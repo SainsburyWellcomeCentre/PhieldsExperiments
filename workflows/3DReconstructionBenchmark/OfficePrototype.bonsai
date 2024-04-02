@@ -4,13 +4,13 @@
                  xmlns:p1="clr-namespace:Bonsai.Harp.Expander;assembly=Bonsai.Harp.Expander"
                  xmlns:rx="clr-namespace:Bonsai.Reactive;assembly=Bonsai.Core"
                  xmlns:sys="clr-namespace:System;assembly=mscorlib"
-                 xmlns:p2="clr-namespace:Bonsai.Harp;assembly=Bonsai.Harp"
-                 xmlns:p3="clr-namespace:Bonsai.Spinnaker;assembly=Bonsai.Spinnaker"
+                 xmlns:harp="clr-namespace:Bonsai.Harp;assembly=Bonsai.Harp"
+                 xmlns:spk="clr-namespace:Bonsai.Spinnaker;assembly=Bonsai.Spinnaker"
                  xmlns:cv="clr-namespace:Bonsai.Vision;assembly=Bonsai.Vision"
-                 xmlns:p4="clr-namespace:Aeon.Acquisition;assembly=Aeon.Acquisition"
-                 xmlns:p5="clr-namespace:OpenCV.Net;assembly=OpenCV.Net"
+                 xmlns:aeon="clr-namespace:Aeon.Acquisition;assembly=Aeon.Acquisition"
+                 xmlns:p2="clr-namespace:OpenCV.Net;assembly=OpenCV.Net"
                  xmlns:wie="clr-namespace:Bonsai.Windows.Input;assembly=Bonsai.Windows.Input"
-                 xmlns:p6="clr-namespace:Bonsai.Aruco;assembly=Bonsai.Aruco"
+                 xmlns:aruco="clr-namespace:Bonsai.Aruco;assembly=Bonsai.Aruco"
                  xmlns:gl="clr-namespace:Bonsai.Shaders;assembly=Bonsai.Shaders"
                  xmlns:scr="clr-namespace:Bonsai.Scripting.Expressions;assembly=Bonsai.Scripting.Expressions"
                  xmlns:io="clr-namespace:Bonsai.IO;assembly=Bonsai.System"
@@ -99,14 +99,14 @@
                                   <Property Name="PortName" />
                                 </Expression>
                                 <Expression xsi:type="Combinator">
-                                  <Combinator xsi:type="p2:Device">
-                                    <p2:OperationMode>Active</p2:OperationMode>
-                                    <p2:OperationLed>On</p2:OperationLed>
-                                    <p2:DumpRegisters>true</p2:DumpRegisters>
-                                    <p2:VisualIndicators>On</p2:VisualIndicators>
-                                    <p2:Heartbeat>Enabled</p2:Heartbeat>
-                                    <p2:IgnoreErrors>false</p2:IgnoreErrors>
-                                    <p2:PortName>COM3</p2:PortName>
+                                  <Combinator xsi:type="harp:Device">
+                                    <harp:OperationMode>Active</harp:OperationMode>
+                                    <harp:OperationLed>On</harp:OperationLed>
+                                    <harp:DumpRegisters>true</harp:DumpRegisters>
+                                    <harp:VisualIndicators>On</harp:VisualIndicators>
+                                    <harp:Heartbeat>Enabled</harp:Heartbeat>
+                                    <harp:IgnoreErrors>false</harp:IgnoreErrors>
+                                    <harp:PortName>COM3</harp:PortName>
                                   </Combinator>
                                 </Expression>
                                 <Expression xsi:type="rx:PublishSubject">
@@ -114,9 +114,9 @@
                                 </Expression>
                                 <Expression xsi:type="WorkflowOutput" />
                                 <Expression xsi:type="Combinator">
-                                  <Combinator xsi:type="p2:FilterMessage">
-                                    <p2:MessageType>Event</p2:MessageType>
-                                    <p2:Address xsi:nil="true" />
+                                  <Combinator xsi:type="harp:FilterMessage">
+                                    <harp:MessageType>Event</harp:MessageType>
+                                    <harp:Address xsi:nil="true" />
                                   </Combinator>
                                 </Expression>
                                 <Expression xsi:type="rx:Condition">
@@ -200,12 +200,12 @@
                                 <Expression xsi:type="SubscribeSubject">
                                   <Name>VideoEvents</Name>
                                 </Expression>
-                                <Expression xsi:type="p2:Parse">
-                                  <p2:Register xsi:type="harp:ParseMessagePayload">
-                                    <p2:Address>37</p2:Address>
-                                    <p2:PayloadType>Timestamp</p2:PayloadType>
-                                    <p2:IsArray>false</p2:IsArray>
-                                  </p2:Register>
+                                <Expression xsi:type="harp:Parse">
+                                  <harp:Register xsi:type="harp:ParseMessagePayload">
+                                    <harp:Address>37</harp:Address>
+                                    <harp:PayloadType>Timestamp</harp:PayloadType>
+                                    <harp:IsArray>false</harp:IsArray>
+                                  </harp:Register>
                                 </Expression>
                                 <Expression xsi:type="ExternalizedMapping">
                                   <Property Name="Value" DisplayName="GlobalTriggerFrequency" Description="The frequency at which to trigger global cameras." />
@@ -315,9 +315,9 @@
                     </Builder>
                   </Expression>
                   <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="p3:SpinnakerCapture">
-                      <p3:Index xsi:nil="true" />
-                      <p3:ColorProcessing>Default</p3:ColorProcessing>
+                    <Combinator xsi:type="spk:SpinnakerCapture">
+                      <spk:Index xsi:nil="true" />
+                      <spk:ColorProcessing>Default</spk:ColorProcessing>
                     </Combinator>
                   </Expression>
                   <Expression xsi:type="MemberSelector">
@@ -478,7 +478,7 @@
                     <Combinator xsi:type="rx:WithLatestFrom" />
                   </Expression>
                   <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="p4:ObserveOnTaskPool" />
+                    <Combinator xsi:type="aeon:ObserveOnTaskPool" />
                   </Expression>
                   <Expression xsi:type="MemberSelector">
                     <Selector>Item2</Selector>
@@ -493,7 +493,7 @@
                   <Expression xsi:type="ExternalizedMapping">
                     <Property Name="Value" DisplayName="PatternSize" />
                   </Expression>
-                  <Expression xsi:type="PropertySource" TypeArguments="cv:FindChessboardCorners,p5:Size">
+                  <Expression xsi:type="PropertySource" TypeArguments="cv:FindChessboardCorners,p2:Size">
                     <MemberName>PatternSize</MemberName>
                     <Value>
                       <Width>14</Width>
@@ -529,7 +529,7 @@
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:Zip" />
                   </Expression>
-                  <Expression xsi:type="PropertySource" TypeArguments="cv:FindChessboardCorners,p5:Size">
+                  <Expression xsi:type="PropertySource" TypeArguments="cv:FindChessboardCorners,p2:Size">
                     <MemberName>PatternSize</MemberName>
                     <Value>
                       <Width>14</Width>
@@ -729,7 +729,7 @@
                           <Selector>Timestamp.DateTime</Selector>
                         </Expression>
                         <Expression xsi:type="Combinator">
-                          <Combinator xsi:type="p4:FormatDate" />
+                          <Combinator xsi:type="aeon:FormatDate" />
                         </Expression>
                         <Expression xsi:type="ExternalizedMapping">
                           <Property Name="Value" DisplayName="LogName" />
@@ -814,18 +814,18 @@
               <Combinator xsi:type="rx:Sample" />
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p4:ObserveOnTaskPool" />
+              <Combinator xsi:type="aeon:ObserveOnTaskPool" />
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p6:DetectMarkers">
-                <p6:CameraParameters>Calibration.yml</p6:CameraParameters>
-                <p6:ThresholdMethod>AdaptiveThreshold</p6:ThresholdMethod>
-                <p6:Param1>20</p6:Param1>
-                <p6:Param2>5</p6:Param2>
-                <p6:MinSize>0.04</p6:MinSize>
-                <p6:MaxSize>0.5</p6:MaxSize>
-                <p6:CornerRefinement>Lines</p6:CornerRefinement>
-                <p6:MarkerSize>0.075</p6:MarkerSize>
+              <Combinator xsi:type="aruco:DetectMarkers">
+                <aruco:CameraParameters>Calibration.yml</aruco:CameraParameters>
+                <aruco:ThresholdMethod>AdaptiveThreshold</aruco:ThresholdMethod>
+                <aruco:Param1>20</aruco:Param1>
+                <aruco:Param2>5</aruco:Param2>
+                <aruco:MinSize>0.04</aruco:MinSize>
+                <aruco:MaxSize>0.5</aruco:MaxSize>
+                <aruco:CornerRefinement>Lines</aruco:CornerRefinement>
+                <aruco:MarkerSize>0.075</aruco:MarkerSize>
               </Combinator>
             </Expression>
             <Expression xsi:type="GroupWorkflow">
@@ -838,12 +838,12 @@
                     <Property Name="Id" DisplayName="Target" />
                   </Expression>
                   <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="p6:SelectMarker">
-                      <p6:Id>11</p6:Id>
+                    <Combinator xsi:type="aruco:SelectMarker">
+                      <aruco:Id>11</aruco:Id>
                     </Combinator>
                   </Expression>
                   <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="p6:MarkerViewMatrix" />
+                    <Combinator xsi:type="aruco:MarkerViewMatrix" />
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="gl:ExtractTranslation" />
@@ -852,12 +852,12 @@
                     <Property Name="Id" DisplayName="Reference" />
                   </Expression>
                   <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="p6:SelectMarker">
-                      <p6:Id>37</p6:Id>
+                    <Combinator xsi:type="aruco:SelectMarker">
+                      <aruco:Id>37</aruco:Id>
                     </Combinator>
                   </Expression>
                   <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="p6:MarkerViewMatrix" />
+                    <Combinator xsi:type="aruco:MarkerViewMatrix" />
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="gl:ExtractTranslation" />
@@ -870,12 +870,12 @@
                     <Selector>Length</Selector>
                   </Expression>
                   <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="p6:SelectMarker">
-                      <p6:Id>37</p6:Id>
+                    <Combinator xsi:type="aruco:SelectMarker">
+                      <aruco:Id>37</aruco:Id>
                     </Combinator>
                   </Expression>
                   <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="p6:MarkerViewMatrix" />
+                    <Combinator xsi:type="aruco:MarkerViewMatrix" />
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="gl:ExtractTranslation" />
@@ -937,12 +937,12 @@ Item2 as Z)</scr:Expression>
               <Selector>Z</Selector>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p6:SelectMarker">
-                <p6:Id>14</p6:Id>
+              <Combinator xsi:type="aruco:SelectMarker">
+                <aruco:Id>14</aruco:Id>
               </Combinator>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p6:MarkerViewMatrix" />
+              <Combinator xsi:type="aruco:MarkerViewMatrix" />
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="gl:ExtractTranslation" />
