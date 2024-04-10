@@ -23,4 +23,5 @@ __pycache__/
 
 # Environments
 .venv
+.conda
 winpython
