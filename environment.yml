@@ -1,0 +1,12 @@
+name: .conda
+channels:
+  - conda-forge
+dependencies:
+- pip
+- jupyter
+- matplotlib
+- numpy
+- opencv
+# - opencv-contrib-python
+- pip:
+  - harp-python
