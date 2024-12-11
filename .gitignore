@@ -1,0 +1,7 @@
+bin
+obj
+Packages
+*.exe
+*.exe.settings
+*.nupkg
+*WebView
