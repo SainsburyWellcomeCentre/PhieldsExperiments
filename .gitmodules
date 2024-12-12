@@ -4,3 +4,6 @@
 [submodule "src/Arduino/libraries/SerialCommand"]
 	path = src/Arduino/libraries/SerialCommand
 	url = https://github.com/nightswimmer/SerialCommand.git
+[submodule "src/Arduino/libraries/StateMachine"]
+	path = src/Arduino/libraries/StateMachine
+	url = https://github.com/nightswimmer/StateMachine.git
