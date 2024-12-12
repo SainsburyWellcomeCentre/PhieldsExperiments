@@ -5,3 +5,4 @@ Packages
 *.exe.settings
 *.nupkg
 *WebView
+.vscode
