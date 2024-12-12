@@ -1,0 +1,3 @@
+[submodule "src/Arduino/libraries/FastStepper"]
+	path = src/Arduino/libraries/FastStepper
+	url = https://github.com/nightswimmer/FastStepper
