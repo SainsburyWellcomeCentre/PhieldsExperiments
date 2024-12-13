@@ -4,11 +4,13 @@
                  xmlns:port="clr-namespace:Bonsai.IO.Ports;assembly=Bonsai.System"
                  xmlns:rx="clr-namespace:Bonsai.Reactive;assembly=Bonsai.Core"
                  xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                 xmlns:p1="clr-namespace:;assembly=Extensions"
+                 xmlns:scr="clr-namespace:Bonsai.Scripting.Expressions;assembly=Bonsai.Scripting.Expressions"
                  xmlns:viz="clr-namespace:Bonsai.Design.Visualizers;assembly=Bonsai.Design.Visualizers"
                  xmlns:wie="clr-namespace:Bonsai.Windows.Input;assembly=Bonsai.Windows.Input"
                  xmlns:io="clr-namespace:Bonsai.IO;assembly=Bonsai.System"
                  xmlns:aeon="clr-namespace:Aeon.Acquisition;assembly=Aeon.Acquisition"
-                 xmlns:p1="clr-namespace:Harp.CameraControllerGen2;assembly=Harp.CameraControllerGen2"
+                 xmlns:p2="clr-namespace:Harp.CameraControllerGen2;assembly=Harp.CameraControllerGen2"
                  xmlns:harp="clr-namespace:Bonsai.Harp;assembly=Bonsai.Harp"
                  xmlns="https://bonsai-rx.org/2018/workflow">
   <Workflow>
@@ -66,6 +68,19 @@
                       <port:PortName>LoomDevice</port:PortName>
                       <port:NewLine>\n</port:NewLine>
                     </Combinator>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="p1:RemoveEOL" />
+                  </Expression>
+                  <Expression xsi:type="Disable">
+                    <Builder xsi:type="scr:ExpressionTransform">
+                      <scr:Expression>new( it.Remove(it.Lenght-1) as Message)</scr:Expression>
+                    </Builder>
+                  </Expression>
+                  <Expression xsi:type="Disable">
+                    <Builder xsi:type="scr:ExpressionTransform">
+                      <scr:Expression>new( it.Replace("\n",String.Empty) as Message)</scr:Expression>
+                    </Builder>
                   </Expression>
                   <Expression xsi:type="rx:PublishSubject">
                     <Name>MotorEvents</Name>
@@ -152,7 +167,7 @@
                     <MinVelocity>31</MinVelocity>
                     <MaxVelocity>32767</MaxVelocity>
                     <Acceleration>4000</Acceleration>
-                    <Deceleration>20000</Deceleration>
+                    <Deceleration>18000</Deceleration>
                   </Expression>
                   <Expression xsi:type="MulticastSubject">
                     <Name>MotorCommands</Name>
@@ -261,18 +276,21 @@
                   <Edge From="4" To="5" Label="Source1" />
                   <Edge From="6" To="7" Label="Source1" />
                   <Edge From="7" To="8" Label="Source1" />
-                  <Edge From="9" To="11" Label="Source1" />
-                  <Edge From="10" To="11" Label="Source2" />
-                  <Edge From="11" To="12" Label="Source1" />
-                  <Edge From="13" To="15" Label="Source1" />
-                  <Edge From="14" To="15" Label="Source2" />
-                  <Edge From="15" To="16" Label="Source1" />
-                  <Edge From="17" To="19" Label="Source1" />
-                  <Edge From="18" To="19" Label="Source2" />
-                  <Edge From="19" To="20" Label="Source1" />
-                  <Edge From="21" To="23" Label="Source1" />
-                  <Edge From="22" To="23" Label="Source2" />
-                  <Edge From="23" To="24" Label="Source1" />
+                  <Edge From="8" To="9" Label="Source1" />
+                  <Edge From="9" To="10" Label="Source1" />
+                  <Edge From="10" To="11" Label="Source1" />
+                  <Edge From="12" To="14" Label="Source1" />
+                  <Edge From="13" To="14" Label="Source2" />
+                  <Edge From="14" To="15" Label="Source1" />
+                  <Edge From="16" To="18" Label="Source1" />
+                  <Edge From="17" To="18" Label="Source2" />
+                  <Edge From="18" To="19" Label="Source1" />
+                  <Edge From="20" To="22" Label="Source1" />
+                  <Edge From="21" To="22" Label="Source2" />
+                  <Edge From="22" To="23" Label="Source1" />
+                  <Edge From="24" To="26" Label="Source1" />
+                  <Edge From="25" To="26" Label="Source2" />
+                  <Edge From="26" To="27" Label="Source1" />
                 </Edges>
               </Workflow>
             </Expression>
@@ -521,8 +539,8 @@
             <Expression xsi:type="SubscribeSubject">
               <Name>VideoEvents</Name>
             </Expression>
-            <Expression xsi:type="p1:Parse">
-              <harp:Register xsi:type="p1:TimestampedCam0Event" />
+            <Expression xsi:type="p2:Parse">
+              <harp:Register xsi:type="p2:TimestampedCam0Event" />
             </Expression>
             <Expression xsi:type="MemberSelector">
               <Selector>Seconds</Selector>
@@ -530,43 +548,92 @@
             <Expression xsi:type="rx:BehaviorSubject">
               <Name>LoggerTimestamp</Name>
             </Expression>
-            <Expression xsi:type="SubscribeSubject">
-              <Name>MotorCommands</Name>
+            <Expression xsi:type="Disable">
+              <Builder xsi:type="SubscribeSubject">
+                <Name>MotorCommands</Name>
+              </Builder>
             </Expression>
-            <Expression xsi:type="IncludeWorkflow" Path="Extensions\LogMotor.bonsai">
-              <Name>MotorCommands</Name>
+            <Expression xsi:type="Disable">
+              <Builder xsi:type="IncludeWorkflow" Path="Extensions\LogMotor.bonsai">
+                <Name>MotorCommands</Name>
+              </Builder>
             </Expression>
-            <Expression xsi:type="SubscribeSubject">
-              <Name>MotorEvents</Name>
+            <Expression xsi:type="Disable">
+              <Builder xsi:type="SubscribeSubject">
+                <Name>MotorEvents</Name>
+              </Builder>
             </Expression>
-            <Expression xsi:type="IncludeWorkflow" Path="Extensions\LogMotor.bonsai">
-              <Name>MotorEvents</Name>
+            <Expression xsi:type="Disable">
+              <Builder xsi:type="IncludeWorkflow" Path="Extensions\LogMotor.bonsai">
+                <Name>MotorEvents</Name>
+              </Builder>
             </Expression>
             <Expression xsi:type="SubscribeSubject">
               <Name>SynchronizerEvents</Name>
             </Expression>
-            <Expression xsi:type="IncludeWorkflow" Path="Extensions\LogHarpState.bonsai">
+            <Expression xsi:type="IncludeWorkflow" Path="Aeon.Acquisition:LogHarpState.bonsai">
               <LogName>ClockSynchronizer</LogName>
+              <Heartbeats>Heartbeats</Heartbeats>
+              <ClosingDuration>PT2S</ClosingDuration>
             </Expression>
             <Expression xsi:type="SubscribeSubject">
               <Name>VideoEvents</Name>
             </Expression>
-            <Expression xsi:type="IncludeWorkflow" Path="Extensions\LogHarpState.bonsai">
+            <Expression xsi:type="IncludeWorkflow" Path="Aeon.Acquisition:LogHarpState.bonsai">
               <LogName>VideoController</LogName>
+              <Heartbeats>Heartbeats</Heartbeats>
+              <ClosingDuration>PT2S</ClosingDuration>
             </Expression>
             <Expression xsi:type="SubscribeSubject">
               <Name>Cam1FrameEvents</Name>
             </Expression>
-            <Expression xsi:type="IncludeWorkflow" Path="Extensions\LogVideo.bonsai">
-              <Name>Cam1</Name>
+            <Expression xsi:type="IncludeWorkflow" Path="Aeon.Acquisition:LogVideo.bonsai">
+              <Heartbeats>Heartbeats</Heartbeats>
+              <ClosingDuration>PT2S</ClosingDuration>
+              <LogName>Cam1</LogName>
               <FrameRate>50</FrameRate>
             </Expression>
             <Expression xsi:type="SubscribeSubject">
               <Name>Cam2FrameEvents</Name>
             </Expression>
-            <Expression xsi:type="IncludeWorkflow" Path="Extensions\LogVideo.bonsai">
-              <Name>Cam2</Name>
+            <Expression xsi:type="IncludeWorkflow" Path="Aeon.Acquisition:LogVideo.bonsai">
+              <Heartbeats>Heartbeats</Heartbeats>
+              <ClosingDuration>PT2S</ClosingDuration>
+              <LogName>Cam2</LogName>
               <FrameRate>50</FrameRate>
+            </Expression>
+            <Expression xsi:type="SubscribeSubject">
+              <Name>MotorCommands</Name>
+            </Expression>
+            <Expression xsi:type="scr:ExpressionTransform">
+              <scr:Expression>new(
+  "Command" as Type,
+  it as Content
+)</scr:Expression>
+            </Expression>
+            <Expression xsi:type="SubscribeSubject">
+              <Name>MotorEvents</Name>
+            </Expression>
+            <Expression xsi:type="scr:ExpressionTransform">
+              <scr:Expression>new(
+  "Event" as Type,
+  it as Content
+)</scr:Expression>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:Merge" />
+            </Expression>
+            <Expression xsi:type="SubscribeSubject">
+              <Name>LoggerTimestamp</Name>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:WithLatestFrom" />
+            </Expression>
+            <Expression xsi:type="IncludeWorkflow" Path="Aeon.Acquisition:LogData.bonsai">
+              <Heartbeats>Heartbeats</Heartbeats>
+              <ClosingDuration>PT2S</ClosingDuration>
+              <LogName>Motor</LogName>
+              <Selector />
             </Expression>
           </Nodes>
           <Edges>
@@ -580,6 +647,13 @@
             <Edge From="12" To="13" Label="Source1" />
             <Edge From="14" To="15" Label="Source1" />
             <Edge From="16" To="17" Label="Source1" />
+            <Edge From="18" To="19" Label="Source1" />
+            <Edge From="19" To="22" Label="Source1" />
+            <Edge From="20" To="21" Label="Source1" />
+            <Edge From="21" To="22" Label="Source2" />
+            <Edge From="22" To="24" Label="Source1" />
+            <Edge From="23" To="24" Label="Source2" />
+            <Edge From="24" To="25" Label="Source1" />
           </Edges>
         </Workflow>
       </Expression>
