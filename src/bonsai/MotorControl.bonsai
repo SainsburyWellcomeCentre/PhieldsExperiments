@@ -167,7 +167,7 @@
                     <MinVelocity>31</MinVelocity>
                     <MaxVelocity>32767</MaxVelocity>
                     <Acceleration>4000</Acceleration>
-                    <Deceleration>18000</Deceleration>
+                    <Deceleration>20000</Deceleration>
                   </Expression>
                   <Expression xsi:type="MulticastSubject">
                     <Name>MotorCommands</Name>
@@ -269,6 +269,17 @@
                   <Expression xsi:type="MulticastSubject">
                     <Name>MotorCommands</Name>
                   </Expression>
+                  <Expression xsi:type="rx:BehaviorSubject" TypeArguments="sys:Object">
+                    <rx:Name>TriggerReset</rx:Name>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="StringProperty">
+                      <Value>M;-3100</Value>
+                    </Combinator>
+                  </Expression>
+                  <Expression xsi:type="MulticastSubject">
+                    <Name>MotorCommands</Name>
+                  </Expression>
                 </Nodes>
                 <Edges>
                   <Edge From="1" To="2" Label="Source1" />
@@ -291,6 +302,8 @@
                   <Edge From="24" To="26" Label="Source1" />
                   <Edge From="25" To="26" Label="Source2" />
                   <Edge From="26" To="27" Label="Source1" />
+                  <Edge From="28" To="29" Label="Source1" />
+                  <Edge From="29" To="30" Label="Source1" />
                 </Edges>
               </Workflow>
             </Expression>
@@ -388,6 +401,15 @@
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="wie:KeyDown">
+                <wie:Filter>LButton ShiftKey ControlKey Space Prior PageUp D0 D1 A P Q NumPad0 NumPad1 F1 F2 Shift Alt</wie:Filter>
+                <wie:SuppressRepetitions>false</wie:SuppressRepetitions>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="MulticastSubject">
+              <Name>StopCameras</Name>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="wie:KeyDown">
                 <wie:Filter>LButton MButton XButton1 Back Tab Clear Return Enter A D E H I L M Control</wie:Filter>
                 <wie:SuppressRepetitions>true</wie:SuppressRepetitions>
               </Combinator>
@@ -433,12 +455,12 @@
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="wie:KeyDown">
-                <wie:Filter>LButton ShiftKey ControlKey Space Prior PageUp D0 D1 A P Q NumPad0 NumPad1 F1 F2 Shift Alt</wie:Filter>
+                <wie:Filter>RButton ShiftKey Menu Space Next PageDown D0 D2 B P R NumPad0 NumPad2 F1 F3 Shift Alt</wie:Filter>
                 <wie:SuppressRepetitions>false</wie:SuppressRepetitions>
               </Combinator>
             </Expression>
             <Expression xsi:type="MulticastSubject">
-              <Name>StopCameras</Name>
+              <Name>TriggerReset</Name>
             </Expression>
           </Nodes>
           <Edges>
@@ -454,6 +476,7 @@
             <Edge From="14" To="15" Label="Source1" />
             <Edge From="16" To="17" Label="Source1" />
             <Edge From="18" To="19" Label="Source1" />
+            <Edge From="20" To="21" Label="Source1" />
           </Edges>
         </Workflow>
       </Expression>
@@ -635,6 +658,48 @@
               <LogName>Motor</LogName>
               <Selector />
             </Expression>
+            <Expression xsi:type="ExternalizedMapping">
+              <Property Name="Value" DisplayName="MouseId" />
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="StringProperty">
+                <Value />
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="StringProperty">
+                <Value />
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="SubscribeSubject">
+              <Name>LoggerTimestamp</Name>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:CombineLatest" />
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:Take">
+                <rx:Count>1</rx:Count>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="MemberSelector">
+              <Selector>Item1</Selector>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:Merge" />
+            </Expression>
+            <Expression xsi:type="SubscribeSubject">
+              <Name>LoggerTimestamp</Name>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:WithLatestFrom" />
+            </Expression>
+            <Expression xsi:type="IncludeWorkflow" Path="Aeon.Acquisition:LogData.bonsai">
+              <Heartbeats>Heartbeats</Heartbeats>
+              <ClosingDuration>PT2S</ClosingDuration>
+              <LogName>MouseID</LogName>
+              <Selector />
+            </Expression>
           </Nodes>
           <Edges>
             <Edge From="0" To="1" Label="Source1" />
@@ -654,6 +719,17 @@
             <Edge From="22" To="24" Label="Source1" />
             <Edge From="23" To="24" Label="Source2" />
             <Edge From="24" To="25" Label="Source1" />
+            <Edge From="26" To="27" Label="Source1" />
+            <Edge From="26" To="28" Label="Source1" />
+            <Edge From="27" To="33" Label="Source1" />
+            <Edge From="28" To="30" Label="Source1" />
+            <Edge From="29" To="30" Label="Source2" />
+            <Edge From="30" To="31" Label="Source1" />
+            <Edge From="31" To="32" Label="Source1" />
+            <Edge From="32" To="33" Label="Source2" />
+            <Edge From="33" To="35" Label="Source1" />
+            <Edge From="34" To="35" Label="Source2" />
+            <Edge From="35" To="36" Label="Source1" />
           </Edges>
         </Workflow>
       </Expression>
