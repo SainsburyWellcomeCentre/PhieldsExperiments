@@ -6,3 +6,5 @@ Packages
 *.nupkg
 *WebView
 .vscode
+devdata
+layout
