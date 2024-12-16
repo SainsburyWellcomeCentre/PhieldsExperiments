@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <WorkflowBuilder Version="2.9.0-preview1+76e8ce94db5dd636925244a720164ef8694af513"
                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                  xmlns:port="clr-namespace:Bonsai.IO.Ports;assembly=Bonsai.System"
@@ -216,7 +216,7 @@
                         </Expression>
                         <Expression xsi:type="Combinator">
                           <Combinator xsi:type="IntProperty">
-                            <Value>775</Value>
+                            <Value>760</Value>
                           </Combinator>
                         </Expression>
                         <Expression xsi:type="ExternalizedMapping">
