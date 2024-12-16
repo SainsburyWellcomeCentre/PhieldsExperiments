@@ -331,7 +331,7 @@
                   <Expression xsi:type="IncludeWorkflow" Path="Aeon.Acquisition:SpinnakerVideoSource.bonsai">
                     <TriggerSource>GlobalTrigger</TriggerSource>
                     <TriggerFrequency>GlobalTriggerFrequency</TriggerFrequency>
-                    <ExposureTime>INF</ExposureTime>
+                    <ExposureTime>15000</ExposureTime>
                     <SerialNumber>23391015</SerialNumber>
                     <Gain>0</Gain>
                     <Binning>1</Binning>
