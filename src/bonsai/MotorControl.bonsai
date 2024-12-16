@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <WorkflowBuilder Version="2.9.0-preview1+76e8ce94db5dd636925244a720164ef8694af513"
                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                  xmlns:port="clr-namespace:Bonsai.IO.Ports;assembly=Bonsai.System"
@@ -12,6 +12,7 @@
                  xmlns:aeon="clr-namespace:Aeon.Acquisition;assembly=Aeon.Acquisition"
                  xmlns:p2="clr-namespace:Harp.CameraControllerGen2;assembly=Harp.CameraControllerGen2"
                  xmlns:harp="clr-namespace:Bonsai.Harp;assembly=Bonsai.Harp"
+                 xmlns:cv="clr-namespace:Bonsai.Vision;assembly=Bonsai.Vision"
                  xmlns="https://bonsai-rx.org/2018/workflow">
   <Workflow>
     <Nodes>
@@ -733,7 +734,59 @@
           </Edges>
         </Workflow>
       </Expression>
+      <Expression xsi:type="SubscribeSubject">
+        <Name>Camera2Image</Name>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="cv:WarpPerspective">
+          <cv:Source>
+            <cv:Point2f>
+              <cv:X>3</cv:X>
+              <cv:Y>550.2439</cv:Y>
+            </cv:Point2f>
+            <cv:Point2f>
+              <cv:X>180</cv:X>
+              <cv:Y>570.7317</cv:Y>
+            </cv:Point2f>
+            <cv:Point2f>
+              <cv:X>207</cv:X>
+              <cv:Y>333.658539</cv:Y>
+            </cv:Point2f>
+            <cv:Point2f>
+              <cv:X>3</cv:X>
+              <cv:Y>333.658539</cv:Y>
+            </cv:Point2f>
+          </cv:Source>
+          <cv:Destination>
+            <cv:Point2f>
+              <cv:X>0</cv:X>
+              <cv:Y>0</cv:Y>
+            </cv:Point2f>
+            <cv:Point2f>
+              <cv:X>0</cv:X>
+              <cv:Y>1080</cv:Y>
+            </cv:Point2f>
+            <cv:Point2f>
+              <cv:X>1440</cv:X>
+              <cv:Y>1080</cv:Y>
+            </cv:Point2f>
+            <cv:Point2f>
+              <cv:X>1440</cv:X>
+              <cv:Y>0</cv:Y>
+            </cv:Point2f>
+          </cv:Destination>
+          <cv:Flags>Linear</cv:Flags>
+          <cv:FillValue>
+            <cv:Val0>0</cv:Val0>
+            <cv:Val1>0</cv:Val1>
+            <cv:Val2>0</cv:Val2>
+            <cv:Val3>0</cv:Val3>
+          </cv:FillValue>
+        </Combinator>
+      </Expression>
     </Nodes>
-    <Edges />
+    <Edges>
+      <Edge From="3" To="4" Label="Source1" />
+    </Edges>
   </Workflow>
 </WorkflowBuilder>
