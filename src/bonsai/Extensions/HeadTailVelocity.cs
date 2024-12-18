@@ -27,7 +27,7 @@ public class HeadTailVelocity
     {
         return (value1.X*value2.X)+(value1.Y*value2.Y);
     }
-    public IObservable<Tuple<Point2f, Point2f>> Process(IObservable<Tuple<Tuple<Point2f, Point2f>, IList<Point2f>>> source)
+    public IObservable<HeadTail> Process(IObservable<Tuple<Tuple<Point2f, Point2f>, IList<Point2f>>> source)
     {
         return source.Select(value => 
         {
@@ -65,7 +65,9 @@ public class HeadTailVelocity
             //else
             oldHead = head;
             oldTail = tail;
-            return new Tuple<Point2f, Point2f>(head,tail);
+            var subtract = head-tail;
+            var heading = Math.Atan2(-subtract.Y,subtract.X);
+            return new HeadTail{Head = head, Tail= tail, Heading= heading, Centroid= value.Item2.Last(), Velocity = distance};
             // var centerA = (value.Item1.Item1+value.Item1.Item2)*0.5f;
             // //var ExtremeA2 = value.Item1.Item2;
             // var centerB = (value.Item2.Item1+value.Item2.Item2)*0.5f;
@@ -74,4 +76,12 @@ public class HeadTailVelocity
             // return new Tuple<Point2f, Point2f>(centerA,centerB);
         });
     }
+}
+public struct HeadTail
+{
+    public Point2f Head;
+    public Point2f Tail;
+    public double Heading;
+    public Point2f Centroid;
+    public Point2f Velocity;
 }
