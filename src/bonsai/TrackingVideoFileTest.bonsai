@@ -1,8 +1,10 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <WorkflowBuilder Version="2.9.0-preview1+76e8ce94db5dd636925244a720164ef8694af513"
                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xmlns:aeon="clr-namespace:Aeon.Acquisition;assembly=Aeon.Acquisition"
                  xmlns:cv="clr-namespace:Bonsai.Vision;assembly=Bonsai.Vision"
                  xmlns:rx="clr-namespace:Bonsai.Reactive;assembly=Bonsai.Core"
+                 xmlns:harp="clr-namespace:Bonsai.Harp;assembly=Bonsai.Harp"
                  xmlns:p1="clr-namespace:;assembly=Extensions"
                  xmlns:drw="clr-namespace:Bonsai.Vision.Drawing;assembly=Bonsai.Vision"
                  xmlns:scr="clr-namespace:Bonsai.Scripting.Expressions;assembly=Bonsai.Scripting.Expressions"
@@ -15,23 +17,35 @@
         <Workflow>
           <Nodes>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="cv:FileCapture">
-                <cv:FileName>devdata\2024-12-16T15-40-12\Cam1\Cam1_2024-12-16T16-00-00.avi</cv:FileName>
-                <cv:PlaybackRate>0</cv:PlaybackRate>
-                <cv:StartPosition>0</cv:StartPosition>
-                <cv:PositionUnits>Frames</cv:PositionUnits>
-                <cv:Loop>false</cv:Loop>
-                <cv:Playing>true</cv:Playing>
+              <Combinator xsi:type="aeon:VideoFileCapture">
+                <aeon:FileName>devdata\2024-12-16T15-40-12\Cam1\Cam1_2024-12-16T16-00-00.avi</aeon:FileName>
               </Combinator>
+            </Expression>
+            <Expression xsi:type="MemberSelector">
+              <Selector>Value.Image</Selector>
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="cv:Grayscale" />
+            </Expression>
+            <Expression xsi:type="MemberSelector">
+              <Selector>Seconds</Selector>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:Zip" />
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="harp:CreateTimestamped" />
             </Expression>
             <Expression xsi:type="WorkflowOutput" />
           </Nodes>
           <Edges>
             <Edge From="0" To="1" Label="Source1" />
+            <Edge From="0" To="3" Label="Source1" />
             <Edge From="1" To="2" Label="Source1" />
+            <Edge From="2" To="4" Label="Source1" />
+            <Edge From="3" To="4" Label="Source2" />
+            <Edge From="4" To="5" Label="Source1" />
+            <Edge From="5" To="6" Label="Source1" />
           </Edges>
         </Workflow>
       </Expression>
@@ -47,6 +61,9 @@
           <Nodes>
             <Expression xsi:type="WorkflowInput">
               <Name>Source1</Name>
+            </Expression>
+            <Expression xsi:type="MemberSelector">
+              <Selector>Value</Selector>
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="cv:ResizeCanvas">
@@ -96,13 +113,27 @@
                 <cv:Interpolation>Linear</cv:Interpolation>
               </Combinator>
             </Expression>
+            <Expression xsi:type="MemberSelector">
+              <Selector>Seconds</Selector>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:Zip" />
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="harp:CreateTimestamped" />
+            </Expression>
             <Expression xsi:type="WorkflowOutput" />
           </Nodes>
           <Edges>
             <Edge From="0" To="1" Label="Source1" />
+            <Edge From="0" To="5" Label="Source1" />
             <Edge From="1" To="2" Label="Source1" />
             <Edge From="2" To="3" Label="Source1" />
             <Edge From="3" To="4" Label="Source1" />
+            <Edge From="4" To="6" Label="Source1" />
+            <Edge From="5" To="6" Label="Source2" />
+            <Edge From="6" To="7" Label="Source1" />
+            <Edge From="7" To="8" Label="Source1" />
           </Edges>
         </Workflow>
       </Expression>
@@ -118,6 +149,9 @@
           <Nodes>
             <Expression xsi:type="WorkflowInput">
               <Name>Source1</Name>
+            </Expression>
+            <Expression xsi:type="MemberSelector">
+              <Selector>Value</Selector>
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="cv:MaskPolygon">
@@ -261,20 +295,34 @@
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="cv:BinaryRegionAnalysis" />
             </Expression>
+            <Expression xsi:type="MemberSelector">
+              <Selector>Seconds</Selector>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:Zip" />
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="harp:CreateTimestamped" />
+            </Expression>
             <Expression xsi:type="WorkflowOutput" />
           </Nodes>
           <Edges>
             <Edge From="0" To="1" Label="Source1" />
-            <Edge From="0" To="3" Label="Source1" />
+            <Edge From="0" To="11" Label="Source1" />
             <Edge From="1" To="2" Label="Source1" />
-            <Edge From="2" To="5" Label="Source1" />
-            <Edge From="3" To="4" Label="Source1" />
-            <Edge From="4" To="5" Label="Source2" />
-            <Edge From="5" To="6" Label="Source1" />
+            <Edge From="1" To="4" Label="Source1" />
+            <Edge From="2" To="3" Label="Source1" />
+            <Edge From="3" To="6" Label="Source1" />
+            <Edge From="4" To="5" Label="Source1" />
+            <Edge From="5" To="6" Label="Source2" />
             <Edge From="6" To="7" Label="Source1" />
             <Edge From="7" To="8" Label="Source1" />
             <Edge From="8" To="9" Label="Source1" />
             <Edge From="9" To="10" Label="Source1" />
+            <Edge From="10" To="12" Label="Source1" />
+            <Edge From="11" To="12" Label="Source2" />
+            <Edge From="12" To="13" Label="Source1" />
+            <Edge From="13" To="14" Label="Source1" />
           </Edges>
         </Workflow>
       </Expression>
@@ -290,6 +338,9 @@
           <Nodes>
             <Expression xsi:type="WorkflowInput">
               <Name>Source1</Name>
+            </Expression>
+            <Expression xsi:type="MemberSelector">
+              <Selector>Value</Selector>
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="cv:LargestBinaryRegion" />
@@ -357,7 +408,7 @@
                           <Name>ProcessingImage</Name>
                         </Expression>
                         <Expression xsi:type="MemberSelector">
-                          <Selector>Size</Selector>
+                          <Selector>Value.Size</Selector>
                         </Expression>
                         <Expression xsi:type="PropertyMapping">
                           <PropertyMappings>
@@ -402,7 +453,7 @@
                           <Name>ProcessingImage</Name>
                         </Expression>
                         <Expression xsi:type="MemberSelector">
-                          <Selector>Size</Selector>
+                          <Selector>Value.Size</Selector>
                         </Expression>
                         <Expression xsi:type="scr:ExpressionTransform">
                           <scr:Expression>new (0 as X, 0 as Y ,it.Width as Width, it.Height as Height)</scr:Expression>
@@ -414,6 +465,9 @@
                         </Expression>
                         <Expression xsi:type="SubscribeSubject">
                           <Name>ProcessingImage</Name>
+                        </Expression>
+                        <Expression xsi:type="MemberSelector">
+                          <Selector>Value</Selector>
                         </Expression>
                         <Expression xsi:type="Combinator">
                           <Combinator xsi:type="cv:ConvertColor">
@@ -439,15 +493,16 @@
                         <Expression xsi:type="WorkflowOutput" />
                       </Nodes>
                       <Edges>
-                        <Edge From="0" To="8" Label="Source1" />
+                        <Edge From="0" To="9" Label="Source1" />
                         <Edge From="1" To="2" Label="Source1" />
                         <Edge From="2" To="3" Label="Source1" />
                         <Edge From="3" To="4" Label="Source1" />
-                        <Edge From="4" To="8" Label="Source2" />
+                        <Edge From="4" To="9" Label="Source2" />
                         <Edge From="5" To="6" Label="Source1" />
                         <Edge From="6" To="7" Label="Source1" />
-                        <Edge From="7" To="8" Label="Source3" />
-                        <Edge From="8" To="9" Label="Source1" />
+                        <Edge From="7" To="8" Label="Source1" />
+                        <Edge From="8" To="9" Label="Source3" />
+                        <Edge From="9" To="10" Label="Source1" />
                       </Edges>
                     </Workflow>
                   </Expression>
@@ -460,6 +515,9 @@
                         </Expression>
                         <Expression xsi:type="SubscribeSubject">
                           <Name>Contours</Name>
+                        </Expression>
+                        <Expression xsi:type="MemberSelector">
+                          <Selector>Value</Selector>
                         </Expression>
                         <Expression xsi:type="Combinator">
                           <Combinator xsi:type="cv:LargestBinaryRegion" />
@@ -494,12 +552,13 @@
                         <Expression xsi:type="WorkflowOutput" />
                       </Nodes>
                       <Edges>
-                        <Edge From="0" To="5" Label="Source1" />
+                        <Edge From="0" To="6" Label="Source1" />
                         <Edge From="1" To="2" Label="Source1" />
                         <Edge From="2" To="3" Label="Source1" />
                         <Edge From="3" To="4" Label="Source1" />
-                        <Edge From="4" To="5" Label="Source2" />
-                        <Edge From="5" To="6" Label="Source1" />
+                        <Edge From="4" To="5" Label="Source1" />
+                        <Edge From="5" To="6" Label="Source2" />
+                        <Edge From="6" To="7" Label="Source1" />
                       </Edges>
                     </Workflow>
                   </Expression>
@@ -612,33 +671,47 @@
                 </Edges>
               </Workflow>
             </Expression>
+            <Expression xsi:type="MemberSelector">
+              <Selector>Seconds</Selector>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:Zip" />
+            </Expression>
             <Expression xsi:type="WorkflowOutput" />
           </Nodes>
           <Edges>
             <Edge From="0" To="1" Label="Source1" />
+            <Edge From="0" To="13" Label="Source1" />
             <Edge From="1" To="2" Label="Source1" />
-            <Edge From="1" To="5" Label="Source1" />
-            <Edge From="2" To="8" Label="Source1" />
-            <Edge From="3" To="4" Label="Source1" />
-            <Edge From="4" To="6" Label="Source1" />
-            <Edge From="5" To="6" Label="Source2" />
-            <Edge From="6" To="7" Label="Source1" />
-            <Edge From="7" To="8" Label="Source2" />
-            <Edge From="8" To="10" Label="Source1" />
-            <Edge From="9" To="10" Label="Source2" />
-            <Edge From="10" To="11" Label="Source1" />
+            <Edge From="2" To="3" Label="Source1" />
+            <Edge From="2" To="6" Label="Source1" />
+            <Edge From="3" To="9" Label="Source1" />
+            <Edge From="4" To="5" Label="Source1" />
+            <Edge From="5" To="7" Label="Source1" />
+            <Edge From="6" To="7" Label="Source2" />
+            <Edge From="7" To="8" Label="Source1" />
+            <Edge From="8" To="9" Label="Source2" />
+            <Edge From="9" To="11" Label="Source1" />
+            <Edge From="10" To="11" Label="Source2" />
             <Edge From="11" To="12" Label="Source1" />
+            <Edge From="12" To="14" Label="Source1" />
+            <Edge From="13" To="14" Label="Source2" />
+            <Edge From="14" To="15" Label="Source1" />
           </Edges>
         </Workflow>
       </Expression>
       <Expression xsi:type="rx:PublishSubject">
         <Name>HeadTail</Name>
       </Expression>
+      <Expression xsi:type="GroupWorkflow">
+        <Name>ControlPanel</Name>
+        <Workflow>
+          <Nodes>
       <Expression xsi:type="SubscribeSubject">
         <Name>HeadTail</Name>
       </Expression>
       <Expression xsi:type="MemberSelector">
-        <Selector>Velocity</Selector>
+              <Selector>Item1.Velocity</Selector>
       </Expression>
       <Expression xsi:type="viz:RollingGraphBuilder">
         <viz:SymbolType>None</viz:SymbolType>
@@ -649,6 +722,19 @@
       </Expression>
       <Expression xsi:type="scr:ExpressionTransform">
         <scr:Expression>Math.Sqrt((it.X*it.X)+(it.Y*it.Y))</scr:Expression>
+            </Expression>
+            <Expression xsi:type="MemberSelector">
+              <Selector>Item1.Heading</Selector>
+            </Expression>
+          </Nodes>
+          <Edges>
+            <Edge From="0" To="1" Label="Source1" />
+            <Edge From="0" To="4" Label="Source1" />
+            <Edge From="1" To="2" Label="Source1" />
+            <Edge From="1" To="3" Label="Source1" />
+          </Edges>
+        </Workflow>
+      </Expression>
       </Expression>
     </Nodes>
     <Edges>
@@ -659,9 +745,6 @@
       <Edge From="6" To="7" Label="Source1" />
       <Edge From="8" To="9" Label="Source1" />
       <Edge From="9" To="10" Label="Source1" />
-      <Edge From="11" To="12" Label="Source1" />
-      <Edge From="12" To="13" Label="Source1" />
-      <Edge From="12" To="14" Label="Source1" />
     </Edges>
   </Workflow>
 </WorkflowBuilder>
