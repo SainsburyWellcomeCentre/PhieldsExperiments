@@ -1,4 +1,7 @@
 # PhieldsExperiments motor control requirements
+## Bonsai install instructions 
+- Install [.net 4.6.2 Developer pack](https://dotnet.microsoft.com/en-us/download/dotnet-framework/net462)
+
 ## Instalation instructions
 Download and install the Arduino IDE  from https://www.arduino.cc/en/software
 Any version after 2.x.x should be compatible with it.
