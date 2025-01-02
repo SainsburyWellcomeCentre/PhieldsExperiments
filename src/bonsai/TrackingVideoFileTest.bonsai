@@ -1,10 +1,11 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <WorkflowBuilder Version="2.8.5"
                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                 xmlns:aeon="clr-namespace:Aeon.Acquisition;assembly=Aeon.Acquisition"
-                 xmlns:harp="clr-namespace:Bonsai.Harp;assembly=Bonsai.Harp"
                  xmlns:cv="clr-namespace:Bonsai.Vision;assembly=Bonsai.Vision"
                  xmlns:rx="clr-namespace:Bonsai.Reactive;assembly=Bonsai.Core"
+                 xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                 xmlns:harp="clr-namespace:Bonsai.Harp;assembly=Bonsai.Harp"
+                 xmlns:aeon="clr-namespace:Aeon.Acquisition;assembly=Aeon.Acquisition"
                  xmlns:p1="clr-namespace:;assembly=Extensions"
                  xmlns:p2="clr-namespace:OpenCV.Net;assembly=OpenCV.Net"
                  xmlns="https://bonsai-rx.org/2018/workflow">
@@ -15,11 +16,54 @@
         <Workflow>
           <Nodes>
             <Expression xsi:type="Combinator">
+              <Combinator xsi:type="cv:FileCapture">
+                <cv:FileName>devdata\2024-12-16T15-40-12\Cam1\Cam1_2024-12-16T16-00-00.avi</cv:FileName>
+                <cv:PlaybackRate>0</cv:PlaybackRate>
+                <cv:StartPosition>0</cv:StartPosition>
+                <cv:PositionUnits>Frames</cv:PositionUnits>
+                <cv:Loop>true</cv:Loop>
+                <cv:Playing>false</cv:Playing>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="cv:Grayscale" />
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:Timer">
+                <rx:DueTime>PT0S</rx:DueTime>
+                <rx:Period>PT0.1S</rx:Period>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="Divide">
+              <Operand xsi:type="WorkflowProperty" TypeArguments="sys:Int64">
+                <Value>10</Value>
+              </Operand>
+            </Expression>
+            <Expression xsi:type="InputMapping">
+              <PropertyMappings>
+                <Property Name="Value" Selector="it" />
+              </PropertyMappings>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="DoubleProperty">
+                <Value>39</Value>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:WithLatestFrom" />
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="harp:CreateTimestamped" />
+            </Expression>
+            <Expression xsi:type="Disable">
+              <Builder xsi:type="Combinator">
               <Combinator xsi:type="aeon:VideoFileCapture">
                 <aeon:FileName>devdata\2024-12-16T15-40-12\Cam1\Cam1_2024-12-16T16-00-00.avi</aeon:FileName>
               </Combinator>
+              </Builder>
             </Expression>
-            <Expression xsi:type="harp:ConvertTimestamped">
+            <Expression xsi:type="Disable">
+              <Builder xsi:type="harp:ConvertTimestamped">
               <Name>GetImage</Name>
               <Workflow>
                 <Nodes>
@@ -40,12 +84,21 @@
                   <Edge From="2" To="3" Label="Source1" />
                 </Edges>
               </Workflow>
+              </Builder>
             </Expression>
             <Expression xsi:type="WorkflowOutput" />
           </Nodes>
           <Edges>
             <Edge From="0" To="1" Label="Source1" />
-            <Edge From="1" To="2" Label="Source2" />
+            <Edge From="1" To="6" Label="Source1" />
+            <Edge From="2" To="3" Label="Source1" />
+            <Edge From="3" To="4" Label="Source1" />
+            <Edge From="4" To="5" Label="Source1" />
+            <Edge From="5" To="6" Label="Source2" />
+            <Edge From="6" To="7" Label="Source1" />
+            <Edge From="7" To="10" Label="Source1" />
+            <Edge From="8" To="9" Label="Source1" />
+            <Edge From="9" To="10" Label="Source2" />
           </Edges>
         </Workflow>
       </Expression>
@@ -141,6 +194,10 @@
           <Nodes>
             <Expression xsi:type="WorkflowInput">
               <Name>Source1</Name>
+            </Expression>
+            <Expression xsi:type="ExternalizedMapping">
+              <Property Name="WholeImageThreshold" />
+              <Property Name="NestThreshold" />
             </Expression>
             <Expression xsi:type="harp:ConvertTimestamped">
               <Name>BinaryRegions</Name>
@@ -334,6 +391,9 @@
             <Expression xsi:type="WorkflowInput">
               <Name>Source1</Name>
             </Expression>
+            <Expression xsi:type="ExternalizedMapping">
+              <Property Name="ExpectedNumberOfConnectedComponents" />
+            </Expression>
             <Expression xsi:type="harp:ConvertTimestamped">
               <Name>Tracking</Name>
               <Workflow>
@@ -341,24 +401,29 @@
                   <Expression xsi:type="WorkflowInput">
                     <Name>Source1</Name>
                   </Expression>
+                  <Expression xsi:type="ExternalizedMapping">
+                    <Property Name="ExpectedNumberOfConnectedComponents" />
+                  </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="p1:BinaryRegionsTracking">
-                      <p1:ExpectedNumberOfConnectedComponents>0</p1:ExpectedNumberOfConnectedComponents>
+                      <p1:ExpectedNumberOfConnectedComponents>1</p1:ExpectedNumberOfConnectedComponents>
                     </Combinator>
                   </Expression>
                   <Expression xsi:type="WorkflowOutput" />
                 </Nodes>
                 <Edges>
-                  <Edge From="0" To="1" Label="Source1" />
-                  <Edge From="1" To="2" Label="Source1" />
+                  <Edge From="0" To="2" Label="Source1" />
+                  <Edge From="1" To="2" Label="Source2" />
+                  <Edge From="2" To="3" Label="Source1" />
                 </Edges>
               </Workflow>
             </Expression>
             <Expression xsi:type="WorkflowOutput" />
           </Nodes>
           <Edges>
-            <Edge From="0" To="1" Label="Source1" />
+            <Edge From="0" To="2" Label="Source1" />
             <Edge From="1" To="2" Label="Source2" />
+            <Edge From="2" To="3" Label="Source2" />
           </Edges>
         </Workflow>
       </Expression>
