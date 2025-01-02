@@ -327,15 +327,15 @@
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="cv:MorphologicalOperator">
                       <cv:Size>
-                        <cv:Width>3</cv:Width>
-                        <cv:Height>3</cv:Height>
+                        <cv:Width>4</cv:Width>
+                        <cv:Height>4</cv:Height>
                       </cv:Size>
                       <cv:Anchor>
                         <cv:X>-1</cv:X>
                         <cv:Y>-1</cv:Y>
                       </cv:Anchor>
                       <cv:Shape>Rectangle</cv:Shape>
-                      <cv:Iterations>1</cv:Iterations>
+                      <cv:Iterations>2</cv:Iterations>
                       <cv:Operation>Open</cv:Operation>
                     </Combinator>
                   </Expression>
