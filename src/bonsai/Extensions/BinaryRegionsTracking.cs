@@ -15,7 +15,7 @@ public class BinaryRegionsTracking
 {
     public int ExpectedNumberOfConnectedComponents { get; set; }
     
-    public struct DistanceConnectedComponents
+    public class DistanceConnectedComponents
     {
         public int Crossings;
 
@@ -98,39 +98,43 @@ public class BinaryRegionsTracking
     {
         ConnectedComponentCollection previous = null;
         return source.Select(value => 
-        { 
+        {
+            var valueCopy = new ConnectedComponentCollection(value.ImageSize);
+            int max = (value.Count >= ExpectedNumberOfConnectedComponents) ? ExpectedNumberOfConnectedComponents : value.Count;
+            for (int i = 0; i < max; i++)
+            {
+                valueCopy.Add(value[i]);
+            }
+            var VirtualConnectedComponent = new ConnectedComponent();
+            VirtualConnectedComponent.Centroid = new OpenCV.Net.Point2f(float.NaN, float.NaN);
 
             if (previous==null)
             {
-                previous = new ConnectedComponentCollection(value,value.ImageSize);
+                if (valueCopy.Count != ExpectedNumberOfConnectedComponents)
+                    return null;
+                previous = new ConnectedComponentCollection(valueCopy, valueCopy.ImageSize);
                 var previousDistanceComponentsCollection = new DistanceConnectedComponentCollection() { ConnCompCollection =previous, Distance =0};
                 var res = new DistanceConnectedComponents(){ DistConnCompCollection = previousDistanceComponentsCollection, Crossings = ExpectedNumberOfConnectedComponents-value.Count};
                 return res; //bestPermute.permuted;
             }
-            var VirtualConnectedComponent = new ConnectedComponent();
-           VirtualConnectedComponent.Centroid = new OpenCV.Net.Point2f(float.NaN,float.NaN);
-
-            var valueCopy = new ConnectedComponentCollection(value.ImageSize);
-            for (int i = 0; i < value.Count; i++)
-            {
-                valueCopy.Add(value[i]);
-            }
-            
             // less detected individuals in this frame than expected (specified)
             // TO DO: til min(previous.count, ExpectedConnectedComponents);
-            
-            if (value.Count <  ExpectedNumberOfConnectedComponents)
-                 for (int i =  value.Count; i < ExpectedNumberOfConnectedComponents; i++)
-                 {
+
+            if (value.Count < ExpectedNumberOfConnectedComponents)
+            {
+                for (int i = value.Count; i < ExpectedNumberOfConnectedComponents; i++)
+                {
                     //var temp = ConnectedComponent.FromContour(value[0].Contour);
                     //temp.Centroid = new OpenCV.Net.Point2f(float.NaN,float.NaN);
                     valueCopy.Add(VirtualConnectedComponent);
-                 }
+                }
+            }
+
 
             var bestPermute = permute(valueCopy,0,valueCopy.Count-1,previous);
             previous = bestPermute.ConnCompCollection;
 
-            return  new DistanceConnectedComponents(){ DistConnCompCollection = bestPermute, Crossings = ExpectedNumberOfConnectedComponents-value.Count};
+            return  new DistanceConnectedComponents(){ DistConnCompCollection = bestPermute, Crossings = ExpectedNumberOfConnectedComponents- valueCopy.Count};
         });
     }
 }
