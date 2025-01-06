@@ -8,3 +8,6 @@ Packages
 .vscode
 devdata
 layout
+examples
+keywords.txt
+src/Arduino/libraries/FastStepper/.gitignore
