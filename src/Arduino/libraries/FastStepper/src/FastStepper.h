@@ -55,11 +55,14 @@ class FastStepper
 	// Run the controller. This needs to be called often in the main loop in 
 	void run();
 
-	// Initialize the movement parameters
-	void setMovementParameters(uint16_t min_speed, uint16_t max_speed, uint32_t acceleration);
+	// Initialize the speed settings
+	void setMovementSpeed(uint16_t min_speed, uint16_t max_speed);
 
-	// Initialize the movement parameters
-	void setMovementParameters(uint16_t min_speed, uint16_t max_speed, uint32_t acceleration, uint32_t deceleration);
+	// Initialize the acceleration settings
+	void setMovementAcceleration(uint32_t acceleration, uint32_t deceleration);
+
+	// Initialize the jerk settings
+	void setMovementJerk(int32_t acceleration_jerk, int32_t deceleration_jerk);
 
 	// Set the movement limits
 	void setPositionConstraints(int32_t min_position, int32_t max_position);
@@ -155,6 +158,10 @@ private:
 	uint32_t _acceleration = DEFAULT_MOTOR_ACCELERATION;
 	// Default deceleration do be used when decreasing speed
 	uint32_t _deceleration = DEFAULT_MOTOR_ACCELERATION;
+	// Default acceleration jerk do be used when increasing speed
+	int32_t _acceleration_jerk = 0;
+	// Default deceleration jerk do be used when decreasing speed
+	int32_t _deceleration_jerk = 0;
 
 
 	// Should we constrain the movement to a min and max positions?
@@ -169,6 +176,12 @@ private:
 
 	// Current speed for the stepper
 	float _current_velocity = 0;
+
+	// Current acceleration for the stepper
+	float _current_acceleration = 0;
+
+	// Current deceleration for the stepper
+	float _current_deceleration = 0;
 
 	// Is the stepper currently sleeping?
 	bool _sleeping = false;

@@ -39,14 +39,20 @@ const uint16_t MOTOR_MAX_SPEED = 32767;
 //#define MOTOR_DROP_ACCELERATION 5204
 const uint32_t MOTOR_DROP_ACCELERATION = 4000;
 
+// Jerk (in steps/second^3) to be used when dropping the loom in "freefall"
+const int32_t MOTOR_DROP_ACCELERATION_JERK = -1000;
+
 // Acceleration (in steps/second^2) to be used when stopping the loom drop
 //define MOTOR_DROP_DECELERATION 46855
 const uint32_t MOTOR_DROP_DECELERATION = 20000;
 
+// Jerk (in steps/second^3) to be used when dropping the loom in "freefall"
+const int32_t MOTOR_DROP_DECELERATION_JERK = 2000;
+
 // Acceleration (in steps/second^2) to be used when pulling the Loom back up
-const uint32_t MOTOR_RETRACT_ACCELERATION = 100;
+const uint32_t MOTOR_RETRACT_ACCELERATION = 10000;
 // Maximum motor speed (in steps/second) to pull the Loom back up
-const uint32_t MOTOR_MAX_RESET_SPEED = 80;
+const uint32_t MOTOR_MAX_RESET_SPEED = 8000;
 
 // Total of steps for the complete drop
 //#define TOTAL_STEPS_TRAVELED 955
@@ -93,13 +99,15 @@ typedef struct
   uint32_t max_speed;
   uint32_t acceleration;
   uint32_t deceleration;
+  uint32_t acceleration_jerk;
+  uint32_t deceleration_jerk;
 
 } MovementParameters;
 
 // Settings for the movement of dropping the loom
-MovementParameters _motor_drop_parameters = { MOTOR_MIN_SPEED, MOTOR_MAX_SPEED, MOTOR_DROP_ACCELERATION, MOTOR_DROP_DECELERATION };
+MovementParameters _motor_drop_parameters = { MOTOR_MIN_SPEED, MOTOR_MAX_SPEED, MOTOR_DROP_ACCELERATION, MOTOR_DROP_DECELERATION, MOTOR_DROP_ACCELERATION_JERK, MOTOR_DROP_DECELERATION_JERK };
 // Settings for the movement of bringing the loom back up
-MovementParameters _motor_reset_parameters = { MOTOR_MIN_SPEED, MOTOR_MAX_RESET_SPEED, MOTOR_RETRACT_ACCELERATION, MOTOR_RETRACT_ACCELERATION };
+MovementParameters _motor_reset_parameters = { MOTOR_MIN_SPEED, MOTOR_MAX_RESET_SPEED, MOTOR_RETRACT_ACCELERATION, MOTOR_RETRACT_ACCELERATION, 0, 0 };
 
 
 // Class to send the control signals to the stepper using the desired acceleration curves
@@ -182,6 +190,8 @@ void loop() {
   // The run() method needs to be called often in order for the acceleration to happen smoothly.
   // This means we cannot use delay() if the rest of the code, at least when the motor is moving
   _stepper.run();
+
+  //Serial.println(TCNT1); delay(10);
 }
 
 // Helper functions to control the brake
@@ -222,9 +232,12 @@ void enterReleasingBrake() {
 
 void enterDropping() {
   // Set the movement parameters for the drop and start the movement
-  _stepper.setMovementParameters(MOTOR_MIN_SPEED, MOTOR_MAX_SPEED, 
-                                  _motor_drop_parameters.acceleration*_motor_parameters.microstepping_compensation, 
+  _stepper.setMovementSpeed(MOTOR_MIN_SPEED, MOTOR_MAX_SPEED);
+  _stepper.setMovementAcceleration(_motor_drop_parameters.acceleration*_motor_parameters.microstepping_compensation, 
                                   _motor_drop_parameters.deceleration*_motor_parameters.microstepping_compensation);
+  _stepper.setMovementJerk(_motor_drop_parameters.acceleration_jerk*_motor_parameters.microstepping_compensation, 
+                                  _motor_drop_parameters.deceleration_jerk*_motor_parameters.microstepping_compensation);
+
   _stepper.moveTo(_loom_parameters.loom_drop_distance*_motor_parameters.microstepping_compensation);
   //Serial.print(F("Moving:")); Serial.println(_stepper.getMovementDirection());
   _drop_start_time = millis();
@@ -241,9 +254,10 @@ void runDropping() {
 }
 
 void enterResetting() {
-  _stepper.setMovementParameters(MOTOR_MIN_SPEED, _motor_reset_parameters.max_speed*_motor_parameters.microstepping_compensation, 
-                                  _motor_reset_parameters.acceleration*_motor_parameters.microstepping_compensation, 
-                                  _motor_reset_parameters.deceleration*_motor_parameters.microstepping_compensation);
+  _stepper.setMovementSpeed(MOTOR_MIN_SPEED, _motor_reset_parameters.max_speed*_motor_parameters.microstepping_compensation);
+  _stepper.setMovementAcceleration(_motor_reset_parameters.acceleration*_motor_parameters.microstepping_compensation, 
+                                   _motor_reset_parameters.deceleration*_motor_parameters.microstepping_compensation);
+  _stepper.setMovementJerk(0, 0);
   _stepper.moveTo(0);
   //Serial.print(F("Moving:")); Serial.println(_stepper.getMovementDirection());
 }
@@ -309,7 +323,8 @@ void startDrops() {
 }
 
 
-void moveMotor() {
+void moveMotor() 
+{
   int32_t parameter;
   char *arg;
 
@@ -325,16 +340,17 @@ void moveMotor() {
     Serial.print(F("Target: "));
     Serial.println(target_position);
 
-    _stepper.setMovementParameters(MOTOR_MIN_SPEED, _motor_reset_parameters.max_speed, 
-                                  _motor_reset_parameters.acceleration*_motor_parameters.microstepping_compensation, 
+    _stepper.setMovementSpeed(MOTOR_MIN_SPEED, _motor_reset_parameters.max_speed); 
+    _stepper.setMovementAcceleration(_motor_reset_parameters.acceleration*_motor_parameters.microstepping_compensation, 
                                   _motor_reset_parameters.deceleration*_motor_parameters.microstepping_compensation);
-
+    _stepper.setMovementJerk(0, 0);
     _stepper.moveTo(target_position);
   } else {
     Serial.println(F("No arguments, can't move"));
   }
 }
-void setupSerialCommands() {
+void setupSerialCommands() 
+{
   _command.addCommand("DROP", startDrops);
   _command.addCommand("R", releaseMotor);
   _command.addCommand("E", engageMotor);
@@ -361,15 +377,23 @@ void readParameters(int32_t* parameters, int8_t count)
   }
 }
 
+void printParameters(int32_t* parameters, int8_t count)
+{
+  for (int i = 0; i<count; i++) 
+  {
+    Serial.print(parameters[i]); Serial.print(' ');    
+  }
+}
+
 //MovementParameters _motor_drop_parameters = { MOTOR_MIN_SPEED, MOTOR_MAX_SPEED, MOTOR_DROP_ACCELERATION, MOTOR_DROP_DECELERATION};
 void parseDropMotorParameters() 
 {
   Serial.println(F("parseDropMotorParameters"));
-  int32_t parameter[4];
+  int32_t parameter[6];
 
-  readParameters(parameter, 4);
-  _motor_drop_parameters = {parameter[0],parameter[1],parameter[2],parameter[3]};
-  Serial.println(_motor_drop_parameters.deceleration);
+  readParameters(parameter, 6);
+  _motor_drop_parameters = {(uint32_t)parameter[0],(uint32_t)parameter[1],(uint32_t)parameter[2],(uint32_t)parameter[3],(uint32_t)parameter[4],(uint32_t)parameter[5]};
+  Serial.print("DropMotorParameters: "); printParameters(parameter, 6); Serial.println();
 }
 
 //MovementParameters _motor_reset_parameters = {MOTOR_MIN_SPEED, MOTOR_MAX_RESET_SPEED, MOTOR_RETRACT_ACCELERATION, MOTOR_RETRACT_ACCELERATION};
@@ -378,8 +402,8 @@ void parseResetMotorParameters()
   Serial.println(F("parseResetMotorParameters"));
   int32_t parameter[4];
   readParameters(parameter, 4);
-  _motor_reset_parameters = {parameter[0],parameter[1],parameter[2],parameter[3]};
-  Serial.println(_motor_reset_parameters.acceleration);
+  _motor_reset_parameters = {(uint32_t)parameter[0],(uint32_t)parameter[1],(uint32_t)parameter[2],(uint32_t)parameter[3]};
+  Serial.print("ResetMotorParameters: "); printParameters(parameter, 4); Serial.println();
 }
 
 //LoomParameters _loom_parameters = { TOTAL_STEPS_TRAVELED, LOOM_BOTTOM_PAUSE, LOOM_DROP_PAUSE };
@@ -389,8 +413,8 @@ void parseLoomParameters()
   int32_t parameter[3];
 
   readParameters(parameter, 3);
-  _loom_parameters = {parameter[0],parameter[1],parameter[2]};
-  Serial.println(_loom_parameters.loom_drop_pause);
+  _loom_parameters = {(uint32_t)parameter[0],(uint32_t)parameter[1],(uint32_t)parameter[2]};
+  Serial.print("LoomParameters: "); printParameters(parameter, 3); Serial.println();
 
   _loom_machine.setStateTransition(SystemStateBottom, SystemStateResetting, _loom_parameters.loom_bottom_pause);
 
@@ -403,19 +427,11 @@ void parseMotorParameters()
   int32_t parameter[2];
 
   readParameters(parameter, 2);
-  _loom_parameters = {parameter[0],parameter[1]};
-  Serial.println(_motor_parameters.brake_engage_delay);
+  _motor_parameters = {(uint32_t)parameter[0],(uint32_t)parameter[1]};
+  Serial.print("MotorParameters: "); printParameters(parameter, 2); Serial.println();
 
   _loom_machine.setStateTransition(SystemStateStartingDrop, SystemStateReleasingBrake, _motor_parameters.brake_engage_delay);
   _loom_machine.setStateTransition(SystemStateReleasingBrake, SystemStateDropping, _motor_parameters.brake_engage_delay);
   _loom_machine.setStateTransition(SystemStateEngagingBrake, SystemStateIdle, _motor_parameters.brake_engage_delay);
   //_loom_machine.setStateTransition(SystemStateFinishingDrop, SystemStateIdle, _motor_parameters.brake_engage_delay);
-
 }
-
-
-
-
-  /*
-
-*/
