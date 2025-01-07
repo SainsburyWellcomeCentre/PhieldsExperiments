@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <WorkflowBuilder Version="2.8.5"
                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                  xmlns:cv="clr-namespace:Bonsai.Vision;assembly=Bonsai.Vision"
@@ -18,12 +18,12 @@
           <Nodes>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="cv:FileCapture">
-                <cv:FileName>devdata\2024-12-16T15-40-12\Cam1\Cam1_2024-12-16T16-00-00.avi</cv:FileName>
+                <cv:FileName></cv:FileName>
                 <cv:PlaybackRate>0</cv:PlaybackRate>
                 <cv:StartPosition>0</cv:StartPosition>
                 <cv:PositionUnits>Frames</cv:PositionUnits>
                 <cv:Loop>true</cv:Loop>
-                <cv:Playing>false</cv:Playing>
+                <cv:Playing>true</cv:Playing>
               </Combinator>
             </Expression>
             <Expression xsi:type="Combinator">
