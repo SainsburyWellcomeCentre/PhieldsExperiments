@@ -279,14 +279,14 @@
                         <drw:X>1287</drw:X>
                         <drw:Y>397</drw:Y>
                       </drw:Center>
-                      <drw:Radius>1</drw:Radius>
+                      <drw:Radius>2</drw:Radius>
                       <drw:Color>
                         <drw:Val0>0</drw:Val0>
                         <drw:Val1>0</drw:Val1>
                         <drw:Val2>255</drw:Val2>
                         <drw:Val3>255</drw:Val3>
                       </drw:Color>
-                      <drw:Thickness>1</drw:Thickness>
+                      <drw:Thickness>2</drw:Thickness>
                       <drw:LineType>Connected8</drw:LineType>
                       <drw:Shift>0</drw:Shift>
                     </Combinator>
@@ -308,14 +308,14 @@
                         <drw:X>1285</drw:X>
                         <drw:Y>408</drw:Y>
                       </drw:Center>
-                      <drw:Radius>1</drw:Radius>
+                      <drw:Radius>2</drw:Radius>
                       <drw:Color>
                         <drw:Val0>0</drw:Val0>
                         <drw:Val1>255</drw:Val1>
                         <drw:Val2>0</drw:Val2>
                         <drw:Val3>255</drw:Val3>
                       </drw:Color>
-                      <drw:Thickness>1</drw:Thickness>
+                      <drw:Thickness>2</drw:Thickness>
                       <drw:LineType>Connected8</drw:LineType>
                       <drw:Shift>0</drw:Shift>
                     </Combinator>
@@ -337,14 +337,14 @@
                         <drw:X>1285</drw:X>
                         <drw:Y>418</drw:Y>
                       </drw:Center>
-                      <drw:Radius>1</drw:Radius>
+                      <drw:Radius>2</drw:Radius>
                       <drw:Color>
                         <drw:Val0>255</drw:Val0>
                         <drw:Val1>255</drw:Val1>
                         <drw:Val2>255</drw:Val2>
                         <drw:Val3>255</drw:Val3>
                       </drw:Color>
-                      <drw:Thickness>1</drw:Thickness>
+                      <drw:Thickness>2</drw:Thickness>
                       <drw:LineType>Connected8</drw:LineType>
                       <drw:Shift>0</drw:Shift>
                     </Combinator>
