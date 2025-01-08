@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <WorkflowBuilder Version="2.8.5"
                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                  xmlns:cv="clr-namespace:Bonsai.Vision;assembly=Bonsai.Vision"
@@ -18,7 +18,7 @@
           <Nodes>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="cv:FileCapture">
-                <cv:FileName></cv:FileName>
+                <cv:FileName>devdata\2024-12-16T15-40-12\Cam1\Cam1_2024-12-16T15-00-00.avi</cv:FileName>
                 <cv:PlaybackRate>0</cv:PlaybackRate>
                 <cv:StartPosition>0</cv:StartPosition>
                 <cv:PositionUnits>Frames</cv:PositionUnits>
@@ -47,7 +47,7 @@
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="DoubleProperty">
-                <Value>39</Value>
+                <Value>325</Value>
               </Combinator>
             </Expression>
             <Expression xsi:type="Combinator">
@@ -683,20 +683,20 @@
                 <aeon:Regions>
                   <aeon:ArrayOfPoint>
                     <aeon:Point>
-                      <aeon:X>1118</aeon:X>
-                      <aeon:Y>172</aeon:Y>
+                      <aeon:X>1217</aeon:X>
+                      <aeon:Y>167</aeon:Y>
                     </aeon:Point>
                     <aeon:Point>
-                      <aeon:X>1214</aeon:X>
-                      <aeon:Y>172</aeon:Y>
+                      <aeon:X>1313</aeon:X>
+                      <aeon:Y>167</aeon:Y>
                     </aeon:Point>
                     <aeon:Point>
-                      <aeon:X>1214</aeon:X>
-                      <aeon:Y>927</aeon:Y>
+                      <aeon:X>1313</aeon:X>
+                      <aeon:Y>922</aeon:Y>
                     </aeon:Point>
                     <aeon:Point>
-                      <aeon:X>1118</aeon:X>
-                      <aeon:Y>927</aeon:Y>
+                      <aeon:X>1217</aeon:X>
+                      <aeon:Y>922</aeon:Y>
                     </aeon:Point>
                   </aeon:ArrayOfPoint>
                 </aeon:Regions>
@@ -835,20 +835,20 @@
               <Value>
                 <ArrayOfPoint>
                   <Point>
-                    <X>1118</X>
-                    <Y>172</Y>
+                    <X>1217</X>
+                    <Y>167</Y>
                   </Point>
                   <Point>
-                    <X>1214</X>
-                    <Y>172</Y>
+                    <X>1313</X>
+                    <Y>167</Y>
                   </Point>
                   <Point>
-                    <X>1214</X>
-                    <Y>927</Y>
+                    <X>1313</X>
+                    <Y>922</Y>
                   </Point>
                   <Point>
-                    <X>1118</X>
-                    <Y>927</Y>
+                    <X>1217</X>
+                    <Y>922</Y>
                   </Point>
                 </ArrayOfPoint>
               </Value>
@@ -867,6 +867,120 @@
         </Workflow>
       </Expression>
       <Expression xsi:type="IncludeWorkflow" Path="Extensions\TrackingControlPanel.bonsai" />
+      <Expression xsi:type="SubscribeSubject">
+        <Name>HeadTail</Name>
+      </Expression>
+      <Expression xsi:type="rx:SelectMany">
+        <Name>LoomAngle</Name>
+        <Workflow>
+          <Nodes>
+            <Expression xsi:type="WorkflowInput">
+              <Name>Source1</Name>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:Take">
+                <rx:Count>1</rx:Count>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="MemberSelector">
+              <Selector>Key</Selector>
+            </Expression>
+            <Expression xsi:type="rx:AsyncSubject">
+              <Name>Id</Name>
+            </Expression>
+            <Expression xsi:type="rx:AsyncSubject">
+              <Name>Source</Name>
+            </Expression>
+            <Expression xsi:type="SubscribeSubject">
+              <Name>Source</Name>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:Merge" />
+            </Expression>
+            <Expression xsi:type="harp:ConvertTimestamped">
+              <Workflow>
+                <Nodes>
+                  <Expression xsi:type="WorkflowInput">
+                    <Name>Source1</Name>
+                  </Expression>
+                  <Expression xsi:type="MemberSelector">
+                    <Selector>Item1.Heading,Item1.Centroid</Selector>
+                  </Expression>
+                  <Expression xsi:type="MemberSelector">
+                    <Selector>Item1</Selector>
+                  </Expression>
+                  <Expression xsi:type="MemberSelector">
+                    <Selector>Item2</Selector>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="cv:CreatePoint2f">
+                      <cv:X>1077</cv:X>
+                      <cv:Y>860</cv:Y>
+                    </Combinator>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="rx:WithLatestFrom" />
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="p1:AngleCalculator" />
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="rx:Zip" />
+                  </Expression>
+                  <Expression xsi:type="Disable">
+                    <Builder xsi:type="scr:ExpressionTransform">
+                      <scr:Expression>Math.PI-Math.ABS(Math.ABS(it.Item1 - it.Item2) - Math.PI)</scr:Expression>
+                    </Builder>
+                  </Expression>
+                  <Expression xsi:type="Subtract" />
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="p1:NormalizeAngle" />
+                  </Expression>
+                  <Expression xsi:type="Disable">
+                    <Builder xsi:type="scr:ExpressionTransform">
+                      <scr:Expression>((it+Math.PI)%(2*Math.PI))-Math.PI</scr:Expression>
+                    </Builder>
+                  </Expression>
+                  <Expression xsi:type="WorkflowOutput" />
+                </Nodes>
+                <Edges>
+                  <Edge From="0" To="1" Label="Source1" />
+                  <Edge From="1" To="2" Label="Source1" />
+                  <Edge From="1" To="3" Label="Source1" />
+                  <Edge From="2" To="7" Label="Source1" />
+                  <Edge From="3" To="5" Label="Source1" />
+                  <Edge From="4" To="5" Label="Source2" />
+                  <Edge From="5" To="6" Label="Source1" />
+                  <Edge From="6" To="7" Label="Source2" />
+                  <Edge From="7" To="8" Label="Source1" />
+                  <Edge From="8" To="9" Label="Source1" />
+                  <Edge From="9" To="10" Label="Source1" />
+                  <Edge From="10" To="11" Label="Source1" />
+                  <Edge From="11" To="12" Label="Source1" />
+                </Edges>
+              </Workflow>
+            </Expression>
+            <Expression xsi:type="SubscribeSubject">
+              <Name>Id</Name>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:WithLatestFrom" />
+            </Expression>
+            <Expression xsi:type="WorkflowOutput" />
+          </Nodes>
+          <Edges>
+            <Edge From="0" To="1" Label="Source1" />
+            <Edge From="1" To="2" Label="Source1" />
+            <Edge From="1" To="4" Label="Source1" />
+            <Edge From="2" To="3" Label="Source1" />
+            <Edge From="5" To="6" Label="Source1" />
+            <Edge From="6" To="7" Label="Source1" />
+            <Edge From="7" To="9" Label="Source1" />
+            <Edge From="8" To="9" Label="Source2" />
+            <Edge From="9" To="10" Label="Source1" />
+          </Edges>
+        </Workflow>
+      </Expression>
     </Nodes>
     <Edges>
       <Edge From="0" To="1" Label="Source1" />
@@ -884,6 +998,7 @@
       <Edge From="13" To="14" Label="Source1" />
       <Edge From="15" To="16" Label="Source1" />
       <Edge From="16" To="17" Label="Source1" />
+      <Edge From="19" To="20" Label="Source1" />
     </Edges>
   </Workflow>
 </WorkflowBuilder>
