@@ -1,9 +1,9 @@
 [submodule "src/Arduino/libraries/FastStepper"]
-	path = src/Arduino/libraries/FastStepper
+	path = Arduino/libraries/FastStepper
 	url = https://github.com/nightswimmer/FastStepper
 [submodule "src/Arduino/libraries/SerialCommand"]
-	path = src/Arduino/libraries/SerialCommand
+	path = Arduino/libraries/SerialCommand
 	url = https://github.com/nightswimmer/SerialCommand.git
 [submodule "src/Arduino/libraries/StateMachine"]
-	path = src/Arduino/libraries/StateMachine
+	path = Arduino/libraries/StateMachine
 	url = https://github.com/nightswimmer/StateMachine.git
