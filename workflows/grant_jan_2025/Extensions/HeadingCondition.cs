@@ -7,7 +7,7 @@ using System.Reactive.Linq;
 using OpenCV.Net;
 
 [Combinator]
-[Description("Validates the heading given two points")]
+[Description("Outputs boolean indicating whether a given angle is within a specific range")]
 [WorkflowElementCategory(ElementCategory.Transform)]
 public class HeadingCondition
 {
