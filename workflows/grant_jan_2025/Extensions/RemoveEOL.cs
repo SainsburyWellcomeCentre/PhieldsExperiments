@@ -6,7 +6,7 @@ using System.Linq;
 using System.Reactive.Linq;
 
 [Combinator]
-[Description("")]
+[Description("Removes \n \r from strings")]
 [WorkflowElementCategory(ElementCategory.Transform)]
 public class RemoveEOL
 {
