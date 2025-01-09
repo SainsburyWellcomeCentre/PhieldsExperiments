@@ -9,7 +9,7 @@ using OpenCV.Net;
 [assembly:TypeVisualizer("Bonsai.Vision.Design.BinaryRegionExtremesVisualizer, Bonsai.Vision.Design", TargetType= typeof(Tuple<Point2f,Point2f>))]
 */
 [Combinator]
-[Description("")]
+[Description("Creates a HeadTail data type from two points(region extremes) and a list of points (Centroids) used has history to calculate current velocity Tuple<Tuple<Point2f, Point2f>, IList<Point2f>>")]
 [WorkflowElementCategory(ElementCategory.Transform)]
 [TypeVisualizer("Bonsai.Vision.Design.BinaryRegionExtremesVisualizer, Bonsai.Vision.Design")]
 public class HeadTailVelocity
