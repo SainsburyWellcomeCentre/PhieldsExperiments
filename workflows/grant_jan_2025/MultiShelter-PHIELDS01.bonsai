@@ -7,9 +7,9 @@
                  xmlns:p1="clr-namespace:;assembly=Extensions"
                  xmlns:harp="clr-namespace:Bonsai.Harp;assembly=Bonsai.Harp"
                  xmlns:cv="clr-namespace:Bonsai.Vision;assembly=Bonsai.Vision"
+                 xmlns:scr="clr-namespace:Bonsai.Scripting.Expressions;assembly=Bonsai.Scripting.Expressions"
                  xmlns:p2="clr-namespace:Harp.CameraControllerGen2;assembly=Harp.CameraControllerGen2"
                  xmlns:aeon-env="clr-namespace:Aeon.Environment;assembly=Aeon.Environment"
-                 xmlns:scr="clr-namespace:Bonsai.Scripting.Expressions;assembly=Bonsai.Scripting.Expressions"
                  xmlns="https://bonsai-rx.org/2018/workflow">
   <Workflow>
     <Nodes>
@@ -741,6 +741,127 @@
                   <Edge From="3" To="5" Label="Source1" />
                   <Edge From="4" To="5" Label="Source2" />
                   <Edge From="5" To="6" Label="Source1" />
+                </Edges>
+              </Workflow>
+            </Expression>
+            <Expression xsi:type="GroupWorkflow">
+              <Name>BinaryRegionsTracking</Name>
+              <Workflow>
+                <Nodes>
+                  <Expression xsi:type="ExternalizedMapping">
+                    <Property Name="Name" DisplayName="TrackingEvents" Description="Contours" Category="Subject" />
+                  </Expression>
+                  <Expression xsi:type="SubscribeSubject">
+                    <Name>TrackingTop</Name>
+                  </Expression>
+                  <Expression xsi:type="ExternalizedMapping">
+                    <Property Name="ExpectedNumberOfConnectedComponents" />
+                  </Expression>
+                  <Expression xsi:type="harp:ConvertTimestamped">
+                    <Name>BinaryRegionsTracking</Name>
+                    <Workflow>
+                      <Nodes>
+                        <Expression xsi:type="WorkflowInput">
+                          <Name>Source1</Name>
+                        </Expression>
+                        <Expression xsi:type="ExternalizedMapping">
+                          <Property Name="ExpectedNumberOfConnectedComponents" />
+                        </Expression>
+                        <Expression xsi:type="Combinator">
+                          <Combinator xsi:type="p1:BinaryRegionsTracking">
+                            <p1:ExpectedNumberOfConnectedComponents>1</p1:ExpectedNumberOfConnectedComponents>
+                          </Combinator>
+                        </Expression>
+                        <Expression xsi:type="scr:ExpressionCondition">
+                          <scr:Name>NotNull</scr:Name>
+                          <scr:Expression>it != null</scr:Expression>
+                        </Expression>
+                        <Expression xsi:type="WorkflowOutput" />
+                      </Nodes>
+                      <Edges>
+                        <Edge From="0" To="2" Label="Source1" />
+                        <Edge From="1" To="2" Label="Source2" />
+                        <Edge From="2" To="3" Label="Source1" />
+                        <Edge From="3" To="4" Label="Source1" />
+                      </Edges>
+                    </Workflow>
+                  </Expression>
+                  <Expression xsi:type="ExternalizedMapping">
+                    <Property Name="Name" DisplayName="BynaryRegionsEvents" Description="The name of the shared subject with binary regions tracking" Category="Subject" />
+                  </Expression>
+                  <Expression xsi:type="rx:PublishSubject">
+                    <Name>BynaryRegionsTracking</Name>
+                  </Expression>
+                  <Expression xsi:type="harp:ConvertTimestamped">
+                    <Name>IndexConnectedComponents</Name>
+                    <Workflow>
+                      <Nodes>
+                        <Expression xsi:type="WorkflowInput">
+                          <Name>Source1</Name>
+                        </Expression>
+                        <Expression xsi:type="rx:SelectMany">
+                          <Name>IndexConnectedComponents</Name>
+                          <Workflow>
+                            <Nodes>
+                              <Expression xsi:type="WorkflowInput">
+                                <Name>Source1</Name>
+                              </Expression>
+                              <Expression xsi:type="MemberSelector">
+                                <Selector>DistConnCompCollection.ConnCompCollection</Selector>
+                              </Expression>
+                              <Expression xsi:type="Combinator">
+                                <Combinator xsi:type="rx:Concat" />
+                              </Expression>
+                              <Expression xsi:type="Combinator">
+                                <Combinator xsi:type="rx:WithLatestFrom" />
+                              </Expression>
+                              <Expression xsi:type="WorkflowOutput" />
+                            </Nodes>
+                            <Edges>
+                              <Edge From="0" To="1" Label="Source1" />
+                              <Edge From="0" To="3" Label="Source2" />
+                              <Edge From="1" To="2" Label="Source1" />
+                              <Edge From="2" To="3" Label="Source1" />
+                              <Edge From="3" To="4" Label="Source1" />
+                            </Edges>
+                          </Workflow>
+                        </Expression>
+                        <Expression xsi:type="WorkflowOutput" />
+                      </Nodes>
+                      <Edges>
+                        <Edge From="0" To="1" Label="Source1" />
+                        <Edge From="1" To="2" Label="Source1" />
+                      </Edges>
+                    </Workflow>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="rx:ElementIndex" />
+                  </Expression>
+                  <Expression xsi:type="rx:GroupBy">
+                    <rx:KeySelector>Index</rx:KeySelector>
+                    <rx:ElementSelector>Value</rx:ElementSelector>
+                  </Expression>
+                  <Expression xsi:type="ExternalizedMapping">
+                    <Property Name="Name" DisplayName="BinaryRegionsObservable" Category="Subject" />
+                  </Expression>
+                  <Expression xsi:type="rx:ReplaySubject">
+                    <Name>BinaryRegionsObservable</Name>
+                    <rx:BufferSize xsi:nil="true" />
+                  </Expression>
+                  <Expression xsi:type="WorkflowOutput" />
+                </Nodes>
+                <Edges>
+                  <Edge From="0" To="1" Label="Source1" />
+                  <Edge From="1" To="3" Label="Source1" />
+                  <Edge From="2" To="3" Label="Source2" />
+                  <Edge From="3" To="5" Label="Source1" />
+                  <Edge From="4" To="5" Label="Source2" />
+                  <Edge From="5" To="6" Label="Source1" />
+                  <Edge From="6" To="7" Label="Source1" />
+                  <Edge From="7" To="8" Label="Source1" />
+                  <Edge From="8" To="10" Label="Source1" />
+                  <Edge From="9" To="10" Label="Source2" />
+                  <Edge From="10" To="11" Label="Source2" />
                 </Edges>
               </Workflow>
             </Expression>
