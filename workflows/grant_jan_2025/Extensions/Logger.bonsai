@@ -6,6 +6,8 @@
                  xmlns:rx="clr-namespace:Bonsai.Reactive;assembly=Bonsai.Core"
                  xmlns:aeon-env="clr-namespace:Aeon.Environment;assembly=Aeon.Environment"
                  xmlns:scr="clr-namespace:Bonsai.Scripting.Expressions;assembly=Bonsai.Scripting.Expressions"
+                 xmlns:aeon="clr-namespace:Aeon.Acquisition;assembly=Aeon.Acquisition"
+                 xmlns:p2="clr-namespace:Social;assembly=Extensions"
                  xmlns="https://bonsai-rx.org/2018/workflow">
   <Workflow>
     <Nodes>
@@ -67,31 +69,23 @@
         <LogName>CameraSide</LogName>
         <FrameRate>50</FrameRate>
       </Expression>
-      <Expression xsi:type="Disable">
-        <Builder xsi:type="rx:BehaviorSubject" TypeArguments="harp:Timestamped(aeon-env:EnvironmentSubjectStateMetadata)">
-          <rx:Name>SubjectState</rx:Name>
-        </Builder>
+      <Expression xsi:type="rx:BehaviorSubject" TypeArguments="harp:Timestamped(aeon-env:EnvironmentSubjectStateMetadata)">
+        <rx:Name>SubjectState</rx:Name>
       </Expression>
-      <Expression xsi:type="Disable">
-        <Builder xsi:type="IncludeWorkflow" Path="Aeon.Acquisition:LogData.bonsai">
-          <Heartbeats>Heartbeats</Heartbeats>
-          <ClosingDuration>PT2S</ClosingDuration>
-          <LogName>Environment_SubjectState</LogName>
-          <Selector>Seconds,Value.Id,Value.Weight,Value.Type</Selector>
-        </Builder>
+      <Expression xsi:type="IncludeWorkflow" Path="Aeon.Acquisition:LogData.bonsai">
+        <Heartbeats>Heartbeats</Heartbeats>
+        <ClosingDuration>PT2S</ClosingDuration>
+        <LogName>Environment_SubjectState</LogName>
+        <Selector>Seconds,Value.Id,Value.Weight,Value.Type</Selector>
       </Expression>
-      <Expression xsi:type="Disable">
-        <Builder xsi:type="rx:BehaviorSubject" TypeArguments="harp:Timestamped(aeon-env:EnvironmentStateMetadata)">
-          <rx:Name>EnvironmentState</rx:Name>
-        </Builder>
+      <Expression xsi:type="rx:BehaviorSubject" TypeArguments="harp:Timestamped(aeon-env:EnvironmentStateMetadata)">
+        <rx:Name>EnvironmentState</rx:Name>
       </Expression>
-      <Expression xsi:type="Disable">
-        <Builder xsi:type="IncludeWorkflow" Path="Aeon.Acquisition:LogData.bonsai">
-          <Heartbeats>Heartbeats</Heartbeats>
-          <ClosingDuration>PT2S</ClosingDuration>
-          <LogName>Environment_EnvironmentState</LogName>
-          <Selector>Seconds,Value.Type</Selector>
-        </Builder>
+      <Expression xsi:type="IncludeWorkflow" Path="Aeon.Acquisition:LogData.bonsai">
+        <Heartbeats>Heartbeats</Heartbeats>
+        <ClosingDuration>PT2S</ClosingDuration>
+        <LogName>Environment_EnvironmentState</LogName>
+        <Selector>Seconds,Value.Type</Selector>
       </Expression>
       <Expression xsi:type="SubscribeSubject">
         <Name>MotorCommands</Name>
@@ -126,68 +120,30 @@
         <LogName>Motor</LogName>
         <Selector />
       </Expression>
+      <Expression xsi:type="rx:PublishSubject" TypeArguments="harp:Timestamped(aeon:LogMessage)">
+        <rx:Name>Annotations</rx:Name>
+      </Expression>
+      <Expression xsi:type="IncludeWorkflow" Path="Aeon.Acquisition:LogData.bonsai">
+        <Heartbeats>Heartbeats</Heartbeats>
+        <ClosingDuration>PT2S</ClosingDuration>
+        <LogName>Environment_MessageLog</LogName>
+        <Selector>Seconds,Value.Priority,Value.Type,Value.Message</Selector>
+      </Expression>
       <Expression xsi:type="Disable">
-        <Builder xsi:type="ExternalizedMapping">
-          <Property Name="Value" DisplayName="MouseId" />
+        <Builder xsi:type="aeon:StateRecoverySubject" TypeArguments="p2:Environment">
+          <aeon:Name>EnvironmentConfiguration</aeon:Name>
         </Builder>
       </Expression>
       <Expression xsi:type="Disable">
-        <Builder xsi:type="Combinator">
-          <Combinator xsi:type="StringProperty">
-            <Value />
-          </Combinator>
+        <Builder xsi:type="IncludeWorkflow" Path="Bonsai.Harp:WithLatestTimestamp.bonsai">
+          <Name>Patch1Events</Name>
         </Builder>
       </Expression>
       <Expression xsi:type="Disable">
-        <Builder xsi:type="Combinator">
-          <Combinator xsi:type="StringProperty">
-            <Value />
-          </Combinator>
-        </Builder>
-      </Expression>
-      <Expression xsi:type="Disable">
-        <Builder xsi:type="SubscribeSubject">
-          <Name>LoggerTimestamp</Name>
-        </Builder>
-      </Expression>
-      <Expression xsi:type="Disable">
-        <Builder xsi:type="Combinator">
-          <Combinator xsi:type="rx:CombineLatest" />
-        </Builder>
-      </Expression>
-      <Expression xsi:type="Disable">
-        <Builder xsi:type="Combinator">
-          <Combinator xsi:type="rx:Take">
-            <rx:Count>1</rx:Count>
-          </Combinator>
-        </Builder>
-      </Expression>
-      <Expression xsi:type="Disable">
-        <Builder xsi:type="MemberSelector">
-          <Selector>Item1</Selector>
-        </Builder>
-      </Expression>
-      <Expression xsi:type="Disable">
-        <Builder xsi:type="Combinator">
-          <Combinator xsi:type="rx:Merge" />
-        </Builder>
-      </Expression>
-      <Expression xsi:type="Disable">
-        <Builder xsi:type="SubscribeSubject">
-          <Name>LoggerTimestamp</Name>
-        </Builder>
-      </Expression>
-      <Expression xsi:type="Disable">
-        <Builder xsi:type="Combinator">
-          <Combinator xsi:type="rx:WithLatestFrom" />
-        </Builder>
-      </Expression>
-      <Expression xsi:type="Disable">
-        <Builder xsi:type="IncludeWorkflow" Path="Aeon.Acquisition:LogData.bonsai">
+        <Builder xsi:type="IncludeWorkflow" Path="Aeon.Acquisition:LogJson.bonsai">
           <Heartbeats>Heartbeats</Heartbeats>
           <ClosingDuration>PT2S</ClosingDuration>
-          <LogName>MouseID</LogName>
-          <Selector />
+          <LogName>Environment_ActiveConfiguration</LogName>
         </Builder>
       </Expression>
     </Nodes>
@@ -210,16 +166,8 @@
       <Edge From="24" To="25" Label="Source2" />
       <Edge From="25" To="26" Label="Source1" />
       <Edge From="27" To="28" Label="Source1" />
-      <Edge From="27" To="29" Label="Source1" />
-      <Edge From="28" To="34" Label="Source1" />
-      <Edge From="29" To="31" Label="Source1" />
-      <Edge From="30" To="31" Label="Source2" />
-      <Edge From="31" To="32" Label="Source1" />
-      <Edge From="32" To="33" Label="Source1" />
-      <Edge From="33" To="34" Label="Source2" />
-      <Edge From="34" To="36" Label="Source1" />
-      <Edge From="35" To="36" Label="Source2" />
-      <Edge From="36" To="37" Label="Source1" />
+      <Edge From="29" To="30" Label="Source1" />
+      <Edge From="30" To="31" Label="Source1" />
     </Edges>
   </Workflow>
 </WorkflowBuilder>
