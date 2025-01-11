@@ -133,8 +133,9 @@ public class BinaryRegionsTracking
 
             var bestPermute = permute(valueCopy,0,valueCopy.Count-1,previous);
             previous = bestPermute.ConnCompCollection;
+            var crossings = (ExpectedNumberOfConnectedComponents- value.Count >0)?ExpectedNumberOfConnectedComponents- value.Count:0;
 
-            return  new DistanceConnectedComponents(){ DistConnCompCollection = bestPermute, Crossings = ExpectedNumberOfConnectedComponents- valueCopy.Count};
+            return  new DistanceConnectedComponents(){ DistConnCompCollection = bestPermute, Crossings = crossings};
         });
     }
 }
