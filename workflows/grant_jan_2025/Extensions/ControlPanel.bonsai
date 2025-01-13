@@ -3,16 +3,15 @@
                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                  xmlns:wie="clr-namespace:Bonsai.Windows.Input;assembly=Bonsai.Windows.Input"
                  xmlns:rx="clr-namespace:Bonsai.Reactive;assembly=Bonsai.Core"
-                 xmlns:viz="clr-namespace:Bonsai.Design.Visualizers;assembly=Bonsai.Design.Visualizers"
-                 xmlns:scr="clr-namespace:Bonsai.Scripting.Expressions;assembly=Bonsai.Scripting.Expressions"
-                 xmlns:gui="clr-namespace:Bonsai.Gui;assembly=Bonsai.Gui"
                  xmlns:drw="clr-namespace:Bonsai.Vision.Drawing;assembly=Bonsai.Vision"
                  xmlns:cv="clr-namespace:Bonsai.Vision;assembly=Bonsai.Vision"
-                 xmlns:p1="clr-namespace:Bonsai.Vision.Design;assembly=Bonsai.Vision.Design"
+                 xmlns:scr="clr-namespace:Bonsai.Scripting.Expressions;assembly=Bonsai.Scripting.Expressions"
                  xmlns:zg="clr-namespace:Bonsai.Gui.ZedGraph;assembly=Bonsai.Gui.ZedGraph"
                  xmlns:dsp="clr-namespace:Bonsai.Dsp;assembly=Bonsai.Dsp"
+                 xmlns:gui="clr-namespace:Bonsai.Gui;assembly=Bonsai.Gui"
                  xmlns:aeon="clr-namespace:Aeon.Acquisition;assembly=Aeon.Acquisition"
                  xmlns:aeon-env="clr-namespace:Aeon.Environment;assembly=Aeon.Environment"
+                 xmlns:viz="clr-namespace:Bonsai.Design.Visualizers;assembly=Bonsai.Design.Visualizers"
                  xmlns="https://bonsai-rx.org/2018/workflow">
   <Workflow>
     <Nodes>
@@ -113,70 +112,9 @@
         <Name>HeadTail</Name>
         <Workflow>
           <Nodes>
-            <Expression xsi:type="IncludeWorkflow" Path="Extensions\MergeIGroupObservables.bonsai">
+            <Expression xsi:type="IncludeWorkflow" Path="Extensions\GetObservableByKey.bonsai">
               <IGroupObservableSubject>HeadTailObservable</IGroupObservableSubject>
-              <ExpectedGroupCount>NumberOfTrackingSubjects</ExpectedGroupCount>
-            </Expression>
-            <Expression xsi:type="Disable">
-              <Builder xsi:type="rx:ToDictionary">
-                <rx:KeySelector>Item2</rx:KeySelector>
-                <rx:ElementSelector>Item1.Value.Item1.Heading</rx:ElementSelector>
-              </Builder>
-            </Expression>
-            <Expression xsi:type="Disable">
-              <Builder xsi:type="viz:RollingGraphBuilder">
-                <viz:IndexSelector>Item2</viz:IndexSelector>
-                <viz:ValueSelector>Item1.Value.Item1.Heading</viz:ValueSelector>
-                <viz:SymbolType>Default</viz:SymbolType>
-                <viz:LineWidth>1</viz:LineWidth>
-                <viz:Capacity xsi:nil="true" />
-                <viz:Min xsi:nil="true" />
-                <viz:Max xsi:nil="true" />
-              </Builder>
-            </Expression>
-            <Expression xsi:type="Disable">
-              <Builder xsi:type="MemberSelector">
-                <Selector>Item1.Item1.Velocity</Selector>
-              </Builder>
-            </Expression>
-            <Expression xsi:type="Disable">
-              <Builder xsi:type="viz:RollingGraphBuilder">
-                <viz:SymbolType>None</viz:SymbolType>
-                <viz:LineWidth>1</viz:LineWidth>
-                <viz:Capacity xsi:nil="true" />
-                <viz:Min xsi:nil="true" />
-                <viz:Max xsi:nil="true" />
-              </Builder>
-            </Expression>
-            <Expression xsi:type="Disable">
-              <Builder xsi:type="VisualizerMapping" />
-            </Expression>
-            <Expression xsi:type="Disable">
-              <Builder xsi:type="scr:ExpressionTransform">
-                <scr:Expression>Math.Sqrt((it.X*it.X)+(it.Y*it.Y))</scr:Expression>
-              </Builder>
-            </Expression>
-            <Expression xsi:type="Disable">
-              <Builder xsi:type="VisualizerMapping" />
-            </Expression>
-            <Expression xsi:type="Disable">
-              <Builder xsi:type="MemberSelector">
-                <Selector>Item1.Item1.Heading</Selector>
-              </Builder>
-            </Expression>
-            <Expression xsi:type="Disable">
-              <Builder xsi:type="VisualizerMapping" />
-            </Expression>
-            <Expression xsi:type="Disable">
-              <Builder xsi:type="gui:TableLayoutPanelBuilder">
-                <gui:Enabled>true</gui:Enabled>
-                <gui:Visible>true</gui:Visible>
-                <gui:ColumnCount>1</gui:ColumnCount>
-                <gui:RowCount>4</gui:RowCount>
-                <gui:ColumnStyles />
-                <gui:RowStyles />
-                <gui:CellSpans />
-              </Builder>
+              <ID>0</ID>
             </Expression>
             <Expression xsi:type="SubscribeSubject">
               <Name>ProcessedImage</Name>
@@ -422,8 +360,8 @@
                         <Expression xsi:type="Combinator">
                           <Combinator xsi:type="drw:Circle">
                             <drw:Center>
-                              <drw:X>1096</drw:X>
-                              <drw:Y>576</drw:Y>
+                              <drw:X>847</drw:X>
+                              <drw:Y>31</drw:Y>
                             </drw:Center>
                             <drw:Radius>2</drw:Radius>
                             <drw:Color>
@@ -448,8 +386,8 @@
                         <Expression xsi:type="Combinator">
                           <Combinator xsi:type="drw:Circle">
                             <drw:Center>
-                              <drw:X>1106</drw:X>
-                              <drw:Y>581</drw:Y>
+                              <drw:X>838</drw:X>
+                              <drw:Y>38</drw:Y>
                             </drw:Center>
                             <drw:Radius>2</drw:Radius>
                             <drw:Color>
@@ -474,8 +412,8 @@
                         <Expression xsi:type="Combinator">
                           <Combinator xsi:type="drw:Circle">
                             <drw:Center>
-                              <drw:X>1116</drw:X>
-                              <drw:Y>586</drw:Y>
+                              <drw:X>830</drw:X>
+                              <drw:Y>44</drw:Y>
                             </drw:Center>
                             <drw:Radius>2</drw:Radius>
                             <drw:Color>
@@ -560,49 +498,21 @@
                 </Edges>
               </Workflow>
             </Expression>
-            <Expression xsi:type="VisualizerMapping">
-              <VisualizerType xsi:type="TypeMapping" TypeArguments="p1:IplImageVisualizer" />
-            </Expression>
-            <Expression xsi:type="rx:Condition">
-              <Workflow>
-                <Nodes>
-                  <Expression xsi:type="WorkflowInput">
-                    <Name>Source1</Name>
-                  </Expression>
-                  <Expression xsi:type="MemberSelector">
-                    <Selector>Value.Item2</Selector>
-                  </Expression>
-                  <Expression xsi:type="Equal">
-                    <Operand xsi:type="IntProperty">
-                      <Value>0</Value>
-                    </Operand>
-                  </Expression>
-                  <Expression xsi:type="WorkflowOutput" />
-                </Nodes>
-                <Edges>
-                  <Edge From="0" To="1" Label="Source1" />
-                  <Edge From="1" To="2" Label="Source1" />
-                  <Edge From="2" To="3" Label="Source1" />
-                </Edges>
-              </Workflow>
+            <Expression xsi:type="VisualizerMapping" />
+            <Expression xsi:type="IncludeWorkflow" Path="Extensions\GetObservableByKey.bonsai">
+              <IGroupObservableSubject>LoomAngleObservable</IGroupObservableSubject>
+              <ID>0</ID>
             </Expression>
             <Expression xsi:type="MemberSelector">
-              <Selector>Value.Item1.Item1.Velocity</Selector>
-            </Expression>
-            <Expression xsi:type="MemberSelector">
-              <Selector>Value.Item1.Item1.Heading</Selector>
-            </Expression>
-            <Expression xsi:type="Combinator">
-              <Combinator xsi:type="rx:Zip" />
+              <Selector>Value</Selector>
             </Expression>
             <Expression xsi:type="scr:ExpressionTransform">
               <scr:Expression>new(
-  it.Item2 as Heading, 
-  Math.SQRT(it.Item1.X*it.Item1.X + it.Item1.Y*it.Item1.Y) as Velocity
+  it as LoomAngle
 )</scr:Expression>
             </Expression>
             <Expression xsi:type="zg:RollingGraphBuilder">
-              <zg:ValueSelector>Heading</zg:ValueSelector>
+              <zg:ValueSelector>LoomAngle</zg:ValueSelector>
               <zg:SymbolType>None</zg:SymbolType>
               <zg:LineWidth>1</zg:LineWidth>
               <zg:CurveSettings />
@@ -611,6 +521,10 @@
               <zg:Max xsi:nil="true" />
             </Expression>
             <Expression xsi:type="VisualizerMapping" />
+            <Expression xsi:type="IncludeWorkflow" Path="Extensions\MergeIGroupObservables.bonsai">
+              <IGroupObservableSubject>HeadTailObservable</IGroupObservableSubject>
+              <ExpectedGroupCount>NumberOfTrackingSubjects</ExpectedGroupCount>
+            </Expression>
             <Expression xsi:type="MemberSelector">
               <Selector>Value.Item1.Item1.Centroid</Selector>
             </Expression>
@@ -634,6 +548,18 @@
               </Combinator>
             </Expression>
             <Expression xsi:type="VisualizerMapping" />
+            <Expression xsi:type="IncludeWorkflow" Path="Extensions\GetObservableByKey.bonsai">
+              <IGroupObservableSubject>HeadTailObservable</IGroupObservableSubject>
+              <ID>0</ID>
+            </Expression>
+            <Expression xsi:type="MemberSelector">
+              <Selector>Value.Item1.Velocity</Selector>
+            </Expression>
+            <Expression xsi:type="scr:ExpressionTransform">
+              <scr:Expression>new(
+  Math.SQRT(it.X*it.X + it.Y*it.Y) as Velocity
+)</scr:Expression>
+            </Expression>
             <Expression xsi:type="zg:RollingGraphBuilder">
               <zg:ValueSelector>Velocity</zg:ValueSelector>
               <zg:SymbolType>None</zg:SymbolType>
@@ -655,62 +581,31 @@
               <gui:CellSpans />
             </Expression>
             <Expression xsi:type="WorkflowOutput" />
-            <Expression xsi:type="SubscribeSubject">
-              <Name>CameraTop</Name>
-            </Expression>
-            <Expression xsi:type="MemberSelector">
-              <Selector>Value.Image</Selector>
-            </Expression>
-            <Expression xsi:type="Combinator">
-              <Combinator xsi:type="rx:SampleInterval">
-                <rx:Interval>PT0.03S</rx:Interval>
-              </Combinator>
-            </Expression>
-            <Expression xsi:type="rx:PublishSubject">
-              <Name>FrameTrajectory</Name>
-            </Expression>
           </Nodes>
           <Edges>
-            <Edge From="0" To="1" Label="Source1" />
-            <Edge From="0" To="18" Label="Source1" />
-            <Edge From="0" To="25" Label="Source1" />
-            <Edge From="1" To="2" Label="Source1" />
-            <Edge From="2" To="3" Label="Source1" />
-            <Edge From="2" To="8" Label="Source1" />
-            <Edge From="3" To="4" Label="Source1" />
+            <Edge From="1" To="3" Label="Source1" />
+            <Edge From="2" To="3" Label="Source2" />
             <Edge From="3" To="6" Label="Source1" />
             <Edge From="4" To="5" Label="Source1" />
-            <Edge From="5" To="10" Label="Source1" />
+            <Edge From="5" To="6" Label="Source2" />
             <Edge From="6" To="7" Label="Source1" />
-            <Edge From="7" To="10" Label="Source2" />
+            <Edge From="7" To="23" Label="Source1" />
             <Edge From="8" To="9" Label="Source1" />
-            <Edge From="9" To="10" Label="Source3" />
-            <Edge From="11" To="13" Label="Source1" />
-            <Edge From="12" To="13" Label="Source2" />
-            <Edge From="13" To="16" Label="Source1" />
+            <Edge From="9" To="10" Label="Source1" />
+            <Edge From="10" To="11" Label="Source1" />
+            <Edge From="11" To="12" Label="Source1" />
+            <Edge From="12" To="23" Label="Source2" />
+            <Edge From="13" To="14" Label="Source1" />
             <Edge From="14" To="15" Label="Source1" />
-            <Edge From="15" To="16" Label="Source2" />
+            <Edge From="15" To="16" Label="Source1" />
             <Edge From="16" To="17" Label="Source1" />
-            <Edge From="17" To="31" Label="Source1" />
+            <Edge From="17" To="23" Label="Source3" />
             <Edge From="18" To="19" Label="Source1" />
-            <Edge From="18" To="20" Label="Source1" />
-            <Edge From="19" To="21" Label="Source1" />
-            <Edge From="20" To="21" Label="Source2" />
+            <Edge From="19" To="20" Label="Source1" />
+            <Edge From="20" To="21" Label="Source1" />
             <Edge From="21" To="22" Label="Source1" />
-            <Edge From="22" To="23" Label="Source1" />
-            <Edge From="22" To="29" Label="Source1" />
+            <Edge From="22" To="23" Label="Source4" />
             <Edge From="23" To="24" Label="Source1" />
-            <Edge From="24" To="31" Label="Source2" />
-            <Edge From="25" To="26" Label="Source1" />
-            <Edge From="26" To="27" Label="Source1" />
-            <Edge From="27" To="28" Label="Source1" />
-            <Edge From="28" To="31" Label="Source3" />
-            <Edge From="29" To="30" Label="Source1" />
-            <Edge From="30" To="31" Label="Source4" />
-            <Edge From="31" To="32" Label="Source1" />
-            <Edge From="33" To="34" Label="Source1" />
-            <Edge From="34" To="35" Label="Source1" />
-            <Edge From="35" To="36" Label="Source1" />
           </Edges>
         </Workflow>
       </Expression>
@@ -770,7 +665,7 @@
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="aeon-env:EnvironmentSubjectState">
-                      <aeon-env:EnvironmentState>Experiment</aeon-env:EnvironmentState>
+                      <aeon-env:EnvironmentState>Maintenance</aeon-env:EnvironmentState>
                     </Combinator>
                   </Expression>
                   <Expression xsi:type="WorkflowOutput" />
@@ -869,7 +764,7 @@
             </Expression>
             <Expression xsi:type="gui:ButtonBuilder">
               <gui:Name>Loom</gui:Name>
-              <gui:Enabled>true</gui:Enabled>
+              <gui:Enabled>false</gui:Enabled>
               <gui:Visible>true</gui:Visible>
               <gui:Font>Microsoft Sans Serif, 16pt</gui:Font>
               <gui:Text>Trigger Loom</gui:Text>
@@ -966,7 +861,7 @@
               <gui:Enabled>false</gui:Enabled>
               <gui:Visible>true</gui:Visible>
               <gui:Font>Microsoft Sans Serif, 26pt, style=Bold</gui:Font>
-              <gui:Text>2</gui:Text>
+              <gui:Text>0</gui:Text>
             </Expression>
             <Expression xsi:type="VisualizerMapping" />
             <Expression xsi:type="Combinator">
