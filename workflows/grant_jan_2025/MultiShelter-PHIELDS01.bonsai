@@ -1137,8 +1137,8 @@
                               </Expression>
                               <Expression xsi:type="Combinator">
                                 <Combinator xsi:type="cv:CreatePoint2f">
-                                  <cv:X>1077</cv:X>
-                                  <cv:Y>860</cv:Y>
+                                  <cv:X>872</cv:X>
+                                  <cv:Y>488</cv:Y>
                                 </Combinator>
                               </Expression>
                               <Expression xsi:type="Combinator">
