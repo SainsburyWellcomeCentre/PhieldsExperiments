@@ -63,8 +63,8 @@
         <Name>CameraSide</Name>
       </Expression>
       <Expression xsi:type="IncludeWorkflow" Path="Aeon.Acquisition:LogVideo.bonsai">
-        <Heartbeats>Heartbeats</Heartbeats>
-        <ClosingDuration>PT2S</ClosingDuration>
+        <Heartbeats />
+        <ClosingDuration xsi:nil="true" />
         <LogName>CameraSide</LogName>
         <FrameRate>50</FrameRate>
       </Expression>
