@@ -589,7 +589,7 @@
                               </Expression>
                               <Expression xsi:type="Combinator">
                                 <Combinator xsi:type="cv:Threshold">
-                                  <cv:ThresholdValue>65</cv:ThresholdValue>
+                                  <cv:ThresholdValue>68</cv:ThresholdValue>
                                   <cv:MaxValue>255</cv:MaxValue>
                                   <cv:ThresholdType>BinaryInv</cv:ThresholdType>
                                 </Combinator>
@@ -664,7 +664,7 @@
                               </Expression>
                               <Expression xsi:type="Combinator">
                                 <Combinator xsi:type="cv:Threshold">
-                                  <cv:ThresholdValue>154</cv:ThresholdValue>
+                                  <cv:ThresholdValue>132</cv:ThresholdValue>
                                   <cv:MaxValue>255</cv:MaxValue>
                                   <cv:ThresholdType>BinaryInv</cv:ThresholdType>
                                 </Combinator>
@@ -676,8 +676,8 @@
                               <Expression xsi:type="Combinator">
                                 <Combinator xsi:type="cv:MorphologicalOperator">
                                   <cv:Size>
-                                    <cv:Width>4</cv:Width>
-                                    <cv:Height>4</cv:Height>
+                                    <cv:Width>3</cv:Width>
+                                    <cv:Height>3</cv:Height>
                                   </cv:Size>
                                   <cv:Anchor>
                                     <cv:X>-1</cv:X>
@@ -696,7 +696,7 @@
                                     <cv:X>0</cv:X>
                                     <cv:Y>0</cv:Y>
                                   </cv:Offset>
-                                  <cv:MinArea>20</cv:MinArea>
+                                  <cv:MinArea>10</cv:MinArea>
                                   <cv:MaxArea xsi:nil="true" />
                                 </Combinator>
                               </Expression>
@@ -763,7 +763,7 @@
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="IntProperty">
-                      <Value>2</Value>
+                      <Value>1</Value>
                     </Combinator>
                   </Expression>
                   <Expression xsi:type="rx:BehaviorSubject">
@@ -792,7 +792,7 @@
                         </Expression>
                         <Expression xsi:type="Combinator">
                           <Combinator xsi:type="p1:BinaryRegionsTracking">
-                            <p1:ExpectedNumberOfConnectedComponents>2</p1:ExpectedNumberOfConnectedComponents>
+                            <p1:ExpectedNumberOfConnectedComponents>1</p1:ExpectedNumberOfConnectedComponents>
                           </Combinator>
                         </Expression>
                         <Expression xsi:type="scr:ExpressionCondition">
