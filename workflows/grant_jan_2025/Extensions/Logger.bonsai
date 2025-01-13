@@ -214,7 +214,7 @@
       <Expression xsi:type="IncludeWorkflow" Path="Aeon.Acquisition:LogData.bonsai">
         <Heartbeats>Heartbeats</Heartbeats>
         <ClosingDuration>PT2S</ClosingDuration>
-        <LogName>BinaryRegions</LogName>
+        <LogName>CameraTop_BinaryRegions</LogName>
         <Selector />
       </Expression>
       <Expression xsi:type="Annotation">
@@ -304,7 +304,7 @@
       <Expression xsi:type="IncludeWorkflow" Path="Aeon.Acquisition:LogData.bonsai">
         <Heartbeats>Heartbeats</Heartbeats>
         <ClosingDuration>PT2S</ClosingDuration>
-        <LogName>HeadTail</LogName>
+        <LogName>CameraTop_HeadTail</LogName>
         <Selector />
       </Expression>
       <Expression xsi:type="Annotation">
@@ -366,7 +366,7 @@
       <Expression xsi:type="IncludeWorkflow" Path="Aeon.Acquisition:LogData.bonsai">
         <Heartbeats>Heartbeats</Heartbeats>
         <ClosingDuration>PT2S</ClosingDuration>
-        <LogName>LoomAngle</LogName>
+        <LogName>CameraTop_LoomAngle</LogName>
         <Selector />
       </Expression>
       <Expression xsi:type="Annotation">
@@ -428,7 +428,7 @@
       <Expression xsi:type="IncludeWorkflow" Path="Aeon.Acquisition:LogData.bonsai">
         <Heartbeats>Heartbeats</Heartbeats>
         <ClosingDuration>PT2S</ClosingDuration>
-        <LogName>LoomRegion</LogName>
+        <LogName>CameraTop_LoomRegion</LogName>
         <Selector />
       </Expression>
       <Expression xsi:type="rx:PublishSubject" TypeArguments="harp:Timestamped(aeon:LogMessage)">
