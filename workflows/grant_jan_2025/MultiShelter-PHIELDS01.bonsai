@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <WorkflowBuilder Version="2.8.5"
                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                  xmlns:port="clr-namespace:Bonsai.IO.Ports;assembly=Bonsai.System"
@@ -428,14 +428,14 @@
                         <Expression xsi:type="Combinator">
                           <Combinator xsi:type="cv:ResizeCanvas">
                             <cv:Size>
-                              <cv:Width>1540</cv:Width>
-                              <cv:Height>1180</cv:Height>
+                              <cv:Width>1680</cv:Width>
+                              <cv:Height>1260</cv:Height>
                             </cv:Size>
                             <cv:BorderType>Constant</cv:BorderType>
                             <cv:FillValue>
-                              <cv:Val0>0</cv:Val0>
-                              <cv:Val1>0</cv:Val1>
-                              <cv:Val2>0</cv:Val2>
+                              <cv:Val0>255</cv:Val0>
+                              <cv:Val1>255</cv:Val1>
+                              <cv:Val2>255</cv:Val2>
                               <cv:Val3>0</cv:Val3>
                             </cv:FillValue>
                             <cv:Offset xsi:nil="true" />
@@ -450,8 +450,8 @@
                               <cv:Y>1000</cv:Y>
                             </cv:FocalLength>
                             <cv:PrincipalPoint>
-                              <cv:X>770</cv:X>
-                              <cv:Y>590</cv:Y>
+                              <cv:X>840</cv:X>
+                              <cv:Y>630</cv:Y>
                             </cv:PrincipalPoint>
                             <cv:RadialDistortion>
                               <cv:X>-0.3</cv:X>
@@ -554,44 +554,24 @@
                                   <cv:Regions>
                                     <cv:ArrayOfPoint>
                                       <cv:Point>
-                                        <cv:X>1308</cv:X>
-                                        <cv:Y>997</cv:Y>
+                                        <cv:X>1254</cv:X>
+                                        <cv:Y>26</cv:Y>
                                       </cv:Point>
                                       <cv:Point>
-                                        <cv:X>1300</cv:X>
-                                        <cv:Y>867</cv:Y>
+                                        <cv:X>317</cv:X>
+                                        <cv:Y>15</cv:Y>
                                       </cv:Point>
                                       <cv:Point>
-                                        <cv:X>1294</cv:X>
-                                        <cv:Y>549</cv:Y>
+                                        <cv:X>300</cv:X>
+                                        <cv:Y>548</cv:Y>
                                       </cv:Point>
                                       <cv:Point>
-                                        <cv:X>1277</cv:X>
-                                        <cv:Y>159</cv:Y>
+                                        <cv:X>302</cv:X>
+                                        <cv:Y>1066</cv:Y>
                                       </cv:Point>
                                       <cv:Point>
-                                        <cv:X>1275</cv:X>
-                                        <cv:Y>9</cv:Y>
-                                      </cv:Point>
-                                      <cv:Point>
-                                        <cv:X>303</cv:X>
-                                        <cv:Y>5</cv:Y>
-                                      </cv:Point>
-                                      <cv:Point>
-                                        <cv:X>279</cv:X>
-                                        <cv:Y>532</cv:Y>
-                                      </cv:Point>
-                                      <cv:Point>
-                                        <cv:X>282</cv:X>
-                                        <cv:Y>923</cv:Y>
-                                      </cv:Point>
-                                      <cv:Point>
-                                        <cv:X>277</cv:X>
-                                        <cv:Y>1074</cv:Y>
-                                      </cv:Point>
-                                      <cv:Point>
-                                        <cv:X>1316</cv:X>
-                                        <cv:Y>1077</cv:Y>
+                                        <cv:X>1281</cv:X>
+                                        <cv:Y>1067</cv:Y>
                                       </cv:Point>
                                     </cv:ArrayOfPoint>
                                   </cv:Regions>
@@ -1328,20 +1308,20 @@
                                   <aeon:Regions>
                                     <aeon:ArrayOfPoint>
                                       <aeon:Point>
-                                        <aeon:X>1217</aeon:X>
-                                        <aeon:Y>167</aeon:Y>
+                                        <aeon:X>1092</aeon:X>
+                                        <aeon:Y>163</aeon:Y>
                                       </aeon:Point>
                                       <aeon:Point>
-                                        <aeon:X>1313</aeon:X>
-                                        <aeon:Y>167</aeon:Y>
+                                        <aeon:X>1182</aeon:X>
+                                        <aeon:Y>163</aeon:Y>
                                       </aeon:Point>
                                       <aeon:Point>
-                                        <aeon:X>1313</aeon:X>
-                                        <aeon:Y>922</aeon:Y>
+                                        <aeon:X>1182</aeon:X>
+                                        <aeon:Y>743</aeon:Y>
                                       </aeon:Point>
                                       <aeon:Point>
-                                        <aeon:X>1217</aeon:X>
-                                        <aeon:Y>922</aeon:Y>
+                                        <aeon:X>1092</aeon:X>
+                                        <aeon:Y>743</aeon:Y>
                                       </aeon:Point>
                                     </aeon:ArrayOfPoint>
                                   </aeon:Regions>
