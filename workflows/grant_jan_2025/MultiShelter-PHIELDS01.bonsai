@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <WorkflowBuilder Version="2.8.5"
                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                  xmlns:port="clr-namespace:Bonsai.IO.Ports;assembly=Bonsai.System"
@@ -599,28 +599,54 @@
                                   <cv:Regions>
                                     <cv:ArrayOfPoint>
                                       <cv:Point>
-                                        <cv:X>1080</cv:X>
-                                        <cv:Y>926</cv:Y>
+                                        <cv:X>1091</cv:X>
+                                        <cv:Y>859</cv:Y>
                                       </cv:Point>
                                       <cv:Point>
-                                        <cv:X>1050</cv:X>
-                                        <cv:Y>860</cv:Y>
+                                        <cv:X>1092</cv:X>
+                                        <cv:Y>792</cv:Y>
                                       </cv:Point>
                                       <cv:Point>
-                                        <cv:X>1074</cv:X>
-                                        <cv:Y>789</cv:Y>
+                                        <cv:X>1043</cv:X>
+                                        <cv:Y>763</cv:Y>
                                       </cv:Point>
                                       <cv:Point>
-                                        <cv:X>1008</cv:X>
-                                        <cv:Y>826</cv:Y>
+                                        <cv:X>988</cv:X>
+                                        <cv:Y>800</cv:Y>
                                       </cv:Point>
                                       <cv:Point>
-                                        <cv:X>1010</cv:X>
-                                        <cv:Y>899</cv:Y>
+                                        <cv:X>988</cv:X>
+                                        <cv:Y>868</cv:Y>
                                       </cv:Point>
                                       <cv:Point>
-                                        <cv:X>1028</cv:X>
-                                        <cv:Y>910</cv:Y>
+                                        <cv:X>1038</cv:X>
+                                        <cv:Y>892</cv:Y>
+                                      </cv:Point>
+                                    </cv:ArrayOfPoint>
+                                    <cv:ArrayOfPoint>
+                                      <cv:Point>
+                                        <cv:X>602</cv:X>
+                                        <cv:Y>252</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>603</cv:X>
+                                        <cv:Y>190</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>550</cv:X>
+                                        <cv:Y>167</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>497</cv:X>
+                                        <cv:Y>197</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>493</cv:X>
+                                        <cv:Y>250</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>547</cv:X>
+                                        <cv:Y>284</cv:Y>
                                       </cv:Point>
                                     </cv:ArrayOfPoint>
                                   </cv:Regions>
