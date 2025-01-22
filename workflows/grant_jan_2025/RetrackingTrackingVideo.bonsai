@@ -1,0 +1,3234 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<WorkflowBuilder Version="2.8.5"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                 xmlns:cv="clr-namespace:Bonsai.Vision;assembly=Bonsai.Vision"
+                 xmlns:p1="clr-namespace:;assembly=Extensions"
+                 xmlns:rx="clr-namespace:Bonsai.Reactive;assembly=Bonsai.Core"
+                 xmlns:harp="clr-namespace:Bonsai.Harp;assembly=Bonsai.Harp"
+                 xmlns:aeon="clr-namespace:Aeon.Acquisition;assembly=Aeon.Acquisition"
+                 xmlns:scr="clr-namespace:Bonsai.Scripting.Expressions;assembly=Bonsai.Scripting.Expressions"
+                 xmlns:p2="clr-namespace:OpenCV.Net;assembly=OpenCV.Net"
+                 xmlns:drw="clr-namespace:Bonsai.Vision.Drawing;assembly=Bonsai.Vision"
+                 xmlns:zg="clr-namespace:Bonsai.Gui.ZedGraph;assembly=Bonsai.Gui.ZedGraph"
+                 xmlns:dsp="clr-namespace:Bonsai.Dsp;assembly=Bonsai.Dsp"
+                 xmlns:gui="clr-namespace:Bonsai.Gui;assembly=Bonsai.Gui"
+                 xmlns:num="clr-namespace:Bonsai.Numerics;assembly=Bonsai.Numerics"
+                 xmlns:p3="clr-namespace:Bonsai.Numerics.Distributions;assembly=Bonsai.Numerics"
+                 xmlns="https://bonsai-rx.org/2018/workflow">
+  <Workflow>
+    <Nodes>
+      <Expression xsi:type="GroupWorkflow">
+        <Name>Metadata</Name>
+        <Workflow>
+          <Nodes>
+            <Expression xsi:type="GroupWorkflow">
+              <Name>Devices</Name>
+              <Workflow>
+                <Nodes>
+                  <Expression xsi:type="GroupWorkflow">
+                    <Name>CameraTop</Name>
+                    <Workflow>
+                      <Nodes>
+                        <Expression xsi:type="Disable">
+                          <Builder xsi:type="ExternalizedMapping">
+                            <Property Name="SerialNumber" />
+                            <Property Name="Gain" />
+                            <Property Name="Binning" />
+                            <Property Name="ExposureTime" />
+                            <Property Name="TriggerSource" />
+                            <Property Name="FrameEvents" />
+                            <Property Name="TriggerFrequency" />
+                          </Builder>
+                        </Expression>
+                        <Expression xsi:type="Disable">
+                          <Builder xsi:type="IncludeWorkflow" Path="Aeon.Acquisition:SpinnakerVideoSource.bonsai">
+                            <TriggerSource>GlobalTrigger</TriggerSource>
+                            <TriggerFrequency>GlobalTriggerFrequency</TriggerFrequency>
+                            <ExposureTime>7500</ExposureTime>
+                            <SerialNumber>23391015</SerialNumber>
+                            <Gain>0</Gain>
+                            <Binning>1</Binning>
+                            <FrameEvents>CameraTop</FrameEvents>
+                          </Builder>
+                        </Expression>
+                        <Expression xsi:type="Disable">
+                          <Builder xsi:type="WorkflowOutput" />
+                        </Expression>
+                        <Expression xsi:type="Disable">
+                          <Builder xsi:type="PropertySource" TypeArguments="SubjectExpressionBuilder,sys:String">
+                            <MemberName>FrameEvents</MemberName>
+                            <Value>CameraTop</Value>
+                          </Builder>
+                        </Expression>
+                        <Expression xsi:type="Disable">
+                          <Builder xsi:type="GroupWorkflow">
+                            <Name>VideoSource</Name>
+                            <Workflow>
+                              <Nodes>
+                                <Expression xsi:type="Combinator">
+                                  <Combinator xsi:type="cv:FileCapture">
+                                    <cv:FileName>C:\Git\SainsburyWellcomeCentre\Phields\phieldsexperiments\src\bonsai\devdata\2024-12-16T15-40-12\Cam1\Cam1_2024-12-16T16-00-00.avi</cv:FileName>
+                                    <cv:PlaybackRate>0</cv:PlaybackRate>
+                                    <cv:StartPosition>0</cv:StartPosition>
+                                    <cv:PositionUnits>Frames</cv:PositionUnits>
+                                    <cv:Loop>true</cv:Loop>
+                                    <cv:Playing>true</cv:Playing>
+                                  </Combinator>
+                                </Expression>
+                                <Expression xsi:type="Combinator">
+                                  <Combinator xsi:type="cv:Grayscale" />
+                                </Expression>
+                                <Expression xsi:type="Combinator">
+                                  <Combinator xsi:type="p1:CreateVideoDataFrame" />
+                                </Expression>
+                                <Expression xsi:type="Combinator">
+                                  <Combinator xsi:type="rx:Timer">
+                                    <rx:DueTime>PT0S</rx:DueTime>
+                                    <rx:Period>PT0.1S</rx:Period>
+                                  </Combinator>
+                                </Expression>
+                                <Expression xsi:type="Divide">
+                                  <Operand xsi:type="WorkflowProperty" TypeArguments="sys:Int64">
+                                    <Value>10</Value>
+                                  </Operand>
+                                </Expression>
+                                <Expression xsi:type="InputMapping">
+                                  <PropertyMappings>
+                                    <Property Name="Value" Selector="it" />
+                                  </PropertyMappings>
+                                </Expression>
+                                <Expression xsi:type="Combinator">
+                                  <Combinator xsi:type="DoubleProperty">
+                                    <Value>34</Value>
+                                  </Combinator>
+                                </Expression>
+                                <Expression xsi:type="Combinator">
+                                  <Combinator xsi:type="rx:WithLatestFrom" />
+                                </Expression>
+                                <Expression xsi:type="Combinator">
+                                  <Combinator xsi:type="harp:CreateTimestamped" />
+                                </Expression>
+                                <Expression xsi:type="Disable">
+                                  <Builder xsi:type="Combinator">
+                                    <Combinator xsi:type="aeon:VideoFileCapture">
+                                      <aeon:FileName>devdata\2024-12-16T15-40-12\Cam1\Cam1_2024-12-16T16-00-00.avi</aeon:FileName>
+                                    </Combinator>
+                                  </Builder>
+                                </Expression>
+                                <Expression xsi:type="Disable">
+                                  <Builder xsi:type="harp:ConvertTimestamped">
+                                    <Name>GetImage</Name>
+                                    <Workflow>
+                                      <Nodes>
+                                        <Expression xsi:type="WorkflowInput">
+                                          <Name>Source1</Name>
+                                        </Expression>
+                                        <Expression xsi:type="MemberSelector">
+                                          <Selector>Image</Selector>
+                                        </Expression>
+                                        <Expression xsi:type="Combinator">
+                                          <Combinator xsi:type="cv:Grayscale" />
+                                        </Expression>
+                                        <Expression xsi:type="WorkflowOutput" />
+                                      </Nodes>
+                                      <Edges>
+                                        <Edge From="0" To="1" Label="Source1" />
+                                        <Edge From="1" To="2" Label="Source1" />
+                                        <Edge From="2" To="3" Label="Source1" />
+                                      </Edges>
+                                    </Workflow>
+                                  </Builder>
+                                </Expression>
+                                <Expression xsi:type="WorkflowOutput" />
+                              </Nodes>
+                              <Edges>
+                                <Edge From="0" To="1" Label="Source1" />
+                                <Edge From="1" To="2" Label="Source1" />
+                                <Edge From="2" To="7" Label="Source1" />
+                                <Edge From="3" To="4" Label="Source1" />
+                                <Edge From="4" To="5" Label="Source1" />
+                                <Edge From="5" To="6" Label="Source1" />
+                                <Edge From="6" To="7" Label="Source2" />
+                                <Edge From="7" To="8" Label="Source1" />
+                                <Edge From="8" To="11" Label="Source1" />
+                                <Edge From="9" To="10" Label="Source1" />
+                                <Edge From="10" To="11" Label="Source2" />
+                              </Edges>
+                            </Workflow>
+                          </Builder>
+                        </Expression>
+                        <Expression xsi:type="GroupWorkflow">
+                          <Name>VideoSource</Name>
+                          <Workflow>
+                            <Nodes>
+                              <Expression xsi:type="Combinator">
+                                <Combinator xsi:type="cv:FileCapture">
+                                  <cv:FileName>C:\Users\User\Downloads\CameraTop_2025-01-15T15-00-00.avi</cv:FileName>
+                                  <cv:PlaybackRate>0</cv:PlaybackRate>
+                                  <cv:StartPosition>43100</cv:StartPosition>
+                                  <cv:PositionUnits>Frames</cv:PositionUnits>
+                                  <cv:Loop>true</cv:Loop>
+                                  <cv:Playing>false</cv:Playing>
+                                </Combinator>
+                              </Expression>
+                              <Expression xsi:type="Combinator">
+                                <Combinator xsi:type="cv:Grayscale" />
+                              </Expression>
+                              <Expression xsi:type="Combinator">
+                                <Combinator xsi:type="p1:CreateVideoDataFrame" />
+                              </Expression>
+                              <Expression xsi:type="Combinator">
+                                <Combinator xsi:type="rx:Timer">
+                                  <rx:DueTime>PT0S</rx:DueTime>
+                                  <rx:Period>PT0.1S</rx:Period>
+                                </Combinator>
+                              </Expression>
+                              <Expression xsi:type="InputMapping">
+                                <PropertyMappings>
+                                  <Property Name="Value" Selector="it" />
+                                </PropertyMappings>
+                              </Expression>
+                              <Expression xsi:type="Combinator">
+                                <Combinator xsi:type="DoubleProperty">
+                                  <Value>637</Value>
+                                </Combinator>
+                              </Expression>
+                              <Expression xsi:type="Divide">
+                                <Operand xsi:type="WorkflowProperty" TypeArguments="sys:Int64">
+                                  <Value>10</Value>
+                                </Operand>
+                              </Expression>
+                              <Expression xsi:type="InputMapping">
+                                <PropertyMappings>
+                                  <Property Name="Value" Selector="it" />
+                                </PropertyMappings>
+                              </Expression>
+                              <Expression xsi:type="Combinator">
+                                <Combinator xsi:type="DoubleProperty">
+                                  <Value>63.7</Value>
+                                </Combinator>
+                              </Expression>
+                              <Expression xsi:type="Combinator">
+                                <Combinator xsi:type="rx:WithLatestFrom" />
+                              </Expression>
+                              <Expression xsi:type="Combinator">
+                                <Combinator xsi:type="harp:CreateTimestamped" />
+                              </Expression>
+                              <Expression xsi:type="Disable">
+                                <Builder xsi:type="Combinator">
+                                  <Combinator xsi:type="aeon:VideoFileCapture">
+                                    <aeon:FileName>devdata\2024-12-16T15-40-12\Cam1\Cam1_2024-12-16T16-00-00.avi</aeon:FileName>
+                                  </Combinator>
+                                </Builder>
+                              </Expression>
+                              <Expression xsi:type="Disable">
+                                <Builder xsi:type="harp:ConvertTimestamped">
+                                  <Name>GetImage</Name>
+                                  <Workflow>
+                                    <Nodes>
+                                      <Expression xsi:type="WorkflowInput">
+                                        <Name>Source1</Name>
+                                      </Expression>
+                                      <Expression xsi:type="MemberSelector">
+                                        <Selector>Image</Selector>
+                                      </Expression>
+                                      <Expression xsi:type="Combinator">
+                                        <Combinator xsi:type="cv:Grayscale" />
+                                      </Expression>
+                                      <Expression xsi:type="WorkflowOutput" />
+                                    </Nodes>
+                                    <Edges>
+                                      <Edge From="0" To="1" Label="Source1" />
+                                      <Edge From="1" To="2" Label="Source1" />
+                                      <Edge From="2" To="3" Label="Source1" />
+                                    </Edges>
+                                  </Workflow>
+                                </Builder>
+                              </Expression>
+                              <Expression xsi:type="WorkflowOutput" />
+                            </Nodes>
+                            <Edges>
+                              <Edge From="0" To="1" Label="Source1" />
+                              <Edge From="1" To="2" Label="Source1" />
+                              <Edge From="2" To="9" Label="Source1" />
+                              <Edge From="3" To="4" Label="Source1" />
+                              <Edge From="4" To="5" Label="Source1" />
+                              <Edge From="5" To="6" Label="Source1" />
+                              <Edge From="6" To="7" Label="Source1" />
+                              <Edge From="7" To="8" Label="Source1" />
+                              <Edge From="8" To="9" Label="Source2" />
+                              <Edge From="9" To="10" Label="Source1" />
+                              <Edge From="10" To="13" Label="Source1" />
+                              <Edge From="11" To="12" Label="Source1" />
+                              <Edge From="12" To="13" Label="Source2" />
+                            </Edges>
+                          </Workflow>
+                        </Expression>
+                        <Expression xsi:type="rx:PublishSubject">
+                          <Name>CameraTop</Name>
+                        </Expression>
+                        <Expression xsi:type="WorkflowOutput" />
+                      </Nodes>
+                      <Edges>
+                        <Edge From="0" To="1" Label="Source1" />
+                        <Edge From="1" To="2" Label="Source1" />
+                        <Edge From="5" To="6" Label="Source1" />
+                        <Edge From="6" To="7" Label="Source1" />
+                      </Edges>
+                    </Workflow>
+                  </Expression>
+                </Nodes>
+                <Edges />
+              </Workflow>
+            </Expression>
+            <Expression xsi:type="GroupWorkflow">
+              <Name>ImagePreProcessing</Name>
+              <Workflow>
+                <Nodes>
+                  <Expression xsi:type="ExternalizedMapping">
+                    <Property Name="Name" DisplayName="FrameEvents" Category="Subject" />
+                  </Expression>
+                  <Expression xsi:type="SubscribeSubject">
+                    <Name>CameraTop</Name>
+                  </Expression>
+                  <Expression xsi:type="harp:ConvertTimestamped">
+                    <Name>Undistort</Name>
+                    <Workflow>
+                      <Nodes>
+                        <Expression xsi:type="WorkflowInput">
+                          <Name>Source1</Name>
+                        </Expression>
+                        <Expression xsi:type="MemberSelector">
+                          <Selector>Image</Selector>
+                        </Expression>
+                        <Expression xsi:type="Combinator">
+                          <Combinator xsi:type="cv:ResizeCanvas">
+                            <cv:Size>
+                              <cv:Width>1680</cv:Width>
+                              <cv:Height>1260</cv:Height>
+                            </cv:Size>
+                            <cv:BorderType>Constant</cv:BorderType>
+                            <cv:FillValue>
+                              <cv:Val0>255</cv:Val0>
+                              <cv:Val1>255</cv:Val1>
+                              <cv:Val2>255</cv:Val2>
+                              <cv:Val3>0</cv:Val3>
+                            </cv:FillValue>
+                            <cv:Offset xsi:nil="true" />
+                          </Combinator>
+                        </Expression>
+                        <Expression xsi:type="Combinator">
+                          <Combinator xsi:type="cv:Undistort">
+                            <cv:ImageSize xsi:nil="true" />
+                            <cv:Alpha>0</cv:Alpha>
+                            <cv:FocalLength>
+                              <cv:X>1000</cv:X>
+                              <cv:Y>1000</cv:Y>
+                            </cv:FocalLength>
+                            <cv:PrincipalPoint>
+                              <cv:X>840</cv:X>
+                              <cv:Y>630</cv:Y>
+                            </cv:PrincipalPoint>
+                            <cv:RadialDistortion>
+                              <cv:X>-0.3</cv:X>
+                              <cv:Y>0</cv:Y>
+                              <cv:Z>0</cv:Z>
+                            </cv:RadialDistortion>
+                            <cv:TangentialDistortion>
+                              <cv:X>0</cv:X>
+                              <cv:Y>0</cv:Y>
+                            </cv:TangentialDistortion>
+                          </Combinator>
+                        </Expression>
+                        <Expression xsi:type="Combinator">
+                          <Combinator xsi:type="cv:Resize">
+                            <cv:Size>
+                              <cv:Width>1440</cv:Width>
+                              <cv:Height>1080</cv:Height>
+                            </cv:Size>
+                            <cv:Interpolation>Linear</cv:Interpolation>
+                          </Combinator>
+                        </Expression>
+                        <Expression xsi:type="MemberSelector">
+                          <Selector>ChunkData</Selector>
+                        </Expression>
+                        <Expression xsi:type="Combinator">
+                          <Combinator xsi:type="rx:Zip" />
+                        </Expression>
+                        <Expression xsi:type="Combinator">
+                          <Combinator xsi:type="p1:CreateVideoDataFrame" />
+                        </Expression>
+                        <Expression xsi:type="WorkflowOutput" />
+                      </Nodes>
+                      <Edges>
+                        <Edge From="0" To="1" Label="Source1" />
+                        <Edge From="0" To="5" Label="Source1" />
+                        <Edge From="1" To="2" Label="Source1" />
+                        <Edge From="2" To="3" Label="Source1" />
+                        <Edge From="3" To="4" Label="Source1" />
+                        <Edge From="4" To="6" Label="Source1" />
+                        <Edge From="5" To="6" Label="Source2" />
+                        <Edge From="6" To="7" Label="Source1" />
+                        <Edge From="7" To="8" Label="Source1" />
+                      </Edges>
+                    </Workflow>
+                  </Expression>
+                  <Expression xsi:type="ExternalizedMapping">
+                    <Property Name="Name" DisplayName="ImagePreProcessingEvents" Description="The name of the shared subject" Category="Subject" />
+                  </Expression>
+                  <Expression xsi:type="rx:PublishSubject">
+                    <Name>ProcessedImage</Name>
+                  </Expression>
+                  <Expression xsi:type="WorkflowOutput" />
+                </Nodes>
+                <Edges>
+                  <Edge From="0" To="1" Label="Source1" />
+                  <Edge From="1" To="2" Label="Source1" />
+                  <Edge From="2" To="4" Label="Source1" />
+                  <Edge From="3" To="4" Label="Source2" />
+                  <Edge From="4" To="5" Label="Source2" />
+                </Edges>
+              </Workflow>
+            </Expression>
+            <Expression xsi:type="GroupWorkflow">
+              <Name>TrackingTop</Name>
+              <Workflow>
+                <Nodes>
+                  <Expression xsi:type="ExternalizedMapping">
+                    <Property Name="Name" DisplayName="FrameEvents" />
+                  </Expression>
+                  <Expression xsi:type="SubscribeSubject">
+                    <Name>ProcessedImage</Name>
+                  </Expression>
+                  <Expression xsi:type="ExternalizedMapping">
+                    <Property Name="WholeImageThreshold" />
+                    <Property Name="NestThreshold" />
+                  </Expression>
+                  <Expression xsi:type="GroupWorkflow">
+                    <Name>BlobTracking</Name>
+                    <Workflow>
+                      <Nodes>
+                        <Expression xsi:type="WorkflowInput">
+                          <Name>Source1</Name>
+                        </Expression>
+                        <Expression xsi:type="ExternalizedMapping">
+                          <Property Name="WholeImageThreshold" />
+                          <Property Name="NestThreshold" />
+                        </Expression>
+                        <Expression xsi:type="harp:ConvertTimestamped">
+                          <Name>BinaryRegions</Name>
+                          <Workflow>
+                            <Nodes>
+                              <Expression xsi:type="WorkflowInput">
+                                <Name>Source1</Name>
+                              </Expression>
+                              <Expression xsi:type="MemberSelector">
+                                <Selector>Image</Selector>
+                              </Expression>
+                              <Expression xsi:type="Combinator">
+                                <Combinator xsi:type="cv:MaskPolygon">
+                                  <cv:Regions>
+                                    <cv:ArrayOfPoint>
+                                      <cv:Point>
+                                        <cv:X>1254</cv:X>
+                                        <cv:Y>26</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>317</cv:X>
+                                        <cv:Y>15</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>300</cv:X>
+                                        <cv:Y>548</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>302</cv:X>
+                                        <cv:Y>1066</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>1281</cv:X>
+                                        <cv:Y>1067</cv:Y>
+                                      </cv:Point>
+                                    </cv:ArrayOfPoint>
+                                  </cv:Regions>
+                                  <cv:MaskType>ToZero</cv:MaskType>
+                                  <cv:FillValue>
+                                    <cv:Val0>255</cv:Val0>
+                                    <cv:Val1>0</cv:Val1>
+                                    <cv:Val2>0</cv:Val2>
+                                    <cv:Val3>0</cv:Val3>
+                                  </cv:FillValue>
+                                </Combinator>
+                              </Expression>
+                              <Expression xsi:type="ExternalizedMapping">
+                                <Property Name="ThresholdValue" DisplayName="WholeImageThreshold" />
+                              </Expression>
+                              <Expression xsi:type="Combinator">
+                                <Combinator xsi:type="cv:Threshold">
+                                  <cv:ThresholdValue>61</cv:ThresholdValue>
+                                  <cv:MaxValue>255</cv:MaxValue>
+                                  <cv:ThresholdType>BinaryInv</cv:ThresholdType>
+                                </Combinator>
+                              </Expression>
+                              <Expression xsi:type="Combinator">
+                                <Combinator xsi:type="cv:MaskPolygon">
+                                  <cv:Regions>
+                                    <cv:ArrayOfPoint>
+                                      <cv:Point>
+                                        <cv:X>1064</cv:X>
+                                        <cv:Y>876</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>1084</cv:X>
+                                        <cv:Y>860</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>1091</cv:X>
+                                        <cv:Y>840</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>1092</cv:X>
+                                        <cv:Y>807</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>1088</cv:X>
+                                        <cv:Y>797</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>1068</cv:X>
+                                        <cv:Y>776</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>1045</cv:X>
+                                        <cv:Y>764</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>1014</cv:X>
+                                        <cv:Y>779</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>989</cv:X>
+                                        <cv:Y>799</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>985</cv:X>
+                                        <cv:Y>833</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>989</cv:X>
+                                        <cv:Y>867</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>1013</cv:X>
+                                        <cv:Y>881</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>1038</cv:X>
+                                        <cv:Y>889</cv:Y>
+                                      </cv:Point>
+                                    </cv:ArrayOfPoint>
+                                    <cv:ArrayOfPoint>
+                                      <cv:Point>
+                                        <cv:X>602</cv:X>
+                                        <cv:Y>252</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>602</cv:X>
+                                        <cv:Y>191</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>574</cv:X>
+                                        <cv:Y>174</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>550</cv:X>
+                                        <cv:Y>168</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>522</cv:X>
+                                        <cv:Y>180</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>497</cv:X>
+                                        <cv:Y>197</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>491</cv:X>
+                                        <cv:Y>221</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>493</cv:X>
+                                        <cv:Y>250</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>512</cv:X>
+                                        <cv:Y>267</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>547</cv:X>
+                                        <cv:Y>284</cv:Y>
+                                      </cv:Point>
+                                    </cv:ArrayOfPoint>
+                                    <cv:ArrayOfPoint>
+                                      <cv:Point>
+                                        <cv:X>572</cv:X>
+                                        <cv:Y>764</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>598</cv:X>
+                                        <cv:Y>743</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>601</cv:X>
+                                        <cv:Y>712</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>601</cv:X>
+                                        <cv:Y>680</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>565</cv:X>
+                                        <cv:Y>652</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>541</cv:X>
+                                        <cv:Y>645</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>513</cv:X>
+                                        <cv:Y>658</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>488</cv:X>
+                                        <cv:Y>675</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>482</cv:X>
+                                        <cv:Y>699</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>487</cv:X>
+                                        <cv:Y>740</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>514</cv:X>
+                                        <cv:Y>761</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>546</cv:X>
+                                        <cv:Y>774</cv:Y>
+                                      </cv:Point>
+                                    </cv:ArrayOfPoint>
+                                    <cv:ArrayOfPoint>
+                                      <cv:Point>
+                                        <cv:X>1074</cv:X>
+                                        <cv:Y>391</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>1086</cv:X>
+                                        <cv:Y>373</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>1088</cv:X>
+                                        <cv:Y>348</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>1082</cv:X>
+                                        <cv:Y>318</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>1056</cv:X>
+                                        <cv:Y>300</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>1031</cv:X>
+                                        <cv:Y>287</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>1010</cv:X>
+                                        <cv:Y>293</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>981</cv:X>
+                                        <cv:Y>311</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>978</cv:X>
+                                        <cv:Y>332</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>982</cv:X>
+                                        <cv:Y>368</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>1012</cv:X>
+                                        <cv:Y>392</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>1042</cv:X>
+                                        <cv:Y>407</cv:Y>
+                                      </cv:Point>
+                                    </cv:ArrayOfPoint>
+                                    <cv:ArrayOfPoint>
+                                      <cv:Point>
+                                        <cv:X>791</cv:X>
+                                        <cv:Y>786</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>791</cv:X>
+                                        <cv:Y>786</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>791</cv:X>
+                                        <cv:Y>786</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>791</cv:X>
+                                        <cv:Y>786</cv:Y>
+                                      </cv:Point>
+                                    </cv:ArrayOfPoint>
+                                  </cv:Regions>
+                                  <cv:MaskType>ToZero</cv:MaskType>
+                                  <cv:FillValue>
+                                    <cv:Val0>255</cv:Val0>
+                                    <cv:Val1>0</cv:Val1>
+                                    <cv:Val2>0</cv:Val2>
+                                    <cv:Val3>0</cv:Val3>
+                                  </cv:FillValue>
+                                </Combinator>
+                              </Expression>
+                              <Expression xsi:type="ExternalizedMapping">
+                                <Property Name="ThresholdValue" DisplayName="NestThreshold" />
+                              </Expression>
+                              <Expression xsi:type="Combinator">
+                                <Combinator xsi:type="cv:Threshold">
+                                  <cv:ThresholdValue>132</cv:ThresholdValue>
+                                  <cv:MaxValue>255</cv:MaxValue>
+                                  <cv:ThresholdType>BinaryInv</cv:ThresholdType>
+                                </Combinator>
+                              </Expression>
+                              <Expression xsi:type="Combinator">
+                                <Combinator xsi:type="cv:MaskPolygon">
+                                  <cv:Regions>
+                                    <cv:ArrayOfPoint>
+                                      <cv:Point>
+                                        <cv:X>335</cv:X>
+                                        <cv:Y>391</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>330</cv:X>
+                                        <cv:Y>552</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>329</cv:X>
+                                        <cv:Y>722</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>330</cv:X>
+                                        <cv:Y>967</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>328</cv:X>
+                                        <cv:Y>1046</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>462</cv:X>
+                                        <cv:Y>1040</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>614</cv:X>
+                                        <cv:Y>1042</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>845</cv:X>
+                                        <cv:Y>1040</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>967</cv:X>
+                                        <cv:Y>1037</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>1081</cv:X>
+                                        <cv:Y>1037</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>1166</cv:X>
+                                        <cv:Y>1038</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>1214</cv:X>
+                                        <cv:Y>1042</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>1259</cv:X>
+                                        <cv:Y>1048</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>1252</cv:X>
+                                        <cv:Y>1000</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>1247</cv:X>
+                                        <cv:Y>929</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>1244</cv:X>
+                                        <cv:Y>788</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>1242</cv:X>
+                                        <cv:Y>612</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>1241</cv:X>
+                                        <cv:Y>525</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>1239</cv:X>
+                                        <cv:Y>436</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>1231</cv:X>
+                                        <cv:Y>277</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>1228</cv:X>
+                                        <cv:Y>181</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>1228</cv:X>
+                                        <cv:Y>44</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>1150</cv:X>
+                                        <cv:Y>47</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>1043</cv:X>
+                                        <cv:Y>44</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>701</cv:X>
+                                        <cv:Y>36</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>349</cv:X>
+                                        <cv:Y>41</cv:Y>
+                                      </cv:Point>
+                                    </cv:ArrayOfPoint>
+                                  </cv:Regions>
+                                  <cv:MaskType>ToZero</cv:MaskType>
+                                  <cv:FillValue>
+                                    <cv:Val0>255</cv:Val0>
+                                    <cv:Val1>0</cv:Val1>
+                                    <cv:Val2>0</cv:Val2>
+                                    <cv:Val3>0</cv:Val3>
+                                  </cv:FillValue>
+                                </Combinator>
+                              </Expression>
+                              <Expression xsi:type="ExternalizedMapping">
+                                <Property Name="ThresholdValue" DisplayName="InArenaThreshold" />
+                              </Expression>
+                              <Expression xsi:type="Combinator">
+                                <Combinator xsi:type="cv:Threshold">
+                                  <cv:ThresholdValue>104</cv:ThresholdValue>
+                                  <cv:MaxValue>255</cv:MaxValue>
+                                  <cv:ThresholdType>BinaryInv</cv:ThresholdType>
+                                </Combinator>
+                              </Expression>
+                              <Expression xsi:type="Combinator">
+                                <Combinator xsi:type="rx:Zip" />
+                              </Expression>
+                              <Expression xsi:type="Add" />
+                              <Expression xsi:type="Combinator">
+                                <Combinator xsi:type="cv:MorphologicalOperator">
+                                  <cv:Size>
+                                    <cv:Width>4</cv:Width>
+                                    <cv:Height>4</cv:Height>
+                                  </cv:Size>
+                                  <cv:Anchor>
+                                    <cv:X>-1</cv:X>
+                                    <cv:Y>-1</cv:Y>
+                                  </cv:Anchor>
+                                  <cv:Shape>Rectangle</cv:Shape>
+                                  <cv:Iterations>1</cv:Iterations>
+                                  <cv:Operation>Open</cv:Operation>
+                                </Combinator>
+                              </Expression>
+                              <Expression xsi:type="Combinator">
+                                <Combinator xsi:type="cv:FindContours">
+                                  <cv:Mode>External</cv:Mode>
+                                  <cv:Method>ChainApproxSimple</cv:Method>
+                                  <cv:Offset>
+                                    <cv:X>0</cv:X>
+                                    <cv:Y>0</cv:Y>
+                                  </cv:Offset>
+                                  <cv:MinArea>10</cv:MinArea>
+                                  <cv:MaxArea xsi:nil="true" />
+                                </Combinator>
+                              </Expression>
+                              <Expression xsi:type="Combinator">
+                                <Combinator xsi:type="cv:BinaryRegionAnalysis" />
+                              </Expression>
+                              <Expression xsi:type="Combinator">
+                                <Combinator xsi:type="cv:SortBinaryRegions" />
+                              </Expression>
+                              <Expression xsi:type="WorkflowOutput" />
+                            </Nodes>
+                            <Edges>
+                              <Edge From="0" To="1" Label="Source1" />
+                              <Edge From="1" To="2" Label="Source1" />
+                              <Edge From="1" To="5" Label="Source1" />
+                              <Edge From="1" To="8" Label="Source1" />
+                              <Edge From="2" To="4" Label="Source1" />
+                              <Edge From="3" To="4" Label="Source2" />
+                              <Edge From="4" To="11" Label="Source1" />
+                              <Edge From="5" To="7" Label="Source1" />
+                              <Edge From="6" To="7" Label="Source2" />
+                              <Edge From="7" To="11" Label="Source2" />
+                              <Edge From="8" To="10" Label="Source1" />
+                              <Edge From="9" To="10" Label="Source2" />
+                              <Edge From="10" To="11" Label="Source3" />
+                              <Edge From="11" To="12" Label="Source1" />
+                              <Edge From="12" To="13" Label="Source1" />
+                              <Edge From="13" To="14" Label="Source1" />
+                              <Edge From="14" To="15" Label="Source1" />
+                              <Edge From="15" To="16" Label="Source1" />
+                              <Edge From="16" To="17" Label="Source1" />
+                            </Edges>
+                          </Workflow>
+                        </Expression>
+                        <Expression xsi:type="WorkflowOutput" />
+                      </Nodes>
+                      <Edges>
+                        <Edge From="0" To="2" Label="Source1" />
+                        <Edge From="1" To="2" Label="Source2" />
+                        <Edge From="2" To="3" Label="Source1" />
+                      </Edges>
+                    </Workflow>
+                  </Expression>
+                  <Expression xsi:type="ExternalizedMapping">
+                    <Property Name="Name" DisplayName="TrackingEvents" />
+                  </Expression>
+                  <Expression xsi:type="rx:PublishSubject">
+                    <Name>TrackingTop</Name>
+                  </Expression>
+                  <Expression xsi:type="WorkflowOutput" />
+                </Nodes>
+                <Edges>
+                  <Edge From="0" To="1" Label="Source1" />
+                  <Edge From="1" To="3" Label="Source1" />
+                  <Edge From="2" To="3" Label="Source2" />
+                  <Edge From="3" To="5" Label="Source1" />
+                  <Edge From="4" To="5" Label="Source2" />
+                  <Edge From="5" To="6" Label="Source1" />
+                </Edges>
+              </Workflow>
+            </Expression>
+            <Expression xsi:type="GroupWorkflow">
+              <Name>BinaryRegionsTracking</Name>
+              <Workflow>
+                <Nodes>
+                  <Expression xsi:type="ExternalizedMapping">
+                    <Property Name="Value" DisplayName="NumberOfTrackingSubjects" />
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="IntProperty">
+                      <Value>1</Value>
+                    </Combinator>
+                  </Expression>
+                  <Expression xsi:type="rx:BehaviorSubject">
+                    <Name>NumberOfTrackingSubjects</Name>
+                  </Expression>
+                  <Expression xsi:type="ExternalizedMapping">
+                    <Property Name="Name" DisplayName="TrackingEvents" Description="Contours" Category="Subject" />
+                  </Expression>
+                  <Expression xsi:type="SubscribeSubject">
+                    <Name>TrackingTop</Name>
+                  </Expression>
+                  <Expression xsi:type="harp:ConvertTimestamped">
+                    <Name>BinaryRegionsTracking</Name>
+                    <Workflow>
+                      <Nodes>
+                        <Expression xsi:type="WorkflowInput">
+                          <Name>Source1</Name>
+                        </Expression>
+                        <Expression xsi:type="SubscribeSubject">
+                          <Name>NumberOfTrackingSubjects</Name>
+                        </Expression>
+                        <Expression xsi:type="PropertyMapping">
+                          <PropertyMappings>
+                            <Property Name="ExpectedNumberOfConnectedComponents" />
+                          </PropertyMappings>
+                        </Expression>
+                        <Expression xsi:type="Combinator">
+                          <Combinator xsi:type="p1:BinaryRegionsTracking">
+                            <p1:ExpectedNumberOfConnectedComponents>1</p1:ExpectedNumberOfConnectedComponents>
+                          </Combinator>
+                        </Expression>
+                        <Expression xsi:type="WorkflowOutput" />
+                      </Nodes>
+                      <Edges>
+                        <Edge From="0" To="3" Label="Source1" />
+                        <Edge From="1" To="2" Label="Source1" />
+                        <Edge From="2" To="3" Label="Source2" />
+                        <Edge From="3" To="4" Label="Source1" />
+                      </Edges>
+                    </Workflow>
+                  </Expression>
+                  <Expression xsi:type="scr:ExpressionCondition">
+                    <scr:Name>NotNull</scr:Name>
+                    <scr:Expression>it.Value != null</scr:Expression>
+                  </Expression>
+                  <Expression xsi:type="ExternalizedMapping">
+                    <Property Name="Name" DisplayName="BinaryRegionsEvents" Description="The name of the shared subject with binary regions tracking" Category="Subject" />
+                  </Expression>
+                  <Expression xsi:type="rx:PublishSubject">
+                    <Name>BinaryRegionsTracking (Subject)</Name>
+                  </Expression>
+                  <Expression xsi:type="rx:SelectMany">
+                    <Name>IndexConnectedComponents</Name>
+                    <Workflow>
+                      <Nodes>
+                        <Expression xsi:type="WorkflowInput">
+                          <Name>Source1</Name>
+                        </Expression>
+                        <Expression xsi:type="MemberSelector">
+                          <Selector>Value.DistConnCompCollection.ConnCompCollection</Selector>
+                        </Expression>
+                        <Expression xsi:type="Combinator">
+                          <Combinator xsi:type="rx:Concat" />
+                        </Expression>
+                        <Expression xsi:type="MemberSelector">
+                          <Selector>Value</Selector>
+                        </Expression>
+                        <Expression xsi:type="Combinator">
+                          <Combinator xsi:type="rx:WithLatestFrom" />
+                        </Expression>
+                        <Expression xsi:type="MemberSelector">
+                          <Selector>Seconds</Selector>
+                        </Expression>
+                        <Expression xsi:type="Combinator">
+                          <Combinator xsi:type="rx:WithLatestFrom" />
+                        </Expression>
+                        <Expression xsi:type="Combinator">
+                          <Combinator xsi:type="harp:CreateTimestamped" />
+                        </Expression>
+                        <Expression xsi:type="Combinator">
+                          <Combinator xsi:type="rx:ElementIndex" />
+                        </Expression>
+                        <Expression xsi:type="WorkflowOutput" />
+                      </Nodes>
+                      <Edges>
+                        <Edge From="0" To="1" Label="Source1" />
+                        <Edge From="0" To="3" Label="Source1" />
+                        <Edge From="0" To="5" Label="Source1" />
+                        <Edge From="1" To="2" Label="Source1" />
+                        <Edge From="2" To="4" Label="Source1" />
+                        <Edge From="3" To="4" Label="Source2" />
+                        <Edge From="4" To="6" Label="Source1" />
+                        <Edge From="5" To="6" Label="Source2" />
+                        <Edge From="6" To="7" Label="Source1" />
+                        <Edge From="7" To="8" Label="Source1" />
+                        <Edge From="8" To="9" Label="Source1" />
+                      </Edges>
+                    </Workflow>
+                  </Expression>
+                  <Expression xsi:type="rx:GroupBy">
+                    <rx:KeySelector>Index</rx:KeySelector>
+                    <rx:ElementSelector>Value</rx:ElementSelector>
+                  </Expression>
+                  <Expression xsi:type="ExternalizedMapping">
+                    <Property Name="Name" DisplayName="BinaryRegionsObservable" Category="Subject" />
+                  </Expression>
+                  <Expression xsi:type="rx:ReplaySubject">
+                    <Name>BinaryRegionsObservable</Name>
+                    <rx:BufferSize xsi:nil="true" />
+                  </Expression>
+                  <Expression xsi:type="WorkflowOutput" />
+                </Nodes>
+                <Edges>
+                  <Edge From="0" To="1" Label="Source1" />
+                  <Edge From="1" To="2" Label="Source1" />
+                  <Edge From="3" To="4" Label="Source1" />
+                  <Edge From="4" To="5" Label="Source1" />
+                  <Edge From="5" To="6" Label="Source1" />
+                  <Edge From="6" To="8" Label="Source1" />
+                  <Edge From="7" To="8" Label="Source2" />
+                  <Edge From="8" To="9" Label="Source1" />
+                  <Edge From="9" To="10" Label="Source1" />
+                  <Edge From="10" To="12" Label="Source1" />
+                  <Edge From="11" To="12" Label="Source2" />
+                  <Edge From="12" To="13" Label="Source2" />
+                </Edges>
+              </Workflow>
+            </Expression>
+            <Expression xsi:type="GroupWorkflow">
+              <Name>MovementBehaviorTracking</Name>
+              <Workflow>
+                <Nodes>
+                  <Expression xsi:type="ExternalizedMapping">
+                    <Property Name="Name" DisplayName="ObservableBinaryRegions" Category="Subject" />
+                  </Expression>
+                  <Expression xsi:type="SubscribeSubject">
+                    <Name>BinaryRegionsObservable</Name>
+                  </Expression>
+                  <Expression xsi:type="ExternalizedMapping">
+                    <Property Name="VelocityThreshold" />
+                  </Expression>
+                  <Expression xsi:type="rx:SelectMany">
+                    <Name>MovementBehaviorTracking</Name>
+                    <Workflow>
+                      <Nodes>
+                        <Expression xsi:type="WorkflowInput">
+                          <Name>Source1</Name>
+                        </Expression>
+                        <Expression xsi:type="Combinator">
+                          <Combinator xsi:type="rx:Take">
+                            <rx:Count>1</rx:Count>
+                          </Combinator>
+                        </Expression>
+                        <Expression xsi:type="rx:AsyncSubject">
+                          <Name>source</Name>
+                        </Expression>
+                        <Expression xsi:type="SubscribeSubject">
+                          <Name>source</Name>
+                        </Expression>
+                        <Expression xsi:type="Combinator">
+                          <Combinator xsi:type="rx:Merge" />
+                        </Expression>
+                        <Expression xsi:type="ExternalizedMapping">
+                          <Property Name="VelocityThreshold" />
+                        </Expression>
+                        <Expression xsi:type="GroupWorkflow">
+                          <Name>HeadTailTracking</Name>
+                          <Workflow>
+                            <Nodes>
+                              <Expression xsi:type="WorkflowInput">
+                                <Name>Source1</Name>
+                              </Expression>
+                              <Expression xsi:type="ExternalizedMapping">
+                                <Property Name="VelocityThreshold" />
+                              </Expression>
+                              <Expression xsi:type="harp:ConvertTimestamped">
+                                <Name>HeadTailVelocity</Name>
+                                <Workflow>
+                                  <Nodes>
+                                    <Expression xsi:type="WorkflowInput">
+                                      <Name>Source1</Name>
+                                    </Expression>
+                                    <Expression xsi:type="MemberSelector">
+                                      <Selector>Item1</Selector>
+                                    </Expression>
+                                    <Expression xsi:type="Combinator">
+                                      <Combinator xsi:type="cv:BinaryRegionExtremes">
+                                        <cv:Method>MajorAxis</cv:Method>
+                                      </Combinator>
+                                    </Expression>
+                                    <Expression xsi:type="Combinator">
+                                      <Combinator xsi:type="rx:Range">
+                                        <rx:Start>0</rx:Start>
+                                        <rx:Count>10</rx:Count>
+                                      </Combinator>
+                                    </Expression>
+                                    <Expression xsi:type="Combinator">
+                                      <Combinator xsi:type="cv:CreatePoint2f">
+                                        <cv:X>NaN</cv:X>
+                                        <cv:Y>NaN</cv:Y>
+                                      </Combinator>
+                                    </Expression>
+                                    <Expression xsi:type="MemberSelector">
+                                      <Selector>Item1.Centroid</Selector>
+                                    </Expression>
+                                    <Expression xsi:type="Combinator">
+                                      <Combinator xsi:type="rx:Merge" />
+                                    </Expression>
+                                    <Expression xsi:type="Combinator">
+                                      <Combinator xsi:type="rx:BufferCount">
+                                        <rx:Count>10</rx:Count>
+                                        <rx:Skip>1</rx:Skip>
+                                      </Combinator>
+                                    </Expression>
+                                    <Expression xsi:type="Combinator">
+                                      <Combinator xsi:type="rx:WithLatestFrom" />
+                                    </Expression>
+                                    <Expression xsi:type="ExternalizedMapping">
+                                      <Property Name="VelocityThreshold" />
+                                    </Expression>
+                                    <Expression xsi:type="Combinator">
+                                      <Combinator xsi:type="p1:HeadTailVelocity">
+                                        <p1:VelocityThreshold>10</p1:VelocityThreshold>
+                                      </Combinator>
+                                    </Expression>
+                                    <Expression xsi:type="MemberSelector">
+                                      <Selector>Item1</Selector>
+                                    </Expression>
+                                    <Expression xsi:type="Combinator">
+                                      <Combinator xsi:type="rx:Zip" />
+                                    </Expression>
+                                    <Expression xsi:type="WorkflowOutput" />
+                                  </Nodes>
+                                  <Edges>
+                                    <Edge From="0" To="1" Label="Source1" />
+                                    <Edge From="0" To="5" Label="Source1" />
+                                    <Edge From="0" To="11" Label="Source1" />
+                                    <Edge From="1" To="2" Label="Source1" />
+                                    <Edge From="2" To="8" Label="Source1" />
+                                    <Edge From="3" To="4" Label="Source1" />
+                                    <Edge From="4" To="6" Label="Source1" />
+                                    <Edge From="5" To="6" Label="Source2" />
+                                    <Edge From="6" To="7" Label="Source1" />
+                                    <Edge From="7" To="8" Label="Source2" />
+                                    <Edge From="8" To="10" Label="Source1" />
+                                    <Edge From="9" To="10" Label="Source2" />
+                                    <Edge From="10" To="12" Label="Source1" />
+                                    <Edge From="11" To="12" Label="Source2" />
+                                    <Edge From="12" To="13" Label="Source1" />
+                                  </Edges>
+                                </Workflow>
+                              </Expression>
+                              <Expression xsi:type="WorkflowOutput" />
+                            </Nodes>
+                            <Edges>
+                              <Edge From="0" To="2" Label="Source1" />
+                              <Edge From="1" To="2" Label="Source2" />
+                              <Edge From="2" To="3" Label="Source1" />
+                            </Edges>
+                          </Workflow>
+                        </Expression>
+                        <Expression xsi:type="SubscribeSubject">
+                          <Name>source</Name>
+                        </Expression>
+                        <Expression xsi:type="MemberSelector">
+                          <Selector>Key</Selector>
+                        </Expression>
+                        <Expression xsi:type="Combinator">
+                          <Combinator xsi:type="rx:WithLatestFrom" />
+                        </Expression>
+                        <Expression xsi:type="rx:GroupBy">
+                          <rx:KeySelector>Item2</rx:KeySelector>
+                          <rx:ElementSelector>Item1</rx:ElementSelector>
+                        </Expression>
+                        <Expression xsi:type="WorkflowOutput" />
+                      </Nodes>
+                      <Edges>
+                        <Edge From="0" To="1" Label="Source1" />
+                        <Edge From="1" To="2" Label="Source1" />
+                        <Edge From="3" To="4" Label="Source1" />
+                        <Edge From="4" To="6" Label="Source1" />
+                        <Edge From="5" To="6" Label="Source2" />
+                        <Edge From="6" To="9" Label="Source1" />
+                        <Edge From="7" To="8" Label="Source1" />
+                        <Edge From="8" To="9" Label="Source2" />
+                        <Edge From="9" To="10" Label="Source1" />
+                        <Edge From="10" To="11" Label="Source1" />
+                      </Edges>
+                    </Workflow>
+                  </Expression>
+                  <Expression xsi:type="ExternalizedMapping">
+                    <Property Name="Name" DisplayName="HeadTailObservable" Category="Subject" />
+                  </Expression>
+                  <Expression xsi:type="rx:ReplaySubject">
+                    <Name>HeadTailObservable</Name>
+                    <rx:BufferSize xsi:nil="true" />
+                  </Expression>
+                </Nodes>
+                <Edges>
+                  <Edge From="0" To="1" Label="Source1" />
+                  <Edge From="1" To="3" Label="Source1" />
+                  <Edge From="2" To="3" Label="Source2" />
+                  <Edge From="3" To="5" Label="Source1" />
+                  <Edge From="4" To="5" Label="Source2" />
+                </Edges>
+              </Workflow>
+            </Expression>
+            <Expression xsi:type="GroupWorkflow">
+              <Name>LoomAngle</Name>
+              <Workflow>
+                <Nodes>
+                  <Expression xsi:type="ExternalizedMapping">
+                    <Property Name="Name" DisplayName="HeadTail" Category="Subject" />
+                  </Expression>
+                  <Expression xsi:type="SubscribeSubject">
+                    <Name>HeadTailObservable</Name>
+                  </Expression>
+                  <Expression xsi:type="ExternalizedMapping">
+                    <Property Name="X" />
+                    <Property Name="Y" />
+                  </Expression>
+                  <Expression xsi:type="rx:SelectMany">
+                    <Name>LoomAngle</Name>
+                    <Workflow>
+                      <Nodes>
+                        <Expression xsi:type="WorkflowInput">
+                          <Name>Source1</Name>
+                        </Expression>
+                        <Expression xsi:type="Combinator">
+                          <Combinator xsi:type="rx:Take">
+                            <rx:Count>1</rx:Count>
+                          </Combinator>
+                        </Expression>
+                        <Expression xsi:type="MemberSelector">
+                          <Selector>Key</Selector>
+                        </Expression>
+                        <Expression xsi:type="rx:AsyncSubject">
+                          <Name>Id</Name>
+                        </Expression>
+                        <Expression xsi:type="rx:AsyncSubject">
+                          <Name>Source</Name>
+                        </Expression>
+                        <Expression xsi:type="SubscribeSubject">
+                          <Name>Source</Name>
+                        </Expression>
+                        <Expression xsi:type="Combinator">
+                          <Combinator xsi:type="rx:Merge" />
+                        </Expression>
+                        <Expression xsi:type="ExternalizedMapping">
+                          <Property Name="X" />
+                          <Property Name="Y" />
+                        </Expression>
+                        <Expression xsi:type="harp:ConvertTimestamped">
+                          <Workflow>
+                            <Nodes>
+                              <Expression xsi:type="WorkflowInput">
+                                <Name>Source1</Name>
+                              </Expression>
+                              <Expression xsi:type="MemberSelector">
+                                <Selector>Item1.Heading,Item1.Centroid</Selector>
+                              </Expression>
+                              <Expression xsi:type="MemberSelector">
+                                <Selector>Item1</Selector>
+                              </Expression>
+                              <Expression xsi:type="MemberSelector">
+                                <Selector>Item2</Selector>
+                              </Expression>
+                              <Expression xsi:type="ExternalizedMapping">
+                                <Property Name="X" Category="LoomPosition" />
+                                <Property Name="Y" Category="LoomPosition" />
+                              </Expression>
+                              <Expression xsi:type="Combinator">
+                                <Combinator xsi:type="cv:CreatePoint2f">
+                                  <cv:X>872</cv:X>
+                                  <cv:Y>488</cv:Y>
+                                </Combinator>
+                              </Expression>
+                              <Expression xsi:type="Combinator">
+                                <Combinator xsi:type="rx:WithLatestFrom" />
+                              </Expression>
+                              <Expression xsi:type="Combinator">
+                                <Combinator xsi:type="p1:AngleCalculator" />
+                              </Expression>
+                              <Expression xsi:type="Combinator">
+                                <Combinator xsi:type="rx:Zip" />
+                              </Expression>
+                              <Expression xsi:type="Disable">
+                                <Builder xsi:type="scr:ExpressionTransform">
+                                  <scr:Expression>Math.PI-Math.ABS(Math.ABS(it.Item1 - it.Item2) - Math.PI)</scr:Expression>
+                                </Builder>
+                              </Expression>
+                              <Expression xsi:type="Subtract" />
+                              <Expression xsi:type="Combinator">
+                                <Combinator xsi:type="p1:NormalizeAngle" />
+                              </Expression>
+                              <Expression xsi:type="Disable">
+                                <Builder xsi:type="scr:ExpressionTransform">
+                                  <scr:Expression>((it+Math.PI)%(2*Math.PI))-Math.PI</scr:Expression>
+                                </Builder>
+                              </Expression>
+                              <Expression xsi:type="WorkflowOutput" />
+                            </Nodes>
+                            <Edges>
+                              <Edge From="0" To="1" Label="Source1" />
+                              <Edge From="1" To="2" Label="Source1" />
+                              <Edge From="1" To="3" Label="Source1" />
+                              <Edge From="2" To="8" Label="Source1" />
+                              <Edge From="3" To="6" Label="Source1" />
+                              <Edge From="4" To="5" Label="Source1" />
+                              <Edge From="5" To="6" Label="Source2" />
+                              <Edge From="6" To="7" Label="Source1" />
+                              <Edge From="7" To="8" Label="Source2" />
+                              <Edge From="8" To="9" Label="Source1" />
+                              <Edge From="9" To="10" Label="Source1" />
+                              <Edge From="10" To="11" Label="Source1" />
+                              <Edge From="11" To="12" Label="Source1" />
+                              <Edge From="12" To="13" Label="Source1" />
+                            </Edges>
+                          </Workflow>
+                        </Expression>
+                        <Expression xsi:type="SubscribeSubject">
+                          <Name>Id</Name>
+                        </Expression>
+                        <Expression xsi:type="Combinator">
+                          <Combinator xsi:type="rx:WithLatestFrom" />
+                        </Expression>
+                        <Expression xsi:type="WorkflowOutput" />
+                      </Nodes>
+                      <Edges>
+                        <Edge From="0" To="1" Label="Source1" />
+                        <Edge From="1" To="2" Label="Source1" />
+                        <Edge From="1" To="4" Label="Source1" />
+                        <Edge From="2" To="3" Label="Source1" />
+                        <Edge From="5" To="6" Label="Source1" />
+                        <Edge From="6" To="8" Label="Source1" />
+                        <Edge From="7" To="8" Label="Source2" />
+                        <Edge From="8" To="10" Label="Source1" />
+                        <Edge From="9" To="10" Label="Source2" />
+                        <Edge From="10" To="11" Label="Source1" />
+                      </Edges>
+                    </Workflow>
+                  </Expression>
+                  <Expression xsi:type="rx:GroupBy">
+                    <rx:KeySelector>Item2</rx:KeySelector>
+                    <rx:ElementSelector>Item1</rx:ElementSelector>
+                  </Expression>
+                  <Expression xsi:type="ExternalizedMapping">
+                    <Property Name="Name" DisplayName="LoomAngle" Category="Subject" />
+                  </Expression>
+                  <Expression xsi:type="rx:ReplaySubject">
+                    <Name>LoomAngleObservable</Name>
+                    <rx:BufferSize xsi:nil="true" />
+                  </Expression>
+                </Nodes>
+                <Edges>
+                  <Edge From="0" To="1" Label="Source1" />
+                  <Edge From="1" To="3" Label="Source1" />
+                  <Edge From="2" To="3" Label="Source2" />
+                  <Edge From="3" To="4" Label="Source1" />
+                  <Edge From="4" To="6" Label="Source1" />
+                  <Edge From="5" To="6" Label="Source2" />
+                </Edges>
+              </Workflow>
+            </Expression>
+            <Expression xsi:type="SubscribeSubject">
+              <Name>ProcessedImage</Name>
+            </Expression>
+            <Expression xsi:type="MemberSelector">
+              <Selector>Value.Image</Selector>
+            </Expression>
+            <Expression xsi:type="GroupWorkflow">
+              <Name>LoomRegion</Name>
+              <Workflow>
+                <Nodes>
+                  <Expression xsi:type="ExternalizedMapping">
+                    <Property Name="HeadTail" />
+                    <Property Name="RegionOfInterest1" />
+                  </Expression>
+                  <Expression xsi:type="rx:Defer">
+                    <Workflow>
+                      <Nodes>
+                        <Expression xsi:type="ExternalizedMapping">
+                          <Property Name="Name" DisplayName="HeadTail" Category="Subject" />
+                        </Expression>
+                        <Expression xsi:type="SubscribeSubject">
+                          <Name>HeadTailObservable</Name>
+                        </Expression>
+                        <Expression xsi:type="ExternalizedMapping">
+                          <Property Name="RegionOfInterest1" />
+                        </Expression>
+                        <Expression xsi:type="rx:SelectMany">
+                          <Name>LoomRegion</Name>
+                          <Workflow>
+                            <Nodes>
+                              <Expression xsi:type="WorkflowInput">
+                                <Name>Source1</Name>
+                              </Expression>
+                              <Expression xsi:type="Combinator">
+                                <Combinator xsi:type="rx:Take">
+                                  <rx:Count>1</rx:Count>
+                                </Combinator>
+                              </Expression>
+                              <Expression xsi:type="MemberSelector">
+                                <Selector>Key</Selector>
+                              </Expression>
+                              <Expression xsi:type="rx:AsyncSubject">
+                                <Name>Id</Name>
+                              </Expression>
+                              <Expression xsi:type="rx:AsyncSubject">
+                                <Name>Source</Name>
+                              </Expression>
+                              <Expression xsi:type="SubscribeSubject">
+                                <Name>Source</Name>
+                              </Expression>
+                              <Expression xsi:type="Combinator">
+                                <Combinator xsi:type="rx:Merge" />
+                              </Expression>
+                              <Expression xsi:type="harp:ConvertTimestamped">
+                                <Workflow>
+                                  <Nodes>
+                                    <Expression xsi:type="WorkflowInput">
+                                      <Name>Source1</Name>
+                                    </Expression>
+                                    <Expression xsi:type="MemberSelector">
+                                      <Selector>Item1.Head</Selector>
+                                    </Expression>
+                                    <Expression xsi:type="WorkflowOutput" />
+                                  </Nodes>
+                                  <Edges>
+                                    <Edge From="0" To="1" Label="Source1" />
+                                    <Edge From="1" To="2" Label="Source1" />
+                                  </Edges>
+                                </Workflow>
+                              </Expression>
+                              <Expression xsi:type="ExternalizedMapping">
+                                <Property Name="Value" DisplayName="RegionOfInterest1" />
+                              </Expression>
+                              <Expression xsi:type="PropertySource" TypeArguments="cv:CropPolygon,p2:Point[][]">
+                                <MemberName>Regions</MemberName>
+                                <Value>
+                                  <ArrayOfPoint>
+                                    <Point>
+                                      <X>800</X>
+                                      <Y>498</Y>
+                                    </Point>
+                                    <Point>
+                                      <X>802</X>
+                                      <Y>508</Y>
+                                    </Point>
+                                    <Point>
+                                      <X>803</X>
+                                      <Y>519</Y>
+                                    </Point>
+                                    <Point>
+                                      <X>808</X>
+                                      <Y>529</Y>
+                                    </Point>
+                                    <Point>
+                                      <X>814</X>
+                                      <Y>538</Y>
+                                    </Point>
+                                    <Point>
+                                      <X>821</X>
+                                      <Y>545</Y>
+                                    </Point>
+                                    <Point>
+                                      <X>829</X>
+                                      <Y>551</Y>
+                                    </Point>
+                                    <Point>
+                                      <X>838</X>
+                                      <Y>556</Y>
+                                    </Point>
+                                    <Point>
+                                      <X>848</X>
+                                      <Y>559</Y>
+                                    </Point>
+                                    <Point>
+                                      <X>859</X>
+                                      <Y>560</Y>
+                                    </Point>
+                                    <Point>
+                                      <X>868</X>
+                                      <Y>559</Y>
+                                    </Point>
+                                    <Point>
+                                      <X>878</X>
+                                      <Y>556</Y>
+                                    </Point>
+                                    <Point>
+                                      <X>887</X>
+                                      <Y>551</Y>
+                                    </Point>
+                                    <Point>
+                                      <X>895</X>
+                                      <Y>545</Y>
+                                    </Point>
+                                    <Point>
+                                      <X>902</X>
+                                      <Y>538</Y>
+                                    </Point>
+                                    <Point>
+                                      <X>908</X>
+                                      <Y>529</Y>
+                                    </Point>
+                                    <Point>
+                                      <X>913</X>
+                                      <Y>519</Y>
+                                    </Point>
+                                    <Point>
+                                      <X>914</X>
+                                      <Y>508</Y>
+                                    </Point>
+                                    <Point>
+                                      <X>917</X>
+                                      <Y>498</Y>
+                                    </Point>
+                                    <Point>
+                                      <X>914</X>
+                                      <Y>486</Y>
+                                    </Point>
+                                    <Point>
+                                      <X>913</X>
+                                      <Y>475</Y>
+                                    </Point>
+                                    <Point>
+                                      <X>908</X>
+                                      <Y>466</Y>
+                                    </Point>
+                                    <Point>
+                                      <X>902</X>
+                                      <Y>456</Y>
+                                    </Point>
+                                    <Point>
+                                      <X>895</X>
+                                      <Y>449</Y>
+                                    </Point>
+                                    <Point>
+                                      <X>887</X>
+                                      <Y>443</Y>
+                                    </Point>
+                                    <Point>
+                                      <X>878</X>
+                                      <Y>438</Y>
+                                    </Point>
+                                    <Point>
+                                      <X>868</X>
+                                      <Y>435</Y>
+                                    </Point>
+                                    <Point>
+                                      <X>859</X>
+                                      <Y>435</Y>
+                                    </Point>
+                                    <Point>
+                                      <X>848</X>
+                                      <Y>435</Y>
+                                    </Point>
+                                    <Point>
+                                      <X>838</X>
+                                      <Y>438</Y>
+                                    </Point>
+                                    <Point>
+                                      <X>829</X>
+                                      <Y>443</Y>
+                                    </Point>
+                                    <Point>
+                                      <X>821</X>
+                                      <Y>449</Y>
+                                    </Point>
+                                    <Point>
+                                      <X>814</X>
+                                      <Y>456</Y>
+                                    </Point>
+                                    <Point>
+                                      <X>808</X>
+                                      <Y>466</Y>
+                                    </Point>
+                                    <Point>
+                                      <X>803</X>
+                                      <Y>475</Y>
+                                    </Point>
+                                    <Point>
+                                      <X>802</X>
+                                      <Y>486</Y>
+                                    </Point>
+                                    <Point>
+                                      <X>800</X>
+                                      <Y>498</Y>
+                                    </Point>
+                                    <Point>
+                                      <X>1065</X>
+                                      <Y>461</Y>
+                                    </Point>
+                                    <Point>
+                                      <X>1069</X>
+                                      <Y>511</Y>
+                                    </Point>
+                                    <Point>
+                                      <X>1065</X>
+                                      <Y>560</Y>
+                                    </Point>
+                                    <Point>
+                                      <X>1056</X>
+                                      <Y>607</Y>
+                                    </Point>
+                                    <Point>
+                                      <X>1040</X>
+                                      <Y>650</Y>
+                                    </Point>
+                                    <Point>
+                                      <X>1019</X>
+                                      <Y>690</Y>
+                                    </Point>
+                                    <Point>
+                                      <X>994</X>
+                                      <Y>725</Y>
+                                    </Point>
+                                    <Point>
+                                      <X>963</X>
+                                      <Y>753</Y>
+                                    </Point>
+                                    <Point>
+                                      <X>929</X>
+                                      <Y>774</Y>
+                                    </Point>
+                                    <Point>
+                                      <X>894</X>
+                                      <Y>786</Y>
+                                    </Point>
+                                    <Point>
+                                      <X>857</X>
+                                      <Y>790</Y>
+                                    </Point>
+                                    <Point>
+                                      <X>820</X>
+                                      <Y>786</Y>
+                                    </Point>
+                                    <Point>
+                                      <X>785</X>
+                                      <Y>774</Y>
+                                    </Point>
+                                    <Point>
+                                      <X>751</X>
+                                      <Y>753</Y>
+                                    </Point>
+                                    <Point>
+                                      <X>720</X>
+                                      <Y>725</Y>
+                                    </Point>
+                                    <Point>
+                                      <X>695</X>
+                                      <Y>690</Y>
+                                    </Point>
+                                    <Point>
+                                      <X>674</X>
+                                      <Y>650</Y>
+                                    </Point>
+                                    <Point>
+                                      <X>658</X>
+                                      <Y>607</Y>
+                                    </Point>
+                                    <Point>
+                                      <X>649</X>
+                                      <Y>560</Y>
+                                    </Point>
+                                    <Point>
+                                      <X>646</X>
+                                      <Y>511</Y>
+                                    </Point>
+                                    <Point>
+                                      <X>649</X>
+                                      <Y>461</Y>
+                                    </Point>
+                                    <Point>
+                                      <X>658</X>
+                                      <Y>414</Y>
+                                    </Point>
+                                    <Point>
+                                      <X>674</X>
+                                      <Y>371</Y>
+                                    </Point>
+                                    <Point>
+                                      <X>695</X>
+                                      <Y>331</Y>
+                                    </Point>
+                                    <Point>
+                                      <X>720</X>
+                                      <Y>296</Y>
+                                    </Point>
+                                    <Point>
+                                      <X>751</X>
+                                      <Y>268</Y>
+                                    </Point>
+                                    <Point>
+                                      <X>785</X>
+                                      <Y>247</Y>
+                                    </Point>
+                                    <Point>
+                                      <X>820</X>
+                                      <Y>235</Y>
+                                    </Point>
+                                    <Point>
+                                      <X>857</X>
+                                      <Y>231</Y>
+                                    </Point>
+                                    <Point>
+                                      <X>894</X>
+                                      <Y>235</Y>
+                                    </Point>
+                                    <Point>
+                                      <X>929</X>
+                                      <Y>247</Y>
+                                    </Point>
+                                    <Point>
+                                      <X>963</X>
+                                      <Y>268</Y>
+                                    </Point>
+                                    <Point>
+                                      <X>994</X>
+                                      <Y>296</Y>
+                                    </Point>
+                                    <Point>
+                                      <X>1019</X>
+                                      <Y>331</Y>
+                                    </Point>
+                                    <Point>
+                                      <X>1040</X>
+                                      <Y>371</Y>
+                                    </Point>
+                                    <Point>
+                                      <X>1056</X>
+                                      <Y>414</Y>
+                                    </Point>
+                                    <Point>
+                                      <X>1065</X>
+                                      <Y>461</Y>
+                                    </Point>
+                                  </ArrayOfPoint>
+                                </Value>
+                              </Expression>
+                              <Expression xsi:type="PropertyMapping">
+                                <PropertyMappings>
+                                  <Property Name="Regions" />
+                                </PropertyMappings>
+                              </Expression>
+                              <Expression xsi:type="Combinator">
+                                <Combinator xsi:type="aeon:RegionContainsPoint">
+                                  <aeon:Regions>
+                                    <aeon:ArrayOfPoint>
+                                      <aeon:Point>
+                                        <aeon:X>800</aeon:X>
+                                        <aeon:Y>498</aeon:Y>
+                                      </aeon:Point>
+                                      <aeon:Point>
+                                        <aeon:X>802</aeon:X>
+                                        <aeon:Y>508</aeon:Y>
+                                      </aeon:Point>
+                                      <aeon:Point>
+                                        <aeon:X>803</aeon:X>
+                                        <aeon:Y>519</aeon:Y>
+                                      </aeon:Point>
+                                      <aeon:Point>
+                                        <aeon:X>808</aeon:X>
+                                        <aeon:Y>529</aeon:Y>
+                                      </aeon:Point>
+                                      <aeon:Point>
+                                        <aeon:X>814</aeon:X>
+                                        <aeon:Y>538</aeon:Y>
+                                      </aeon:Point>
+                                      <aeon:Point>
+                                        <aeon:X>821</aeon:X>
+                                        <aeon:Y>545</aeon:Y>
+                                      </aeon:Point>
+                                      <aeon:Point>
+                                        <aeon:X>829</aeon:X>
+                                        <aeon:Y>551</aeon:Y>
+                                      </aeon:Point>
+                                      <aeon:Point>
+                                        <aeon:X>838</aeon:X>
+                                        <aeon:Y>556</aeon:Y>
+                                      </aeon:Point>
+                                      <aeon:Point>
+                                        <aeon:X>848</aeon:X>
+                                        <aeon:Y>559</aeon:Y>
+                                      </aeon:Point>
+                                      <aeon:Point>
+                                        <aeon:X>859</aeon:X>
+                                        <aeon:Y>560</aeon:Y>
+                                      </aeon:Point>
+                                      <aeon:Point>
+                                        <aeon:X>868</aeon:X>
+                                        <aeon:Y>559</aeon:Y>
+                                      </aeon:Point>
+                                      <aeon:Point>
+                                        <aeon:X>878</aeon:X>
+                                        <aeon:Y>556</aeon:Y>
+                                      </aeon:Point>
+                                      <aeon:Point>
+                                        <aeon:X>887</aeon:X>
+                                        <aeon:Y>551</aeon:Y>
+                                      </aeon:Point>
+                                      <aeon:Point>
+                                        <aeon:X>895</aeon:X>
+                                        <aeon:Y>545</aeon:Y>
+                                      </aeon:Point>
+                                      <aeon:Point>
+                                        <aeon:X>902</aeon:X>
+                                        <aeon:Y>538</aeon:Y>
+                                      </aeon:Point>
+                                      <aeon:Point>
+                                        <aeon:X>908</aeon:X>
+                                        <aeon:Y>529</aeon:Y>
+                                      </aeon:Point>
+                                      <aeon:Point>
+                                        <aeon:X>913</aeon:X>
+                                        <aeon:Y>519</aeon:Y>
+                                      </aeon:Point>
+                                      <aeon:Point>
+                                        <aeon:X>914</aeon:X>
+                                        <aeon:Y>508</aeon:Y>
+                                      </aeon:Point>
+                                      <aeon:Point>
+                                        <aeon:X>917</aeon:X>
+                                        <aeon:Y>498</aeon:Y>
+                                      </aeon:Point>
+                                      <aeon:Point>
+                                        <aeon:X>914</aeon:X>
+                                        <aeon:Y>486</aeon:Y>
+                                      </aeon:Point>
+                                      <aeon:Point>
+                                        <aeon:X>913</aeon:X>
+                                        <aeon:Y>475</aeon:Y>
+                                      </aeon:Point>
+                                      <aeon:Point>
+                                        <aeon:X>908</aeon:X>
+                                        <aeon:Y>466</aeon:Y>
+                                      </aeon:Point>
+                                      <aeon:Point>
+                                        <aeon:X>902</aeon:X>
+                                        <aeon:Y>456</aeon:Y>
+                                      </aeon:Point>
+                                      <aeon:Point>
+                                        <aeon:X>895</aeon:X>
+                                        <aeon:Y>449</aeon:Y>
+                                      </aeon:Point>
+                                      <aeon:Point>
+                                        <aeon:X>887</aeon:X>
+                                        <aeon:Y>443</aeon:Y>
+                                      </aeon:Point>
+                                      <aeon:Point>
+                                        <aeon:X>878</aeon:X>
+                                        <aeon:Y>438</aeon:Y>
+                                      </aeon:Point>
+                                      <aeon:Point>
+                                        <aeon:X>868</aeon:X>
+                                        <aeon:Y>435</aeon:Y>
+                                      </aeon:Point>
+                                      <aeon:Point>
+                                        <aeon:X>859</aeon:X>
+                                        <aeon:Y>435</aeon:Y>
+                                      </aeon:Point>
+                                      <aeon:Point>
+                                        <aeon:X>848</aeon:X>
+                                        <aeon:Y>435</aeon:Y>
+                                      </aeon:Point>
+                                      <aeon:Point>
+                                        <aeon:X>838</aeon:X>
+                                        <aeon:Y>438</aeon:Y>
+                                      </aeon:Point>
+                                      <aeon:Point>
+                                        <aeon:X>829</aeon:X>
+                                        <aeon:Y>443</aeon:Y>
+                                      </aeon:Point>
+                                      <aeon:Point>
+                                        <aeon:X>821</aeon:X>
+                                        <aeon:Y>449</aeon:Y>
+                                      </aeon:Point>
+                                      <aeon:Point>
+                                        <aeon:X>814</aeon:X>
+                                        <aeon:Y>456</aeon:Y>
+                                      </aeon:Point>
+                                      <aeon:Point>
+                                        <aeon:X>808</aeon:X>
+                                        <aeon:Y>466</aeon:Y>
+                                      </aeon:Point>
+                                      <aeon:Point>
+                                        <aeon:X>803</aeon:X>
+                                        <aeon:Y>475</aeon:Y>
+                                      </aeon:Point>
+                                      <aeon:Point>
+                                        <aeon:X>802</aeon:X>
+                                        <aeon:Y>486</aeon:Y>
+                                      </aeon:Point>
+                                      <aeon:Point>
+                                        <aeon:X>800</aeon:X>
+                                        <aeon:Y>498</aeon:Y>
+                                      </aeon:Point>
+                                      <aeon:Point>
+                                        <aeon:X>1065</aeon:X>
+                                        <aeon:Y>461</aeon:Y>
+                                      </aeon:Point>
+                                      <aeon:Point>
+                                        <aeon:X>1069</aeon:X>
+                                        <aeon:Y>511</aeon:Y>
+                                      </aeon:Point>
+                                      <aeon:Point>
+                                        <aeon:X>1065</aeon:X>
+                                        <aeon:Y>560</aeon:Y>
+                                      </aeon:Point>
+                                      <aeon:Point>
+                                        <aeon:X>1056</aeon:X>
+                                        <aeon:Y>607</aeon:Y>
+                                      </aeon:Point>
+                                      <aeon:Point>
+                                        <aeon:X>1040</aeon:X>
+                                        <aeon:Y>650</aeon:Y>
+                                      </aeon:Point>
+                                      <aeon:Point>
+                                        <aeon:X>1019</aeon:X>
+                                        <aeon:Y>690</aeon:Y>
+                                      </aeon:Point>
+                                      <aeon:Point>
+                                        <aeon:X>994</aeon:X>
+                                        <aeon:Y>725</aeon:Y>
+                                      </aeon:Point>
+                                      <aeon:Point>
+                                        <aeon:X>963</aeon:X>
+                                        <aeon:Y>753</aeon:Y>
+                                      </aeon:Point>
+                                      <aeon:Point>
+                                        <aeon:X>929</aeon:X>
+                                        <aeon:Y>774</aeon:Y>
+                                      </aeon:Point>
+                                      <aeon:Point>
+                                        <aeon:X>894</aeon:X>
+                                        <aeon:Y>786</aeon:Y>
+                                      </aeon:Point>
+                                      <aeon:Point>
+                                        <aeon:X>857</aeon:X>
+                                        <aeon:Y>790</aeon:Y>
+                                      </aeon:Point>
+                                      <aeon:Point>
+                                        <aeon:X>820</aeon:X>
+                                        <aeon:Y>786</aeon:Y>
+                                      </aeon:Point>
+                                      <aeon:Point>
+                                        <aeon:X>785</aeon:X>
+                                        <aeon:Y>774</aeon:Y>
+                                      </aeon:Point>
+                                      <aeon:Point>
+                                        <aeon:X>751</aeon:X>
+                                        <aeon:Y>753</aeon:Y>
+                                      </aeon:Point>
+                                      <aeon:Point>
+                                        <aeon:X>720</aeon:X>
+                                        <aeon:Y>725</aeon:Y>
+                                      </aeon:Point>
+                                      <aeon:Point>
+                                        <aeon:X>695</aeon:X>
+                                        <aeon:Y>690</aeon:Y>
+                                      </aeon:Point>
+                                      <aeon:Point>
+                                        <aeon:X>674</aeon:X>
+                                        <aeon:Y>650</aeon:Y>
+                                      </aeon:Point>
+                                      <aeon:Point>
+                                        <aeon:X>658</aeon:X>
+                                        <aeon:Y>607</aeon:Y>
+                                      </aeon:Point>
+                                      <aeon:Point>
+                                        <aeon:X>649</aeon:X>
+                                        <aeon:Y>560</aeon:Y>
+                                      </aeon:Point>
+                                      <aeon:Point>
+                                        <aeon:X>646</aeon:X>
+                                        <aeon:Y>511</aeon:Y>
+                                      </aeon:Point>
+                                      <aeon:Point>
+                                        <aeon:X>649</aeon:X>
+                                        <aeon:Y>461</aeon:Y>
+                                      </aeon:Point>
+                                      <aeon:Point>
+                                        <aeon:X>658</aeon:X>
+                                        <aeon:Y>414</aeon:Y>
+                                      </aeon:Point>
+                                      <aeon:Point>
+                                        <aeon:X>674</aeon:X>
+                                        <aeon:Y>371</aeon:Y>
+                                      </aeon:Point>
+                                      <aeon:Point>
+                                        <aeon:X>695</aeon:X>
+                                        <aeon:Y>331</aeon:Y>
+                                      </aeon:Point>
+                                      <aeon:Point>
+                                        <aeon:X>720</aeon:X>
+                                        <aeon:Y>296</aeon:Y>
+                                      </aeon:Point>
+                                      <aeon:Point>
+                                        <aeon:X>751</aeon:X>
+                                        <aeon:Y>268</aeon:Y>
+                                      </aeon:Point>
+                                      <aeon:Point>
+                                        <aeon:X>785</aeon:X>
+                                        <aeon:Y>247</aeon:Y>
+                                      </aeon:Point>
+                                      <aeon:Point>
+                                        <aeon:X>820</aeon:X>
+                                        <aeon:Y>235</aeon:Y>
+                                      </aeon:Point>
+                                      <aeon:Point>
+                                        <aeon:X>857</aeon:X>
+                                        <aeon:Y>231</aeon:Y>
+                                      </aeon:Point>
+                                      <aeon:Point>
+                                        <aeon:X>894</aeon:X>
+                                        <aeon:Y>235</aeon:Y>
+                                      </aeon:Point>
+                                      <aeon:Point>
+                                        <aeon:X>929</aeon:X>
+                                        <aeon:Y>247</aeon:Y>
+                                      </aeon:Point>
+                                      <aeon:Point>
+                                        <aeon:X>963</aeon:X>
+                                        <aeon:Y>268</aeon:Y>
+                                      </aeon:Point>
+                                      <aeon:Point>
+                                        <aeon:X>994</aeon:X>
+                                        <aeon:Y>296</aeon:Y>
+                                      </aeon:Point>
+                                      <aeon:Point>
+                                        <aeon:X>1019</aeon:X>
+                                        <aeon:Y>331</aeon:Y>
+                                      </aeon:Point>
+                                      <aeon:Point>
+                                        <aeon:X>1040</aeon:X>
+                                        <aeon:Y>371</aeon:Y>
+                                      </aeon:Point>
+                                      <aeon:Point>
+                                        <aeon:X>1056</aeon:X>
+                                        <aeon:Y>414</aeon:Y>
+                                      </aeon:Point>
+                                      <aeon:Point>
+                                        <aeon:X>1065</aeon:X>
+                                        <aeon:Y>461</aeon:Y>
+                                      </aeon:Point>
+                                    </aeon:ArrayOfPoint>
+                                  </aeon:Regions>
+                                </Combinator>
+                              </Expression>
+                              <Expression xsi:type="rx:Condition">
+                                <Name>Inside</Name>
+                                <Workflow>
+                                  <Nodes>
+                                    <Expression xsi:type="WorkflowInput">
+                                      <Name>Source1</Name>
+                                    </Expression>
+                                    <Expression xsi:type="MemberSelector">
+                                      <Selector>Value</Selector>
+                                    </Expression>
+                                    <Expression xsi:type="WorkflowOutput" />
+                                  </Nodes>
+                                  <Edges>
+                                    <Edge From="0" To="1" Label="Source1" />
+                                    <Edge From="1" To="2" Label="Source1" />
+                                  </Edges>
+                                </Workflow>
+                              </Expression>
+                              <Expression xsi:type="rx:Condition">
+                                <Name>Outside</Name>
+                                <Workflow>
+                                  <Nodes>
+                                    <Expression xsi:type="WorkflowInput">
+                                      <Name>Source1</Name>
+                                    </Expression>
+                                    <Expression xsi:type="MemberSelector">
+                                      <Selector>Value</Selector>
+                                    </Expression>
+                                    <Expression xsi:type="BitwiseNot" />
+                                    <Expression xsi:type="WorkflowOutput" />
+                                  </Nodes>
+                                  <Edges>
+                                    <Edge From="0" To="1" Label="Source1" />
+                                    <Edge From="1" To="2" Label="Source1" />
+                                    <Edge From="2" To="3" Label="Source1" />
+                                  </Edges>
+                                </Workflow>
+                              </Expression>
+                              <Expression xsi:type="Combinator">
+                                <Combinator xsi:type="rx:WithLatestFrom" />
+                              </Expression>
+                              <Expression xsi:type="MemberSelector">
+                                <Selector>Seconds</Selector>
+                              </Expression>
+                              <Expression xsi:type="Combinator">
+                                <Combinator xsi:type="rx:Zip" />
+                              </Expression>
+                              <Expression xsi:type="Combinator">
+                                <Combinator xsi:type="harp:CreateTimestamped" />
+                              </Expression>
+                              <Expression xsi:type="harp:ConvertTimestamped">
+                                <Workflow>
+                                  <Nodes>
+                                    <Expression xsi:type="WorkflowInput">
+                                      <Name>Source1</Name>
+                                    </Expression>
+                                    <Expression xsi:type="MemberSelector">
+                                      <Selector>Item1.Seconds</Selector>
+                                    </Expression>
+                                    <Expression xsi:type="MemberSelector">
+                                      <Selector>Item2.Seconds</Selector>
+                                    </Expression>
+                                    <Expression xsi:type="Combinator">
+                                      <Combinator xsi:type="rx:WithLatestFrom" />
+                                    </Expression>
+                                    <Expression xsi:type="Subtract" />
+                                    <Expression xsi:type="WorkflowOutput" />
+                                  </Nodes>
+                                  <Edges>
+                                    <Edge From="0" To="1" Label="Source1" />
+                                    <Edge From="0" To="2" Label="Source1" />
+                                    <Edge From="1" To="3" Label="Source1" />
+                                    <Edge From="2" To="3" Label="Source2" />
+                                    <Edge From="3" To="4" Label="Source1" />
+                                    <Edge From="4" To="5" Label="Source1" />
+                                  </Edges>
+                                </Workflow>
+                              </Expression>
+                              <Expression xsi:type="SubscribeSubject">
+                                <Name>Id</Name>
+                              </Expression>
+                              <Expression xsi:type="Combinator">
+                                <Combinator xsi:type="rx:WithLatestFrom" />
+                              </Expression>
+                              <Expression xsi:type="WorkflowOutput" />
+                            </Nodes>
+                            <Edges>
+                              <Edge From="0" To="1" Label="Source1" />
+                              <Edge From="1" To="2" Label="Source1" />
+                              <Edge From="1" To="4" Label="Source1" />
+                              <Edge From="2" To="3" Label="Source1" />
+                              <Edge From="5" To="6" Label="Source1" />
+                              <Edge From="6" To="7" Label="Source1" />
+                              <Edge From="7" To="11" Label="Source1" />
+                              <Edge From="8" To="9" Label="Source1" />
+                              <Edge From="9" To="10" Label="Source1" />
+                              <Edge From="10" To="11" Label="Source2" />
+                              <Edge From="11" To="12" Label="Source1" />
+                              <Edge From="11" To="13" Label="Source1" />
+                              <Edge From="12" To="14" Label="Source1" />
+                              <Edge From="12" To="15" Label="Source1" />
+                              <Edge From="13" To="14" Label="Source2" />
+                              <Edge From="14" To="16" Label="Source1" />
+                              <Edge From="15" To="16" Label="Source2" />
+                              <Edge From="16" To="17" Label="Source1" />
+                              <Edge From="17" To="18" Label="Source1" />
+                              <Edge From="18" To="20" Label="Source1" />
+                              <Edge From="19" To="20" Label="Source2" />
+                              <Edge From="20" To="21" Label="Source1" />
+                            </Edges>
+                          </Workflow>
+                        </Expression>
+                        <Expression xsi:type="WorkflowOutput" />
+                      </Nodes>
+                      <Edges>
+                        <Edge From="0" To="1" Label="Source1" />
+                        <Edge From="1" To="3" Label="Source1" />
+                        <Edge From="2" To="3" Label="Source2" />
+                        <Edge From="3" To="4" Label="Source1" />
+                      </Edges>
+                    </Workflow>
+                  </Expression>
+                  <Expression xsi:type="rx:GroupBy">
+                    <rx:KeySelector>Item2</rx:KeySelector>
+                    <rx:ElementSelector>Item1</rx:ElementSelector>
+                  </Expression>
+                  <Expression xsi:type="ExternalizedMapping">
+                    <Property Name="Name" DisplayName="LoomRegion" Category="Subject" />
+                  </Expression>
+                  <Expression xsi:type="rx:ReplaySubject">
+                    <Name>LoomRegionObservable</Name>
+                    <rx:BufferSize xsi:nil="true" />
+                  </Expression>
+                  <Expression xsi:type="WorkflowInput">
+                    <Name>Source1</Name>
+                  </Expression>
+                </Nodes>
+                <Edges>
+                  <Edge From="0" To="1" Label="Source1" />
+                  <Edge From="1" To="2" Label="Source1" />
+                  <Edge From="2" To="4" Label="Source1" />
+                  <Edge From="3" To="4" Label="Source2" />
+                </Edges>
+              </Workflow>
+            </Expression>
+          </Nodes>
+          <Edges>
+            <Edge From="6" To="7" Label="Source1" />
+            <Edge From="7" To="8" Label="Source1" />
+          </Edges>
+        </Workflow>
+      </Expression>
+      <Expression xsi:type="GroupWorkflow">
+        <Name>HeadTail</Name>
+        <Workflow>
+          <Nodes>
+            <Expression xsi:type="IncludeWorkflow" Path="Extensions\GetObservableByKey.bonsai">
+              <IGroupObservableSubject>HeadTailObservable</IGroupObservableSubject>
+              <ID>0</ID>
+            </Expression>
+            <Expression xsi:type="SubscribeSubject">
+              <Name>ProcessedImage</Name>
+            </Expression>
+            <Expression xsi:type="ExternalizedMapping">
+              <Property Name="Interval" DisplayName="VisualizerInterval" />
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:SampleInterval">
+                <rx:Interval>PT0.05S</rx:Interval>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="SubscribeSubject">
+              <Name>NumberOfTrackingSubjects</Name>
+            </Expression>
+            <Expression xsi:type="PropertyMapping">
+              <PropertyMappings>
+                <Property Name="NumberOfTrackingElements" />
+              </PropertyMappings>
+            </Expression>
+            <Expression xsi:type="rx:SelectMany">
+              <Name>TrackingVisualizer</Name>
+              <Workflow>
+                <Nodes>
+                  <Expression xsi:type="Disable">
+                    <Builder xsi:type="WorkflowInput">
+                      <Name>Source1</Name>
+                    </Builder>
+                  </Expression>
+                  <Expression xsi:type="ExternalizedMapping">
+                    <Property Name="Name" DisplayName="ProcessedImage" Category="Subject" />
+                  </Expression>
+                  <Expression xsi:type="SubscribeSubject">
+                    <Name>ProcessedImage</Name>
+                  </Expression>
+                  <Expression xsi:type="MemberSelector">
+                    <Selector>Value.Image</Selector>
+                  </Expression>
+                  <Expression xsi:type="GroupWorkflow">
+                    <Name>CreateCanvas</Name>
+                    <Workflow>
+                      <Nodes>
+                        <Expression xsi:type="WorkflowInput">
+                          <Name>Source1</Name>
+                        </Expression>
+                        <Expression xsi:type="InputMapping">
+                          <PropertyMappings>
+                            <Property Name="Size" Selector="Size" />
+                          </PropertyMappings>
+                        </Expression>
+                        <Expression xsi:type="Combinator">
+                          <Combinator xsi:type="drw:CreateCanvas">
+                            <drw:Size>
+                              <drw:Width>1440</drw:Width>
+                              <drw:Height>1080</drw:Height>
+                            </drw:Size>
+                            <drw:Depth>U8</drw:Depth>
+                            <drw:Channels>4</drw:Channels>
+                            <drw:Color>
+                              <drw:Val0>0</drw:Val0>
+                              <drw:Val1>0</drw:Val1>
+                              <drw:Val2>0</drw:Val2>
+                              <drw:Val3>0</drw:Val3>
+                            </drw:Color>
+                          </Combinator>
+                        </Expression>
+                        <Expression xsi:type="WorkflowOutput" />
+                      </Nodes>
+                      <Edges>
+                        <Edge From="0" To="1" Label="Source1" />
+                        <Edge From="1" To="2" Label="Source1" />
+                        <Edge From="2" To="3" Label="Source1" />
+                      </Edges>
+                    </Workflow>
+                  </Expression>
+                  <Expression xsi:type="GroupWorkflow">
+                    <Name>AddImage</Name>
+                    <Workflow>
+                      <Nodes>
+                        <Expression xsi:type="WorkflowInput">
+                          <Name>Source1</Name>
+                        </Expression>
+                        <Expression xsi:type="ExternalizedMapping">
+                          <Property Name="Name" />
+                        </Expression>
+                        <Expression xsi:type="SubscribeSubject">
+                          <Name>ProcessedImage</Name>
+                        </Expression>
+                        <Expression xsi:type="MemberSelector">
+                          <Selector>Value.Image</Selector>
+                        </Expression>
+                        <Expression xsi:type="Combinator">
+                          <Combinator xsi:type="cv:ConvertColor">
+                            <cv:Conversion>Gray2Bgra</cv:Conversion>
+                          </Combinator>
+                        </Expression>
+                        <Expression xsi:type="MemberSelector">
+                          <Selector>Value.Image.Size</Selector>
+                        </Expression>
+                        <Expression xsi:type="scr:ExpressionTransform">
+                          <scr:Expression>new (0 as X, 0 as Y ,it.Width as Width, it.Height as Height)</scr:Expression>
+                        </Expression>
+                        <Expression xsi:type="Combinator">
+                          <Combinator xsi:type="rx:Zip" />
+                        </Expression>
+                        <Expression xsi:type="InputMapping">
+                          <PropertyMappings>
+                            <Property Name="Image" Selector="Item2" />
+                            <Property Name="Destination" Selector="Item3.X,Item3.Y,Item3.Width,Item3.Height" />
+                          </PropertyMappings>
+                          <Selector>Item1</Selector>
+                        </Expression>
+                        <Expression xsi:type="Combinator">
+                          <Combinator xsi:type="drw:AddImage">
+                            <drw:Destination>
+                              <drw:X>0</drw:X>
+                              <drw:Y>0</drw:Y>
+                              <drw:Width>1440</drw:Width>
+                              <drw:Height>1080</drw:Height>
+                            </drw:Destination>
+                            <drw:Interpolation>Linear</drw:Interpolation>
+                          </Combinator>
+                        </Expression>
+                        <Expression xsi:type="WorkflowOutput" />
+                      </Nodes>
+                      <Edges>
+                        <Edge From="0" To="7" Label="Source1" />
+                        <Edge From="1" To="2" Label="Source1" />
+                        <Edge From="2" To="3" Label="Source1" />
+                        <Edge From="2" To="5" Label="Source1" />
+                        <Edge From="3" To="4" Label="Source1" />
+                        <Edge From="4" To="7" Label="Source2" />
+                        <Edge From="5" To="6" Label="Source1" />
+                        <Edge From="6" To="7" Label="Source3" />
+                        <Edge From="7" To="8" Label="Source1" />
+                        <Edge From="8" To="9" Label="Source1" />
+                        <Edge From="9" To="10" Label="Source1" />
+                      </Edges>
+                    </Workflow>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="rx:Take">
+                      <rx:Count>1</rx:Count>
+                    </Combinator>
+                  </Expression>
+                  <Expression xsi:type="rx:BehaviorSubject">
+                    <Name>Canvas</Name>
+                  </Expression>
+                  <Expression xsi:type="ExternalizedMapping">
+                    <Property Name="Name" />
+                  </Expression>
+                  <Expression xsi:type="SubscribeSubject">
+                    <Name>HeadTailObservable</Name>
+                  </Expression>
+                  <Expression xsi:type="ExternalizedMapping">
+                    <Property Name="Count" DisplayName="NumberOfTrackingElements" />
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="rx:Take">
+                      <rx:Count>1</rx:Count>
+                    </Combinator>
+                  </Expression>
+                  <Expression xsi:type="rx:CreateObservable">
+                    <Workflow>
+                      <Nodes>
+                        <Expression xsi:type="WorkflowInput">
+                          <Name>Source1</Name>
+                        </Expression>
+                        <Expression xsi:type="Combinator">
+                          <Combinator xsi:type="rx:Take">
+                            <rx:Count>1</rx:Count>
+                          </Combinator>
+                        </Expression>
+                        <Expression xsi:type="rx:AsyncSubject">
+                          <Name>source</Name>
+                        </Expression>
+                        <Expression xsi:type="SubscribeSubject">
+                          <Name>Canvas</Name>
+                        </Expression>
+                        <Expression xsi:type="SubscribeSubject">
+                          <Name>source</Name>
+                        </Expression>
+                        <Expression xsi:type="Combinator">
+                          <Combinator xsi:type="rx:Merge" />
+                        </Expression>
+                        <Expression xsi:type="Combinator">
+                          <Combinator xsi:type="rx:Zip" />
+                        </Expression>
+                        <Expression xsi:type="MemberSelector">
+                          <Selector>Item1</Selector>
+                        </Expression>
+                        <Expression xsi:type="PropertyMapping">
+                          <PropertyMappings>
+                            <Property Name="Contour" Selector="Value.Item2.Contour" />
+                          </PropertyMappings>
+                        </Expression>
+                        <Expression xsi:type="GroupWorkflow">
+                          <Name>AddBlob</Name>
+                          <Workflow>
+                            <Nodes>
+                              <Expression xsi:type="WorkflowInput">
+                                <Name>Source1</Name>
+                              </Expression>
+                              <Expression xsi:type="ExternalizedMapping">
+                                <Property Name="Contour" />
+                              </Expression>
+                              <Expression xsi:type="Combinator">
+                                <Combinator xsi:type="drw:DrawContours">
+                                  <drw:ExternalColor>
+                                    <drw:Val0>255</drw:Val0>
+                                    <drw:Val1>0</drw:Val1>
+                                    <drw:Val2>0</drw:Val2>
+                                    <drw:Val3>255</drw:Val3>
+                                  </drw:ExternalColor>
+                                  <drw:HoleColor>
+                                    <drw:Val0>0</drw:Val0>
+                                    <drw:Val1>0</drw:Val1>
+                                    <drw:Val2>0</drw:Val2>
+                                    <drw:Val3>0</drw:Val3>
+                                  </drw:HoleColor>
+                                  <drw:MaxLevel>0</drw:MaxLevel>
+                                  <drw:Thickness>1</drw:Thickness>
+                                  <drw:LineType>Connected8</drw:LineType>
+                                </Combinator>
+                              </Expression>
+                              <Expression xsi:type="WorkflowOutput" />
+                            </Nodes>
+                            <Edges>
+                              <Edge From="0" To="2" Label="Source1" />
+                              <Edge From="1" To="2" Label="Source2" />
+                              <Edge From="2" To="3" Label="Source1" />
+                            </Edges>
+                          </Workflow>
+                        </Expression>
+                        <Expression xsi:type="MemberSelector">
+                          <Selector>Value.Item1.Head</Selector>
+                        </Expression>
+                        <Expression xsi:type="PropertyMapping">
+                          <PropertyMappings>
+                            <Property Name="Center" Selector="it" />
+                          </PropertyMappings>
+                        </Expression>
+                        <Expression xsi:type="Combinator">
+                          <Combinator xsi:type="drw:Circle">
+                            <drw:Center>
+                              <drw:X>712</drw:X>
+                              <drw:Y>669</drw:Y>
+                            </drw:Center>
+                            <drw:Radius>2</drw:Radius>
+                            <drw:Color>
+                              <drw:Val0>0</drw:Val0>
+                              <drw:Val1>0</drw:Val1>
+                              <drw:Val2>255</drw:Val2>
+                              <drw:Val3>255</drw:Val3>
+                            </drw:Color>
+                            <drw:Thickness>2</drw:Thickness>
+                            <drw:LineType>Connected8</drw:LineType>
+                            <drw:Shift>0</drw:Shift>
+                          </Combinator>
+                        </Expression>
+                        <Expression xsi:type="MemberSelector">
+                          <Selector>Value.Item2.Centroid</Selector>
+                        </Expression>
+                        <Expression xsi:type="PropertyMapping">
+                          <PropertyMappings>
+                            <Property Name="Center" />
+                          </PropertyMappings>
+                        </Expression>
+                        <Expression xsi:type="Combinator">
+                          <Combinator xsi:type="drw:Circle">
+                            <drw:Center>
+                              <drw:X>706</drw:X>
+                              <drw:Y>674</drw:Y>
+                            </drw:Center>
+                            <drw:Radius>2</drw:Radius>
+                            <drw:Color>
+                              <drw:Val0>0</drw:Val0>
+                              <drw:Val1>255</drw:Val1>
+                              <drw:Val2>0</drw:Val2>
+                              <drw:Val3>255</drw:Val3>
+                            </drw:Color>
+                            <drw:Thickness>2</drw:Thickness>
+                            <drw:LineType>Connected8</drw:LineType>
+                            <drw:Shift>0</drw:Shift>
+                          </Combinator>
+                        </Expression>
+                        <Expression xsi:type="MemberSelector">
+                          <Selector>Value.Item1.Tail</Selector>
+                        </Expression>
+                        <Expression xsi:type="PropertyMapping">
+                          <PropertyMappings>
+                            <Property Name="Center" />
+                          </PropertyMappings>
+                        </Expression>
+                        <Expression xsi:type="Combinator">
+                          <Combinator xsi:type="drw:Circle">
+                            <drw:Center>
+                              <drw:X>699</drw:X>
+                              <drw:Y>679</drw:Y>
+                            </drw:Center>
+                            <drw:Radius>2</drw:Radius>
+                            <drw:Color>
+                              <drw:Val0>255</drw:Val0>
+                              <drw:Val1>255</drw:Val1>
+                              <drw:Val2>255</drw:Val2>
+                              <drw:Val3>255</drw:Val3>
+                            </drw:Color>
+                            <drw:Thickness>2</drw:Thickness>
+                            <drw:LineType>Connected8</drw:LineType>
+                            <drw:Shift>0</drw:Shift>
+                          </Combinator>
+                        </Expression>
+                        <Expression xsi:type="Combinator">
+                          <Combinator xsi:type="rx:Take">
+                            <rx:Count>1</rx:Count>
+                          </Combinator>
+                        </Expression>
+                        <Expression xsi:type="MulticastSubject">
+                          <Name>Canvas</Name>
+                        </Expression>
+                        <Expression xsi:type="WorkflowOutput" />
+                      </Nodes>
+                      <Edges>
+                        <Edge From="0" To="1" Label="Source1" />
+                        <Edge From="1" To="2" Label="Source1" />
+                        <Edge From="3" To="6" Label="Source1" />
+                        <Edge From="4" To="5" Label="Source1" />
+                        <Edge From="5" To="6" Label="Source2" />
+                        <Edge From="5" To="8" Label="Source1" />
+                        <Edge From="5" To="10" Label="Source1" />
+                        <Edge From="5" To="13" Label="Source1" />
+                        <Edge From="5" To="16" Label="Source1" />
+                        <Edge From="6" To="7" Label="Source1" />
+                        <Edge From="7" To="9" Label="Source1" />
+                        <Edge From="8" To="9" Label="Source2" />
+                        <Edge From="9" To="12" Label="Source1" />
+                        <Edge From="10" To="11" Label="Source1" />
+                        <Edge From="11" To="12" Label="Source2" />
+                        <Edge From="12" To="15" Label="Source1" />
+                        <Edge From="13" To="14" Label="Source1" />
+                        <Edge From="14" To="15" Label="Source2" />
+                        <Edge From="15" To="18" Label="Source1" />
+                        <Edge From="16" To="17" Label="Source1" />
+                        <Edge From="17" To="18" Label="Source2" />
+                        <Edge From="18" To="19" Label="Source1" />
+                        <Edge From="19" To="20" Label="Source1" />
+                        <Edge From="20" To="21" Label="Source1" />
+                      </Edges>
+                    </Workflow>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="rx:Concat" />
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="rx:TakeLast">
+                      <rx:Count>1</rx:Count>
+                    </Combinator>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="drw:DrawCanvas" />
+                  </Expression>
+                  <Expression xsi:type="WorkflowOutput" />
+                </Nodes>
+                <Edges>
+                  <Edge From="0" To="3" Label="Source1" />
+                  <Edge From="1" To="2" Label="Source1" />
+                  <Edge From="1" To="5" Label="Source2" />
+                  <Edge From="2" To="3" Label="Source2" />
+                  <Edge From="3" To="4" Label="Source1" />
+                  <Edge From="4" To="5" Label="Source1" />
+                  <Edge From="5" To="6" Label="Source1" />
+                  <Edge From="6" To="7" Label="Source1" />
+                  <Edge From="8" To="9" Label="Source1" />
+                  <Edge From="9" To="11" Label="Source1" />
+                  <Edge From="10" To="11" Label="Source2" />
+                  <Edge From="11" To="12" Label="Source1" />
+                  <Edge From="12" To="13" Label="Source1" />
+                  <Edge From="13" To="14" Label="Source1" />
+                  <Edge From="14" To="15" Label="Source1" />
+                  <Edge From="15" To="16" Label="Source1" />
+                </Edges>
+              </Workflow>
+            </Expression>
+            <Expression xsi:type="VisualizerMapping" />
+            <Expression xsi:type="IncludeWorkflow" Path="Extensions\GetObservableByKey.bonsai">
+              <IGroupObservableSubject>LoomAngleObservable</IGroupObservableSubject>
+              <ID>0</ID>
+            </Expression>
+            <Expression xsi:type="MemberSelector">
+              <Selector>Value</Selector>
+            </Expression>
+            <Expression xsi:type="scr:ExpressionTransform">
+              <scr:Expression>new(
+  it as LoomAngle
+)</scr:Expression>
+            </Expression>
+            <Expression xsi:type="zg:RollingGraphBuilder">
+              <zg:ValueSelector>LoomAngle</zg:ValueSelector>
+              <zg:SymbolType>None</zg:SymbolType>
+              <zg:LineWidth>1</zg:LineWidth>
+              <zg:CurveSettings />
+              <zg:Capacity xsi:nil="true" />
+              <zg:Min xsi:nil="true" />
+              <zg:Max xsi:nil="true" />
+            </Expression>
+            <Expression xsi:type="VisualizerMapping" />
+            <Expression xsi:type="IncludeWorkflow" Path="Extensions\MergeIGroupObservables.bonsai">
+              <IGroupObservableSubject>HeadTailObservable</IGroupObservableSubject>
+              <ExpectedGroupCount>NumberOfTrackingSubjects</ExpectedGroupCount>
+            </Expression>
+            <Expression xsi:type="MemberSelector">
+              <Selector>Value.Item1.Item1.Centroid</Selector>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="dsp:Histogram2D">
+                <dsp:MinX>0</dsp:MinX>
+                <dsp:MaxX>1440</dsp:MaxX>
+                <dsp:MinY>0</dsp:MinY>
+                <dsp:MaxY>1080</dsp:MaxY>
+                <dsp:BinsX>288</dsp:BinsX>
+                <dsp:BinsY>216</dsp:BinsY>
+                <dsp:Normalize>false</dsp:Normalize>
+                <dsp:Accumulate>true</dsp:Accumulate>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="dsp:ConvertScale">
+                <dsp:Depth>U8</dsp:Depth>
+                <dsp:Scale>20</dsp:Scale>
+                <dsp:Shift>0</dsp:Shift>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="VisualizerMapping" />
+            <Expression xsi:type="IncludeWorkflow" Path="Extensions\GetObservableByKey.bonsai">
+              <IGroupObservableSubject>HeadTailObservable</IGroupObservableSubject>
+              <ID>0</ID>
+            </Expression>
+            <Expression xsi:type="MemberSelector">
+              <Selector>Value.Item1.Velocity</Selector>
+            </Expression>
+            <Expression xsi:type="scr:ExpressionTransform">
+              <scr:Expression>new(
+  Math.SQRT(it.X*it.X + it.Y*it.Y) as Velocity
+)</scr:Expression>
+            </Expression>
+            <Expression xsi:type="zg:RollingGraphBuilder">
+              <zg:ValueSelector>Velocity</zg:ValueSelector>
+              <zg:SymbolType>None</zg:SymbolType>
+              <zg:LineWidth>1</zg:LineWidth>
+              <zg:CurveSettings />
+              <zg:Capacity xsi:nil="true" />
+              <zg:Min xsi:nil="true" />
+              <zg:Max xsi:nil="true" />
+            </Expression>
+            <Expression xsi:type="VisualizerMapping" />
+            <Expression xsi:type="gui:TableLayoutPanelBuilder">
+              <gui:Name>Tracking</gui:Name>
+              <gui:Enabled>true</gui:Enabled>
+              <gui:Visible>true</gui:Visible>
+              <gui:ColumnCount>2</gui:ColumnCount>
+              <gui:RowCount>2</gui:RowCount>
+              <gui:ColumnStyles />
+              <gui:RowStyles />
+              <gui:CellSpans />
+            </Expression>
+            <Expression xsi:type="WorkflowOutput" />
+            <Expression xsi:type="IncludeWorkflow" Path="Extensions\GetObservableByKey.bonsai">
+              <IGroupObservableSubject>LoomRegionObservable</IGroupObservableSubject>
+              <ID>0</ID>
+            </Expression>
+            <Expression xsi:type="MemberSelector">
+              <Selector>Value</Selector>
+            </Expression>
+            <Expression xsi:type="SubscribeSubject">
+              <Name>RegionTimeTreshold</Name>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:WithLatestFrom" />
+            </Expression>
+            <Expression xsi:type="rx:BehaviorSubject">
+              <Name>teste</Name>
+            </Expression>
+            <Expression xsi:type="zg:RollingGraphBuilder">
+              <zg:ValueSelector>Item1,Item2</zg:ValueSelector>
+              <zg:SymbolType>None</zg:SymbolType>
+              <zg:LineWidth>1</zg:LineWidth>
+              <zg:CurveSettings>
+                <zg:CurveConfiguration>
+                  <zg:Label />
+                  <zg:Color>LightGrey</zg:Color>
+                </zg:CurveConfiguration>
+                <zg:CurveConfiguration>
+                  <zg:Color>#00C000</zg:Color>
+                </zg:CurveConfiguration>
+              </zg:CurveSettings>
+              <zg:Capacity xsi:nil="true" />
+              <zg:Min xsi:nil="true" />
+              <zg:Max xsi:nil="true" />
+            </Expression>
+            <Expression xsi:type="VisualizerMapping" />
+            <Expression xsi:type="IncludeWorkflow" Path="Extensions\GetObservableByKey.bonsai">
+              <IGroupObservableSubject>LoomAngleObservable</IGroupObservableSubject>
+              <ID>0</ID>
+            </Expression>
+            <Expression xsi:type="MemberSelector">
+              <Selector>Value</Selector>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="dsp:Abs" />
+            </Expression>
+            <Expression xsi:type="SubscribeSubject">
+              <Name>AngleTreshold</Name>
+            </Expression>
+            <Expression xsi:type="PropertyMapping">
+              <PropertyMappings>
+                <Property Name="Value" />
+              </PropertyMappings>
+            </Expression>
+            <Expression xsi:type="LessThan">
+              <Operand xsi:type="DoubleProperty">
+                <Value>2</Value>
+              </Operand>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:WithLatestFrom" />
+            </Expression>
+            <Expression xsi:type="rx:Condition">
+              <Workflow>
+                <Nodes>
+                  <Expression xsi:type="WorkflowInput">
+                    <Name>Source1</Name>
+                  </Expression>
+                  <Expression xsi:type="MemberSelector">
+                    <Selector>Item2</Selector>
+                  </Expression>
+                  <Expression xsi:type="MemberSelector">
+                    <Selector>Item1</Selector>
+                  </Expression>
+                  <Expression xsi:type="GreaterThan" />
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="rx:Zip" />
+                  </Expression>
+                  <Expression xsi:type="BitwiseAnd" />
+                  <Expression xsi:type="WorkflowOutput" />
+                </Nodes>
+                <Edges>
+                  <Edge From="0" To="1" Label="Source1" />
+                  <Edge From="0" To="2" Label="Source1" />
+                  <Edge From="1" To="4" Label="Source1" />
+                  <Edge From="2" To="3" Label="Source1" />
+                  <Edge From="3" To="4" Label="Source2" />
+                  <Edge From="4" To="5" Label="Source1" />
+                  <Edge From="5" To="6" Label="Source1" />
+                </Edges>
+              </Workflow>
+            </Expression>
+            <Expression xsi:type="MemberSelector">
+              <Selector>Item1.Item1</Selector>
+            </Expression>
+            <Expression xsi:type="zg:RollingGraphBuilder">
+              <zg:SymbolType>XCross</zg:SymbolType>
+              <zg:LineWidth>0</zg:LineWidth>
+              <zg:CurveSettings>
+                <zg:CurveConfiguration>
+                  <zg:Color>Red</zg:Color>
+                </zg:CurveConfiguration>
+              </zg:CurveSettings>
+              <zg:Capacity xsi:nil="true" />
+              <zg:Min xsi:nil="true" />
+              <zg:Max xsi:nil="true" />
+            </Expression>
+            <Expression xsi:type="VisualizerMapping" />
+            <Expression xsi:type="zg:RollingGraphPanelBuilder">
+              <zg:ReverseX>false</zg:ReverseX>
+              <zg:ReverseY>false</zg:ReverseY>
+              <zg:Span xsi:nil="true" />
+              <zg:Capacity xsi:nil="true" />
+              <zg:BaseAxis>X</zg:BaseAxis>
+              <zg:BarType>Cluster</zg:BarType>
+              <zg:Min xsi:nil="true" />
+              <zg:Max xsi:nil="true" />
+            </Expression>
+          </Nodes>
+          <Edges>
+            <Edge From="1" To="3" Label="Source1" />
+            <Edge From="2" To="3" Label="Source2" />
+            <Edge From="3" To="6" Label="Source1" />
+            <Edge From="4" To="5" Label="Source1" />
+            <Edge From="5" To="6" Label="Source2" />
+            <Edge From="6" To="7" Label="Source1" />
+            <Edge From="7" To="23" Label="Source1" />
+            <Edge From="8" To="9" Label="Source1" />
+            <Edge From="9" To="10" Label="Source1" />
+            <Edge From="10" To="11" Label="Source1" />
+            <Edge From="11" To="12" Label="Source1" />
+            <Edge From="12" To="23" Label="Source2" />
+            <Edge From="13" To="14" Label="Source1" />
+            <Edge From="14" To="15" Label="Source1" />
+            <Edge From="15" To="16" Label="Source1" />
+            <Edge From="16" To="17" Label="Source1" />
+            <Edge From="17" To="23" Label="Source3" />
+            <Edge From="18" To="19" Label="Source1" />
+            <Edge From="19" To="20" Label="Source1" />
+            <Edge From="20" To="21" Label="Source1" />
+            <Edge From="21" To="22" Label="Source1" />
+            <Edge From="22" To="23" Label="Source4" />
+            <Edge From="23" To="24" Label="Source1" />
+            <Edge From="25" To="26" Label="Source1" />
+            <Edge From="26" To="28" Label="Source1" />
+            <Edge From="27" To="28" Label="Source2" />
+            <Edge From="28" To="29" Label="Source1" />
+            <Edge From="28" To="38" Label="Source1" />
+            <Edge From="29" To="30" Label="Source1" />
+            <Edge From="30" To="31" Label="Source1" />
+            <Edge From="31" To="43" Label="Source1" />
+            <Edge From="32" To="33" Label="Source1" />
+            <Edge From="33" To="34" Label="Source1" />
+            <Edge From="34" To="37" Label="Source1" />
+            <Edge From="35" To="36" Label="Source1" />
+            <Edge From="36" To="37" Label="Source2" />
+            <Edge From="37" To="38" Label="Source2" />
+            <Edge From="38" To="39" Label="Source1" />
+            <Edge From="39" To="40" Label="Source1" />
+            <Edge From="40" To="41" Label="Source1" />
+            <Edge From="41" To="42" Label="Source1" />
+            <Edge From="42" To="43" Label="Source2" />
+          </Edges>
+        </Workflow>
+      </Expression>
+      <Expression xsi:type="GroupWorkflow">
+        <Name>TaskLogic</Name>
+        <Workflow>
+          <Nodes>
+            <Expression xsi:type="ExternalizedMapping">
+              <Property Name="Value" DisplayName="RegionTimeThreshold" />
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="DoubleProperty">
+                <Value>0</Value>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="rx:BehaviorSubject">
+              <Name>RegionTimeTreshold</Name>
+            </Expression>
+            <Expression xsi:type="ExternalizedMapping">
+              <Property Name="Value" DisplayName="AngleThreshold" />
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="DoubleProperty">
+                <Value>0</Value>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="rx:BehaviorSubject">
+              <Name>AngleTreshold</Name>
+            </Expression>
+            <Expression xsi:type="SubscribeSubject">
+              <Name>LoomRegionObservable</Name>
+            </Expression>
+            <Expression xsi:type="rx:SelectMany">
+              <Workflow>
+                <Nodes>
+                  <Expression xsi:type="WorkflowInput">
+                    <Name>Source1</Name>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="rx:Take">
+                      <rx:Count>1</rx:Count>
+                    </Combinator>
+                  </Expression>
+                  <Expression xsi:type="rx:AsyncSubject">
+                    <Name>Source</Name>
+                  </Expression>
+                  <Expression xsi:type="SubscribeSubject">
+                    <Name>Source</Name>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="rx:Merge" />
+                  </Expression>
+                  <Expression xsi:type="MemberSelector">
+                    <Selector>Value</Selector>
+                  </Expression>
+                  <Expression xsi:type="SubscribeSubject">
+                    <Name>RegionTimeTreshold</Name>
+                  </Expression>
+                  <Expression xsi:type="PropertyMapping">
+                    <PropertyMappings>
+                      <Property Name="Value" />
+                    </PropertyMappings>
+                  </Expression>
+                  <Expression xsi:type="GreaterThan">
+                    <Operand xsi:type="DoubleProperty">
+                      <Value>1</Value>
+                    </Operand>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="rx:DistinctUntilChanged" />
+                  </Expression>
+                  <Expression xsi:type="rx:Condition">
+                    <Workflow>
+                      <Nodes>
+                        <Expression xsi:type="WorkflowInput">
+                          <Name>Source1</Name>
+                        </Expression>
+                        <Expression xsi:type="WorkflowOutput" />
+                      </Nodes>
+                      <Edges>
+                        <Edge From="0" To="1" Label="Source1" />
+                      </Edges>
+                    </Workflow>
+                  </Expression>
+                  <Expression xsi:type="SubscribeSubject">
+                    <Name>AngleTreshold</Name>
+                  </Expression>
+                  <Expression xsi:type="PropertyMapping">
+                    <PropertyMappings>
+                      <Property Name="AngleThreshold" />
+                    </PropertyMappings>
+                  </Expression>
+                  <Expression xsi:type="rx:SelectMany">
+                    <Workflow>
+                      <Nodes>
+                        <Expression xsi:type="SubscribeSubject">
+                          <Name>Source</Name>
+                        </Expression>
+                        <Expression xsi:type="MemberSelector">
+                          <Selector>Key</Selector>
+                        </Expression>
+                        <Expression xsi:type="PropertyMapping">
+                          <PropertyMappings>
+                            <Property Name="ID" />
+                          </PropertyMappings>
+                        </Expression>
+                        <Expression xsi:type="IncludeWorkflow" Path="Extensions\GetObservableByKey.bonsai">
+                          <IGroupObservableSubject>LoomRegionObservable</IGroupObservableSubject>
+                          <ID>0</ID>
+                        </Expression>
+                        <Expression xsi:type="GroupWorkflow">
+                          <Name>Inegion</Name>
+                          <Workflow>
+                            <Nodes>
+                              <Expression xsi:type="WorkflowInput">
+                                <Name>Source1</Name>
+                              </Expression>
+                              <Expression xsi:type="WorkflowOutput" />
+                            </Nodes>
+                            <Edges>
+                              <Edge From="0" To="1" Label="Source1" />
+                            </Edges>
+                          </Workflow>
+                        </Expression>
+                        <Expression xsi:type="MemberSelector">
+                          <Selector>Value</Selector>
+                        </Expression>
+                        <Expression xsi:type="ExternalizedMapping">
+                          <Property Name="Value" />
+                        </Expression>
+                        <Expression xsi:type="GreaterThan">
+                          <Operand xsi:type="DoubleProperty">
+                            <Value>1</Value>
+                          </Operand>
+                        </Expression>
+                        <Expression xsi:type="rx:Condition">
+                          <Workflow>
+                            <Nodes>
+                              <Expression xsi:type="WorkflowInput">
+                                <Name>Source1</Name>
+                              </Expression>
+                              <Expression xsi:type="WorkflowOutput" />
+                            </Nodes>
+                            <Edges>
+                              <Edge From="0" To="1" Label="Source1" />
+                            </Edges>
+                          </Workflow>
+                        </Expression>
+                        <Expression xsi:type="IncludeWorkflow" Path="Extensions\GetObservableByKey.bonsai">
+                          <IGroupObservableSubject>LoomAngleObservable</IGroupObservableSubject>
+                          <ID>0</ID>
+                        </Expression>
+                        <Expression xsi:type="Combinator">
+                          <Combinator xsi:type="rx:WithLatestFrom" />
+                        </Expression>
+                        <Expression xsi:type="ExternalizedMapping">
+                          <Property Name="AngleThreshold" />
+                        </Expression>
+                        <Expression xsi:type="rx:Condition">
+                          <Name>AngleCondition</Name>
+                          <Workflow>
+                            <Nodes>
+                              <Expression xsi:type="WorkflowInput">
+                                <Name>Source1</Name>
+                              </Expression>
+                              <Expression xsi:type="MemberSelector">
+                                <Selector>Item2.Value</Selector>
+                              </Expression>
+                              <Expression xsi:type="Combinator">
+                                <Combinator xsi:type="dsp:Abs" />
+                              </Expression>
+                              <Expression xsi:type="ExternalizedMapping">
+                                <Property Name="Value" DisplayName="AngleThreshold" />
+                              </Expression>
+                              <Expression xsi:type="LessThan">
+                                <Operand xsi:type="DoubleProperty">
+                                  <Value>3</Value>
+                                </Operand>
+                              </Expression>
+                              <Expression xsi:type="WorkflowOutput" />
+                            </Nodes>
+                            <Edges>
+                              <Edge From="0" To="1" Label="Source1" />
+                              <Edge From="1" To="2" Label="Source1" />
+                              <Edge From="2" To="4" Label="Source1" />
+                              <Edge From="3" To="4" Label="Source2" />
+                              <Edge From="4" To="5" Label="Source1" />
+                            </Edges>
+                          </Workflow>
+                        </Expression>
+                        <Expression xsi:type="Combinator">
+                          <Combinator xsi:type="rx:Take">
+                            <rx:Count>1</rx:Count>
+                          </Combinator>
+                        </Expression>
+                        <Expression xsi:type="LessThan">
+                          <Operand xsi:type="DoubleProperty">
+                            <Value>1</Value>
+                          </Operand>
+                        </Expression>
+                        <Expression xsi:type="rx:Condition">
+                          <Workflow>
+                            <Nodes>
+                              <Expression xsi:type="WorkflowInput">
+                                <Name>Source1</Name>
+                              </Expression>
+                              <Expression xsi:type="WorkflowOutput" />
+                            </Nodes>
+                            <Edges>
+                              <Edge From="0" To="1" Label="Source1" />
+                            </Edges>
+                          </Workflow>
+                        </Expression>
+                        <Expression xsi:type="Combinator">
+                          <Combinator xsi:type="rx:TakeUntil" />
+                        </Expression>
+                        <Expression xsi:type="WorkflowOutput" />
+                      </Nodes>
+                      <Edges>
+                        <Edge From="0" To="1" Label="Source1" />
+                        <Edge From="1" To="2" Label="Source1" />
+                        <Edge From="2" To="3" Label="Source1" />
+                        <Edge From="2" To="9" Label="Source1" />
+                        <Edge From="3" To="4" Label="Source1" />
+                        <Edge From="4" To="5" Label="Source1" />
+                        <Edge From="5" To="7" Label="Source1" />
+                        <Edge From="5" To="14" Label="Source1" />
+                        <Edge From="6" To="7" Label="Source2" />
+                        <Edge From="6" To="14" Label="Source2" />
+                        <Edge From="7" To="8" Label="Source1" />
+                        <Edge From="8" To="10" Label="Source1" />
+                        <Edge From="9" To="10" Label="Source2" />
+                        <Edge From="10" To="12" Label="Source1" />
+                        <Edge From="11" To="12" Label="Source2" />
+                        <Edge From="12" To="13" Label="Source1" />
+                        <Edge From="13" To="16" Label="Source1" />
+                        <Edge From="14" To="15" Label="Source1" />
+                        <Edge From="15" To="16" Label="Source2" />
+                        <Edge From="16" To="17" Label="Source1" />
+                      </Edges>
+                    </Workflow>
+                  </Expression>
+                  <Expression xsi:type="WorkflowOutput" />
+                </Nodes>
+                <Edges>
+                  <Edge From="0" To="1" Label="Source1" />
+                  <Edge From="1" To="2" Label="Source1" />
+                  <Edge From="3" To="4" Label="Source1" />
+                  <Edge From="4" To="5" Label="Source1" />
+                  <Edge From="5" To="8" Label="Source1" />
+                  <Edge From="6" To="7" Label="Source1" />
+                  <Edge From="7" To="8" Label="Source2" />
+                  <Edge From="7" To="13" Label="Source2" />
+                  <Edge From="8" To="9" Label="Source1" />
+                  <Edge From="9" To="10" Label="Source1" />
+                  <Edge From="10" To="13" Label="Source1" />
+                  <Edge From="11" To="12" Label="Source1" />
+                  <Edge From="12" To="13" Label="Source3" />
+                  <Edge From="13" To="14" Label="Source1" />
+                </Edges>
+              </Workflow>
+            </Expression>
+            <Expression xsi:type="ExternalizedMapping">
+              <Property Name="Probability" />
+            </Expression>
+            <Expression xsi:type="GroupWorkflow">
+              <Name>Probability</Name>
+              <Workflow>
+                <Nodes>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="num:CreateRandom">
+                      <num:Seed>11010</num:Seed>
+                    </Combinator>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="p3:CreateContinuousUniform">
+                      <p3:Lower>0</p3:Lower>
+                      <p3:Upper>1</p3:Upper>
+                    </Combinator>
+                  </Expression>
+                  <Expression xsi:type="rx:BehaviorSubject">
+                    <Name>dist</Name>
+                  </Expression>
+                  <Expression xsi:type="WorkflowInput">
+                    <Name>Source1</Name>
+                  </Expression>
+                  <Expression xsi:type="ExternalizedMapping">
+                    <Property Name="Probability" />
+                  </Expression>
+                  <Expression xsi:type="rx:SelectMany">
+                    <Workflow>
+                      <Nodes>
+                        <Expression xsi:type="SubscribeSubject">
+                          <Name>dist</Name>
+                        </Expression>
+                        <Expression xsi:type="Combinator">
+                          <Combinator xsi:type="p3:Sample" />
+                        </Expression>
+                        <Expression xsi:type="ExternalizedMapping">
+                          <Property Name="Value" DisplayName="Probability" />
+                        </Expression>
+                        <Expression xsi:type="LessThan">
+                          <Operand xsi:type="DoubleProperty">
+                            <Value>0.2</Value>
+                          </Operand>
+                        </Expression>
+                        <Expression xsi:type="rx:Condition">
+                          <Workflow>
+                            <Nodes>
+                              <Expression xsi:type="WorkflowInput">
+                                <Name>Source1</Name>
+                              </Expression>
+                              <Expression xsi:type="WorkflowOutput" />
+                            </Nodes>
+                            <Edges>
+                              <Edge From="0" To="1" Label="Source1" />
+                            </Edges>
+                          </Workflow>
+                        </Expression>
+                        <Expression xsi:type="WorkflowOutput" />
+                        <Expression xsi:type="WorkflowInput">
+                          <Name>Source1</Name>
+                        </Expression>
+                      </Nodes>
+                      <Edges>
+                        <Edge From="0" To="1" Label="Source1" />
+                        <Edge From="1" To="3" Label="Source1" />
+                        <Edge From="2" To="3" Label="Source2" />
+                        <Edge From="3" To="4" Label="Source1" />
+                        <Edge From="4" To="5" Label="Source1" />
+                      </Edges>
+                    </Workflow>
+                  </Expression>
+                  <Expression xsi:type="WorkflowOutput" />
+                </Nodes>
+                <Edges>
+                  <Edge From="0" To="1" Label="Source1" />
+                  <Edge From="1" To="2" Label="Source1" />
+                  <Edge From="3" To="5" Label="Source1" />
+                  <Edge From="4" To="5" Label="Source2" />
+                  <Edge From="5" To="6" Label="Source1" />
+                </Edges>
+              </Workflow>
+            </Expression>
+            <Expression xsi:type="WorkflowOutput" />
+          </Nodes>
+          <Edges>
+            <Edge From="0" To="1" Label="Source1" />
+            <Edge From="1" To="2" Label="Source1" />
+            <Edge From="3" To="4" Label="Source1" />
+            <Edge From="4" To="5" Label="Source1" />
+            <Edge From="6" To="7" Label="Source1" />
+            <Edge From="7" To="9" Label="Source1" />
+            <Edge From="8" To="9" Label="Source2" />
+            <Edge From="9" To="10" Label="Source1" />
+          </Edges>
+        </Workflow>
+      </Expression>
+    </Nodes>
+    <Edges />
+  </Workflow>
+</WorkflowBuilder>
