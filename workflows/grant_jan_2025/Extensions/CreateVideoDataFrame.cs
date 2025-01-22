@@ -16,4 +16,17 @@ public class CreateVideoDataFrame
     {
         return source.Select(value => new VideoDataFrame(value.Item1,value.Item2));
     }
+    public IObservable<VideoDataFrame> Process(IObservable<IplImage> source)
+    {
+        long frameId =0;
+        long time=0;
+        
+        return source.Select(value =>
+        {
+            var retValue = new VideoDataFrame(value,frameId,time);
+            frameId++;
+            time++;
+            return retValue;
+        } );
+    }
 }
