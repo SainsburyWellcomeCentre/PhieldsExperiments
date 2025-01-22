@@ -1058,7 +1058,7 @@
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="IntProperty">
-                      <Value>1</Value>
+                      <Value>2</Value>
                     </Combinator>
                   </Expression>
                   <Expression xsi:type="rx:BehaviorSubject">
@@ -1087,7 +1087,7 @@
                         </Expression>
                         <Expression xsi:type="Combinator">
                           <Combinator xsi:type="p1:BinaryRegionsTracking">
-                            <p1:ExpectedNumberOfConnectedComponents>1</p1:ExpectedNumberOfConnectedComponents>
+                            <p1:ExpectedNumberOfConnectedComponents>2</p1:ExpectedNumberOfConnectedComponents>
                           </Combinator>
                         </Expression>
                         <Expression xsi:type="WorkflowOutput" />
