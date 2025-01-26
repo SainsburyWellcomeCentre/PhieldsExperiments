@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using Bonsai.Vision;
 
+
 [Combinator]
 [Description("Keeps Blob order based on distance from previous frame")]
 [WorkflowElementCategory(ElementCategory.Transform)]
@@ -13,21 +14,8 @@ using Bonsai.Vision;
 
 public class BinaryRegionsTracking
 {
+
     public int ExpectedNumberOfConnectedComponents { get; set; }
-    
-    public class DistanceConnectedComponents
-    {
-        public int Crossings;
-
-        public DistanceConnectedComponentCollection DistConnCompCollection; 
-    }
-
-
-    public struct DistanceConnectedComponentCollection
-    {
-        public double Distance;
-        public ConnectedComponentCollection ConnCompCollection; 
-    }
 
     private static double distance (OpenCV.Net.Point2f a,OpenCV.Net.Point2f b)
     {
@@ -35,7 +23,7 @@ public class BinaryRegionsTracking
     }
     
 
-	private DistanceConnectedComponentCollection permute(ConnectedComponentCollection current, 
+	private TrackingConnectedComponents permute(ConnectedComponentCollection current, 
 								int l, int r, ConnectedComponentCollection previous)
 	{
 		if (l == r)
@@ -62,17 +50,17 @@ public class BinaryRegionsTracking
                     newPermutationCopy.Add(current[i]);
                 }
             }
-            return new DistanceConnectedComponentCollection() {Distance = totalDistance, ConnCompCollection = newPermutationCopy};
+            return new TrackingConnectedComponents() {MinimizedDistance = totalDistance, ConnectedComponents = newPermutationCopy};
         }
 		else
 		{ 
-            var bestCandidateTillNow = new DistanceConnectedComponentCollection() {Distance = Double.MaxValue, ConnCompCollection = null};
+            var bestCandidateTillNow = new TrackingConnectedComponents() {MinimizedDistance = Double.MaxValue, ConnectedComponents = null};
 			for (int i = l; i <= r; i++)
 			{ 
 				swap(current, l, i);
 				
                 var currentCandidate = permute(current, l + 1, r,previous);
-                if (currentCandidate.Distance < bestCandidateTillNow.Distance)
+                if (currentCandidate.MinimizedDistance < bestCandidateTillNow.MinimizedDistance)
                 {
                    bestCandidateTillNow = currentCandidate;
                 }
@@ -94,7 +82,7 @@ public class BinaryRegionsTracking
 
 // This code is contributed by mits 
 
-    public IObservable<DistanceConnectedComponents> Process(IObservable<ConnectedComponentCollection> source)
+    public IObservable<TrackingConnectedComponents> Process(IObservable<ConnectedComponentCollection> source)
     {
         ConnectedComponentCollection previous = null;
         return source.Select(value => 
@@ -113,8 +101,8 @@ public class BinaryRegionsTracking
                 if (valueCopy.Count != ExpectedNumberOfConnectedComponents)
                     return null;
                 previous = new ConnectedComponentCollection(valueCopy, valueCopy.ImageSize);
-                var previousDistanceComponentsCollection = new DistanceConnectedComponentCollection() { ConnCompCollection =previous, Distance =0};
-                var res = new DistanceConnectedComponents(){ DistConnCompCollection = previousDistanceComponentsCollection, Crossings = ExpectedNumberOfConnectedComponents-value.Count};
+                var previousTrackingComponents = new TrackingConnectedComponents() { ConnectedComponents =previous, MinimizedDistance =0, Crossings = 0};
+                var res = new TrackingConnectedComponents(){ ConnectedComponents = previousTrackingComponents.ConnectedComponents, Crossings = ExpectedNumberOfConnectedComponents-value.Count, MinimizedDistance = previousTrackingComponents.MinimizedDistance};
                 return res; //bestPermute.permuted;
             }
             // less detected individuals in this frame than expected (specified)
@@ -132,15 +120,22 @@ public class BinaryRegionsTracking
 
 
             var bestPermute = permute(valueCopy,0,valueCopy.Count-1,previous);
-            previous = bestPermute.ConnCompCollection;
+            previous = bestPermute.ConnectedComponents;
             var crossings = (ExpectedNumberOfConnectedComponents- value.Count >0)?ExpectedNumberOfConnectedComponents- value.Count:0;
 
-            return  new DistanceConnectedComponents(){ DistConnCompCollection = bestPermute, Crossings = crossings};
+            return  new TrackingConnectedComponents(){ ConnectedComponents = bestPermute.ConnectedComponents, MinimizedDistance = bestPermute.MinimizedDistance, Crossings = crossings};
         });
     }
+}      
+
+public class TrackingConnectedComponents
+{
+    public int Crossings;
+    public double MinimizedDistance;
+    public ConnectedComponentCollection ConnectedComponents;
 }
 
-            // var distanceTable = new Double[5,5];
+      // var distanceTable = new Double[5,5];
             // for (int i = 0; i < current.Length; i++)
             // {
             //     for (int j = 0; j < previous.Length; i++) //(int j = 0 + i;
