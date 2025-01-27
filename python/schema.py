@@ -7,7 +7,7 @@ from aeon.schema.streams import Device
 phields01 = DotMap(
     [   
         Device("Metadata", stream.Metadata),
-        Device("CameraTop", stream.Video, stream.Position, phields.HeadTail, phields.BinaryRegion, phields.LoomAngle, phields.LoomRegion),
+        Device("CameraTop", stream.Video, stream.Position, phields.BinaryTrackingPosition, phields.BinaryTrackingState, phields.LoomRegion, phields.LoomAngle, phields.HeadTail),
         Device("CameraSide", stream.Video),
         Device("Motor", phields.Motor)
     ]
