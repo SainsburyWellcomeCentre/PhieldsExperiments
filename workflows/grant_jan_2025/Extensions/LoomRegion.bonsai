@@ -1,0 +1,831 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<WorkflowBuilder Version="2.8.5"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xmlns:rx="clr-namespace:Bonsai.Reactive;assembly=Bonsai.Core"
+                 xmlns:harp="clr-namespace:Bonsai.Harp;assembly=Bonsai.Harp"
+                 xmlns:cv="clr-namespace:Bonsai.Vision;assembly=Bonsai.Vision"
+                 xmlns:p1="clr-namespace:OpenCV.Net;assembly=OpenCV.Net"
+                 xmlns:aeon="clr-namespace:Aeon.Acquisition;assembly=Aeon.Acquisition"
+                 xmlns="https://bonsai-rx.org/2018/workflow">
+  <Workflow>
+    <Nodes>
+      <Expression xsi:type="ExternalizedMapping">
+        <Property Name="HeadTail" />
+        <Property Name="RegionOfInterest1" />
+      </Expression>
+      <Expression xsi:type="rx:Defer">
+        <Workflow>
+          <Nodes>
+            <Expression xsi:type="ExternalizedMapping">
+              <Property Name="Name" DisplayName="HeadTail" Category="Subject" />
+            </Expression>
+            <Expression xsi:type="SubscribeSubject">
+              <Name>HeadTailObservable</Name>
+            </Expression>
+            <Expression xsi:type="ExternalizedMapping">
+              <Property Name="RegionOfInterest1" />
+            </Expression>
+            <Expression xsi:type="rx:SelectMany">
+              <Name>LoomRegion</Name>
+              <Workflow>
+                <Nodes>
+                  <Expression xsi:type="WorkflowInput">
+                    <Name>Source1</Name>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="rx:Take">
+                      <rx:Count>1</rx:Count>
+                    </Combinator>
+                  </Expression>
+                  <Expression xsi:type="MemberSelector">
+                    <Selector>Key</Selector>
+                  </Expression>
+                  <Expression xsi:type="rx:AsyncSubject">
+                    <Name>Id</Name>
+                  </Expression>
+                  <Expression xsi:type="rx:AsyncSubject">
+                    <Name>Source</Name>
+                  </Expression>
+                  <Expression xsi:type="SubscribeSubject">
+                    <Name>Source</Name>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="rx:Merge" />
+                  </Expression>
+                  <Expression xsi:type="harp:ConvertTimestamped">
+                    <Workflow>
+                      <Nodes>
+                        <Expression xsi:type="WorkflowInput">
+                          <Name>Source1</Name>
+                        </Expression>
+                        <Expression xsi:type="MemberSelector">
+                          <Selector>Item1.Head</Selector>
+                        </Expression>
+                        <Expression xsi:type="WorkflowOutput" />
+                      </Nodes>
+                      <Edges>
+                        <Edge From="0" To="1" Label="Source1" />
+                        <Edge From="1" To="2" Label="Source1" />
+                      </Edges>
+                    </Workflow>
+                  </Expression>
+                  <Expression xsi:type="ExternalizedMapping">
+                    <Property Name="Value" DisplayName="RegionOfInterest1" />
+                  </Expression>
+                  <Expression xsi:type="PropertySource" TypeArguments="cv:CropPolygon,p1:Point[][]">
+                    <MemberName>Regions</MemberName>
+                    <Value>
+                      <ArrayOfPoint>
+                        <Point>
+                          <X>800</X>
+                          <Y>498</Y>
+                        </Point>
+                        <Point>
+                          <X>802</X>
+                          <Y>508</Y>
+                        </Point>
+                        <Point>
+                          <X>803</X>
+                          <Y>519</Y>
+                        </Point>
+                        <Point>
+                          <X>808</X>
+                          <Y>529</Y>
+                        </Point>
+                        <Point>
+                          <X>814</X>
+                          <Y>538</Y>
+                        </Point>
+                        <Point>
+                          <X>821</X>
+                          <Y>545</Y>
+                        </Point>
+                        <Point>
+                          <X>829</X>
+                          <Y>551</Y>
+                        </Point>
+                        <Point>
+                          <X>838</X>
+                          <Y>556</Y>
+                        </Point>
+                        <Point>
+                          <X>848</X>
+                          <Y>559</Y>
+                        </Point>
+                        <Point>
+                          <X>859</X>
+                          <Y>560</Y>
+                        </Point>
+                        <Point>
+                          <X>868</X>
+                          <Y>559</Y>
+                        </Point>
+                        <Point>
+                          <X>878</X>
+                          <Y>556</Y>
+                        </Point>
+                        <Point>
+                          <X>887</X>
+                          <Y>551</Y>
+                        </Point>
+                        <Point>
+                          <X>895</X>
+                          <Y>545</Y>
+                        </Point>
+                        <Point>
+                          <X>902</X>
+                          <Y>538</Y>
+                        </Point>
+                        <Point>
+                          <X>908</X>
+                          <Y>529</Y>
+                        </Point>
+                        <Point>
+                          <X>913</X>
+                          <Y>519</Y>
+                        </Point>
+                        <Point>
+                          <X>914</X>
+                          <Y>508</Y>
+                        </Point>
+                        <Point>
+                          <X>917</X>
+                          <Y>498</Y>
+                        </Point>
+                        <Point>
+                          <X>914</X>
+                          <Y>486</Y>
+                        </Point>
+                        <Point>
+                          <X>913</X>
+                          <Y>475</Y>
+                        </Point>
+                        <Point>
+                          <X>908</X>
+                          <Y>466</Y>
+                        </Point>
+                        <Point>
+                          <X>902</X>
+                          <Y>456</Y>
+                        </Point>
+                        <Point>
+                          <X>895</X>
+                          <Y>449</Y>
+                        </Point>
+                        <Point>
+                          <X>887</X>
+                          <Y>443</Y>
+                        </Point>
+                        <Point>
+                          <X>878</X>
+                          <Y>438</Y>
+                        </Point>
+                        <Point>
+                          <X>868</X>
+                          <Y>435</Y>
+                        </Point>
+                        <Point>
+                          <X>859</X>
+                          <Y>435</Y>
+                        </Point>
+                        <Point>
+                          <X>848</X>
+                          <Y>435</Y>
+                        </Point>
+                        <Point>
+                          <X>838</X>
+                          <Y>438</Y>
+                        </Point>
+                        <Point>
+                          <X>829</X>
+                          <Y>443</Y>
+                        </Point>
+                        <Point>
+                          <X>821</X>
+                          <Y>449</Y>
+                        </Point>
+                        <Point>
+                          <X>814</X>
+                          <Y>456</Y>
+                        </Point>
+                        <Point>
+                          <X>808</X>
+                          <Y>466</Y>
+                        </Point>
+                        <Point>
+                          <X>803</X>
+                          <Y>475</Y>
+                        </Point>
+                        <Point>
+                          <X>802</X>
+                          <Y>486</Y>
+                        </Point>
+                        <Point>
+                          <X>800</X>
+                          <Y>498</Y>
+                        </Point>
+                        <Point>
+                          <X>1065</X>
+                          <Y>461</Y>
+                        </Point>
+                        <Point>
+                          <X>1069</X>
+                          <Y>511</Y>
+                        </Point>
+                        <Point>
+                          <X>1065</X>
+                          <Y>560</Y>
+                        </Point>
+                        <Point>
+                          <X>1056</X>
+                          <Y>607</Y>
+                        </Point>
+                        <Point>
+                          <X>1040</X>
+                          <Y>650</Y>
+                        </Point>
+                        <Point>
+                          <X>1019</X>
+                          <Y>690</Y>
+                        </Point>
+                        <Point>
+                          <X>994</X>
+                          <Y>725</Y>
+                        </Point>
+                        <Point>
+                          <X>963</X>
+                          <Y>753</Y>
+                        </Point>
+                        <Point>
+                          <X>929</X>
+                          <Y>774</Y>
+                        </Point>
+                        <Point>
+                          <X>894</X>
+                          <Y>786</Y>
+                        </Point>
+                        <Point>
+                          <X>857</X>
+                          <Y>790</Y>
+                        </Point>
+                        <Point>
+                          <X>820</X>
+                          <Y>786</Y>
+                        </Point>
+                        <Point>
+                          <X>785</X>
+                          <Y>774</Y>
+                        </Point>
+                        <Point>
+                          <X>751</X>
+                          <Y>753</Y>
+                        </Point>
+                        <Point>
+                          <X>720</X>
+                          <Y>725</Y>
+                        </Point>
+                        <Point>
+                          <X>695</X>
+                          <Y>690</Y>
+                        </Point>
+                        <Point>
+                          <X>674</X>
+                          <Y>650</Y>
+                        </Point>
+                        <Point>
+                          <X>658</X>
+                          <Y>607</Y>
+                        </Point>
+                        <Point>
+                          <X>649</X>
+                          <Y>560</Y>
+                        </Point>
+                        <Point>
+                          <X>646</X>
+                          <Y>511</Y>
+                        </Point>
+                        <Point>
+                          <X>649</X>
+                          <Y>461</Y>
+                        </Point>
+                        <Point>
+                          <X>658</X>
+                          <Y>414</Y>
+                        </Point>
+                        <Point>
+                          <X>674</X>
+                          <Y>371</Y>
+                        </Point>
+                        <Point>
+                          <X>695</X>
+                          <Y>331</Y>
+                        </Point>
+                        <Point>
+                          <X>720</X>
+                          <Y>296</Y>
+                        </Point>
+                        <Point>
+                          <X>751</X>
+                          <Y>268</Y>
+                        </Point>
+                        <Point>
+                          <X>785</X>
+                          <Y>247</Y>
+                        </Point>
+                        <Point>
+                          <X>820</X>
+                          <Y>235</Y>
+                        </Point>
+                        <Point>
+                          <X>857</X>
+                          <Y>231</Y>
+                        </Point>
+                        <Point>
+                          <X>894</X>
+                          <Y>235</Y>
+                        </Point>
+                        <Point>
+                          <X>929</X>
+                          <Y>247</Y>
+                        </Point>
+                        <Point>
+                          <X>963</X>
+                          <Y>268</Y>
+                        </Point>
+                        <Point>
+                          <X>994</X>
+                          <Y>296</Y>
+                        </Point>
+                        <Point>
+                          <X>1019</X>
+                          <Y>331</Y>
+                        </Point>
+                        <Point>
+                          <X>1040</X>
+                          <Y>371</Y>
+                        </Point>
+                        <Point>
+                          <X>1056</X>
+                          <Y>414</Y>
+                        </Point>
+                        <Point>
+                          <X>1065</X>
+                          <Y>461</Y>
+                        </Point>
+                      </ArrayOfPoint>
+                    </Value>
+                  </Expression>
+                  <Expression xsi:type="PropertyMapping">
+                    <PropertyMappings>
+                      <Property Name="Regions" />
+                    </PropertyMappings>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="aeon:RegionContainsPoint">
+                      <aeon:Regions>
+                        <aeon:ArrayOfPoint>
+                          <aeon:Point>
+                            <aeon:X>800</aeon:X>
+                            <aeon:Y>498</aeon:Y>
+                          </aeon:Point>
+                          <aeon:Point>
+                            <aeon:X>802</aeon:X>
+                            <aeon:Y>508</aeon:Y>
+                          </aeon:Point>
+                          <aeon:Point>
+                            <aeon:X>803</aeon:X>
+                            <aeon:Y>519</aeon:Y>
+                          </aeon:Point>
+                          <aeon:Point>
+                            <aeon:X>808</aeon:X>
+                            <aeon:Y>529</aeon:Y>
+                          </aeon:Point>
+                          <aeon:Point>
+                            <aeon:X>814</aeon:X>
+                            <aeon:Y>538</aeon:Y>
+                          </aeon:Point>
+                          <aeon:Point>
+                            <aeon:X>821</aeon:X>
+                            <aeon:Y>545</aeon:Y>
+                          </aeon:Point>
+                          <aeon:Point>
+                            <aeon:X>829</aeon:X>
+                            <aeon:Y>551</aeon:Y>
+                          </aeon:Point>
+                          <aeon:Point>
+                            <aeon:X>838</aeon:X>
+                            <aeon:Y>556</aeon:Y>
+                          </aeon:Point>
+                          <aeon:Point>
+                            <aeon:X>848</aeon:X>
+                            <aeon:Y>559</aeon:Y>
+                          </aeon:Point>
+                          <aeon:Point>
+                            <aeon:X>859</aeon:X>
+                            <aeon:Y>560</aeon:Y>
+                          </aeon:Point>
+                          <aeon:Point>
+                            <aeon:X>868</aeon:X>
+                            <aeon:Y>559</aeon:Y>
+                          </aeon:Point>
+                          <aeon:Point>
+                            <aeon:X>878</aeon:X>
+                            <aeon:Y>556</aeon:Y>
+                          </aeon:Point>
+                          <aeon:Point>
+                            <aeon:X>887</aeon:X>
+                            <aeon:Y>551</aeon:Y>
+                          </aeon:Point>
+                          <aeon:Point>
+                            <aeon:X>895</aeon:X>
+                            <aeon:Y>545</aeon:Y>
+                          </aeon:Point>
+                          <aeon:Point>
+                            <aeon:X>902</aeon:X>
+                            <aeon:Y>538</aeon:Y>
+                          </aeon:Point>
+                          <aeon:Point>
+                            <aeon:X>908</aeon:X>
+                            <aeon:Y>529</aeon:Y>
+                          </aeon:Point>
+                          <aeon:Point>
+                            <aeon:X>913</aeon:X>
+                            <aeon:Y>519</aeon:Y>
+                          </aeon:Point>
+                          <aeon:Point>
+                            <aeon:X>914</aeon:X>
+                            <aeon:Y>508</aeon:Y>
+                          </aeon:Point>
+                          <aeon:Point>
+                            <aeon:X>917</aeon:X>
+                            <aeon:Y>498</aeon:Y>
+                          </aeon:Point>
+                          <aeon:Point>
+                            <aeon:X>914</aeon:X>
+                            <aeon:Y>486</aeon:Y>
+                          </aeon:Point>
+                          <aeon:Point>
+                            <aeon:X>913</aeon:X>
+                            <aeon:Y>475</aeon:Y>
+                          </aeon:Point>
+                          <aeon:Point>
+                            <aeon:X>908</aeon:X>
+                            <aeon:Y>466</aeon:Y>
+                          </aeon:Point>
+                          <aeon:Point>
+                            <aeon:X>902</aeon:X>
+                            <aeon:Y>456</aeon:Y>
+                          </aeon:Point>
+                          <aeon:Point>
+                            <aeon:X>895</aeon:X>
+                            <aeon:Y>449</aeon:Y>
+                          </aeon:Point>
+                          <aeon:Point>
+                            <aeon:X>887</aeon:X>
+                            <aeon:Y>443</aeon:Y>
+                          </aeon:Point>
+                          <aeon:Point>
+                            <aeon:X>878</aeon:X>
+                            <aeon:Y>438</aeon:Y>
+                          </aeon:Point>
+                          <aeon:Point>
+                            <aeon:X>868</aeon:X>
+                            <aeon:Y>435</aeon:Y>
+                          </aeon:Point>
+                          <aeon:Point>
+                            <aeon:X>859</aeon:X>
+                            <aeon:Y>435</aeon:Y>
+                          </aeon:Point>
+                          <aeon:Point>
+                            <aeon:X>848</aeon:X>
+                            <aeon:Y>435</aeon:Y>
+                          </aeon:Point>
+                          <aeon:Point>
+                            <aeon:X>838</aeon:X>
+                            <aeon:Y>438</aeon:Y>
+                          </aeon:Point>
+                          <aeon:Point>
+                            <aeon:X>829</aeon:X>
+                            <aeon:Y>443</aeon:Y>
+                          </aeon:Point>
+                          <aeon:Point>
+                            <aeon:X>821</aeon:X>
+                            <aeon:Y>449</aeon:Y>
+                          </aeon:Point>
+                          <aeon:Point>
+                            <aeon:X>814</aeon:X>
+                            <aeon:Y>456</aeon:Y>
+                          </aeon:Point>
+                          <aeon:Point>
+                            <aeon:X>808</aeon:X>
+                            <aeon:Y>466</aeon:Y>
+                          </aeon:Point>
+                          <aeon:Point>
+                            <aeon:X>803</aeon:X>
+                            <aeon:Y>475</aeon:Y>
+                          </aeon:Point>
+                          <aeon:Point>
+                            <aeon:X>802</aeon:X>
+                            <aeon:Y>486</aeon:Y>
+                          </aeon:Point>
+                          <aeon:Point>
+                            <aeon:X>800</aeon:X>
+                            <aeon:Y>498</aeon:Y>
+                          </aeon:Point>
+                          <aeon:Point>
+                            <aeon:X>1065</aeon:X>
+                            <aeon:Y>461</aeon:Y>
+                          </aeon:Point>
+                          <aeon:Point>
+                            <aeon:X>1069</aeon:X>
+                            <aeon:Y>511</aeon:Y>
+                          </aeon:Point>
+                          <aeon:Point>
+                            <aeon:X>1065</aeon:X>
+                            <aeon:Y>560</aeon:Y>
+                          </aeon:Point>
+                          <aeon:Point>
+                            <aeon:X>1056</aeon:X>
+                            <aeon:Y>607</aeon:Y>
+                          </aeon:Point>
+                          <aeon:Point>
+                            <aeon:X>1040</aeon:X>
+                            <aeon:Y>650</aeon:Y>
+                          </aeon:Point>
+                          <aeon:Point>
+                            <aeon:X>1019</aeon:X>
+                            <aeon:Y>690</aeon:Y>
+                          </aeon:Point>
+                          <aeon:Point>
+                            <aeon:X>994</aeon:X>
+                            <aeon:Y>725</aeon:Y>
+                          </aeon:Point>
+                          <aeon:Point>
+                            <aeon:X>963</aeon:X>
+                            <aeon:Y>753</aeon:Y>
+                          </aeon:Point>
+                          <aeon:Point>
+                            <aeon:X>929</aeon:X>
+                            <aeon:Y>774</aeon:Y>
+                          </aeon:Point>
+                          <aeon:Point>
+                            <aeon:X>894</aeon:X>
+                            <aeon:Y>786</aeon:Y>
+                          </aeon:Point>
+                          <aeon:Point>
+                            <aeon:X>857</aeon:X>
+                            <aeon:Y>790</aeon:Y>
+                          </aeon:Point>
+                          <aeon:Point>
+                            <aeon:X>820</aeon:X>
+                            <aeon:Y>786</aeon:Y>
+                          </aeon:Point>
+                          <aeon:Point>
+                            <aeon:X>785</aeon:X>
+                            <aeon:Y>774</aeon:Y>
+                          </aeon:Point>
+                          <aeon:Point>
+                            <aeon:X>751</aeon:X>
+                            <aeon:Y>753</aeon:Y>
+                          </aeon:Point>
+                          <aeon:Point>
+                            <aeon:X>720</aeon:X>
+                            <aeon:Y>725</aeon:Y>
+                          </aeon:Point>
+                          <aeon:Point>
+                            <aeon:X>695</aeon:X>
+                            <aeon:Y>690</aeon:Y>
+                          </aeon:Point>
+                          <aeon:Point>
+                            <aeon:X>674</aeon:X>
+                            <aeon:Y>650</aeon:Y>
+                          </aeon:Point>
+                          <aeon:Point>
+                            <aeon:X>658</aeon:X>
+                            <aeon:Y>607</aeon:Y>
+                          </aeon:Point>
+                          <aeon:Point>
+                            <aeon:X>649</aeon:X>
+                            <aeon:Y>560</aeon:Y>
+                          </aeon:Point>
+                          <aeon:Point>
+                            <aeon:X>646</aeon:X>
+                            <aeon:Y>511</aeon:Y>
+                          </aeon:Point>
+                          <aeon:Point>
+                            <aeon:X>649</aeon:X>
+                            <aeon:Y>461</aeon:Y>
+                          </aeon:Point>
+                          <aeon:Point>
+                            <aeon:X>658</aeon:X>
+                            <aeon:Y>414</aeon:Y>
+                          </aeon:Point>
+                          <aeon:Point>
+                            <aeon:X>674</aeon:X>
+                            <aeon:Y>371</aeon:Y>
+                          </aeon:Point>
+                          <aeon:Point>
+                            <aeon:X>695</aeon:X>
+                            <aeon:Y>331</aeon:Y>
+                          </aeon:Point>
+                          <aeon:Point>
+                            <aeon:X>720</aeon:X>
+                            <aeon:Y>296</aeon:Y>
+                          </aeon:Point>
+                          <aeon:Point>
+                            <aeon:X>751</aeon:X>
+                            <aeon:Y>268</aeon:Y>
+                          </aeon:Point>
+                          <aeon:Point>
+                            <aeon:X>785</aeon:X>
+                            <aeon:Y>247</aeon:Y>
+                          </aeon:Point>
+                          <aeon:Point>
+                            <aeon:X>820</aeon:X>
+                            <aeon:Y>235</aeon:Y>
+                          </aeon:Point>
+                          <aeon:Point>
+                            <aeon:X>857</aeon:X>
+                            <aeon:Y>231</aeon:Y>
+                          </aeon:Point>
+                          <aeon:Point>
+                            <aeon:X>894</aeon:X>
+                            <aeon:Y>235</aeon:Y>
+                          </aeon:Point>
+                          <aeon:Point>
+                            <aeon:X>929</aeon:X>
+                            <aeon:Y>247</aeon:Y>
+                          </aeon:Point>
+                          <aeon:Point>
+                            <aeon:X>963</aeon:X>
+                            <aeon:Y>268</aeon:Y>
+                          </aeon:Point>
+                          <aeon:Point>
+                            <aeon:X>994</aeon:X>
+                            <aeon:Y>296</aeon:Y>
+                          </aeon:Point>
+                          <aeon:Point>
+                            <aeon:X>1019</aeon:X>
+                            <aeon:Y>331</aeon:Y>
+                          </aeon:Point>
+                          <aeon:Point>
+                            <aeon:X>1040</aeon:X>
+                            <aeon:Y>371</aeon:Y>
+                          </aeon:Point>
+                          <aeon:Point>
+                            <aeon:X>1056</aeon:X>
+                            <aeon:Y>414</aeon:Y>
+                          </aeon:Point>
+                          <aeon:Point>
+                            <aeon:X>1065</aeon:X>
+                            <aeon:Y>461</aeon:Y>
+                          </aeon:Point>
+                        </aeon:ArrayOfPoint>
+                      </aeon:Regions>
+                    </Combinator>
+                  </Expression>
+                  <Expression xsi:type="rx:Condition">
+                    <Name>Inside</Name>
+                    <Workflow>
+                      <Nodes>
+                        <Expression xsi:type="WorkflowInput">
+                          <Name>Source1</Name>
+                        </Expression>
+                        <Expression xsi:type="MemberSelector">
+                          <Selector>Value</Selector>
+                        </Expression>
+                        <Expression xsi:type="WorkflowOutput" />
+                      </Nodes>
+                      <Edges>
+                        <Edge From="0" To="1" Label="Source1" />
+                        <Edge From="1" To="2" Label="Source1" />
+                      </Edges>
+                    </Workflow>
+                  </Expression>
+                  <Expression xsi:type="rx:Condition">
+                    <Name>Outside</Name>
+                    <Workflow>
+                      <Nodes>
+                        <Expression xsi:type="WorkflowInput">
+                          <Name>Source1</Name>
+                        </Expression>
+                        <Expression xsi:type="MemberSelector">
+                          <Selector>Value</Selector>
+                        </Expression>
+                        <Expression xsi:type="BitwiseNot" />
+                        <Expression xsi:type="WorkflowOutput" />
+                      </Nodes>
+                      <Edges>
+                        <Edge From="0" To="1" Label="Source1" />
+                        <Edge From="1" To="2" Label="Source1" />
+                        <Edge From="2" To="3" Label="Source1" />
+                      </Edges>
+                    </Workflow>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="rx:WithLatestFrom" />
+                  </Expression>
+                  <Expression xsi:type="SubscribeSubject">
+                    <Name>Id</Name>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="rx:WithLatestFrom" />
+                  </Expression>
+                  <Expression xsi:type="MemberSelector">
+                    <Selector>Seconds</Selector>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="rx:Zip" />
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="harp:CreateTimestamped" />
+                  </Expression>
+                  <Expression xsi:type="harp:ConvertTimestamped">
+                    <Workflow>
+                      <Nodes>
+                        <Expression xsi:type="WorkflowInput">
+                          <Name>Source1</Name>
+                        </Expression>
+                        <Expression xsi:type="MemberSelector">
+                          <Selector>Item1.Item1.Seconds,Item1.Item2.Seconds</Selector>
+                        </Expression>
+                        <Expression xsi:type="Subtract" />
+                        <Expression xsi:type="MemberSelector">
+                          <Selector>Item2</Selector>
+                        </Expression>
+                        <Expression xsi:type="Combinator">
+                          <Combinator xsi:type="rx:Zip" />
+                        </Expression>
+                        <Expression xsi:type="WorkflowOutput" />
+                      </Nodes>
+                      <Edges>
+                        <Edge From="0" To="1" Label="Source1" />
+                        <Edge From="0" To="3" Label="Source1" />
+                        <Edge From="1" To="2" Label="Source1" />
+                        <Edge From="2" To="4" Label="Source1" />
+                        <Edge From="3" To="4" Label="Source2" />
+                        <Edge From="4" To="5" Label="Source1" />
+                      </Edges>
+                    </Workflow>
+                  </Expression>
+                  <Expression xsi:type="WorkflowOutput" />
+                </Nodes>
+                <Edges>
+                  <Edge From="0" To="1" Label="Source1" />
+                  <Edge From="1" To="2" Label="Source1" />
+                  <Edge From="1" To="4" Label="Source1" />
+                  <Edge From="2" To="3" Label="Source1" />
+                  <Edge From="5" To="6" Label="Source1" />
+                  <Edge From="6" To="7" Label="Source1" />
+                  <Edge From="7" To="11" Label="Source1" />
+                  <Edge From="8" To="9" Label="Source1" />
+                  <Edge From="9" To="10" Label="Source1" />
+                  <Edge From="10" To="11" Label="Source2" />
+                  <Edge From="11" To="12" Label="Source1" />
+                  <Edge From="11" To="13" Label="Source1" />
+                  <Edge From="12" To="14" Label="Source1" />
+                  <Edge From="12" To="17" Label="Source1" />
+                  <Edge From="13" To="14" Label="Source2" />
+                  <Edge From="14" To="16" Label="Source1" />
+                  <Edge From="15" To="16" Label="Source2" />
+                  <Edge From="16" To="18" Label="Source1" />
+                  <Edge From="17" To="18" Label="Source2" />
+                  <Edge From="18" To="19" Label="Source1" />
+                  <Edge From="19" To="20" Label="Source1" />
+                  <Edge From="20" To="21" Label="Source1" />
+                </Edges>
+              </Workflow>
+            </Expression>
+            <Expression xsi:type="WorkflowOutput" />
+          </Nodes>
+          <Edges>
+            <Edge From="0" To="1" Label="Source1" />
+            <Edge From="1" To="3" Label="Source1" />
+            <Edge From="2" To="3" Label="Source2" />
+            <Edge From="3" To="4" Label="Source1" />
+          </Edges>
+        </Workflow>
+      </Expression>
+      <Expression xsi:type="rx:GroupBy">
+        <rx:KeySelector>Value.Item2</rx:KeySelector>
+        <rx:ElementSelector>it</rx:ElementSelector>
+      </Expression>
+      <Expression xsi:type="ExternalizedMapping">
+        <Property Name="Name" DisplayName="LoomRegion" Category="Subject" />
+      </Expression>
+      <Expression xsi:type="rx:ReplaySubject">
+        <Name>LoomRegionObservable</Name>
+        <rx:BufferSize xsi:nil="true" />
+      </Expression>
+      <Expression xsi:type="WorkflowInput">
+        <Name>Source1</Name>
+      </Expression>
+    </Nodes>
+    <Edges>
+      <Edge From="0" To="1" Label="Source1" />
+      <Edge From="1" To="2" Label="Source1" />
+      <Edge From="2" To="4" Label="Source1" />
+      <Edge From="3" To="4" Label="Source2" />
+    </Edges>
+  </Workflow>
+</WorkflowBuilder>
