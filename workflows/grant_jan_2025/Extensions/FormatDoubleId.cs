@@ -11,7 +11,7 @@ using Bonsai.Harp;
 [WorkflowElementCategory(ElementCategory.Transform)]
 public class FormatDoubleId
 {
-    const int Address = 200;
+    public int Address { get; set; }
     public IObservable<HarpMessage> Process(IObservable<Timestamped<Tuple<double, int>>> source)
     {
              return source.Select( angle => HarpMessage.FromSingle(

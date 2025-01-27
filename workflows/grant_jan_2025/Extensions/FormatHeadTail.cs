@@ -11,7 +11,7 @@ using Bonsai.Harp;
 [WorkflowElementCategory(ElementCategory.Transform)]
 public class FormatHeadTail
 {
-    const int Address = 200;
+    const int Address = 220;
     public IObservable<HarpMessage> Process(IObservable<Timestamped<Tuple<HeadTail, int>>> source)
     {
         return source.Select( headTail => HarpMessage.FromSingle(
