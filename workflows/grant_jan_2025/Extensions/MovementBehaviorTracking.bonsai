@@ -86,7 +86,7 @@
                           <Name>Source1</Name>
                         </Expression>
                         <Expression xsi:type="MemberSelector">
-                          <Selector>Item1</Selector>
+                          <Selector>Item1.Item1</Selector>
                         </Expression>
                         <Expression xsi:type="Combinator">
                           <Combinator xsi:type="cv:BinaryRegionExtremes">
