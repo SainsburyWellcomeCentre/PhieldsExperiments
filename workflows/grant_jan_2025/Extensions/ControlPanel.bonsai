@@ -104,9 +104,7 @@
           </Edges>
         </Workflow>
       </Expression>
-      <Expression xsi:type="IncludeWorkflow" Path="Extensions\HeadTailVisualizer.bonsai">
-        <VisualizerInterval>PT0.05S</VisualizerInterval>
-      </Expression>
+      <Expression xsi:type="IncludeWorkflow" Path="Extensions\HeadTailVisualizer.bonsai" />
       <Expression xsi:type="GroupWorkflow">
         <Name>EnvironmentSubjectState</Name>
         <Workflow>
