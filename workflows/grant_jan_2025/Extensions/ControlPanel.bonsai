@@ -4,10 +4,11 @@
                  xmlns:wie="clr-namespace:Bonsai.Windows.Input;assembly=Bonsai.Windows.Input"
                  xmlns:rx="clr-namespace:Bonsai.Reactive;assembly=Bonsai.Core"
                  xmlns:viz="clr-namespace:Bonsai.Design.Visualizers;assembly=Bonsai.Design.Visualizers"
-                 xmlns:scr="clr-namespace:Bonsai.Scripting.Expressions;assembly=Bonsai.Scripting.Expressions"
+                 xmlns:dsp="clr-namespace:Bonsai.Dsp;assembly=Bonsai.Dsp"
                  xmlns:gui="clr-namespace:Bonsai.Gui;assembly=Bonsai.Gui"
                  xmlns:drw="clr-namespace:Bonsai.Vision.Drawing;assembly=Bonsai.Vision"
                  xmlns:cv="clr-namespace:Bonsai.Vision;assembly=Bonsai.Vision"
+                 xmlns:scr="clr-namespace:Bonsai.Scripting.Expressions;assembly=Bonsai.Scripting.Expressions"
                  xmlns:p1="clr-namespace:Bonsai.Vision.Design;assembly=Bonsai.Vision.Design"
                  xmlns="https://bonsai-rx.org/2018/workflow">
   <Workflow>
@@ -181,7 +182,7 @@
       </Expression>
       <Expression xsi:type="Disable">
         <Builder xsi:type="MemberSelector">
-          <Selector>Item1.Item1.Velocity</Selector>
+          <Selector>Item1.Value.Item1.Velocity</Selector>
         </Builder>
       </Expression>
       <Expression xsi:type="Disable">
@@ -197,8 +198,10 @@
         <Builder xsi:type="VisualizerMapping" />
       </Expression>
       <Expression xsi:type="Disable">
-        <Builder xsi:type="scr:ExpressionTransform">
-          <scr:Expression>Math.Sqrt((it.X*it.X)+(it.Y*it.Y))</scr:Expression>
+        <Builder xsi:type="Combinator">
+          <Combinator xsi:type="dsp:Norm">
+            <dsp:NormType>L2</dsp:NormType>
+          </Combinator>
         </Builder>
       </Expression>
       <Expression xsi:type="Disable">
