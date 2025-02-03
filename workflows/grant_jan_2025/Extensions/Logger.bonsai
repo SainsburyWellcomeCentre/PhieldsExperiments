@@ -19,7 +19,7 @@
         <Property Name="WorkflowName" />
       </Expression>
       <Expression xsi:type="IncludeWorkflow" Path="Aeon.Acquisition:ExportMetadata.bonsai">
-        <WorkflowName>MultiShelter-PHIELDS01.bonsai</WorkflowName>
+        <WorkflowName/>
       </Expression>
       <Expression xsi:type="SubscribeSubject">
         <Name>VideoEvents</Name>
