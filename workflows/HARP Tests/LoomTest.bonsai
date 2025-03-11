@@ -1268,8 +1268,13 @@
           <wie:SuppressRepetitions>false</wie:SuppressRepetitions>
         </Combinator>
       </Expression>
+      <Expression xsi:type="ExternalizedMapping">
+        <Property Name="HomeDistance" />
+        <Property Name="HomeOffsetPauseTime" />
+        <Property Name="HomeDistanceOffset" />
+      </Expression>
       <Expression xsi:type="IncludeWorkflow" Path="Extensions\Homing.bonsai">
-        <HomeDistance>0</HomeDistance>
+        <HomeDistance>-3500</HomeDistance>
         <HomeOffsetPauseTime>PT1S</HomeOffsetPauseTime>
         <HomeDistanceOffset>42</HomeDistanceOffset>
       </Expression>
@@ -1306,7 +1311,8 @@
       <Edge From="37" To="38" Label="Source2" />
       <Edge From="38" To="40" Label="Source1" />
       <Edge From="39" To="40" Label="Source2" />
-      <Edge From="41" To="42" Label="Source1" />
+      <Edge From="41" To="43" Label="Source1" />
+      <Edge From="42" To="43" Label="Source2" />
     </Edges>
   </Workflow>
 </WorkflowBuilder>
