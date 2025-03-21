@@ -1,0 +1,219 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<WorkflowBuilder Version="2.8.5"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xmlns:rx="clr-namespace:Bonsai.Reactive;assembly=Bonsai.Core"
+                 xmlns:fstep="clr-namespace:Harp.FastStepper;assembly=Harp.FastStepper"
+                 xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                 xmlns:harp="clr-namespace:Bonsai.Harp;assembly=Bonsai.Harp"
+                 xmlns="https://bonsai-rx.org/2018/workflow">
+  <Description>MoveTo with all parameters </Description>
+  <Workflow>
+    <Nodes>
+      <Expression xsi:type="WorkflowInput">
+        <Name>Source1</Name>
+      </Expression>
+      <Expression xsi:type="ExternalizedMapping">
+        <Property Name="MoveTo" />
+        <Property Name="MinVelocity" />
+        <Property Name="MaxVelocity" />
+        <Property Name="Acceleration" />
+        <Property Name="Deceleration" />
+        <Property Name="AccelerationJerk" />
+        <Property Name="DecelerationJerk" />
+      </Expression>
+      <Expression xsi:type="rx:SelectMany">
+        <Name>MoveToParametric</Name>
+        <Description>MoveTo with all parameters </Description>
+        <Workflow>
+          <Nodes>
+            <Expression xsi:type="ExternalizedMapping">
+              <Property Name="Value" DisplayName="MoveTo" />
+            </Expression>
+            <Expression xsi:type="PropertySource" TypeArguments="fstep:CreateMoveToPayload,sys:Int32">
+              <MemberName>MoveTo</MemberName>
+              <Value>3000</Value>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:Take">
+                <rx:Count>1</rx:Count>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="ExternalizedMapping">
+              <Property Name="Value" DisplayName="MinVelocity" />
+            </Expression>
+            <Expression xsi:type="PropertySource" TypeArguments="fstep:CreateMinVelocityPayload,sys:Int32">
+              <MemberName>MinVelocity</MemberName>
+              <Value>200</Value>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:Take">
+                <rx:Count>1</rx:Count>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="ExternalizedMapping">
+              <Property Name="Value" DisplayName="MaxVelocity" />
+            </Expression>
+            <Expression xsi:type="PropertySource" TypeArguments="fstep:CreateMaxVelocityPayload,sys:Int32">
+              <MemberName>MaxVelocity</MemberName>
+              <Value>10000</Value>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:Take">
+                <rx:Count>1</rx:Count>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="ExternalizedMapping">
+              <Property Name="Value" DisplayName="Acceleration" />
+            </Expression>
+            <Expression xsi:type="PropertySource" TypeArguments="fstep:CreateAccelerationPayload,sys:Int32">
+              <MemberName>Acceleration</MemberName>
+              <Value>0</Value>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:Take">
+                <rx:Count>1</rx:Count>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="ExternalizedMapping">
+              <Property Name="Value" DisplayName="Deceleration" />
+            </Expression>
+            <Expression xsi:type="PropertySource" TypeArguments="fstep:CreateDecelerationPayload,sys:Int32">
+              <MemberName>Deceleration</MemberName>
+              <Value>0</Value>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:Take">
+                <rx:Count>1</rx:Count>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="ExternalizedMapping">
+              <Property Name="Value" DisplayName="AccelerationJerk" />
+            </Expression>
+            <Expression xsi:type="PropertySource" TypeArguments="fstep:CreateAccelerationJerkPayload,sys:Int32">
+              <MemberName>AccelerationJerk</MemberName>
+              <Value>0</Value>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:Take">
+                <rx:Count>1</rx:Count>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="ExternalizedMapping">
+              <Property Name="Value" DisplayName="DecelerationJerk" />
+            </Expression>
+            <Expression xsi:type="PropertySource" TypeArguments="fstep:CreateDecelerationJerkPayload,sys:Int32">
+              <MemberName>DecelerationJerk</MemberName>
+              <Value>0</Value>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:Take">
+                <rx:Count>1</rx:Count>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:Concat" />
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:ToArray" />
+            </Expression>
+            <Expression xsi:type="InputMapping">
+              <PropertyMappings>
+                <Property Name="MoveToParametric" Selector="it" />
+              </PropertyMappings>
+            </Expression>
+            <Expression xsi:type="fstep:CreateMessage">
+              <harp:MessageType>Write</harp:MessageType>
+              <harp:Payload xsi:type="fstep:CreateMoveToParametricPayload">
+                <fstep:MoveToParametric>
+                  <fstep:int>3000</fstep:int>
+                  <fstep:int>400</fstep:int>
+                  <fstep:int>10000</fstep:int>
+                  <fstep:int>10000</fstep:int>
+                  <fstep:int>-20000</fstep:int>
+                  <fstep:int>-8000</fstep:int>
+                  <fstep:int>5000</fstep:int>
+                </fstep:MoveToParametric>
+              </harp:Payload>
+            </Expression>
+            <Expression xsi:type="MulticastSubject">
+              <Name>FastStepperCommands</Name>
+            </Expression>
+            <Expression xsi:type="WorkflowOutput" />
+            <Expression xsi:type="fstep:Parse">
+              <harp:Register xsi:type="fstep:MoveToParametric" />
+            </Expression>
+            <Expression xsi:type="Index">
+              <Operand xsi:type="IntProperty">
+                <Value>0</Value>
+              </Operand>
+            </Expression>
+            <Expression xsi:type="Index">
+              <Operand xsi:type="IntProperty">
+                <Value>1</Value>
+              </Operand>
+            </Expression>
+            <Expression xsi:type="Index">
+              <Operand xsi:type="IntProperty">
+                <Value>2</Value>
+              </Operand>
+            </Expression>
+            <Expression xsi:type="Index">
+              <Operand xsi:type="IntProperty">
+                <Value>3</Value>
+              </Operand>
+            </Expression>
+            <Expression xsi:type="MemberSelector">
+              <Selector>Length</Selector>
+            </Expression>
+            <Expression xsi:type="Disable">
+              <Builder xsi:type="fstep:CreateMessage">
+                <harp:MessageType>Write</harp:MessageType>
+                <harp:Payload xsi:type="fstep:CreateMoveToParametricPayload" />
+              </Builder>
+            </Expression>
+          </Nodes>
+          <Edges>
+            <Edge From="0" To="1" Label="Source1" />
+            <Edge From="1" To="2" Label="Source1" />
+            <Edge From="2" To="21" Label="Source1" />
+            <Edge From="3" To="4" Label="Source1" />
+            <Edge From="4" To="5" Label="Source1" />
+            <Edge From="5" To="21" Label="Source2" />
+            <Edge From="6" To="7" Label="Source1" />
+            <Edge From="7" To="8" Label="Source1" />
+            <Edge From="8" To="21" Label="Source3" />
+            <Edge From="9" To="10" Label="Source1" />
+            <Edge From="10" To="11" Label="Source1" />
+            <Edge From="11" To="21" Label="Source4" />
+            <Edge From="12" To="13" Label="Source1" />
+            <Edge From="13" To="14" Label="Source1" />
+            <Edge From="14" To="21" Label="Source5" />
+            <Edge From="15" To="16" Label="Source1" />
+            <Edge From="16" To="17" Label="Source1" />
+            <Edge From="17" To="21" Label="Source6" />
+            <Edge From="18" To="19" Label="Source1" />
+            <Edge From="19" To="20" Label="Source1" />
+            <Edge From="20" To="21" Label="Source7" />
+            <Edge From="21" To="22" Label="Source1" />
+            <Edge From="22" To="23" Label="Source1" />
+            <Edge From="22" To="32" Label="Source1" />
+            <Edge From="23" To="24" Label="Source1" />
+            <Edge From="24" To="25" Label="Source1" />
+            <Edge From="24" To="27" Label="Source1" />
+            <Edge From="25" To="26" Label="Source1" />
+            <Edge From="27" To="28" Label="Source1" />
+            <Edge From="27" To="29" Label="Source1" />
+            <Edge From="27" To="30" Label="Source1" />
+            <Edge From="27" To="31" Label="Source1" />
+          </Edges>
+        </Workflow>
+      </Expression>
+      <Expression xsi:type="WorkflowOutput" />
+    </Nodes>
+    <Edges>
+      <Edge From="0" To="2" Label="Source1" />
+      <Edge From="1" To="2" Label="Source2" />
+      <Edge From="2" To="3" Label="Source1" />
+    </Edges>
+  </Workflow>
+</WorkflowBuilder>
