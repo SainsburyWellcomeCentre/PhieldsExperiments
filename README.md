@@ -62,3 +62,34 @@ The remote CEPH folder can be subsequently mounted on the local machine as a net
 All experiment-specific workflows required to run the experiment are stored in the `workflows` folder. We strongly recommend that each experiment-specific branch includes a `README.md` file describing what the protocol is about and how to configure or run it. The `.gitignore` file may be modified to exclude files according to the needs of each experiment.
 
 It is recommended to keep every project within its own subfolder, and name the subfolder with the same name as the branch name. Multiple sub-folders are allowed if strict project separation is required, e.g. workflows running on different machines with different environments or incompatible extensions.
+
+### Python environment
+
+The following need to be installed once on a fresh new system in order to analyze data:
+
+ * [Visual Studio Code](https://code.visualstudio.com/) (recommended for editing code scripts and git commits)
+ * [Python >=3.11](https://www.python.org/downloads/windows/)
+ * [Python Extension for VS Code](https://marketplace.visualstudio.com/items?itemName=ms-python.python)
+   * This extension needs to be made aware of the Conda installation. To do so, navigate to the extension settings. Under the section **Python: Conda Path**, enter the full path to the conda.bat executable. ([more info](https://stackoverflow.com/a/77615160/3312269).)
+ * [Jupyter Extension for VS Code](https://marketplace.visualstudio.com/items?itemName=ms-toolsai.jupyter)
+ 
+#### Create local Environment
+1. Open the PhieldsExperiments folder in VS Code
+2. `Ctrl+Shift+P` in VS Code > Python: Create Environment
+   * Select venv
+   * Select Python >=3.11 kernel
+   * Use the requirements.txt in the python folder to install base requirements for Phields Analysis scripts
+3. Ensure pip is upgraded:
+ ```
+ pip install --upgrade pip
+ ```
+4. Using the environment. 
+
+When you open the PhieldsExperiments folder in VSCode, it should automatically activate this environment in the terminal.
+Using a Jupyter notebook, choose the python executable in the .venv folder as the python kernel. 
+
+If needed, the environment can be manually activated from the .venv folder:
+
+```
+.venv\Scripts\activate
+```
