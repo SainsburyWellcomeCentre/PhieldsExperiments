@@ -33,10 +33,8 @@ if (!(Test-Path "./Bonsai.exe")) {
 }
 & ./Bonsai.exe --no-editor
 
-# Set-Location -Path ..
-
-# Build custom classes
-# dotnet tool restore
-# Set-Location -Path src\Extensions
-# dotnet bonsai.sgen --namespace TrialSettings --schema ..\Schemas\StageParameters.json --serializer YamlDotNet
-# dotnet bonsai.sgen --namespace RigConfiguration --schema ..\Schemas\RigConfiguration.json --serializer YamlDotNet
+git clean -fdx .venv
+git clean -fx uv.lock
+Set-Location -Path .\
+irm https://astral.sh/uv/install.ps1 | iex
+uv sync --all-extras
