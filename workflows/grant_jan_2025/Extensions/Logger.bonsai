@@ -6,6 +6,7 @@
                  xmlns:rx="clr-namespace:Bonsai.Reactive;assembly=Bonsai.Core"
                  xmlns:aeon-env="clr-namespace:Aeon.Environment;assembly=Aeon.Environment"
                  xmlns:scr="clr-namespace:Bonsai.Scripting.Expressions;assembly=Bonsai.Scripting.Expressions"
+                 xmlns:aeon="clr-namespace:Aeon.Acquisition;assembly=Aeon.Acquisition"
                  xmlns="https://bonsai-rx.org/2018/workflow">
   <Workflow>
     <Nodes>
@@ -62,36 +63,28 @@
         <Name>CameraSide</Name>
       </Expression>
       <Expression xsi:type="IncludeWorkflow" Path="Aeon.Acquisition:LogVideo.bonsai">
-        <Heartbeats>Heartbeats</Heartbeats>
-        <ClosingDuration>PT2S</ClosingDuration>
+        <Heartbeats />
+        <ClosingDuration xsi:nil="true" />
         <LogName>CameraSide</LogName>
         <FrameRate>50</FrameRate>
       </Expression>
-      <Expression xsi:type="Disable">
-        <Builder xsi:type="rx:BehaviorSubject" TypeArguments="harp:Timestamped(aeon-env:EnvironmentSubjectStateMetadata)">
-          <rx:Name>SubjectState</rx:Name>
-        </Builder>
+      <Expression xsi:type="rx:BehaviorSubject" TypeArguments="harp:Timestamped(aeon-env:EnvironmentSubjectStateMetadata)">
+        <rx:Name>SubjectState</rx:Name>
       </Expression>
-      <Expression xsi:type="Disable">
-        <Builder xsi:type="IncludeWorkflow" Path="Aeon.Acquisition:LogData.bonsai">
-          <Heartbeats>Heartbeats</Heartbeats>
-          <ClosingDuration>PT2S</ClosingDuration>
-          <LogName>Environment_SubjectState</LogName>
-          <Selector>Seconds,Value.Id,Value.Weight,Value.Type</Selector>
-        </Builder>
+      <Expression xsi:type="IncludeWorkflow" Path="Aeon.Acquisition:LogData.bonsai">
+        <Heartbeats>Heartbeats</Heartbeats>
+        <ClosingDuration>PT2S</ClosingDuration>
+        <LogName>Environment_SubjectState</LogName>
+        <Selector>Seconds,Value.Id,Value.Weight,Value.Type</Selector>
       </Expression>
-      <Expression xsi:type="Disable">
-        <Builder xsi:type="rx:BehaviorSubject" TypeArguments="harp:Timestamped(aeon-env:EnvironmentStateMetadata)">
-          <rx:Name>EnvironmentState</rx:Name>
-        </Builder>
+      <Expression xsi:type="rx:BehaviorSubject" TypeArguments="harp:Timestamped(aeon-env:EnvironmentStateMetadata)">
+        <rx:Name>EnvironmentState</rx:Name>
       </Expression>
-      <Expression xsi:type="Disable">
-        <Builder xsi:type="IncludeWorkflow" Path="Aeon.Acquisition:LogData.bonsai">
-          <Heartbeats>Heartbeats</Heartbeats>
-          <ClosingDuration>PT2S</ClosingDuration>
-          <LogName>Environment_EnvironmentState</LogName>
-          <Selector>Seconds,Value.Type</Selector>
-        </Builder>
+      <Expression xsi:type="IncludeWorkflow" Path="Aeon.Acquisition:LogData.bonsai">
+        <Heartbeats>Heartbeats</Heartbeats>
+        <ClosingDuration>PT2S</ClosingDuration>
+        <LogName>Environment_EnvironmentState</LogName>
+        <Selector>Seconds,Value.Type</Selector>
       </Expression>
       <Expression xsi:type="SubscribeSubject">
         <Name>MotorCommands</Name>
@@ -126,69 +119,326 @@
         <LogName>Motor</LogName>
         <Selector />
       </Expression>
-      <Expression xsi:type="Disable">
-        <Builder xsi:type="ExternalizedMapping">
-          <Property Name="Value" DisplayName="MouseId" />
-        </Builder>
+      <Expression xsi:type="SubscribeSubject">
+        <Name>TrackingTop</Name>
       </Expression>
-      <Expression xsi:type="Disable">
-        <Builder xsi:type="Combinator">
-          <Combinator xsi:type="StringProperty">
-            <Value />
-          </Combinator>
-        </Builder>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="aeon:FormatBinaryRegions" />
       </Expression>
-      <Expression xsi:type="Disable">
-        <Builder xsi:type="Combinator">
-          <Combinator xsi:type="StringProperty">
-            <Value />
-          </Combinator>
-        </Builder>
+      <Expression xsi:type="IncludeWorkflow" Path="Aeon.Acquisition:LogHarpState.bonsai">
+        <LogName>CameraTop</LogName>
+        <Heartbeats>Heartbeats</Heartbeats>
+        <ClosingDuration>PT2S</ClosingDuration>
       </Expression>
-      <Expression xsi:type="Disable">
-        <Builder xsi:type="SubscribeSubject">
-          <Name>LoggerTimestamp</Name>
-        </Builder>
+      <Expression xsi:type="Annotation">
+        <Name>BinaryRegionsObservable</Name>
+        <Text><![CDATA[]]></Text>
       </Expression>
-      <Expression xsi:type="Disable">
-        <Builder xsi:type="Combinator">
-          <Combinator xsi:type="rx:CombineLatest" />
-        </Builder>
+      <Expression xsi:type="IncludeWorkflow" Path="Extensions\MergeIGroupObservables.bonsai">
+        <IGroupObservableSubject>BinaryRegionsObservable</IGroupObservableSubject>
+        <ExpectedGroupCount>NumberOfTrackingSubjects</ExpectedGroupCount>
       </Expression>
-      <Expression xsi:type="Disable">
-        <Builder xsi:type="Combinator">
-          <Combinator xsi:type="rx:Take">
-            <rx:Count>1</rx:Count>
-          </Combinator>
-        </Builder>
+      <Expression xsi:type="harp:ConvertTimestamped">
+        <Workflow>
+          <Nodes>
+            <Expression xsi:type="WorkflowInput">
+              <Name>Source1</Name>
+            </Expression>
+            <Expression xsi:type="MemberSelector">
+              <Selector>Item1.Item1</Selector>
+            </Expression>
+            <Expression xsi:type="MemberSelector">
+              <Selector>Centroid</Selector>
+            </Expression>
+            <Expression xsi:type="MemberSelector">
+              <Selector>Item2</Selector>
+            </Expression>
+            <Expression xsi:type="GroupWorkflow">
+              <Name>Id</Name>
+              <Workflow>
+                <Nodes>
+                  <Expression xsi:type="WorkflowInput">
+                    <Name>Source1</Name>
+                  </Expression>
+                  <Expression xsi:type="WorkflowOutput" />
+                </Nodes>
+                <Edges>
+                  <Edge From="0" To="1" Label="Source1" />
+                </Edges>
+              </Workflow>
+            </Expression>
+            <Expression xsi:type="MemberSelector">
+              <Selector>Item1.Item2.Crossings</Selector>
+            </Expression>
+            <Expression xsi:type="GroupWorkflow">
+              <Name>Crossings</Name>
+              <Workflow>
+                <Nodes>
+                  <Expression xsi:type="WorkflowInput">
+                    <Name>Source1</Name>
+                  </Expression>
+                  <Expression xsi:type="WorkflowOutput" />
+                </Nodes>
+                <Edges>
+                  <Edge From="0" To="1" Label="Source1" />
+                </Edges>
+              </Workflow>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:Zip" />
+            </Expression>
+            <Expression xsi:type="scr:ExpressionTransform">
+              <scr:Expression>new(
+  it.Item2 as ID,
+  it.Item3 as Crossings,
+  it.Item1 as Centroid
+)</scr:Expression>
+            </Expression>
+            <Expression xsi:type="WorkflowOutput" />
+          </Nodes>
+          <Edges>
+            <Edge From="0" To="1" Label="Source1" />
+            <Edge From="0" To="3" Label="Source1" />
+            <Edge From="0" To="5" Label="Source1" />
+            <Edge From="1" To="2" Label="Source1" />
+            <Edge From="2" To="7" Label="Source1" />
+            <Edge From="3" To="4" Label="Source1" />
+            <Edge From="4" To="7" Label="Source2" />
+            <Edge From="5" To="6" Label="Source1" />
+            <Edge From="6" To="7" Label="Source3" />
+            <Edge From="7" To="8" Label="Source1" />
+            <Edge From="8" To="9" Label="Source1" />
+          </Edges>
+        </Workflow>
       </Expression>
-      <Expression xsi:type="Disable">
-        <Builder xsi:type="MemberSelector">
-          <Selector>Item1</Selector>
-        </Builder>
+      <Expression xsi:type="IncludeWorkflow" Path="Aeon.Acquisition:LogData.bonsai">
+        <Heartbeats />
+        <ClosingDuration xsi:nil="true" />
+        <LogName>CameraTop_BinaryRegions</LogName>
+        <Selector />
       </Expression>
-      <Expression xsi:type="Disable">
-        <Builder xsi:type="Combinator">
-          <Combinator xsi:type="rx:Merge" />
-        </Builder>
+      <Expression xsi:type="Annotation">
+        <Name>HeadTailObservable</Name>
+        <Text><![CDATA[]]></Text>
       </Expression>
-      <Expression xsi:type="Disable">
-        <Builder xsi:type="SubscribeSubject">
-          <Name>LoggerTimestamp</Name>
-        </Builder>
+      <Expression xsi:type="IncludeWorkflow" Path="Extensions\MergeIGroupObservables.bonsai">
+        <IGroupObservableSubject>HeadTailObservable</IGroupObservableSubject>
+        <ExpectedGroupCount>NumberOfTrackingSubjects</ExpectedGroupCount>
       </Expression>
-      <Expression xsi:type="Disable">
-        <Builder xsi:type="Combinator">
-          <Combinator xsi:type="rx:WithLatestFrom" />
-        </Builder>
+      <Expression xsi:type="harp:ConvertTimestamped">
+        <Workflow>
+          <Nodes>
+            <Expression xsi:type="WorkflowInput">
+              <Name>Source1</Name>
+            </Expression>
+            <Expression xsi:type="MemberSelector">
+              <Selector>Item1.Item1</Selector>
+            </Expression>
+            <Expression xsi:type="MemberSelector">
+              <Selector>Centroid</Selector>
+            </Expression>
+            <Expression xsi:type="MemberSelector">
+              <Selector>Head</Selector>
+            </Expression>
+            <Expression xsi:type="MemberSelector">
+              <Selector>Tail</Selector>
+            </Expression>
+            <Expression xsi:type="MemberSelector">
+              <Selector>Heading</Selector>
+            </Expression>
+            <Expression xsi:type="MemberSelector">
+              <Selector>Velocity</Selector>
+            </Expression>
+            <Expression xsi:type="MemberSelector">
+              <Selector>Item2</Selector>
+            </Expression>
+            <Expression xsi:type="GroupWorkflow">
+              <Name>Id</Name>
+              <Workflow>
+                <Nodes>
+                  <Expression xsi:type="WorkflowInput">
+                    <Name>Source1</Name>
+                  </Expression>
+                  <Expression xsi:type="WorkflowOutput" />
+                </Nodes>
+                <Edges>
+                  <Edge From="0" To="1" Label="Source1" />
+                </Edges>
+              </Workflow>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:Zip" />
+            </Expression>
+            <Expression xsi:type="scr:ExpressionTransform">
+              <scr:Expression>new(
+  it.Item6 as ID,
+  it.Item1 as Centroid,
+  it.Item2 as Head,
+  it.Item3 as Tail,
+  it.Item4 as Heading,
+  it.Item5 as Velocity
+)</scr:Expression>
+            </Expression>
+            <Expression xsi:type="WorkflowOutput" />
+          </Nodes>
+          <Edges>
+            <Edge From="0" To="1" Label="Source1" />
+            <Edge From="0" To="7" Label="Source1" />
+            <Edge From="1" To="2" Label="Source1" />
+            <Edge From="1" To="3" Label="Source1" />
+            <Edge From="1" To="4" Label="Source1" />
+            <Edge From="1" To="5" Label="Source1" />
+            <Edge From="1" To="6" Label="Source1" />
+            <Edge From="2" To="9" Label="Source1" />
+            <Edge From="3" To="9" Label="Source2" />
+            <Edge From="4" To="9" Label="Source3" />
+            <Edge From="5" To="9" Label="Source4" />
+            <Edge From="6" To="9" Label="Source5" />
+            <Edge From="7" To="8" Label="Source1" />
+            <Edge From="8" To="9" Label="Source6" />
+            <Edge From="9" To="10" Label="Source1" />
+            <Edge From="10" To="11" Label="Source1" />
+          </Edges>
+        </Workflow>
       </Expression>
-      <Expression xsi:type="Disable">
-        <Builder xsi:type="IncludeWorkflow" Path="Aeon.Acquisition:LogData.bonsai">
-          <Heartbeats>Heartbeats</Heartbeats>
-          <ClosingDuration>PT2S</ClosingDuration>
-          <LogName>MouseID</LogName>
-          <Selector />
-        </Builder>
+      <Expression xsi:type="IncludeWorkflow" Path="Aeon.Acquisition:LogData.bonsai">
+        <Heartbeats />
+        <ClosingDuration xsi:nil="true" />
+        <LogName>CameraTop_HeadTail</LogName>
+        <Selector />
+      </Expression>
+      <Expression xsi:type="Annotation">
+        <Name>LoomAngleObservable</Name>
+        <Text><![CDATA[]]></Text>
+      </Expression>
+      <Expression xsi:type="IncludeWorkflow" Path="Extensions\MergeIGroupObservables.bonsai">
+        <IGroupObservableSubject>LoomAngleObservable</IGroupObservableSubject>
+        <ExpectedGroupCount>NumberOfTrackingSubjects</ExpectedGroupCount>
+      </Expression>
+      <Expression xsi:type="harp:ConvertTimestamped">
+        <Workflow>
+          <Nodes>
+            <Expression xsi:type="WorkflowInput">
+              <Name>Source1</Name>
+            </Expression>
+            <Expression xsi:type="MemberSelector">
+              <Selector>Item1</Selector>
+            </Expression>
+            <Expression xsi:type="MemberSelector">
+              <Selector>Item2</Selector>
+            </Expression>
+            <Expression xsi:type="GroupWorkflow">
+              <Name>Id</Name>
+              <Workflow>
+                <Nodes>
+                  <Expression xsi:type="WorkflowInput">
+                    <Name>Source1</Name>
+                  </Expression>
+                  <Expression xsi:type="WorkflowOutput" />
+                </Nodes>
+                <Edges>
+                  <Edge From="0" To="1" Label="Source1" />
+                </Edges>
+              </Workflow>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:Zip" />
+            </Expression>
+            <Expression xsi:type="scr:ExpressionTransform">
+              <scr:Expression>new(
+  it.Item2 as ID,
+  it.Item1 as InLoomRegionDuration
+)</scr:Expression>
+            </Expression>
+            <Expression xsi:type="WorkflowOutput" />
+          </Nodes>
+          <Edges>
+            <Edge From="0" To="1" Label="Source1" />
+            <Edge From="0" To="2" Label="Source1" />
+            <Edge From="1" To="4" Label="Source1" />
+            <Edge From="2" To="3" Label="Source1" />
+            <Edge From="3" To="4" Label="Source6" />
+            <Edge From="4" To="5" Label="Source1" />
+            <Edge From="5" To="6" Label="Source1" />
+          </Edges>
+        </Workflow>
+      </Expression>
+      <Expression xsi:type="IncludeWorkflow" Path="Aeon.Acquisition:LogData.bonsai">
+        <Heartbeats />
+        <ClosingDuration xsi:nil="true" />
+        <LogName>CameraTop_LoomAngle</LogName>
+        <Selector />
+      </Expression>
+      <Expression xsi:type="Annotation">
+        <Name>LoomRegionObservable</Name>
+        <Text><![CDATA[]]></Text>
+      </Expression>
+      <Expression xsi:type="IncludeWorkflow" Path="Extensions\MergeIGroupObservables.bonsai">
+        <IGroupObservableSubject>LoomRegionObservable</IGroupObservableSubject>
+        <ExpectedGroupCount>NumberOfTrackingSubjects</ExpectedGroupCount>
+      </Expression>
+      <Expression xsi:type="harp:ConvertTimestamped">
+        <Workflow>
+          <Nodes>
+            <Expression xsi:type="WorkflowInput">
+              <Name>Source1</Name>
+            </Expression>
+            <Expression xsi:type="MemberSelector">
+              <Selector>Item1</Selector>
+            </Expression>
+            <Expression xsi:type="MemberSelector">
+              <Selector>Item2</Selector>
+            </Expression>
+            <Expression xsi:type="GroupWorkflow">
+              <Name>Id</Name>
+              <Workflow>
+                <Nodes>
+                  <Expression xsi:type="WorkflowInput">
+                    <Name>Source1</Name>
+                  </Expression>
+                  <Expression xsi:type="WorkflowOutput" />
+                </Nodes>
+                <Edges>
+                  <Edge From="0" To="1" Label="Source1" />
+                </Edges>
+              </Workflow>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:Zip" />
+            </Expression>
+            <Expression xsi:type="scr:ExpressionTransform">
+              <scr:Expression>new(
+  it.Item2 as ID,
+  it.Item1 as LoomAngle
+)</scr:Expression>
+            </Expression>
+            <Expression xsi:type="WorkflowOutput" />
+          </Nodes>
+          <Edges>
+            <Edge From="0" To="1" Label="Source1" />
+            <Edge From="0" To="2" Label="Source1" />
+            <Edge From="1" To="4" Label="Source1" />
+            <Edge From="2" To="3" Label="Source1" />
+            <Edge From="3" To="4" Label="Source6" />
+            <Edge From="4" To="5" Label="Source1" />
+            <Edge From="5" To="6" Label="Source1" />
+          </Edges>
+        </Workflow>
+      </Expression>
+      <Expression xsi:type="IncludeWorkflow" Path="Aeon.Acquisition:LogData.bonsai">
+        <Heartbeats />
+        <ClosingDuration xsi:nil="true" />
+        <LogName>CameraTop_LoomRegion</LogName>
+        <Selector />
+      </Expression>
+      <Expression xsi:type="rx:PublishSubject" TypeArguments="harp:Timestamped(aeon:LogMessage)">
+        <rx:Name>Annotations</rx:Name>
+      </Expression>
+      <Expression xsi:type="IncludeWorkflow" Path="Aeon.Acquisition:LogData.bonsai">
+        <Heartbeats>Heartbeats</Heartbeats>
+        <ClosingDuration>PT2S</ClosingDuration>
+        <LogName>Environment_MessageLog</LogName>
+        <Selector>Seconds,Value.Priority,Value.Type,Value.Message</Selector>
       </Expression>
     </Nodes>
     <Edges>
@@ -210,16 +460,20 @@
       <Edge From="24" To="25" Label="Source2" />
       <Edge From="25" To="26" Label="Source1" />
       <Edge From="27" To="28" Label="Source1" />
-      <Edge From="27" To="29" Label="Source1" />
-      <Edge From="28" To="34" Label="Source1" />
-      <Edge From="29" To="31" Label="Source1" />
-      <Edge From="30" To="31" Label="Source2" />
+      <Edge From="28" To="29" Label="Source1" />
+      <Edge From="30" To="31" Label="Source1" />
       <Edge From="31" To="32" Label="Source1" />
       <Edge From="32" To="33" Label="Source1" />
-      <Edge From="33" To="34" Label="Source2" />
-      <Edge From="34" To="36" Label="Source1" />
-      <Edge From="35" To="36" Label="Source2" />
+      <Edge From="34" To="35" Label="Source1" />
+      <Edge From="35" To="36" Label="Source1" />
       <Edge From="36" To="37" Label="Source1" />
+      <Edge From="38" To="39" Label="Source1" />
+      <Edge From="39" To="40" Label="Source1" />
+      <Edge From="40" To="41" Label="Source1" />
+      <Edge From="42" To="43" Label="Source1" />
+      <Edge From="43" To="44" Label="Source1" />
+      <Edge From="44" To="45" Label="Source1" />
+      <Edge From="46" To="47" Label="Source1" />
     </Edges>
   </Workflow>
 </WorkflowBuilder>
