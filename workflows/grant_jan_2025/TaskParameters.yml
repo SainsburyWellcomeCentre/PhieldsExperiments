@@ -1,0 +1,5 @@
+# yaml-language-server: $schema=./Extensions/Environment.json
+probability: 0.5
+refractoryPeriodSeconds: 10
+angleThreshold: 1.57079633
+timeInLoomAreaThreshold: 0.5
