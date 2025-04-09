@@ -44,7 +44,7 @@ In case the configuration of the environment ever gets corrupted, you can revert
 
 ### Deploy
 
-The `Deploy.ps1` contains scripts which can be installed in each local experiment repository to ensure that the environment is reset to the correct configuration whenever the repository switches to a different experimental branch. To install run `Deploy.cmd` files into the `root` folder.
+The `Deploy.ps1` contains scripts which can be installed in each local experiment repository to ensure that the environment is reset to the correct configuration whenever the repository switches to a different experimental branch. To install run `Deploy.cmd` files from the `root` folder.
 
 ### Data Transfer
 
