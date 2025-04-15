@@ -1,1 +1,1 @@
-powershell -ExecutionPolicy Bypass -File ./deploy.ps1
+powershell -ExecutionPolicy Bypass -File ./Deploy.ps1
