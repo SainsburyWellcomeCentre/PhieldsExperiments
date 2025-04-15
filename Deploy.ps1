@@ -8,11 +8,12 @@ This script performs the following actions:
 #>
 
 git clean -fdx bonsai
-Set-Location -Path .\bonsai
-Invoke-Expression -Command ".\setup.ps1"
+Set-Location -Path ./bonsai
+Invoke-Expression -Command "./setup.ps1"
 
+
+Set-Location -Path ../
 git clean -fdx .venv
 git clean -fx uv.lock
-Set-Location -Path .\
 irm https://astral.sh/uv/install.ps1 | iex
 uv sync --all-extras
