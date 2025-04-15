@@ -13,7 +13,8 @@ These should only need to be installed once on a fresh new system, and are not r
  * Windows 10
  * [Visual Studio Code](https://code.visualstudio.com/) (recommended for editing code scripts and git commits)
  * [.NET Framework 4.7.2 Developer Pack](https://dotnet.microsoft.com/download/dotnet-framework/thank-you/net472-developer-pack-offline-installer) (required for intellisense when editing code scripts)
- * [Python 3.10](https://www.python.org/downloads/release/python-31011/) (required for bootstrapping Python environments)
+ * [Python 3.11](https://www.python.org/downloads/release/python-3119/) (required for bootstrapping Python environments)
+ * [uv](https://docs.astral.sh/uv/) for python version, environment, and package dependency management.
  * [Git for Windows](https://gitforwindows.org/) (recommended for cloning and manipulating this repository)
  * [Visual C++ Redistributable for Visual Studio 2012](https://www.microsoft.com/en-us/download/details.aspx?id=30679) (native dependency for OpenCV)
  * [FTDI CDM Driver 2.12.28](https://www.ftdichip.com/Drivers/CDM/CDM21228_Setup.zip) (serial port drivers for HARP devices)
@@ -21,6 +22,8 @@ These should only need to be installed once on a fresh new system, and are not r
    * On FLIR website: `Download > archive > 1.29.0.5 > SpinnakerSDK_FULL_1.29.0.5_x64.exe`
  * [CUDA 11.3](https://developer.nvidia.com/cuda-11.3.0-download-archive) (for SLEAP multi-animal tracking)
    * Select Custom install and check `CUDA > Development` and `CUDA > Runtime` ONLY (uncheck everything else)
+ 
+
 
 ### Hardware Setup
 
@@ -39,13 +42,9 @@ The `bonsai` folder contains a snapshot of the runtime environment required to r
 
 In case the configuration of the environment ever gets corrupted, you can revert the `bonsai` folder to its original state by deleting all the executable and package files and folders and re-running the `setup.cmd` script. This process may be automated in the future.
 
-### Post-checkout Hook
+### Deploy
 
-The `hooks` folder contains git hook scripts which can be installed in each local experiment repository to ensure that the environment is reset to the correct configuration whenever the repository switches to a different experimental branch. To install the hook, copy the `post-checkout` and `post-merge` files into the `.git\hooks` folder.
-
-After this, the scripts should run automatically whenever you switch branches in the repository or pull changes with modifications to the `Bonsai.config` file. Note that if you do this inside a UI such as VS Code you might get limited feedback as to the progress of the environment reset, and it might be necessary to wait for a little bit until all packages are reinstalled.
-
-It is recommended to install the post-checkout hook on all acquisition machines running experiments to maximize reproducibility when switching experiments or running updates.
+The `Deploy.ps1` contains scripts which can be installed in each local experiment repository to ensure that the environment is reset to the correct configuration whenever the repository switches to a different experimental branch. To install run the `Deploy.cmd` script from the `root` folder.
 
 ### Data Transfer
 

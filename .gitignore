@@ -24,3 +24,6 @@ __pycache__/
 # Environments
 .venv
 winpython
+
+# uv local files
+uv.lock
