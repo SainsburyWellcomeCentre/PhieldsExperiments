@@ -1,0 +1,162 @@
+{
+    "$id": "...h",
+    "$schema": "https://json-schema.org/draft-07/schema",
+    "description": "Describes the hardware and tracking configuration for the rig",
+    "title": "RigConfig",
+    "definitions": {
+        "clockSynchronizerName":
+        {
+            "enum": ["TimestampGeneratorGen3","ClockSynchronizer"],
+            "default": "TimestampGeneratorGen3",
+            "type": "string"
+        },
+        "cameraControllerName":
+        {
+            "enum": ["Behavior","CameraControllerGen2","OutputExpander"],
+            "default": "CameraControllerGen2",
+            "type": "string"
+        },
+        "triggerSource":
+        {
+            "enum": ["GlobalTrigger","LocalTrigger"],
+            "default": "GlobalTrigger",
+            "type": "string"
+        },
+        "cameraName":
+        {
+            "enum": ["CameraTop","CameraSide"],
+            "default": "CameraTop",
+            "type": "string"
+        },
+        "spinnakerSettings": {
+            "properties": {
+                "cameraName":
+                {
+                    "$ref":"#/definitions/cameraName",
+                    "default": "CameraTop"
+                },
+                "triggerSource":
+                {
+                    "$ref":"#/definitions/triggerSource"
+                },
+                "exposureTime": {
+                    "type": "number",
+                    "default": 15000,
+                    "minimum": 0,
+                    "description": "The exposure time for the camera (in microseconds)"
+                },
+                "serialNumber": {
+                    "type": [
+                        "string",
+                        "null"
+                    ],
+                    "default": "00000",
+                    "description": "The serial number of the camera"
+                },
+                "gain": {
+                    "type": "number",
+                    "default": 1,
+                    "minimum": 0,
+                    "description": "The camera gain"
+                },
+                "binning": {
+                    "type": "integer",
+                    "default": 1,
+                    "minimum": 1,
+                    "description": "The binning setting for the camera"
+                }
+            },
+            "required": [
+                "cameraName",
+                "triggerSource",
+                "exposureTime",
+                "serialNumber",
+                "gain",
+                "binning"
+            ]
+        }
+    },
+    "properties": {
+        "clockSynchronizer":
+        {
+            "properties": 
+            {
+                "instanceName":
+                {
+                    "type": "string",
+                    "default": "ClockSynchronizer",
+                    "description": "The folder name for logging"
+
+                },
+                "deviceName":
+                {
+                    "$ref":"#/definitions/clockSynchronizerName"
+                },
+                "portName": 
+                {
+                    "type": "string",
+                    "default": "COM9",
+                    "description": "The COM port for the timestamp generator board"
+                }
+            },
+            "required": [
+                "instanceName",
+                "deviceName",
+                "portName"
+            ]
+        },
+        "cameraController":
+        {
+            "properties": 
+            {
+                "instanceName":
+                {
+                    "type": "string",
+                    "default": "CameraController",
+                    "description": "The folder name for logging"
+
+                },
+                "deviceName":
+                {
+                    "$ref":"#/definitions/cameraControllerName"
+                },
+                "portName": 
+                {
+                    "type": "string",
+                    "default": "COM7",
+                    "description": "The COM port for the camera controller board"
+                },
+                "globalTriggerFrequency":
+                {
+                    "type":"integer",
+                    "default":"50"
+                },
+                "localTriggerFrequency":
+                {
+                    "type":"integer",
+                    "default":"125"
+                }
+            },
+            "required": [
+                "instanceName",
+                "deviceName",
+                "portName",
+                "globalTriggerFrequency",
+                "localTriggerFrequency"
+            ]
+        },
+        "cameraSettings":
+        {
+            "type":"array",
+            "items": 
+            {
+                "$ref": "#/definitions/spinnakerSettings"
+            }
+        }
+    },
+    "required": [
+        "clockSynchronizer",
+        "cameraController",
+        "cameraSettings"
+    ]
+}
