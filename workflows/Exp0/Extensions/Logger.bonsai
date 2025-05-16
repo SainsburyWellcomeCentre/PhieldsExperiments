@@ -55,7 +55,7 @@
         <Name>CameraControllerEvents</Name>
       </Expression>
       <Expression xsi:type="IncludeWorkflow" Path="Aeon.Acquisition:LogHarpState.bonsai">
-        <LogName>VideoController</LogName>
+        <LogName>CameraController</LogName>
         <Heartbeats>Heartbeats</Heartbeats>
         <ClosingDuration>PT2S</ClosingDuration>
       </Expression>
