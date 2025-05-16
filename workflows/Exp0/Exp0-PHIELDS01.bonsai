@@ -156,19 +156,141 @@
                         <Expression xsi:type="MemberSelector">
                           <Selector>CameraController</Selector>
                         </Expression>
-                        <Expression xsi:type="InputMapping">
-                          <PropertyMappings>
-                            <Property Name="PortName" Selector="PortName" />
-                            <Property Name="GlobalTriggerFrequency" Selector="GlobalTriggerFrequency" />
-                            <Property Name="LocalTriggerFrequency" Selector="LocalTriggerFrequency" />
-                          </PropertyMappings>
-                        </Expression>
-                        <Expression xsi:type="rx:SelectMany">
-                          <Name>VideoController</Name>
+                        <Expression xsi:type="rx:Condition">
                           <Workflow>
                             <Nodes>
+                              <Expression xsi:type="WorkflowInput">
+                                <Name>Source1</Name>
+                              </Expression>
+                              <Expression xsi:type="MemberSelector">
+                                <Selector>DeviceName</Selector>
+                              </Expression>
+                              <Expression xsi:type="ExternalizedMapping">
+                                <Property Name="Value" DisplayName="DeviceName" />
+                              </Expression>
+                              <Expression xsi:type="Equal">
+                                <Operand xsi:type="WorkflowProperty" TypeArguments="p1:CameraControllerName">
+                                  <Value>CameraControllerGen2</Value>
+                                </Operand>
+                              </Expression>
+                              <Expression xsi:type="WorkflowOutput" />
+                            </Nodes>
+                            <Edges>
+                              <Edge From="0" To="1" Label="Source1" />
+                              <Edge From="1" To="3" Label="Source1" />
+                              <Edge From="2" To="3" Label="Source2" />
+                              <Edge From="3" To="4" Label="Source1" />
+                            </Edges>
+                          </Workflow>
+                        </Expression>
+                        <Expression xsi:type="rx:SelectMany">
+                          <Name>CameraControllerGen2</Name>
+                          <Workflow>
+                            <Nodes>
+                              <Expression xsi:type="WorkflowInput">
+                                <Name>Source1</Name>
+                              </Expression>
+                              <Expression xsi:type="Combinator">
+                                <Combinator xsi:type="rx:Take">
+                                  <rx:Count>1</rx:Count>
+                                </Combinator>
+                              </Expression>
+                              <Expression xsi:type="rx:AsyncSubject">
+                                <Name>ControllerSettings</Name>
+                              </Expression>
                               <Expression xsi:type="SubscribeSubject">
-                                <Name>GlobalTriggerFrequency</Name>
+                                <Name>ControllerSettings</Name>
+                              </Expression>
+                              <Expression xsi:type="MemberSelector">
+                                <Selector>Triggers</Selector>
+                              </Expression>
+                              <Expression xsi:type="Combinator">
+                                <Combinator xsi:type="rx:Merge" />
+                              </Expression>
+                              <Expression xsi:type="rx:Condition">
+                                <Workflow>
+                                  <Nodes>
+                                    <Expression xsi:type="WorkflowInput">
+                                      <Name>Source1</Name>
+                                    </Expression>
+                                    <Expression xsi:type="MemberSelector">
+                                      <Selector>TriggerName</Selector>
+                                    </Expression>
+                                    <Expression xsi:type="ExternalizedMapping">
+                                      <Property Name="Value" />
+                                    </Expression>
+                                    <Expression xsi:type="Equal">
+                                      <Operand xsi:type="WorkflowProperty" TypeArguments="p1:TriggerName">
+                                        <Value>Trigger0</Value>
+                                      </Operand>
+                                    </Expression>
+                                    <Expression xsi:type="WorkflowOutput" />
+                                  </Nodes>
+                                  <Edges>
+                                    <Edge From="0" To="1" Label="Source1" />
+                                    <Edge From="1" To="3" Label="Source1" />
+                                    <Edge From="2" To="3" Label="Source2" />
+                                    <Edge From="3" To="4" Label="Source1" />
+                                  </Edges>
+                                </Workflow>
+                              </Expression>
+                              <Expression xsi:type="Combinator">
+                                <Combinator xsi:type="rx:Take">
+                                  <rx:Count>1</rx:Count>
+                                </Combinator>
+                              </Expression>
+                              <Expression xsi:type="rx:AsyncSubject">
+                                <Name>Trigger0</Name>
+                              </Expression>
+                              <Expression xsi:type="SubscribeSubject">
+                                <Name>ControllerSettings</Name>
+                              </Expression>
+                              <Expression xsi:type="MemberSelector">
+                                <Selector>Triggers</Selector>
+                              </Expression>
+                              <Expression xsi:type="Combinator">
+                                <Combinator xsi:type="rx:Merge" />
+                              </Expression>
+                              <Expression xsi:type="rx:Condition">
+                                <Workflow>
+                                  <Nodes>
+                                    <Expression xsi:type="WorkflowInput">
+                                      <Name>Source1</Name>
+                                    </Expression>
+                                    <Expression xsi:type="MemberSelector">
+                                      <Selector>TriggerName</Selector>
+                                    </Expression>
+                                    <Expression xsi:type="ExternalizedMapping">
+                                      <Property Name="Value" />
+                                    </Expression>
+                                    <Expression xsi:type="Equal">
+                                      <Operand xsi:type="WorkflowProperty" TypeArguments="p1:TriggerName">
+                                        <Value>Trigger1</Value>
+                                      </Operand>
+                                    </Expression>
+                                    <Expression xsi:type="WorkflowOutput" />
+                                  </Nodes>
+                                  <Edges>
+                                    <Edge From="0" To="1" Label="Source1" />
+                                    <Edge From="1" To="3" Label="Source1" />
+                                    <Edge From="2" To="3" Label="Source2" />
+                                    <Edge From="3" To="4" Label="Source1" />
+                                  </Edges>
+                                </Workflow>
+                              </Expression>
+                              <Expression xsi:type="Combinator">
+                                <Combinator xsi:type="rx:Take">
+                                  <rx:Count>1</rx:Count>
+                                </Combinator>
+                              </Expression>
+                              <Expression xsi:type="rx:AsyncSubject">
+                                <Name>Trigger1</Name>
+                              </Expression>
+                              <Expression xsi:type="SubscribeSubject">
+                                <Name>Trigger0</Name>
+                              </Expression>
+                              <Expression xsi:type="MemberSelector">
+                                <Selector>TriggerFrequency</Selector>
                               </Expression>
                               <Expression xsi:type="PropertyMapping">
                                 <PropertyMappings>
@@ -176,7 +298,7 @@
                                 </PropertyMappings>
                               </Expression>
                               <Expression xsi:type="GroupWorkflow">
-                                <Name>ConfigurePwm</Name>
+                                <Name>ConfigurePwmCam0</Name>
                                 <Description />
                                 <Workflow>
                                   <Nodes>
@@ -219,7 +341,10 @@
                                 </Workflow>
                               </Expression>
                               <Expression xsi:type="SubscribeSubject">
-                                <Name>LocalTriggerFrequency</Name>
+                                <Name>Trigger1</Name>
+                              </Expression>
+                              <Expression xsi:type="MemberSelector">
+                                <Selector>TriggerFrequency</Selector>
                               </Expression>
                               <Expression xsi:type="PropertyMapping">
                                 <PropertyMappings>
@@ -227,7 +352,7 @@
                                 </PropertyMappings>
                               </Expression>
                               <Expression xsi:type="GroupWorkflow">
-                                <Name>ConfigurePwm</Name>
+                                <Name>ConfigurePwmCam1</Name>
                                 <Description />
                                 <Workflow>
                                   <Nodes>
@@ -335,22 +460,15 @@
                                   </Edges>
                                 </Workflow>
                               </Expression>
-                              <Expression xsi:type="PropertySource" TypeArguments="WorkflowProperty(p1:TriggerSource),p1:TriggerSource">
-                                <MemberName>Value</MemberName>
-                                <Value>GlobalTrigger</Value>
-                              </Expression>
                               <Expression xsi:type="SubscribeSubject">
-                                <Name>GlobalTriggerFrequency</Name>
-                              </Expression>
-                              <Expression xsi:type="Combinator">
-                                <Combinator xsi:type="rx:Zip" />
+                                <Name>Trigger0</Name>
                               </Expression>
                               <Expression xsi:type="Combinator">
                                 <Combinator xsi:type="rx:WithLatestFrom" />
                               </Expression>
                               <Expression xsi:type="rx:GroupBy">
-                                <rx:KeySelector>Item2.Item1</rx:KeySelector>
-                                <rx:ElementSelector>Item1,Item2.Item2</rx:ElementSelector>
+                                <rx:KeySelector>Item2</rx:KeySelector>
+                                <rx:ElementSelector>Item1</rx:ElementSelector>
                               </Expression>
                               <Expression xsi:type="MulticastSubject">
                                 <Name>Triggers</Name>
@@ -382,96 +500,61 @@
                                   </Edges>
                                 </Workflow>
                               </Expression>
-                              <Expression xsi:type="PropertySource" TypeArguments="WorkflowProperty(p1:TriggerSource),p1:TriggerSource">
-                                <MemberName>Value</MemberName>
-                                <Value>LocalTrigger</Value>
-                              </Expression>
                               <Expression xsi:type="SubscribeSubject">
-                                <Name>LocalTriggerFrequency</Name>
-                              </Expression>
-                              <Expression xsi:type="Combinator">
-                                <Combinator xsi:type="rx:Zip" />
+                                <Name>Trigger1</Name>
                               </Expression>
                               <Expression xsi:type="Combinator">
                                 <Combinator xsi:type="rx:WithLatestFrom" />
                               </Expression>
                               <Expression xsi:type="rx:GroupBy">
-                                <rx:KeySelector>Item2.Item1</rx:KeySelector>
-                                <rx:ElementSelector>Item1,Item2.Item2</rx:ElementSelector>
+                                <rx:KeySelector>Item2</rx:KeySelector>
+                                <rx:ElementSelector>Item1</rx:ElementSelector>
                               </Expression>
                               <Expression xsi:type="MulticastSubject">
                                 <Name>Triggers</Name>
-                              </Expression>
-                              <Expression xsi:type="ExternalizedMapping">
-                                <Property Name="Value" DisplayName="GlobalTriggerFrequency" Description="The frequency at which to trigger global cameras." />
-                              </Expression>
-                              <Expression xsi:type="Combinator">
-                                <Combinator xsi:type="DoubleProperty">
-                                  <Value>50</Value>
-                                </Combinator>
-                              </Expression>
-                              <Expression xsi:type="Combinator">
-                                <Combinator xsi:type="rx:Take">
-                                  <rx:Count>1</rx:Count>
-                                </Combinator>
-                              </Expression>
-                              <Expression xsi:type="rx:BehaviorSubject">
-                                <Name>GlobalTriggerFrequency</Name>
-                              </Expression>
-                              <Expression xsi:type="ExternalizedMapping">
-                                <Property Name="Value" DisplayName="LocalTriggerFrequency" Description="The frequency at which to trigger the fast local cameras." />
-                              </Expression>
-                              <Expression xsi:type="Combinator">
-                                <Combinator xsi:type="DoubleProperty">
-                                  <Value>125</Value>
-                                </Combinator>
-                              </Expression>
-                              <Expression xsi:type="Combinator">
-                                <Combinator xsi:type="rx:Take">
-                                  <rx:Count>1</rx:Count>
-                                </Combinator>
-                              </Expression>
-                              <Expression xsi:type="rx:BehaviorSubject">
-                                <Name>LocalTriggerFrequency</Name>
                               </Expression>
                             </Nodes>
                             <Edges>
                               <Edge From="0" To="1" Label="Source1" />
                               <Edge From="1" To="2" Label="Source1" />
-                              <Edge From="2" To="10" Label="Source1" />
                               <Edge From="3" To="4" Label="Source1" />
                               <Edge From="4" To="5" Label="Source1" />
-                              <Edge From="5" To="10" Label="Source2" />
+                              <Edge From="5" To="6" Label="Source1" />
                               <Edge From="6" To="7" Label="Source1" />
-                              <Edge From="7" To="10" Label="Source3" />
-                              <Edge From="8" To="9" Label="Source1" />
-                              <Edge From="9" To="10" Label="Source4" />
-                              <Edge From="10" To="12" Label="Source1" />
-                              <Edge From="11" To="12" Label="Source2" />
+                              <Edge From="7" To="8" Label="Source1" />
+                              <Edge From="9" To="10" Label="Source1" />
+                              <Edge From="10" To="11" Label="Source1" />
+                              <Edge From="11" To="12" Label="Source1" />
                               <Edge From="12" To="13" Label="Source1" />
                               <Edge From="13" To="14" Label="Source1" />
-                              <Edge From="13" To="15" Label="Source1" />
-                              <Edge From="13" To="23" Label="Source1" />
                               <Edge From="15" To="16" Label="Source1" />
-                              <Edge From="16" To="20" Label="Source1" />
-                              <Edge From="17" To="19" Label="Source1" />
-                              <Edge From="18" To="19" Label="Source2" />
-                              <Edge From="19" To="20" Label="Source2" />
+                              <Edge From="16" To="17" Label="Source1" />
+                              <Edge From="17" To="18" Label="Source1" />
+                              <Edge From="18" To="27" Label="Source1" />
+                              <Edge From="19" To="20" Label="Source1" />
                               <Edge From="20" To="21" Label="Source1" />
                               <Edge From="21" To="22" Label="Source1" />
+                              <Edge From="22" To="27" Label="Source2" />
                               <Edge From="23" To="24" Label="Source1" />
-                              <Edge From="24" To="28" Label="Source1" />
-                              <Edge From="25" To="27" Label="Source1" />
-                              <Edge From="26" To="27" Label="Source2" />
-                              <Edge From="27" To="28" Label="Source2" />
-                              <Edge From="28" To="29" Label="Source1" />
+                              <Edge From="24" To="27" Label="Source3" />
+                              <Edge From="25" To="26" Label="Source1" />
+                              <Edge From="26" To="27" Label="Source4" />
+                              <Edge From="27" To="29" Label="Source1" />
+                              <Edge From="28" To="29" Label="Source2" />
                               <Edge From="29" To="30" Label="Source1" />
-                              <Edge From="31" To="32" Label="Source1" />
+                              <Edge From="30" To="31" Label="Source1" />
+                              <Edge From="30" To="32" Label="Source1" />
+                              <Edge From="30" To="38" Label="Source1" />
                               <Edge From="32" To="33" Label="Source1" />
-                              <Edge From="33" To="34" Label="Source1" />
+                              <Edge From="33" To="35" Label="Source1" />
+                              <Edge From="34" To="35" Label="Source2" />
                               <Edge From="35" To="36" Label="Source1" />
                               <Edge From="36" To="37" Label="Source1" />
-                              <Edge From="37" To="38" Label="Source1" />
+                              <Edge From="38" To="39" Label="Source1" />
+                              <Edge From="39" To="41" Label="Source1" />
+                              <Edge From="40" To="41" Label="Source2" />
+                              <Edge From="41" To="42" Label="Source1" />
+                              <Edge From="42" To="43" Label="Source1" />
                             </Edges>
                           </Workflow>
                         </Expression>
@@ -482,7 +565,7 @@
                         <Expression xsi:type="rx:BehaviorSubject" TypeArguments="sys:Object">
                           <rx:Name>StopCameras</rx:Name>
                         </Expression>
-                        <Expression xsi:type="rx:ReplaySubject" TypeArguments="p4:IGroupedObservable(p1:TriggerSource,sys:Tuple(harp:Timestamped(p3:CameraEvents),sys:Double))">
+                        <Expression xsi:type="rx:ReplaySubject" TypeArguments="p4:IGroupedObservable(p1:TriggerSource,harp:Timestamped(p3:CameraEvents))">
                           <rx:Name>Triggers</rx:Name>
                           <rx:BufferSize xsi:nil="true" />
                         </Expression>
@@ -506,7 +589,7 @@
                           <Name>RigConfig</Name>
                         </Expression>
                         <Expression xsi:type="MemberSelector">
-                          <Selector>CameraSettings</Selector>
+                          <Selector>Cameras</Selector>
                         </Expression>
                         <Expression xsi:type="Combinator">
                           <Combinator xsi:type="rx:Merge" />
@@ -530,10 +613,65 @@
                                 <Name>source</Name>
                               </Expression>
                               <Expression xsi:type="SubscribeSubject">
+                                <Name>RigConfig</Name>
+                              </Expression>
+                              <Expression xsi:type="MemberSelector">
+                                <Selector>CameraController.Triggers</Selector>
+                              </Expression>
+                              <Expression xsi:type="Combinator">
+                                <Combinator xsi:type="rx:Merge" />
+                              </Expression>
+                              <Expression xsi:type="SubscribeSubject">
                                 <Name>source</Name>
                               </Expression>
                               <Expression xsi:type="MemberSelector">
-                                <Selector>TriggerSource</Selector>
+                                <Selector>TriggerName</Selector>
+                              </Expression>
+                              <Expression xsi:type="PropertyMapping">
+                                <PropertyMappings>
+                                  <Property Name="TriggerName" />
+                                </PropertyMappings>
+                              </Expression>
+                              <Expression xsi:type="rx:Condition">
+                                <Workflow>
+                                  <Nodes>
+                                    <Expression xsi:type="WorkflowInput">
+                                      <Name>Source1</Name>
+                                    </Expression>
+                                    <Expression xsi:type="MemberSelector">
+                                      <Selector>TriggerName</Selector>
+                                    </Expression>
+                                    <Expression xsi:type="ExternalizedMapping">
+                                      <Property Name="Value" DisplayName="TriggerName" />
+                                    </Expression>
+                                    <Expression xsi:type="Equal">
+                                      <Operand xsi:type="WorkflowProperty" TypeArguments="p1:TriggerName">
+                                        <Value>Trigger1</Value>
+                                      </Operand>
+                                    </Expression>
+                                    <Expression xsi:type="WorkflowOutput" />
+                                  </Nodes>
+                                  <Edges>
+                                    <Edge From="0" To="1" Label="Source1" />
+                                    <Edge From="1" To="3" Label="Source1" />
+                                    <Edge From="2" To="3" Label="Source2" />
+                                    <Edge From="3" To="4" Label="Source1" />
+                                  </Edges>
+                                </Workflow>
+                              </Expression>
+                              <Expression xsi:type="Combinator">
+                                <Combinator xsi:type="rx:Take">
+                                  <rx:Count>1</rx:Count>
+                                </Combinator>
+                              </Expression>
+                              <Expression xsi:type="rx:AsyncSubject">
+                                <Name>TriggerSource</Name>
+                              </Expression>
+                              <Expression xsi:type="SubscribeSubject">
+                                <Name>TriggerSource</Name>
+                              </Expression>
+                              <Expression xsi:type="MemberSelector">
+                                <Selector>TriggerName</Selector>
                               </Expression>
                               <Expression xsi:type="rx:SelectMany">
                                 <Name>GetTriggerByKey</Name>
@@ -562,7 +700,7 @@
                                     </Expression>
                                     <Expression xsi:type="PropertyMapping">
                                       <PropertyMappings>
-                                        <Property Name="ID" />
+                                        <Property Name="TiggerName" Selector="it" />
                                       </PropertyMappings>
                                     </Expression>
                                     <Expression xsi:type="rx:SelectMany">
@@ -583,7 +721,7 @@
                                             <Name>Source</Name>
                                           </Expression>
                                           <Expression xsi:type="ExternalizedMapping">
-                                            <Property Name="ID" />
+                                            <Property Name="TiggerName" />
                                           </Expression>
                                           <Expression xsi:type="rx:Condition">
                                             <Workflow>
@@ -592,14 +730,14 @@
                                                   <Name>Source1</Name>
                                                 </Expression>
                                                 <Expression xsi:type="MemberSelector">
-                                                  <Selector>Key</Selector>
+                                                  <Selector>Key.TriggerName</Selector>
                                                 </Expression>
                                                 <Expression xsi:type="ExternalizedMapping">
-                                                  <Property Name="Value" DisplayName="ID" />
+                                                  <Property Name="Value" DisplayName="TiggerName" />
                                                 </Expression>
                                                 <Expression xsi:type="Equal">
-                                                  <Operand xsi:type="WorkflowProperty" TypeArguments="p1:TriggerSource">
-                                                    <Value>LocalTrigger</Value>
+                                                  <Operand xsi:type="WorkflowProperty" TypeArguments="p1:TriggerName">
+                                                    <Value>Trigger1</Value>
                                                   </Operand>
                                                 </Expression>
                                                 <Expression xsi:type="WorkflowOutput" />
@@ -640,8 +778,11 @@
                                   </Edges>
                                 </Workflow>
                               </Expression>
+                              <Expression xsi:type="SubscribeSubject">
+                                <Name>TriggerSource</Name>
+                              </Expression>
                               <Expression xsi:type="MemberSelector">
-                                <Selector>Item1</Selector>
+                                <Selector>TriggerFrequency</Selector>
                               </Expression>
                               <Expression xsi:type="SubscribeSubject">
                                 <Name>source</Name>
@@ -649,15 +790,11 @@
                               <Expression xsi:type="MemberSelector">
                                 <Selector>ExposureTime</Selector>
                               </Expression>
-                              <Expression xsi:type="Disable">
-                                <Builder xsi:type="Combinator">
+                              <Expression xsi:type="Combinator">
                                 <Combinator xsi:type="rx:Zip" />
-                                </Builder>
                               </Expression>
-                              <Expression xsi:type="Disable">
-                                <Builder xsi:type="scr:ExpressionTransform">
+                              <Expression xsi:type="scr:ExpressionTransform">
                                 <scr:Expression>Math.Min(Item2, 1e6 / Item1 - 500)</scr:Expression>
-                                </Builder>
                               </Expression>
                               <Expression xsi:type="PropertyMapping">
                                 <PropertyMappings>
@@ -679,7 +816,7 @@
                                   <spk:Index xsi:nil="true" />
                                   <spk:SerialNumber>23391015</spk:SerialNumber>
                                   <spk:ColorProcessing>Default</spk:ColorProcessing>
-                                  <aeon:ExposureTime>7500</aeon:ExposureTime>
+                                  <aeon:ExposureTime>5000</aeon:ExposureTime>
                                   <aeon:Gain>1</aeon:Gain>
                                   <aeon:Binning>1</aeon:Binning>
                                 </Combinator>
@@ -691,7 +828,10 @@
                                 <Selector>CameraName</Selector>
                               </Expression>
                               <Expression xsi:type="SubscribeSubject">
-                                <Name>TriggerFrequency</Name>
+                                <Name>TriggerSource</Name>
+                              </Expression>
+                              <Expression xsi:type="MemberSelector">
+                                <Selector>TriggerFrequency</Selector>
                               </Expression>
                               <Expression xsi:type="Combinator">
                                 <Combinator xsi:type="rx:Zip" />
@@ -704,42 +844,38 @@
                                 <rx:ElementSelector>Item1</rx:ElementSelector>
                               </Expression>
                               <Expression xsi:type="WorkflowOutput" />
-                              <Expression xsi:type="MemberSelector">
-                                <Selector>Item2</Selector>
-                              </Expression>
-                              <Expression xsi:type="Combinator">
-                                <Combinator xsi:type="rx:Take">
-                                  <rx:Count>1</rx:Count>
-                                </Combinator>
-                              </Expression>
-                              <Expression xsi:type="rx:BehaviorSubject">
-                                <Name>TriggerFrequency</Name>
-                              </Expression>
                             </Nodes>
                             <Edges>
                               <Edge From="0" To="1" Label="Source1" />
                               <Edge From="1" To="2" Label="Source1" />
                               <Edge From="3" To="4" Label="Source1" />
                               <Edge From="4" To="5" Label="Source1" />
-                              <Edge From="5" To="6" Label="Source1" />
-                              <Edge From="5" To="22" Label="Source1" />
-                              <Edge From="6" To="14" Label="Source1" />
+                              <Edge From="5" To="9" Label="Source1" />
+                              <Edge From="6" To="7" Label="Source1" />
                               <Edge From="7" To="8" Label="Source1" />
-                              <Edge From="8" To="9" Label="Source1" />
+                              <Edge From="8" To="9" Label="Source2" />
                               <Edge From="9" To="10" Label="Source1" />
                               <Edge From="10" To="11" Label="Source1" />
-                              <Edge From="11" To="14" Label="Source2" />
                               <Edge From="12" To="13" Label="Source1" />
-                              <Edge From="13" To="14" Label="Source3" />
-                              <Edge From="14" To="19" Label="Source1" />
+                              <Edge From="13" To="14" Label="Source1" />
+                              <Edge From="14" To="24" Label="Source1" />
                               <Edge From="15" To="16" Label="Source1" />
-                              <Edge From="16" To="18" Label="Source1" />
-                              <Edge From="17" To="18" Label="Source2" />
+                              <Edge From="16" To="19" Label="Source1" />
+                              <Edge From="17" To="18" Label="Source1" />
                               <Edge From="18" To="19" Label="Source2" />
                               <Edge From="19" To="20" Label="Source1" />
                               <Edge From="20" To="21" Label="Source1" />
+                              <Edge From="21" To="24" Label="Source2" />
                               <Edge From="22" To="23" Label="Source1" />
-                              <Edge From="23" To="24" Label="Source1" />
+                              <Edge From="23" To="24" Label="Source3" />
+                              <Edge From="24" To="30" Label="Source1" />
+                              <Edge From="25" To="26" Label="Source1" />
+                              <Edge From="26" To="29" Label="Source1" />
+                              <Edge From="27" To="28" Label="Source1" />
+                              <Edge From="28" To="29" Label="Source2" />
+                              <Edge From="29" To="30" Label="Source2" />
+                              <Edge From="30" To="31" Label="Source1" />
+                              <Edge From="31" To="32" Label="Source1" />
                             </Edges>
                           </Workflow>
                         </Expression>

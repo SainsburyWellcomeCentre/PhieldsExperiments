@@ -37,14 +37,93 @@ namespace RigConfiguration
 
 
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.4.0.0 (YamlDotNet v13.0.0.0)")]
-    public enum TriggerSource
+    public enum TriggerName
     {
     
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="GlobalTrigger")]
-        GlobalTrigger = 0,
+        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="Trigger0")]
+        Trigger0 = 0,
     
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="LocalTrigger")]
-        LocalTrigger = 1,
+        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="Trigger1")]
+        Trigger1 = 1,
+    }
+
+
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.4.0.0 (YamlDotNet v13.0.0.0)")]
+    [Bonsai.CombinatorAttribute()]
+    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
+    public partial class TriggerSource
+    {
+    
+        private TriggerName _triggerName = RigConfiguration.TriggerName.Trigger0;
+    
+        private int _triggerFrequency = 50;
+    
+        public TriggerSource()
+        {
+        }
+    
+        protected TriggerSource(TriggerSource other)
+        {
+            _triggerName = other._triggerName;
+            _triggerFrequency = other._triggerFrequency;
+        }
+    
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="TriggerName")]
+        public TriggerName TriggerName
+        {
+            get
+            {
+                return _triggerName;
+            }
+            set
+            {
+                _triggerName = value;
+            }
+        }
+    
+        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="triggerFrequency")]
+        public int TriggerFrequency
+        {
+            get
+            {
+                return _triggerFrequency;
+            }
+            set
+            {
+                _triggerFrequency = value;
+            }
+        }
+    
+        public System.IObservable<TriggerSource> Process()
+        {
+            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new TriggerSource(this)));
+        }
+    
+        public System.IObservable<TriggerSource> Process<TSource>(System.IObservable<TSource> source)
+        {
+            return System.Reactive.Linq.Observable.Select(source, _ => new TriggerSource(this));
+        }
+    
+        protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
+        {
+            stringBuilder.Append("TriggerName = " + _triggerName + ", ");
+            stringBuilder.Append("triggerFrequency = " + _triggerFrequency);
+            return true;
+        }
+    
+        public override string ToString()
+        {
+            System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
+            stringBuilder.Append(GetType().Name);
+            stringBuilder.Append(" { ");
+            if (PrintMembers(stringBuilder))
+            {
+                stringBuilder.Append(" ");
+            }
+            stringBuilder.Append("}");
+            return stringBuilder.ToString();
+        }
     }
 
 
@@ -68,7 +147,7 @@ namespace RigConfiguration
     
         private CameraName _cameraName = RigConfiguration.CameraName.CameraTop;
     
-        private TriggerSource _triggerSource;
+        private TriggerName _triggerName;
     
         private double _exposureTime = 15000D;
     
@@ -85,7 +164,7 @@ namespace RigConfiguration
         protected SpinnakerSettings(SpinnakerSettings other)
         {
             _cameraName = other._cameraName;
-            _triggerSource = other._triggerSource;
+            _triggerName = other._triggerName;
             _exposureTime = other._exposureTime;
             _serialNumber = other._serialNumber;
             _gain = other._gain;
@@ -107,16 +186,16 @@ namespace RigConfiguration
         }
     
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="triggerSource")]
-        public TriggerSource TriggerSource
+        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="triggerName")]
+        public TriggerName TriggerName
         {
             get
             {
-                return _triggerSource;
+                return _triggerName;
             }
             set
             {
-                _triggerSource = value;
+                _triggerName = value;
             }
         }
     
@@ -201,7 +280,7 @@ namespace RigConfiguration
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
         {
             stringBuilder.Append("cameraName = " + _cameraName + ", ");
-            stringBuilder.Append("triggerSource = " + _triggerSource + ", ");
+            stringBuilder.Append("triggerName = " + _triggerName + ", ");
             stringBuilder.Append("exposureTime = " + _exposureTime + ", ");
             stringBuilder.Append("serialNumber = " + _serialNumber + ", ");
             stringBuilder.Append("gain = " + _gain + ", ");
@@ -238,7 +317,7 @@ namespace RigConfiguration
     
         private CameraController _cameraController;
     
-        private System.Collections.Generic.List<SpinnakerSettings> _cameraSettings = new System.Collections.Generic.List<SpinnakerSettings>();
+        private System.Collections.Generic.List<SpinnakerSettings> _cameras = new System.Collections.Generic.List<SpinnakerSettings>();
     
         public RigConfig()
         {
@@ -248,7 +327,7 @@ namespace RigConfiguration
         {
             _clockSynchronizer = other._clockSynchronizer;
             _cameraController = other._cameraController;
-            _cameraSettings = other._cameraSettings;
+            _cameras = other._cameras;
         }
     
         [System.Xml.Serialization.XmlIgnoreAttribute()]
@@ -280,16 +359,16 @@ namespace RigConfiguration
         }
     
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="cameraSettings")]
-        public System.Collections.Generic.List<SpinnakerSettings> CameraSettings
+        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="cameras")]
+        public System.Collections.Generic.List<SpinnakerSettings> Cameras
         {
             get
             {
-                return _cameraSettings;
+                return _cameras;
             }
             set
             {
-                _cameraSettings = value;
+                _cameras = value;
             }
         }
     
@@ -307,7 +386,7 @@ namespace RigConfiguration
         {
             stringBuilder.Append("clockSynchronizer = " + _clockSynchronizer + ", ");
             stringBuilder.Append("cameraController = " + _cameraController + ", ");
-            stringBuilder.Append("cameraSettings = " + _cameraSettings);
+            stringBuilder.Append("cameras = " + _cameras);
             return true;
         }
     
@@ -332,8 +411,6 @@ namespace RigConfiguration
     public partial class ClockSynchronizer
     {
     
-        private string _instanceName = "ClockSynchronizer";
-    
         private ClockSynchronizerName _deviceName;
     
         private string _portName = "COM9";
@@ -344,26 +421,8 @@ namespace RigConfiguration
     
         protected ClockSynchronizer(ClockSynchronizer other)
         {
-            _instanceName = other._instanceName;
             _deviceName = other._deviceName;
             _portName = other._portName;
-        }
-    
-        /// <summary>
-        /// The folder name for logging
-        /// </summary>
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="instanceName")]
-        [System.ComponentModel.DescriptionAttribute("The folder name for logging")]
-        public string InstanceName
-        {
-            get
-            {
-                return _instanceName;
-            }
-            set
-            {
-                _instanceName = value;
-            }
         }
     
         [System.Xml.Serialization.XmlIgnoreAttribute()]
@@ -409,7 +468,6 @@ namespace RigConfiguration
     
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
         {
-            stringBuilder.Append("instanceName = " + _instanceName + ", ");
             stringBuilder.Append("deviceName = " + _deviceName + ", ");
             stringBuilder.Append("portName = " + _portName);
             return true;
@@ -436,15 +494,11 @@ namespace RigConfiguration
     public partial class CameraController
     {
     
-        private string _instanceName = "CameraController";
-    
         private CameraControllerName _deviceName;
     
         private string _portName = "COM7";
     
-        private int _globalTriggerFrequency = 50;
-    
-        private int _localTriggerFrequency = 125;
+        private System.Collections.Generic.List<TriggerSource> _triggers = new System.Collections.Generic.List<TriggerSource>();
     
         public CameraController()
         {
@@ -452,28 +506,9 @@ namespace RigConfiguration
     
         protected CameraController(CameraController other)
         {
-            _instanceName = other._instanceName;
             _deviceName = other._deviceName;
             _portName = other._portName;
-            _globalTriggerFrequency = other._globalTriggerFrequency;
-            _localTriggerFrequency = other._localTriggerFrequency;
-        }
-    
-        /// <summary>
-        /// The folder name for logging
-        /// </summary>
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="instanceName")]
-        [System.ComponentModel.DescriptionAttribute("The folder name for logging")]
-        public string InstanceName
-        {
-            get
-            {
-                return _instanceName;
-            }
-            set
-            {
-                _instanceName = value;
-            }
+            _triggers = other._triggers;
         }
     
         [System.Xml.Serialization.XmlIgnoreAttribute()]
@@ -507,29 +542,17 @@ namespace RigConfiguration
             }
         }
     
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="globalTriggerFrequency")]
-        public int GlobalTriggerFrequency
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="triggers")]
+        public System.Collections.Generic.List<TriggerSource> Triggers
         {
             get
             {
-                return _globalTriggerFrequency;
+                return _triggers;
             }
             set
             {
-                _globalTriggerFrequency = value;
-            }
-        }
-    
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="localTriggerFrequency")]
-        public int LocalTriggerFrequency
-        {
-            get
-            {
-                return _localTriggerFrequency;
-            }
-            set
-            {
-                _localTriggerFrequency = value;
+                _triggers = value;
             }
         }
     
@@ -545,11 +568,9 @@ namespace RigConfiguration
     
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
         {
-            stringBuilder.Append("instanceName = " + _instanceName + ", ");
             stringBuilder.Append("deviceName = " + _deviceName + ", ");
             stringBuilder.Append("portName = " + _portName + ", ");
-            stringBuilder.Append("globalTriggerFrequency = " + _globalTriggerFrequency + ", ");
-            stringBuilder.Append("localTriggerFrequency = " + _localTriggerFrequency);
+            stringBuilder.Append("triggers = " + _triggers);
             return true;
         }
     
@@ -588,6 +609,11 @@ namespace RigConfiguration
             });
         }
 
+        public System.IObservable<string> Process(System.IObservable<TriggerSource> source)
+        {
+            return Process<TriggerSource>(source);
+        }
+
         public System.IObservable<string> Process(System.IObservable<SpinnakerSettings> source)
         {
             return Process<SpinnakerSettings>(source);
@@ -617,6 +643,7 @@ namespace RigConfiguration
     [System.ComponentModel.DescriptionAttribute("Deserializes a sequence of YAML strings into data model objects.")]
     [System.ComponentModel.DefaultPropertyAttribute("Type")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Transform)]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<TriggerSource>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<SpinnakerSettings>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<RigConfig>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<ClockSynchronizer>))]

@@ -16,11 +16,26 @@
             "default": "CameraControllerGen2",
             "type": "string"
         },
+        "triggerName":
+        {   
+            "enum": ["Trigger0","Trigger1"],
+            "default": "Trigger1",
+            "type": "string"
+
+        },
         "triggerSource":
         {
-            "enum": ["GlobalTrigger","LocalTrigger"],
-            "default": "GlobalTrigger",
-            "type": "string"
+            "properties": {
+                "TriggerName":
+                { "$ref":"#/definitions/triggerName",
+                    "default": "Trigger0"
+                },
+                "triggerFrequency":
+                {
+                    "type":"integer",
+                    "default":"50"
+                }
+            }
         },
         "cameraName":
         {
@@ -35,9 +50,9 @@
                     "$ref":"#/definitions/cameraName",
                     "default": "CameraTop"
                 },
-                "triggerSource":
+                "triggerName":
                 {
-                    "$ref":"#/definitions/triggerSource"
+                    "$ref":"#/definitions/triggerName"
                 },
                 "exposureTime": {
                     "type": "number",
@@ -68,7 +83,7 @@
             },
             "required": [
                 "cameraName",
-                "triggerSource",
+                "triggerName",
                 "exposureTime",
                 "serialNumber",
                 "gain",
@@ -81,13 +96,6 @@
         {
             "properties": 
             {
-                "instanceName":
-                {
-                    "type": "string",
-                    "default": "ClockSynchronizer",
-                    "description": "The folder name for logging"
-
-                },
                 "deviceName":
                 {
                     "$ref":"#/definitions/clockSynchronizerName"
@@ -100,7 +108,6 @@
                 }
             },
             "required": [
-                "instanceName",
                 "deviceName",
                 "portName"
             ]
@@ -109,13 +116,6 @@
         {
             "properties": 
             {
-                "instanceName":
-                {
-                    "type": "string",
-                    "default": "CameraController",
-                    "description": "The folder name for logging"
-
-                },
                 "deviceName":
                 {
                     "$ref":"#/definitions/cameraControllerName"
@@ -126,26 +126,20 @@
                     "default": "COM7",
                     "description": "The COM port for the camera controller board"
                 },
-                "globalTriggerFrequency":
-                {
-                    "type":"integer",
-                    "default":"50"
-                },
-                "localTriggerFrequency":
-                {
-                    "type":"integer",
-                    "default":"125"
+                "triggers":{
+                    "type":"array",
+                    "items": {
+                        "$ref":"#/definitions/triggerSource"
+                    }
                 }
             },
             "required": [
-                "instanceName",
                 "deviceName",
                 "portName",
-                "globalTriggerFrequency",
-                "localTriggerFrequency"
+                "triggers"
             ]
         },
-        "cameraSettings":
+        "cameras":
         {
             "type":"array",
             "items": 
@@ -157,6 +151,6 @@
     "required": [
         "clockSynchronizer",
         "cameraController",
-        "cameraSettings"
+        "cameras"
     ]
 }
