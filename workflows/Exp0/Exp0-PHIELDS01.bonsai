@@ -222,7 +222,7 @@
                                       <Property Name="Value" />
                                     </Expression>
                                     <Expression xsi:type="Equal">
-                                      <Operand xsi:type="WorkflowProperty" TypeArguments="p1:TriggerName">
+                                      <Operand xsi:type="WorkflowProperty" TypeArguments="p1:CameraTriggerName">
                                         <Value>Trigger0</Value>
                                       </Operand>
                                     </Expression>
@@ -266,7 +266,7 @@
                                       <Property Name="Value" />
                                     </Expression>
                                     <Expression xsi:type="Equal">
-                                      <Operand xsi:type="WorkflowProperty" TypeArguments="p1:TriggerName">
+                                      <Operand xsi:type="WorkflowProperty" TypeArguments="p1:CameraTriggerName">
                                         <Value>Trigger1</Value>
                                       </Operand>
                                     </Expression>
@@ -626,12 +626,9 @@
                               <Expression xsi:type="SubscribeSubject">
                                 <Name>source</Name>
                               </Expression>
-                              <Expression xsi:type="MemberSelector">
-                                <Selector>TriggerName</Selector>
-                              </Expression>
                               <Expression xsi:type="PropertyMapping">
                                 <PropertyMappings>
-                                  <Property Name="TriggerName" />
+                                  <Property Name="CameraTriggerName" Selector="TriggerName" />
                                 </PropertyMappings>
                               </Expression>
                               <Expression xsi:type="rx:Condition">
@@ -644,10 +641,10 @@
                                       <Selector>TriggerName</Selector>
                                     </Expression>
                                     <Expression xsi:type="ExternalizedMapping">
-                                      <Property Name="Value" DisplayName="TriggerName" />
+                                      <Property Name="Value" DisplayName="CameraTriggerName" />
                                     </Expression>
                                     <Expression xsi:type="Equal">
-                                      <Operand xsi:type="WorkflowProperty" TypeArguments="p1:TriggerName">
+                                      <Operand xsi:type="WorkflowProperty" TypeArguments="p1:CameraTriggerName">
                                         <Value>Trigger0</Value>
                                       </Operand>
                                     </Expression>
@@ -702,7 +699,7 @@
                                     </Expression>
                                     <Expression xsi:type="PropertyMapping">
                                       <PropertyMappings>
-                                        <Property Name="TiggerName" Selector="it" />
+                                        <Property Name="CameraTriggerName" Selector="it" />
                                       </PropertyMappings>
                                     </Expression>
                                     <Expression xsi:type="rx:SelectMany">
@@ -723,7 +720,7 @@
                                             <Name>Source</Name>
                                           </Expression>
                                           <Expression xsi:type="ExternalizedMapping">
-                                            <Property Name="TiggerName" />
+                                            <Property Name="CameraTriggerName" />
                                           </Expression>
                                           <Expression xsi:type="rx:Condition">
                                             <Workflow>
@@ -735,10 +732,10 @@
                                                   <Selector>Key.TriggerName</Selector>
                                                 </Expression>
                                                 <Expression xsi:type="ExternalizedMapping">
-                                                  <Property Name="Value" DisplayName="TiggerName" />
+                                                  <Property Name="Value" DisplayName="CameraTriggerName" />
                                                 </Expression>
                                                 <Expression xsi:type="Equal">
-                                                  <Operand xsi:type="WorkflowProperty" TypeArguments="p1:TriggerName">
+                                                  <Operand xsi:type="WorkflowProperty" TypeArguments="p1:CameraTriggerName">
                                                     <Value>Trigger0</Value>
                                                   </Operand>
                                                 </Expression>
@@ -852,32 +849,31 @@
                               <Edge From="1" To="2" Label="Source1" />
                               <Edge From="3" To="4" Label="Source1" />
                               <Edge From="4" To="5" Label="Source1" />
-                              <Edge From="5" To="9" Label="Source1" />
+                              <Edge From="5" To="8" Label="Source1" />
                               <Edge From="6" To="7" Label="Source1" />
-                              <Edge From="7" To="8" Label="Source1" />
-                              <Edge From="8" To="9" Label="Source2" />
+                              <Edge From="7" To="8" Label="Source2" />
+                              <Edge From="8" To="9" Label="Source1" />
                               <Edge From="9" To="10" Label="Source1" />
-                              <Edge From="10" To="11" Label="Source1" />
+                              <Edge From="11" To="12" Label="Source1" />
                               <Edge From="12" To="13" Label="Source1" />
-                              <Edge From="13" To="14" Label="Source1" />
-                              <Edge From="14" To="24" Label="Source1" />
-                              <Edge From="15" To="16" Label="Source1" />
-                              <Edge From="16" To="19" Label="Source1" />
-                              <Edge From="17" To="18" Label="Source1" />
-                              <Edge From="18" To="19" Label="Source2" />
+                              <Edge From="13" To="23" Label="Source1" />
+                              <Edge From="14" To="15" Label="Source1" />
+                              <Edge From="15" To="18" Label="Source1" />
+                              <Edge From="16" To="17" Label="Source1" />
+                              <Edge From="17" To="18" Label="Source2" />
+                              <Edge From="18" To="19" Label="Source1" />
                               <Edge From="19" To="20" Label="Source1" />
-                              <Edge From="20" To="21" Label="Source1" />
-                              <Edge From="21" To="24" Label="Source2" />
-                              <Edge From="22" To="23" Label="Source1" />
-                              <Edge From="23" To="24" Label="Source3" />
-                              <Edge From="24" To="30" Label="Source1" />
-                              <Edge From="25" To="26" Label="Source1" />
-                              <Edge From="26" To="29" Label="Source1" />
-                              <Edge From="27" To="28" Label="Source1" />
+                              <Edge From="20" To="23" Label="Source2" />
+                              <Edge From="21" To="22" Label="Source1" />
+                              <Edge From="22" To="23" Label="Source3" />
+                              <Edge From="23" To="29" Label="Source1" />
+                              <Edge From="24" To="25" Label="Source1" />
+                              <Edge From="25" To="28" Label="Source1" />
+                              <Edge From="26" To="27" Label="Source1" />
+                              <Edge From="27" To="28" Label="Source2" />
                               <Edge From="28" To="29" Label="Source2" />
-                              <Edge From="29" To="30" Label="Source2" />
+                              <Edge From="29" To="30" Label="Source1" />
                               <Edge From="30" To="31" Label="Source1" />
-                              <Edge From="31" To="32" Label="Source1" />
                             </Edges>
                           </Workflow>
                         </Expression>

@@ -99,7 +99,7 @@ namespace RigConfiguration
 
 
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.4.0.0 (YamlDotNet v13.0.0.0)")]
-    public enum TriggerName
+    public enum CameraTriggerName
     {
     
         [YamlDotNet.Serialization.YamlMemberAttribute(Alias="Trigger0")]
@@ -116,7 +116,7 @@ namespace RigConfiguration
     public partial class CameraTriggerSource
     {
     
-        private TriggerName _triggerName = RigConfiguration.TriggerName.Trigger0;
+        private CameraTriggerName _triggerName = RigConfiguration.CameraTriggerName.Trigger0;
     
         private int _triggerFrequency = 50;
     
@@ -132,7 +132,7 @@ namespace RigConfiguration
     
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [YamlDotNet.Serialization.YamlMemberAttribute(Alias="TriggerName")]
-        public TriggerName TriggerName
+        public CameraTriggerName TriggerName
         {
             get
             {
@@ -209,7 +209,7 @@ namespace RigConfiguration
     
         private CameraName _cameraName = RigConfiguration.CameraName.CameraTop;
     
-        private TriggerName _triggerName;
+        private CameraTriggerName _triggerName;
     
         private double _exposureTime = 15000D;
     
@@ -249,7 +249,7 @@ namespace RigConfiguration
     
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [YamlDotNet.Serialization.YamlMemberAttribute(Alias="triggerName")]
-        public TriggerName TriggerName
+        public CameraTriggerName TriggerName
         {
             get
             {

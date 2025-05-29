@@ -20,7 +20,7 @@ looms:
     id: 00
 cameras:
   - cameraName: CameraSide
-    triggerName: Trigger0
+    triggerName: Trigger1
     exposureTime: 5000
     serialNumber: "23391028"
     gain: 1

@@ -27,7 +27,7 @@
             "default": "CameraControllerGen2",
             "type": "string"
         },
-        "triggerName":
+        "cameraTriggerName":
         {   
             "enum": ["Trigger0","Trigger1"],
             "default": "Trigger1",
@@ -39,7 +39,7 @@
             "properties": {
                 "TriggerName":
                 { 
-                    "$ref":"#/definitions/triggerName",
+                    "$ref":"#/definitions/cameraTriggerName",
                     "default": "Trigger0"
                 },
                 "triggerFrequency":
@@ -64,7 +64,7 @@
                 },
                 "triggerName":
                 {
-                    "$ref":"#/definitions/triggerName"
+                    "$ref":"#/definitions/cameraTriggerName"
                 },
                 "exposureTime": {
                     "type": "number",
