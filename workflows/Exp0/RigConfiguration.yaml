@@ -10,6 +10,14 @@ cameraController:
       triggerFrequency: 50
     - TriggerName: Trigger1
       triggerFrequency: 125
+looms:
+  - portName: COM8
+    bottomPauseTimeSeconds: 1
+    dropAcceleration: 18000
+    bottomPosition: 3000
+    dropMaxVelocity: 10000
+    homeVelocity: 200
+    id: 00
 cameras:
   - cameraName: CameraSide
     triggerName: Trigger0
@@ -18,8 +26,8 @@ cameras:
     gain: 1
     binning: 1
   - cameraName: CameraTop
-    triggerName: Trigger1
-    exposureTime: 5000
+    triggerName: Trigger0
+    exposureTime: 30000
     serialNumber: "23391015"
     gain: 1
     binning: 1
