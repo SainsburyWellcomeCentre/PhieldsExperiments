@@ -1,0 +1,68 @@
+{
+    "$id": "...h",
+    "$schema": "https://json-schema.org/draft-07/schema",
+    "description": "Describes the Loom hardware for Phields hardware",
+    "title": "LoomConfig",
+    "definitions": 
+    {
+        "loomAction":
+        {
+            "enum": ["Drop","Home"],
+            "default": "Drop",
+            "type": "string"
+        },
+        "mechanicalLoom":
+        {
+            "properties": 
+            {
+                "portName": 
+                {
+                    "type": "string",
+                    "default": "COM9",
+                    "description": "The COM port for the timestamp generator board"
+                },
+                "id":
+                {
+                    "type": "integer",
+                    "default":0
+                },
+                "homeVelocity" :
+                {
+                    "type":"integer",
+                    "default": 200
+                },
+                "bottomPosition":
+                {
+                    "type":"integer",
+                    "default":3000
+                },
+                "bottomPauseTimeSeconds":
+                {
+                    "type":"number",
+                    "default": 1.0
+                },
+                "dropAcceleration" :
+                {
+                    "type":"integer",
+                    "default": 18000,
+                    "minimum": 10000,
+                    "maximum": 20000
+                },
+                "dropMaxVelocity":
+                {
+                    "type":"integer",
+                    "default": 10000
+                }
+            },
+            "required": [
+                "portName",
+                "id",
+                "homeVelocity",
+                "bottomPosition",
+                "bottomPauseTimeSeconds",
+                "dropAcceleration",
+                "dropMaxVelocity"
+            ]
+        }
+    }
+}

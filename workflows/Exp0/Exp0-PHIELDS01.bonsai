@@ -12,9 +12,11 @@
                  xmlns:scr="clr-namespace:Bonsai.Scripting.Expressions;assembly=Bonsai.Scripting.Expressions"
                  xmlns:aeon="clr-namespace:Aeon.Acquisition;assembly=Aeon.Acquisition"
                  xmlns:spk="clr-namespace:Bonsai.Spinnaker;assembly=Bonsai.Spinnaker"
+                 xmlns:fstep="clr-namespace:Harp.FastStepper;assembly=Harp.FastStepper"
                  xmlns:cv="clr-namespace:Bonsai.Vision;assembly=Bonsai.Vision"
                  xmlns:p5="clr-namespace:;assembly=Extensions"
                  xmlns:p6="clr-namespace:OpenCV.Net;assembly=OpenCV.Net"
+                 xmlns:wie="clr-namespace:Bonsai.Windows.Input;assembly=Bonsai.Windows.Input"
                  xmlns="https://bonsai-rx.org/2018/workflow">
   <Workflow>
     <Nodes>
@@ -220,7 +222,7 @@
                                       <Property Name="Value" />
                                     </Expression>
                                     <Expression xsi:type="Equal">
-                                      <Operand xsi:type="WorkflowProperty" TypeArguments="p1:TriggerName">
+                                      <Operand xsi:type="WorkflowProperty" TypeArguments="p1:CameraTriggerName">
                                         <Value>Trigger0</Value>
                                       </Operand>
                                     </Expression>
@@ -264,7 +266,7 @@
                                       <Property Name="Value" />
                                     </Expression>
                                     <Expression xsi:type="Equal">
-                                      <Operand xsi:type="WorkflowProperty" TypeArguments="p1:TriggerName">
+                                      <Operand xsi:type="WorkflowProperty" TypeArguments="p1:CameraTriggerName">
                                         <Value>Trigger1</Value>
                                       </Operand>
                                     </Expression>
@@ -565,12 +567,12 @@
                         <Expression xsi:type="rx:BehaviorSubject" TypeArguments="sys:Object">
                           <rx:Name>StopCameras</rx:Name>
                         </Expression>
-                        <Expression xsi:type="rx:ReplaySubject" TypeArguments="p4:IGroupedObservable(p1:TriggerSource,harp:Timestamped(p3:CameraEvents))">
-                          <rx:Name>Triggers</rx:Name>
-                          <rx:BufferSize xsi:nil="true" />
-                        </Expression>
                         <Expression xsi:type="rx:PublishSubject" TypeArguments="harp:HarpMessage">
                           <rx:Name>CameraControllerEvents</rx:Name>
+                        </Expression>
+                        <Expression xsi:type="rx:ReplaySubject" TypeArguments="p4:IGroupedObservable(p1:CameraTriggerSource,harp:Timestamped(p3:CameraEvents))">
+                          <rx:Name>Triggers</rx:Name>
+                          <rx:BufferSize xsi:nil="true" />
                         </Expression>
                       </Nodes>
                       <Edges>
@@ -624,12 +626,9 @@
                               <Expression xsi:type="SubscribeSubject">
                                 <Name>source</Name>
                               </Expression>
-                              <Expression xsi:type="MemberSelector">
-                                <Selector>TriggerName</Selector>
-                              </Expression>
                               <Expression xsi:type="PropertyMapping">
                                 <PropertyMappings>
-                                  <Property Name="TriggerName" />
+                                  <Property Name="CameraTriggerName" Selector="TriggerName" />
                                 </PropertyMappings>
                               </Expression>
                               <Expression xsi:type="rx:Condition">
@@ -642,11 +641,11 @@
                                       <Selector>TriggerName</Selector>
                                     </Expression>
                                     <Expression xsi:type="ExternalizedMapping">
-                                      <Property Name="Value" DisplayName="TriggerName" />
+                                      <Property Name="Value" DisplayName="CameraTriggerName" />
                                     </Expression>
                                     <Expression xsi:type="Equal">
-                                      <Operand xsi:type="WorkflowProperty" TypeArguments="p1:TriggerName">
-                                        <Value>Trigger1</Value>
+                                      <Operand xsi:type="WorkflowProperty" TypeArguments="p1:CameraTriggerName">
+                                        <Value>Trigger0</Value>
                                       </Operand>
                                     </Expression>
                                     <Expression xsi:type="WorkflowOutput" />
@@ -700,7 +699,7 @@
                                     </Expression>
                                     <Expression xsi:type="PropertyMapping">
                                       <PropertyMappings>
-                                        <Property Name="TiggerName" Selector="it" />
+                                        <Property Name="CameraTriggerName" Selector="it" />
                                       </PropertyMappings>
                                     </Expression>
                                     <Expression xsi:type="rx:SelectMany">
@@ -721,7 +720,7 @@
                                             <Name>Source</Name>
                                           </Expression>
                                           <Expression xsi:type="ExternalizedMapping">
-                                            <Property Name="TiggerName" />
+                                            <Property Name="CameraTriggerName" />
                                           </Expression>
                                           <Expression xsi:type="rx:Condition">
                                             <Workflow>
@@ -733,11 +732,11 @@
                                                   <Selector>Key.TriggerName</Selector>
                                                 </Expression>
                                                 <Expression xsi:type="ExternalizedMapping">
-                                                  <Property Name="Value" DisplayName="TiggerName" />
+                                                  <Property Name="Value" DisplayName="CameraTriggerName" />
                                                 </Expression>
                                                 <Expression xsi:type="Equal">
-                                                  <Operand xsi:type="WorkflowProperty" TypeArguments="p1:TriggerName">
-                                                    <Value>Trigger1</Value>
+                                                  <Operand xsi:type="WorkflowProperty" TypeArguments="p1:CameraTriggerName">
+                                                    <Value>Trigger0</Value>
                                                   </Operand>
                                                 </Expression>
                                                 <Expression xsi:type="WorkflowOutput" />
@@ -816,7 +815,7 @@
                                   <spk:Index xsi:nil="true" />
                                   <spk:SerialNumber>23391015</spk:SerialNumber>
                                   <spk:ColorProcessing>Default</spk:ColorProcessing>
-                                  <aeon:ExposureTime>5000</aeon:ExposureTime>
+                                  <aeon:ExposureTime>19500</aeon:ExposureTime>
                                   <aeon:Gain>1</aeon:Gain>
                                   <aeon:Binning>1</aeon:Binning>
                                 </Combinator>
@@ -850,32 +849,31 @@
                               <Edge From="1" To="2" Label="Source1" />
                               <Edge From="3" To="4" Label="Source1" />
                               <Edge From="4" To="5" Label="Source1" />
-                              <Edge From="5" To="9" Label="Source1" />
+                              <Edge From="5" To="8" Label="Source1" />
                               <Edge From="6" To="7" Label="Source1" />
-                              <Edge From="7" To="8" Label="Source1" />
-                              <Edge From="8" To="9" Label="Source2" />
+                              <Edge From="7" To="8" Label="Source2" />
+                              <Edge From="8" To="9" Label="Source1" />
                               <Edge From="9" To="10" Label="Source1" />
-                              <Edge From="10" To="11" Label="Source1" />
+                              <Edge From="11" To="12" Label="Source1" />
                               <Edge From="12" To="13" Label="Source1" />
-                              <Edge From="13" To="14" Label="Source1" />
-                              <Edge From="14" To="24" Label="Source1" />
-                              <Edge From="15" To="16" Label="Source1" />
-                              <Edge From="16" To="19" Label="Source1" />
-                              <Edge From="17" To="18" Label="Source1" />
-                              <Edge From="18" To="19" Label="Source2" />
+                              <Edge From="13" To="23" Label="Source1" />
+                              <Edge From="14" To="15" Label="Source1" />
+                              <Edge From="15" To="18" Label="Source1" />
+                              <Edge From="16" To="17" Label="Source1" />
+                              <Edge From="17" To="18" Label="Source2" />
+                              <Edge From="18" To="19" Label="Source1" />
                               <Edge From="19" To="20" Label="Source1" />
-                              <Edge From="20" To="21" Label="Source1" />
-                              <Edge From="21" To="24" Label="Source2" />
-                              <Edge From="22" To="23" Label="Source1" />
-                              <Edge From="23" To="24" Label="Source3" />
-                              <Edge From="24" To="30" Label="Source1" />
-                              <Edge From="25" To="26" Label="Source1" />
-                              <Edge From="26" To="29" Label="Source1" />
-                              <Edge From="27" To="28" Label="Source1" />
+                              <Edge From="20" To="23" Label="Source2" />
+                              <Edge From="21" To="22" Label="Source1" />
+                              <Edge From="22" To="23" Label="Source3" />
+                              <Edge From="23" To="29" Label="Source1" />
+                              <Edge From="24" To="25" Label="Source1" />
+                              <Edge From="25" To="28" Label="Source1" />
+                              <Edge From="26" To="27" Label="Source1" />
+                              <Edge From="27" To="28" Label="Source2" />
                               <Edge From="28" To="29" Label="Source2" />
-                              <Edge From="29" To="30" Label="Source2" />
+                              <Edge From="29" To="30" Label="Source1" />
                               <Edge From="30" To="31" Label="Source1" />
-                              <Edge From="31" To="32" Label="Source1" />
                             </Edges>
                           </Workflow>
                         </Expression>
@@ -890,6 +888,2268 @@
                         <Edge From="2" To="4" Label="Source1" />
                         <Edge From="3" To="4" Label="Source2" />
                         <Edge From="4" To="5" Label="Source1" />
+                      </Edges>
+                    </Workflow>
+                  </Expression>
+                  <Expression xsi:type="GroupWorkflow">
+                    <Name>Looms</Name>
+                    <Workflow>
+                      <Nodes>
+                        <Expression xsi:type="SubscribeSubject">
+                          <Name>RigConfig</Name>
+                        </Expression>
+                        <Expression xsi:type="MemberSelector">
+                          <Selector>Looms</Selector>
+                        </Expression>
+                        <Expression xsi:type="Combinator">
+                          <Combinator xsi:type="rx:Merge" />
+                        </Expression>
+                        <Expression xsi:type="rx:SelectMany">
+                          <Name>CreateLooms</Name>
+                          <Workflow>
+                            <Nodes>
+                              <Expression xsi:type="WorkflowInput">
+                                <Name>Source1</Name>
+                              </Expression>
+                              <Expression xsi:type="Combinator">
+                                <Combinator xsi:type="rx:Take">
+                                  <rx:Count>1</rx:Count>
+                                </Combinator>
+                              </Expression>
+                              <Expression xsi:type="rx:AsyncSubject">
+                                <Name>settings</Name>
+                              </Expression>
+                              <Expression xsi:type="Combinator">
+                                <Combinator xsi:type="BooleanProperty">
+                                  <Value>false</Value>
+                                </Combinator>
+                              </Expression>
+                              <Expression xsi:type="rx:BehaviorSubject">
+                                <Name>LoomSequenceActive</Name>
+                              </Expression>
+                              <Expression xsi:type="SubscribeSubject">
+                                <Name>Events</Name>
+                              </Expression>
+                              <Expression xsi:type="Combinator">
+                                <Combinator xsi:type="rx:First" />
+                              </Expression>
+                              <Expression xsi:type="Combinator">
+                                <Combinator xsi:type="rx:Delay">
+                                  <rx:DueTime>PT0.1S</rx:DueTime>
+                                </Combinator>
+                              </Expression>
+                              <Expression xsi:type="rx:SelectMany">
+                                <Name>InitializeMovementSettings</Name>
+                                <Description>GroupName</Description>
+                                <Workflow>
+                                  <Nodes>
+                                    <Expression xsi:type="WorkflowInput">
+                                      <Name>Source1</Name>
+                                    </Expression>
+                                    <Expression xsi:type="Disable">
+                                      <Builder xsi:type="GroupWorkflow">
+                                        <Name>BrakeLock</Name>
+                                        <Workflow>
+                                          <Nodes>
+                                            <Expression xsi:type="WorkflowInput">
+                                              <Name>Source1</Name>
+                                            </Expression>
+                                            <Expression xsi:type="fstep:CreateMessage">
+                                              <harp:MessageType>Write</harp:MessageType>
+                                              <harp:Payload xsi:type="fstep:CreateMotorBrakePayload">
+                                                <fstep:MotorBrake>BreakOn</fstep:MotorBrake>
+                                              </harp:Payload>
+                                            </Expression>
+                                            <Expression xsi:type="MulticastSubject">
+                                              <Name>FastStepperCommands</Name>
+                                            </Expression>
+                                            <Expression xsi:type="WorkflowOutput" />
+                                          </Nodes>
+                                          <Edges>
+                                            <Edge From="0" To="1" Label="Source1" />
+                                            <Edge From="1" To="2" Label="Source1" />
+                                            <Edge From="2" To="3" Label="Source1" />
+                                          </Edges>
+                                        </Workflow>
+                                      </Builder>
+                                    </Expression>
+                                    <Expression xsi:type="GroupWorkflow">
+                                      <Name>DisableMotor</Name>
+                                      <Workflow>
+                                        <Nodes>
+                                          <Expression xsi:type="WorkflowInput">
+                                            <Name>Source1</Name>
+                                          </Expression>
+                                          <Expression xsi:type="fstep:CreateMessage">
+                                            <harp:MessageType>Write</harp:MessageType>
+                                            <harp:Payload xsi:type="fstep:CreateControlPayload">
+                                              <fstep:Control>DisableMotor</fstep:Control>
+                                            </harp:Payload>
+                                          </Expression>
+                                          <Expression xsi:type="MulticastSubject">
+                                            <Name>Commands</Name>
+                                          </Expression>
+                                          <Expression xsi:type="WorkflowOutput" />
+                                        </Nodes>
+                                        <Edges>
+                                          <Edge From="0" To="1" Label="Source1" />
+                                          <Edge From="1" To="2" Label="Source1" />
+                                          <Edge From="2" To="3" Label="Source1" />
+                                        </Edges>
+                                      </Workflow>
+                                    </Expression>
+                                    <Expression xsi:type="GroupWorkflow">
+                                      <Name>DisableAnalog</Name>
+                                      <Workflow>
+                                        <Nodes>
+                                          <Expression xsi:type="WorkflowInput">
+                                            <Name>Source1</Name>
+                                          </Expression>
+                                          <Expression xsi:type="fstep:CreateMessage">
+                                            <harp:MessageType>Write</harp:MessageType>
+                                            <harp:Payload xsi:type="fstep:CreateControlPayload">
+                                              <fstep:Control>DisableAnalogInput</fstep:Control>
+                                            </harp:Payload>
+                                          </Expression>
+                                          <Expression xsi:type="MulticastSubject">
+                                            <Name>Commands</Name>
+                                          </Expression>
+                                          <Expression xsi:type="WorkflowOutput" />
+                                        </Nodes>
+                                        <Edges>
+                                          <Edge From="0" To="1" Label="Source1" />
+                                          <Edge From="1" To="2" Label="Source1" />
+                                          <Edge From="2" To="3" Label="Source1" />
+                                        </Edges>
+                                      </Workflow>
+                                    </Expression>
+                                    <Expression xsi:type="GroupWorkflow">
+                                      <Name>EnableHoming</Name>
+                                      <Workflow>
+                                        <Nodes>
+                                          <Expression xsi:type="WorkflowInput">
+                                            <Name>Source1</Name>
+                                          </Expression>
+                                          <Expression xsi:type="fstep:CreateMessage">
+                                            <harp:MessageType>Write</harp:MessageType>
+                                            <harp:Payload xsi:type="fstep:CreateControlPayload">
+                                              <fstep:Control>EnableHoming</fstep:Control>
+                                            </harp:Payload>
+                                          </Expression>
+                                          <Expression xsi:type="MulticastSubject">
+                                            <Name>Commands</Name>
+                                          </Expression>
+                                          <Expression xsi:type="WorkflowOutput" />
+                                        </Nodes>
+                                        <Edges>
+                                          <Edge From="0" To="1" Label="Source1" />
+                                          <Edge From="1" To="2" Label="Source1" />
+                                          <Edge From="2" To="3" Label="Source1" />
+                                        </Edges>
+                                      </Workflow>
+                                    </Expression>
+                                    <Expression xsi:type="SubscribeSubject">
+                                      <Name>settings</Name>
+                                    </Expression>
+                                    <Expression xsi:type="MemberSelector">
+                                      <Selector>HomeVelocity</Selector>
+                                    </Expression>
+                                    <Expression xsi:type="PropertyMapping">
+                                      <PropertyMappings>
+                                        <Property Name="HomeVelocity" />
+                                      </PropertyMappings>
+                                    </Expression>
+                                    <Expression xsi:type="GroupWorkflow">
+                                      <Name>SetHomingVelocity</Name>
+                                      <Workflow>
+                                        <Nodes>
+                                          <Expression xsi:type="WorkflowInput">
+                                            <Name>Source1</Name>
+                                          </Expression>
+                                          <Expression xsi:type="ExternalizedMapping">
+                                            <Property Name="HomeVelocity" />
+                                          </Expression>
+                                          <Expression xsi:type="fstep:CreateMessage">
+                                            <harp:MessageType>Write</harp:MessageType>
+                                            <harp:Payload xsi:type="fstep:CreateHomeVelocityPayload">
+                                              <fstep:HomeVelocity>200</fstep:HomeVelocity>
+                                            </harp:Payload>
+                                          </Expression>
+                                          <Expression xsi:type="MulticastSubject">
+                                            <Name>Commands</Name>
+                                          </Expression>
+                                          <Expression xsi:type="WorkflowOutput" />
+                                        </Nodes>
+                                        <Edges>
+                                          <Edge From="0" To="2" Label="Source1" />
+                                          <Edge From="1" To="2" Label="Source2" />
+                                          <Edge From="2" To="3" Label="Source1" />
+                                          <Edge From="3" To="4" Label="Source1" />
+                                        </Edges>
+                                      </Workflow>
+                                    </Expression>
+                                    <Expression xsi:type="Disable">
+                                      <Builder xsi:type="ExternalizedMapping">
+                                        <Property Name="MinVelocity" />
+                                      </Builder>
+                                    </Expression>
+                                    <Expression xsi:type="Disable">
+                                      <Builder xsi:type="GroupWorkflow">
+                                        <Name>SetMinimumVelocity</Name>
+                                        <Workflow>
+                                          <Nodes>
+                                            <Expression xsi:type="WorkflowInput">
+                                              <Name>Source1</Name>
+                                            </Expression>
+                                            <Expression xsi:type="ExternalizedMapping">
+                                              <Property Name="MinVelocity" />
+                                            </Expression>
+                                            <Expression xsi:type="fstep:CreateMessage">
+                                              <harp:MessageType>Write</harp:MessageType>
+                                              <harp:Payload xsi:type="fstep:CreateMinVelocityPayload">
+                                                <fstep:MinVelocity>100</fstep:MinVelocity>
+                                              </harp:Payload>
+                                            </Expression>
+                                            <Expression xsi:type="MulticastSubject">
+                                              <Name>FastStepperCommands</Name>
+                                            </Expression>
+                                            <Expression xsi:type="WorkflowOutput" />
+                                          </Nodes>
+                                          <Edges>
+                                            <Edge From="0" To="2" Label="Source1" />
+                                            <Edge From="1" To="2" Label="Source2" />
+                                            <Edge From="2" To="3" Label="Source1" />
+                                            <Edge From="3" To="4" Label="Source1" />
+                                          </Edges>
+                                        </Workflow>
+                                      </Builder>
+                                    </Expression>
+                                    <Expression xsi:type="Disable">
+                                      <Builder xsi:type="ExternalizedMapping">
+                                        <Property Name="MaxVelocity" />
+                                      </Builder>
+                                    </Expression>
+                                    <Expression xsi:type="Disable">
+                                      <Builder xsi:type="GroupWorkflow">
+                                        <Name>SetMaximumVelocity</Name>
+                                        <Workflow>
+                                          <Nodes>
+                                            <Expression xsi:type="WorkflowInput">
+                                              <Name>Source1</Name>
+                                            </Expression>
+                                            <Expression xsi:type="ExternalizedMapping">
+                                              <Property Name="MaxVelocity" />
+                                            </Expression>
+                                            <Expression xsi:type="fstep:CreateMessage">
+                                              <harp:MessageType>Write</harp:MessageType>
+                                              <harp:Payload xsi:type="fstep:CreateMaxVelocityPayload">
+                                                <fstep:MaxVelocity>10000</fstep:MaxVelocity>
+                                              </harp:Payload>
+                                            </Expression>
+                                            <Expression xsi:type="MulticastSubject">
+                                              <Name>FastStepperCommands</Name>
+                                            </Expression>
+                                            <Expression xsi:type="WorkflowOutput" />
+                                          </Nodes>
+                                          <Edges>
+                                            <Edge From="0" To="2" Label="Source1" />
+                                            <Edge From="1" To="2" Label="Source2" />
+                                            <Edge From="2" To="3" Label="Source1" />
+                                            <Edge From="3" To="4" Label="Source1" />
+                                          </Edges>
+                                        </Workflow>
+                                      </Builder>
+                                    </Expression>
+                                    <Expression xsi:type="Disable">
+                                      <Builder xsi:type="ExternalizedMapping">
+                                        <Property Name="Acceleration" Category="AcceleratedMovement" />
+                                      </Builder>
+                                    </Expression>
+                                    <Expression xsi:type="Disable">
+                                      <Builder xsi:type="GroupWorkflow">
+                                        <Name>SetAcceleration</Name>
+                                        <Workflow>
+                                          <Nodes>
+                                            <Expression xsi:type="WorkflowInput">
+                                              <Name>Source1</Name>
+                                            </Expression>
+                                            <Expression xsi:type="ExternalizedMapping">
+                                              <Property Name="Acceleration" />
+                                            </Expression>
+                                            <Expression xsi:type="fstep:CreateMessage">
+                                              <harp:MessageType>Write</harp:MessageType>
+                                              <harp:Payload xsi:type="fstep:CreateAccelerationPayload">
+                                                <fstep:Acceleration>10000</fstep:Acceleration>
+                                              </harp:Payload>
+                                            </Expression>
+                                            <Expression xsi:type="MulticastSubject">
+                                              <Name>FastStepperCommands</Name>
+                                            </Expression>
+                                            <Expression xsi:type="WorkflowOutput" />
+                                          </Nodes>
+                                          <Edges>
+                                            <Edge From="0" To="2" Label="Source1" />
+                                            <Edge From="1" To="2" Label="Source2" />
+                                            <Edge From="2" To="3" Label="Source1" />
+                                            <Edge From="3" To="4" Label="Source1" />
+                                          </Edges>
+                                        </Workflow>
+                                      </Builder>
+                                    </Expression>
+                                    <Expression xsi:type="Disable">
+                                      <Builder xsi:type="ExternalizedMapping">
+                                        <Property Name="Deceleration" Category="DeceleratedMovement" />
+                                      </Builder>
+                                    </Expression>
+                                    <Expression xsi:type="Disable">
+                                      <Builder xsi:type="GroupWorkflow">
+                                        <Name>SetDeceleration</Name>
+                                        <Workflow>
+                                          <Nodes>
+                                            <Expression xsi:type="WorkflowInput">
+                                              <Name>Source1</Name>
+                                            </Expression>
+                                            <Expression xsi:type="ExternalizedMapping">
+                                              <Property Name="Deceleration" />
+                                            </Expression>
+                                            <Expression xsi:type="fstep:CreateMessage">
+                                              <harp:MessageType>Write</harp:MessageType>
+                                              <harp:Payload xsi:type="fstep:CreateDecelerationPayload">
+                                                <fstep:Deceleration>-20000</fstep:Deceleration>
+                                              </harp:Payload>
+                                            </Expression>
+                                            <Expression xsi:type="MulticastSubject">
+                                              <Name>FastStepperCommands</Name>
+                                            </Expression>
+                                            <Expression xsi:type="WorkflowOutput" />
+                                          </Nodes>
+                                          <Edges>
+                                            <Edge From="0" To="2" Label="Source1" />
+                                            <Edge From="1" To="2" Label="Source2" />
+                                            <Edge From="2" To="3" Label="Source1" />
+                                            <Edge From="3" To="4" Label="Source1" />
+                                          </Edges>
+                                        </Workflow>
+                                      </Builder>
+                                    </Expression>
+                                    <Expression xsi:type="Disable">
+                                      <Builder xsi:type="ExternalizedMapping">
+                                        <Property Name="AccelerationJerk" Category="AcceleratedMovement" />
+                                      </Builder>
+                                    </Expression>
+                                    <Expression xsi:type="Disable">
+                                      <Builder xsi:type="GroupWorkflow">
+                                        <Name>SetAccelerationJerk</Name>
+                                        <Workflow>
+                                          <Nodes>
+                                            <Expression xsi:type="WorkflowInput">
+                                              <Name>Source1</Name>
+                                            </Expression>
+                                            <Expression xsi:type="ExternalizedMapping">
+                                              <Property Name="AccelerationJerk" />
+                                            </Expression>
+                                            <Expression xsi:type="fstep:CreateMessage">
+                                              <harp:MessageType>Write</harp:MessageType>
+                                              <harp:Payload xsi:type="fstep:CreateAccelerationJerkPayload">
+                                                <fstep:AccelerationJerk>-20000</fstep:AccelerationJerk>
+                                              </harp:Payload>
+                                            </Expression>
+                                            <Expression xsi:type="MulticastSubject">
+                                              <Name>FastStepperCommands</Name>
+                                            </Expression>
+                                            <Expression xsi:type="WorkflowOutput" />
+                                          </Nodes>
+                                          <Edges>
+                                            <Edge From="0" To="2" Label="Source1" />
+                                            <Edge From="1" To="2" Label="Source2" />
+                                            <Edge From="2" To="3" Label="Source1" />
+                                            <Edge From="3" To="4" Label="Source1" />
+                                          </Edges>
+                                        </Workflow>
+                                      </Builder>
+                                    </Expression>
+                                    <Expression xsi:type="Disable">
+                                      <Builder xsi:type="ExternalizedMapping">
+                                        <Property Name="DecelerationJerk" Category="DeceleratedMovement" />
+                                      </Builder>
+                                    </Expression>
+                                    <Expression xsi:type="Disable">
+                                      <Builder xsi:type="GroupWorkflow">
+                                        <Name>SetDecelerationJerk</Name>
+                                        <Workflow>
+                                          <Nodes>
+                                            <Expression xsi:type="WorkflowInput">
+                                              <Name>Source1</Name>
+                                            </Expression>
+                                            <Expression xsi:type="ExternalizedMapping">
+                                              <Property Name="DecelerationJerk" />
+                                            </Expression>
+                                            <Expression xsi:type="fstep:CreateMessage">
+                                              <harp:MessageType>Write</harp:MessageType>
+                                              <harp:Payload xsi:type="fstep:CreateDecelerationJerkPayload">
+                                                <fstep:DecelerationJerk>0</fstep:DecelerationJerk>
+                                              </harp:Payload>
+                                            </Expression>
+                                            <Expression xsi:type="MulticastSubject">
+                                              <Name>FastStepperCommands</Name>
+                                            </Expression>
+                                            <Expression xsi:type="WorkflowOutput" />
+                                          </Nodes>
+                                          <Edges>
+                                            <Edge From="0" To="2" Label="Source1" />
+                                            <Edge From="1" To="2" Label="Source2" />
+                                            <Edge From="2" To="3" Label="Source1" />
+                                            <Edge From="3" To="4" Label="Source1" />
+                                          </Edges>
+                                        </Workflow>
+                                      </Builder>
+                                    </Expression>
+                                    <Expression xsi:type="WorkflowOutput" />
+                                  </Nodes>
+                                  <Edges>
+                                    <Edge From="0" To="1" Label="Source1" />
+                                    <Edge From="1" To="2" Label="Source1" />
+                                    <Edge From="2" To="3" Label="Source1" />
+                                    <Edge From="3" To="4" Label="Source1" />
+                                    <Edge From="4" To="8" Label="Source1" />
+                                    <Edge From="5" To="6" Label="Source1" />
+                                    <Edge From="6" To="7" Label="Source1" />
+                                    <Edge From="7" To="8" Label="Source2" />
+                                    <Edge From="8" To="10" Label="Source1" />
+                                    <Edge From="9" To="10" Label="Source2" />
+                                    <Edge From="10" To="12" Label="Source1" />
+                                    <Edge From="11" To="12" Label="Source2" />
+                                    <Edge From="12" To="14" Label="Source1" />
+                                    <Edge From="13" To="14" Label="Source2" />
+                                    <Edge From="14" To="16" Label="Source1" />
+                                    <Edge From="15" To="16" Label="Source2" />
+                                    <Edge From="16" To="18" Label="Source1" />
+                                    <Edge From="17" To="18" Label="Source2" />
+                                    <Edge From="18" To="20" Label="Source1" />
+                                    <Edge From="19" To="20" Label="Source2" />
+                                    <Edge From="20" To="21" Label="Source1" />
+                                  </Edges>
+                                </Workflow>
+                              </Expression>
+                              <Expression xsi:type="rx:BehaviorSubject" TypeArguments="harp:HarpMessage">
+                                <rx:Name>Commands</rx:Name>
+                              </Expression>
+                              <Expression xsi:type="SubscribeSubject">
+                                <Name>settings</Name>
+                              </Expression>
+                              <Expression xsi:type="PropertyMapping">
+                                <PropertyMappings>
+                                  <Property Name="PortName" Selector="PortName" />
+                                </PropertyMappings>
+                              </Expression>
+                              <Expression xsi:type="Combinator">
+                                <Combinator xsi:type="fstep:Device">
+                                  <harp:OperationMode>Active</harp:OperationMode>
+                                  <harp:OperationLed>On</harp:OperationLed>
+                                  <harp:DumpRegisters>true</harp:DumpRegisters>
+                                  <harp:VisualIndicators>On</harp:VisualIndicators>
+                                  <harp:Heartbeat>Enabled</harp:Heartbeat>
+                                  <harp:IgnoreErrors>false</harp:IgnoreErrors>
+                                  <harp:PortName>COM8</harp:PortName>
+                                </Combinator>
+                              </Expression>
+                              <Expression xsi:type="rx:PublishSubject">
+                                <Name>Events</Name>
+                              </Expression>
+                              <Expression xsi:type="SubscribeSubject">
+                                <Name>LoomTriggerEvent</Name>
+                              </Expression>
+                              <Expression xsi:type="rx:SelectMany">
+                                <Name>FormatHarp</Name>
+                                <Workflow>
+                                  <Nodes>
+                                    <Expression xsi:type="WorkflowInput">
+                                      <Name>Source1</Name>
+                                    </Expression>
+                                    <Expression xsi:type="Combinator">
+                                      <Combinator xsi:type="rx:Take">
+                                        <rx:Count>1</rx:Count>
+                                      </Combinator>
+                                    </Expression>
+                                    <Expression xsi:type="rx:AsyncSubject">
+                                      <Name>source</Name>
+                                    </Expression>
+                                    <Expression xsi:type="SubscribeSubject">
+                                      <Name>source</Name>
+                                    </Expression>
+                                    <Expression xsi:type="fstep:CreateMessage">
+                                      <harp:MessageType>Read</harp:MessageType>
+                                      <harp:Payload xsi:type="fstep:CreateAnalogInputPayload">
+                                        <fstep:AnalogInput>0</fstep:AnalogInput>
+                                      </harp:Payload>
+                                    </Expression>
+                                    <Expression xsi:type="MulticastSubject">
+                                      <Name>Commands</Name>
+                                    </Expression>
+                                    <Expression xsi:type="SubscribeSubject">
+                                      <Name>Events</Name>
+                                    </Expression>
+                                    <Expression xsi:type="fstep:Parse">
+                                      <harp:Register xsi:type="fstep:TimestampedAnalogInput" />
+                                    </Expression>
+                                    <Expression xsi:type="MemberSelector">
+                                      <Selector>Seconds</Selector>
+                                    </Expression>
+                                    <Expression xsi:type="Combinator">
+                                      <Combinator xsi:type="rx:Take">
+                                        <rx:Count>1</rx:Count>
+                                      </Combinator>
+                                    </Expression>
+                                    <Expression xsi:type="rx:AsyncSubject">
+                                      <Name>Timestamp</Name>
+                                    </Expression>
+                                    <Expression xsi:type="SubscribeSubject">
+                                      <Name>source</Name>
+                                    </Expression>
+                                    <Expression xsi:type="SubscribeSubject">
+                                      <Name>Timestamp</Name>
+                                    </Expression>
+                                    <Expression xsi:type="Combinator">
+                                      <Combinator xsi:type="rx:Zip" />
+                                    </Expression>
+                                    <Expression xsi:type="Combinator">
+                                      <Combinator xsi:type="harp:CreateTimestamped" />
+                                    </Expression>
+                                    <Expression xsi:type="ExternalizedMapping">
+                                      <Property Name="Address" />
+                                    </Expression>
+                                    <Expression xsi:type="harp:Format">
+                                      <harp:MessageType>Write</harp:MessageType>
+                                      <harp:Register xsi:type="harp:FormatMessagePayload">
+                                        <harp:Address>200</harp:Address>
+                                        <harp:PayloadType>TimestampedU8</harp:PayloadType>
+                                      </harp:Register>
+                                    </Expression>
+                                    <Expression xsi:type="WorkflowOutput" />
+                                  </Nodes>
+                                  <Edges>
+                                    <Edge From="0" To="1" Label="Source1" />
+                                    <Edge From="1" To="2" Label="Source1" />
+                                    <Edge From="3" To="4" Label="Source1" />
+                                    <Edge From="4" To="5" Label="Source1" />
+                                    <Edge From="6" To="7" Label="Source1" />
+                                    <Edge From="7" To="8" Label="Source1" />
+                                    <Edge From="8" To="9" Label="Source1" />
+                                    <Edge From="9" To="10" Label="Source1" />
+                                    <Edge From="11" To="13" Label="Source1" />
+                                    <Edge From="12" To="13" Label="Source2" />
+                                    <Edge From="13" To="14" Label="Source1" />
+                                    <Edge From="14" To="16" Label="Source1" />
+                                    <Edge From="15" To="16" Label="Source2" />
+                                    <Edge From="16" To="17" Label="Source1" />
+                                  </Edges>
+                                </Workflow>
+                              </Expression>
+                              <Expression xsi:type="Combinator">
+                                <Combinator xsi:type="rx:Merge" />
+                              </Expression>
+                              <Expression xsi:type="SubscribeSubject">
+                                <Name>settings</Name>
+                              </Expression>
+                              <Expression xsi:type="MemberSelector">
+                                <Selector>Id</Selector>
+                              </Expression>
+                              <Expression xsi:type="Combinator">
+                                <Combinator xsi:type="rx:WithLatestFrom" />
+                              </Expression>
+                              <Expression xsi:type="rx:GroupBy">
+                                <rx:KeySelector>Item2</rx:KeySelector>
+                                <rx:ElementSelector>Item1</rx:ElementSelector>
+                              </Expression>
+                              <Expression xsi:type="WorkflowOutput" />
+                              <Expression xsi:type="IncludeWorkflow" Path="Extensions\GetObservable.bonsai">
+                                <IGroupObservableSubject>LoomTrigger</IGroupObservableSubject>
+                              </Expression>
+                              <Expression xsi:type="rx:PublishSubject">
+                                <Name>LoomTriggerEvent</Name>
+                              </Expression>
+                              <Expression xsi:type="rx:Condition">
+                                <Name>IsDrop</Name>
+                                <Workflow>
+                                  <Nodes>
+                                    <Expression xsi:type="WorkflowInput">
+                                      <Name>Source1</Name>
+                                    </Expression>
+                                    <Expression xsi:type="ExternalizedMapping">
+                                      <Property Name="Value" />
+                                    </Expression>
+                                    <Expression xsi:type="Equal">
+                                      <Operand xsi:type="WorkflowProperty" TypeArguments="p1:LoomAction">
+                                        <Value>Drop</Value>
+                                      </Operand>
+                                    </Expression>
+                                    <Expression xsi:type="WorkflowOutput" />
+                                  </Nodes>
+                                  <Edges>
+                                    <Edge From="0" To="2" Label="Source1" />
+                                    <Edge From="1" To="2" Label="Source2" />
+                                    <Edge From="2" To="3" Label="Source1" />
+                                  </Edges>
+                                </Workflow>
+                              </Expression>
+                              <Expression xsi:type="ExternalizedMapping">
+                                <Property Name="HomeDistance" />
+                                <Property Name="HomeDistanceOffset" />
+                                <Property Name="MotorActivationTime" />
+                                <Property Name="MotorDeactivationTime" />
+                              </Expression>
+                              <Expression xsi:type="Disable">
+                                <Builder xsi:type="rx:CreateObservable">
+                                  <Name>LoomSequence</Name>
+                                  <Workflow>
+                                    <Nodes>
+                                      <Expression xsi:type="WorkflowInput">
+                                        <Name>Source1</Name>
+                                      </Expression>
+                                      <Expression xsi:type="ExternalizedMapping">
+                                        <Property Name="HomeDistance" />
+                                        <Property Name="HomeDistanceOffset" />
+                                        <Property Name="HomeOffsetPauseTime" />
+                                        <Property Name="LiftToPosition" />
+                                        <Property Name="MotorDeactivationTime" />
+                                        <Property Name="MotorActivationTime" />
+                                      </Expression>
+                                      <Expression xsi:type="GroupWorkflow">
+                                        <Name>LoomSequence</Name>
+                                        <Workflow>
+                                          <Nodes>
+                                            <Expression xsi:type="WorkflowInput">
+                                              <Name>Source1</Name>
+                                            </Expression>
+                                            <Expression xsi:type="GroupWorkflow">
+                                              <Name>GetPermission</Name>
+                                              <Workflow>
+                                                <Nodes>
+                                                  <Expression xsi:type="WorkflowInput">
+                                                    <Name>Source1</Name>
+                                                  </Expression>
+                                                  <Expression xsi:type="SubscribeSubject">
+                                                    <Name>LoomSequenceActive</Name>
+                                                  </Expression>
+                                                  <Expression xsi:type="BitwiseNot" />
+                                                  <Expression xsi:type="rx:Condition">
+                                                    <Workflow>
+                                                      <Nodes>
+                                                        <Expression xsi:type="WorkflowInput">
+                                                          <Name>Source1</Name>
+                                                        </Expression>
+                                                        <Expression xsi:type="WorkflowOutput" />
+                                                      </Nodes>
+                                                      <Edges>
+                                                        <Edge From="0" To="1" Label="Source1" />
+                                                      </Edges>
+                                                    </Workflow>
+                                                  </Expression>
+                                                  <Expression xsi:type="Combinator">
+                                                    <Combinator xsi:type="rx:Sample" />
+                                                  </Expression>
+                                                  <Expression xsi:type="Combinator">
+                                                    <Combinator xsi:type="BooleanProperty">
+                                                      <Value>true</Value>
+                                                    </Combinator>
+                                                  </Expression>
+                                                  <Expression xsi:type="MulticastSubject">
+                                                    <Name>LoomSequenceActive</Name>
+                                                  </Expression>
+                                                  <Expression xsi:type="WorkflowOutput" />
+                                                </Nodes>
+                                                <Edges>
+                                                  <Edge From="0" To="4" Label="Source1" />
+                                                  <Edge From="1" To="2" Label="Source1" />
+                                                  <Edge From="2" To="3" Label="Source1" />
+                                                  <Edge From="3" To="4" Label="Source2" />
+                                                  <Edge From="4" To="5" Label="Source1" />
+                                                  <Edge From="5" To="6" Label="Source1" />
+                                                  <Edge From="6" To="7" Label="Source1" />
+                                                </Edges>
+                                              </Workflow>
+                                            </Expression>
+                                            <Expression xsi:type="ExternalizedMapping">
+                                              <Property Name="HomeDistance" />
+                                              <Property Name="HomeDistanceOffset" />
+                                              <Property Name="HomeOffsetPauseTime" />
+                                              <Property Name="LiftToPosition" />
+                                              <Property Name="MotorDeactivationTime" />
+                                              <Property Name="MotorActivationTime" />
+                                            </Expression>
+                                            <Expression xsi:type="rx:SelectMany">
+                                              <Name>LoomDropSequence</Name>
+                                              <Workflow>
+                                                <Nodes>
+                                                  <Expression xsi:type="WorkflowInput">
+                                                    <Name>Source1</Name>
+                                                  </Expression>
+                                                  <Expression xsi:type="Combinator">
+                                                    <Combinator xsi:type="BooleanProperty">
+                                                      <Value>true</Value>
+                                                    </Combinator>
+                                                  </Expression>
+                                                  <Expression xsi:type="ExternalizedMapping">
+                                                    <Property Name="MotorActivationTime" />
+                                                  </Expression>
+                                                  <Expression xsi:type="GroupWorkflow">
+                                                    <Name>EngagingMotor</Name>
+                                                    <Workflow>
+                                                      <Nodes>
+                                                        <Expression xsi:type="WorkflowInput">
+                                                          <Name>Source1</Name>
+                                                        </Expression>
+                                                        <Expression xsi:type="ExternalizedMapping">
+                                                          <Property Name="MotorActivationTime" Category="Timings" />
+                                                        </Expression>
+                                                        <Expression xsi:type="rx:SelectMany">
+                                                          <Name>EnablingMotor</Name>
+                                                          <Workflow>
+                                                            <Nodes>
+                                                              <Expression xsi:type="WorkflowInput">
+                                                                <Name>Source1</Name>
+                                                              </Expression>
+                                                              <Expression xsi:type="fstep:CreateMessage">
+                                                                <harp:MessageType>Write</harp:MessageType>
+                                                                <harp:Payload xsi:type="fstep:CreateControlPayload">
+                                                                  <fstep:Control>EnableMotor</fstep:Control>
+                                                                </harp:Payload>
+                                                              </Expression>
+                                                              <Expression xsi:type="MulticastSubject">
+                                                                <Name>Commands</Name>
+                                                              </Expression>
+                                                              <Expression xsi:type="ExternalizedMapping">
+                                                                <Property Name="DueTime" DisplayName="MotorActivationTime" Description="Time to wait after we enable the motor untill we can use it" />
+                                                              </Expression>
+                                                              <Expression xsi:type="Combinator">
+                                                                <Combinator xsi:type="rx:Delay">
+                                                                  <rx:DueTime>PT0.1S</rx:DueTime>
+                                                                </Combinator>
+                                                              </Expression>
+                                                              <Expression xsi:type="Combinator">
+                                                                <Combinator xsi:type="rx:Take">
+                                                                  <rx:Count>1</rx:Count>
+                                                                </Combinator>
+                                                              </Expression>
+                                                              <Expression xsi:type="WorkflowOutput" />
+                                                            </Nodes>
+                                                            <Edges>
+                                                              <Edge From="0" To="1" Label="Source1" />
+                                                              <Edge From="1" To="2" Label="Source1" />
+                                                              <Edge From="2" To="4" Label="Source1" />
+                                                              <Edge From="3" To="4" Label="Source2" />
+                                                              <Edge From="4" To="5" Label="Source1" />
+                                                              <Edge From="5" To="6" Label="Source1" />
+                                                            </Edges>
+                                                          </Workflow>
+                                                        </Expression>
+                                                        <Expression xsi:type="Disable">
+                                                          <Builder xsi:type="ExternalizedMapping">
+                                                            <Property Name="BrakeReleaseTime" Category="EngageMotorTimings" />
+                                                          </Builder>
+                                                        </Expression>
+                                                        <Expression xsi:type="Disable">
+                                                          <Builder xsi:type="rx:SelectMany">
+                                                            <Name>ReleasingBrake</Name>
+                                                            <Workflow>
+                                                              <Nodes>
+                                                                <Expression xsi:type="WorkflowInput">
+                                                                  <Name>Source1</Name>
+                                                                </Expression>
+                                                                <Expression xsi:type="rx:Sink">
+                                                                  <Name>LogStateMachine</Name>
+                                                                  <Workflow>
+                                                                    <Nodes>
+                                                                      <Expression xsi:type="WorkflowInput">
+                                                                        <Name>Source1</Name>
+                                                                      </Expression>
+                                                                      <Expression xsi:type="Combinator">
+                                                                        <Combinator xsi:type="StringProperty">
+                                                                          <Value>ReleasingBrake</Value>
+                                                                        </Combinator>
+                                                                      </Expression>
+                                                                      <Expression xsi:type="MulticastSubject">
+                                                                        <Name>LoomStateLog</Name>
+                                                                      </Expression>
+                                                                      <Expression xsi:type="WorkflowOutput" />
+                                                                    </Nodes>
+                                                                    <Edges>
+                                                                      <Edge From="0" To="1" Label="Source1" />
+                                                                      <Edge From="1" To="2" Label="Source1" />
+                                                                      <Edge From="2" To="3" Label="Source1" />
+                                                                    </Edges>
+                                                                  </Workflow>
+                                                                </Expression>
+                                                                <Expression xsi:type="fstep:CreateMessage">
+                                                                  <harp:MessageType>Write</harp:MessageType>
+                                                                  <harp:Payload xsi:type="fstep:CreateMotorBrakePayload">
+                                                                    <fstep:MotorBrake>BreakOff</fstep:MotorBrake>
+                                                                  </harp:Payload>
+                                                                </Expression>
+                                                                <Expression xsi:type="MulticastSubject">
+                                                                  <Name>FastStepperCommands</Name>
+                                                                </Expression>
+                                                                <Expression xsi:type="ExternalizedMapping">
+                                                                  <Property Name="DueTime" DisplayName="BrakeReleaseTime" />
+                                                                </Expression>
+                                                                <Expression xsi:type="Combinator">
+                                                                  <Combinator xsi:type="rx:Delay">
+                                                                    <rx:DueTime>PT0S</rx:DueTime>
+                                                                  </Combinator>
+                                                                </Expression>
+                                                                <Expression xsi:type="Combinator">
+                                                                  <Combinator xsi:type="rx:Take">
+                                                                    <rx:Count>1</rx:Count>
+                                                                  </Combinator>
+                                                                </Expression>
+                                                                <Expression xsi:type="WorkflowOutput" />
+                                                              </Nodes>
+                                                              <Edges>
+                                                                <Edge From="0" To="1" Label="Source1" />
+                                                                <Edge From="1" To="2" Label="Source1" />
+                                                                <Edge From="2" To="3" Label="Source1" />
+                                                                <Edge From="3" To="5" Label="Source1" />
+                                                                <Edge From="4" To="5" Label="Source2" />
+                                                                <Edge From="5" To="6" Label="Source1" />
+                                                                <Edge From="6" To="7" Label="Source1" />
+                                                              </Edges>
+                                                            </Workflow>
+                                                          </Builder>
+                                                        </Expression>
+                                                        <Expression xsi:type="WorkflowOutput" />
+                                                      </Nodes>
+                                                      <Edges>
+                                                        <Edge From="0" To="2" Label="Source1" />
+                                                        <Edge From="1" To="2" Label="Source2" />
+                                                        <Edge From="2" To="4" Label="Source1" />
+                                                        <Edge From="3" To="4" Label="Source2" />
+                                                        <Edge From="4" To="5" Label="Source1" />
+                                                      </Edges>
+                                                    </Workflow>
+                                                  </Expression>
+                                                  <Expression xsi:type="SubscribeSubject">
+                                                    <Name>settings</Name>
+                                                  </Expression>
+                                                  <Expression xsi:type="PropertyMapping">
+                                                    <PropertyMappings>
+                                                      <Property Name="BottomPosition" Selector="BottomPosition" />
+                                                      <Property Name="Acceleration" Selector="DropAcceleration" />
+                                                      <Property Name="MaxVelocity" Selector="DropMaxVelocity" />
+                                                    </PropertyMappings>
+                                                  </Expression>
+                                                  <Expression xsi:type="rx:SelectMany">
+                                                    <Name>Dropping</Name>
+                                                    <Workflow>
+                                                      <Nodes>
+                                                        <Expression xsi:type="SubscribeSubject">
+                                                          <Name>Events</Name>
+                                                        </Expression>
+                                                        <Expression xsi:type="fstep:Parse">
+                                                          <harp:Register xsi:type="fstep:MoveToEvents" />
+                                                        </Expression>
+                                                        <Expression xsi:type="rx:Condition">
+                                                          <Name>MoveSuccessful</Name>
+                                                          <Workflow>
+                                                            <Nodes>
+                                                              <Expression xsi:type="WorkflowInput">
+                                                                <Name>Source1</Name>
+                                                              </Expression>
+                                                              <Expression xsi:type="Equal">
+                                                                <Operand xsi:type="WorkflowProperty" TypeArguments="fstep:MoveToEventsFlags">
+                                                                  <Value>MoveSuccessful</Value>
+                                                                </Operand>
+                                                              </Expression>
+                                                              <Expression xsi:type="WorkflowOutput" />
+                                                            </Nodes>
+                                                            <Edges>
+                                                              <Edge From="0" To="1" Label="Source1" />
+                                                              <Edge From="1" To="2" Label="Source1" />
+                                                            </Edges>
+                                                          </Workflow>
+                                                        </Expression>
+                                                        <Expression xsi:type="Combinator">
+                                                          <Combinator xsi:type="rx:Take">
+                                                            <rx:Count>1</rx:Count>
+                                                          </Combinator>
+                                                        </Expression>
+                                                        <Expression xsi:type="WorkflowOutput" />
+                                                        <Expression xsi:type="rx:Condition">
+                                                          <Name>MoveNotSuccessful</Name>
+                                                          <Workflow>
+                                                            <Nodes>
+                                                              <Expression xsi:type="WorkflowInput">
+                                                                <Name>Source1</Name>
+                                                              </Expression>
+                                                              <Expression xsi:type="NotEqual">
+                                                                <Operand xsi:type="WorkflowProperty" TypeArguments="fstep:MoveToEventsFlags">
+                                                                  <Value>MoveSuccessful</Value>
+                                                                </Operand>
+                                                              </Expression>
+                                                              <Expression xsi:type="WorkflowOutput" />
+                                                            </Nodes>
+                                                            <Edges>
+                                                              <Edge From="0" To="1" Label="Source1" />
+                                                              <Edge From="1" To="2" Label="Source1" />
+                                                            </Edges>
+                                                          </Workflow>
+                                                        </Expression>
+                                                        <Expression xsi:type="Combinator">
+                                                          <Combinator xsi:type="aeon:ThrowException">
+                                                            <aeon:Message>MoveNotSuccessful</aeon:Message>
+                                                          </Combinator>
+                                                        </Expression>
+                                                        <Expression xsi:type="WorkflowInput">
+                                                          <Name>Source1</Name>
+                                                        </Expression>
+                                                        <Expression xsi:type="ExternalizedMapping">
+                                                          <Property Name="MoveTo" DisplayName="BottomPosition" Category="Distances" />
+                                                          <Property Name="Acceleration" />
+                                                          <Property Name="MaxVelocity" />
+                                                        </Expression>
+                                                        <Expression xsi:type="IncludeWorkflow" Path="Extensions\MoveToParametric.bonsai">
+                                                          <MoveTo>3000</MoveTo>
+                                                          <MinVelocity>400</MinVelocity>
+                                                          <MaxVelocity>10000</MaxVelocity>
+                                                          <Acceleration>18000</Acceleration>
+                                                          <Deceleration>-20000</Deceleration>
+                                                          <AccelerationJerk>-8000</AccelerationJerk>
+                                                          <DecelerationJerk>4000</DecelerationJerk>
+                                                        </Expression>
+                                                      </Nodes>
+                                                      <Edges>
+                                                        <Edge From="0" To="1" Label="Source1" />
+                                                        <Edge From="1" To="2" Label="Source1" />
+                                                        <Edge From="1" To="5" Label="Source1" />
+                                                        <Edge From="2" To="3" Label="Source1" />
+                                                        <Edge From="3" To="4" Label="Source1" />
+                                                        <Edge From="5" To="6" Label="Source1" />
+                                                        <Edge From="7" To="9" Label="Source1" />
+                                                        <Edge From="8" To="9" Label="Source2" />
+                                                      </Edges>
+                                                    </Workflow>
+                                                  </Expression>
+                                                  <Expression xsi:type="SubscribeSubject">
+                                                    <Name>settings</Name>
+                                                  </Expression>
+                                                  <Expression xsi:type="PropertyMapping">
+                                                    <PropertyMappings>
+                                                      <Property Name="BottomPauseTime" Selector="BottomPauseTimeSeconds" />
+                                                    </PropertyMappings>
+                                                  </Expression>
+                                                  <Expression xsi:type="rx:SelectMany">
+                                                    <Name>Bottom</Name>
+                                                    <Workflow>
+                                                      <Nodes>
+                                                        <Expression xsi:type="WorkflowInput">
+                                                          <Name>Source1</Name>
+                                                        </Expression>
+                                                        <Expression xsi:type="ExternalizedMapping">
+                                                          <Property Name="DueTime" DisplayName="BottomPauseTime" />
+                                                        </Expression>
+                                                        <Expression xsi:type="Combinator">
+                                                          <Combinator xsi:type="rx:Delay">
+                                                            <rx:DueTime>PT0.0000001S</rx:DueTime>
+                                                          </Combinator>
+                                                        </Expression>
+                                                        <Expression xsi:type="Combinator">
+                                                          <Combinator xsi:type="rx:Take">
+                                                            <rx:Count>1</rx:Count>
+                                                          </Combinator>
+                                                        </Expression>
+                                                        <Expression xsi:type="WorkflowOutput" />
+                                                      </Nodes>
+                                                      <Edges>
+                                                        <Edge From="0" To="2" Label="Source1" />
+                                                        <Edge From="1" To="2" Label="Source2" />
+                                                        <Edge From="2" To="3" Label="Source1" />
+                                                        <Edge From="3" To="4" Label="Source1" />
+                                                      </Edges>
+                                                    </Workflow>
+                                                  </Expression>
+                                                  <Expression xsi:type="ExternalizedMapping">
+                                                    <Property Name="HomeDistance" Category="Distances" />
+                                                    <Property Name="HomeOffsetPauseTime" Description="Time to wait after the homing completes untill it moves slightly down" />
+                                                    <Property Name="HomeDistanceOffset" Category="Distances" />
+                                                    <Property Name="LiftToPosition" Category="Distances" />
+                                                  </Expression>
+                                                  <Expression xsi:type="GroupWorkflow">
+                                                    <Name>Homing</Name>
+                                                    <Workflow>
+                                                      <Nodes>
+                                                        <Expression xsi:type="WorkflowInput">
+                                                          <Name>Source1</Name>
+                                                        </Expression>
+                                                        <Expression xsi:type="ExternalizedMapping">
+                                                          <Property Name="LiftToPosition" />
+                                                        </Expression>
+                                                        <Expression xsi:type="rx:SelectMany">
+                                                          <Name>Lifting</Name>
+                                                          <Workflow>
+                                                            <Nodes>
+                                                              <Expression xsi:type="SubscribeSubject">
+                                                                <Name>Events</Name>
+                                                              </Expression>
+                                                              <Expression xsi:type="fstep:Parse">
+                                                                <harp:Register xsi:type="fstep:MoveToEvents" />
+                                                              </Expression>
+                                                              <Expression xsi:type="rx:Condition">
+                                                                <Name>MoveSuccessful</Name>
+                                                                <Workflow>
+                                                                  <Nodes>
+                                                                    <Expression xsi:type="WorkflowInput">
+                                                                      <Name>Source1</Name>
+                                                                    </Expression>
+                                                                    <Expression xsi:type="Equal">
+                                                                      <Operand xsi:type="WorkflowProperty" TypeArguments="fstep:MoveToEventsFlags">
+                                                                        <Value>MoveSuccessful</Value>
+                                                                      </Operand>
+                                                                    </Expression>
+                                                                    <Expression xsi:type="WorkflowOutput" />
+                                                                  </Nodes>
+                                                                  <Edges>
+                                                                    <Edge From="0" To="1" Label="Source1" />
+                                                                    <Edge From="1" To="2" Label="Source1" />
+                                                                  </Edges>
+                                                                </Workflow>
+                                                              </Expression>
+                                                              <Expression xsi:type="Combinator">
+                                                                <Combinator xsi:type="rx:Take">
+                                                                  <rx:Count>1</rx:Count>
+                                                                </Combinator>
+                                                              </Expression>
+                                                              <Expression xsi:type="WorkflowOutput" />
+                                                              <Expression xsi:type="rx:Condition">
+                                                                <Name>MoveNotSuccessful</Name>
+                                                                <Workflow>
+                                                                  <Nodes>
+                                                                    <Expression xsi:type="WorkflowInput">
+                                                                      <Name>Source1</Name>
+                                                                    </Expression>
+                                                                    <Expression xsi:type="NotEqual">
+                                                                      <Operand xsi:type="WorkflowProperty" TypeArguments="fstep:MoveToEventsFlags">
+                                                                        <Value>MoveSuccessful</Value>
+                                                                      </Operand>
+                                                                    </Expression>
+                                                                    <Expression xsi:type="WorkflowOutput" />
+                                                                  </Nodes>
+                                                                  <Edges>
+                                                                    <Edge From="0" To="1" Label="Source1" />
+                                                                    <Edge From="1" To="2" Label="Source1" />
+                                                                  </Edges>
+                                                                </Workflow>
+                                                              </Expression>
+                                                              <Expression xsi:type="Combinator">
+                                                                <Combinator xsi:type="aeon:ThrowException">
+                                                                  <aeon:Message>MoveNotSuccessful</aeon:Message>
+                                                                </Combinator>
+                                                              </Expression>
+                                                              <Expression xsi:type="WorkflowInput">
+                                                                <Name>Source1</Name>
+                                                              </Expression>
+                                                              <Expression xsi:type="ExternalizedMapping">
+                                                                <Property Name="MoveTo" DisplayName="LiftToPosition" />
+                                                              </Expression>
+                                                              <Expression xsi:type="IncludeWorkflow" Path="Extensions\MoveToParametric.bonsai">
+                                                                <MoveTo>200</MoveTo>
+                                                                <MinVelocity>200</MinVelocity>
+                                                                <MaxVelocity>800</MaxVelocity>
+                                                                <Acceleration>1000</Acceleration>
+                                                                <Deceleration>-1000</Deceleration>
+                                                                <AccelerationJerk>0</AccelerationJerk>
+                                                                <DecelerationJerk>0</DecelerationJerk>
+                                                              </Expression>
+                                                            </Nodes>
+                                                            <Edges>
+                                                              <Edge From="0" To="1" Label="Source1" />
+                                                              <Edge From="1" To="2" Label="Source1" />
+                                                              <Edge From="1" To="5" Label="Source1" />
+                                                              <Edge From="2" To="3" Label="Source1" />
+                                                              <Edge From="3" To="4" Label="Source1" />
+                                                              <Edge From="5" To="6" Label="Source1" />
+                                                              <Edge From="7" To="9" Label="Source1" />
+                                                              <Edge From="8" To="9" Label="Source2" />
+                                                            </Edges>
+                                                          </Workflow>
+                                                        </Expression>
+                                                        <Expression xsi:type="ExternalizedMapping">
+                                                          <Property Name="HomeDistance" Category="Distances" />
+                                                        </Expression>
+                                                        <Expression xsi:type="rx:SelectMany">
+                                                          <Name>Homing</Name>
+                                                          <Workflow>
+                                                            <Nodes>
+                                                              <Expression xsi:type="SubscribeSubject">
+                                                                <Name>Events</Name>
+                                                              </Expression>
+                                                              <Expression xsi:type="fstep:Parse">
+                                                                <harp:Register xsi:type="fstep:HomeStepsEvents" />
+                                                              </Expression>
+                                                              <Expression xsi:type="rx:Condition">
+                                                                <Name>HomingSuccessful</Name>
+                                                                <Workflow>
+                                                                  <Nodes>
+                                                                    <Expression xsi:type="WorkflowInput">
+                                                                      <Name>Source1</Name>
+                                                                    </Expression>
+                                                                    <Expression xsi:type="Equal">
+                                                                      <Operand xsi:type="WorkflowProperty" TypeArguments="fstep:HomeStepsEventsFlags">
+                                                                        <Value>HomingSuccessful</Value>
+                                                                      </Operand>
+                                                                    </Expression>
+                                                                    <Expression xsi:type="WorkflowOutput" />
+                                                                  </Nodes>
+                                                                  <Edges>
+                                                                    <Edge From="0" To="1" Label="Source1" />
+                                                                    <Edge From="1" To="2" Label="Source1" />
+                                                                  </Edges>
+                                                                </Workflow>
+                                                              </Expression>
+                                                              <Expression xsi:type="Combinator">
+                                                                <Combinator xsi:type="rx:Take">
+                                                                  <rx:Count>1</rx:Count>
+                                                                </Combinator>
+                                                              </Expression>
+                                                              <Expression xsi:type="WorkflowOutput" />
+                                                              <Expression xsi:type="rx:Condition">
+                                                                <Name>HomingNotSuccessful</Name>
+                                                                <Workflow>
+                                                                  <Nodes>
+                                                                    <Expression xsi:type="WorkflowInput">
+                                                                      <Name>Source1</Name>
+                                                                    </Expression>
+                                                                    <Expression xsi:type="NotEqual">
+                                                                      <Operand xsi:type="WorkflowProperty" TypeArguments="fstep:HomeStepsEventsFlags">
+                                                                        <Value>HomingSuccessful</Value>
+                                                                      </Operand>
+                                                                    </Expression>
+                                                                    <Expression xsi:type="WorkflowOutput" />
+                                                                  </Nodes>
+                                                                  <Edges>
+                                                                    <Edge From="0" To="1" Label="Source1" />
+                                                                    <Edge From="1" To="2" Label="Source1" />
+                                                                  </Edges>
+                                                                </Workflow>
+                                                              </Expression>
+                                                              <Expression xsi:type="Combinator">
+                                                                <Combinator xsi:type="aeon:ThrowException">
+                                                                  <aeon:Message>HomingNotSuccessful</aeon:Message>
+                                                                </Combinator>
+                                                              </Expression>
+                                                              <Expression xsi:type="WorkflowInput">
+                                                                <Name>Source1</Name>
+                                                              </Expression>
+                                                              <Expression xsi:type="ExternalizedMapping">
+                                                                <Property Name="HomeSteps" DisplayName="HomeDistance" />
+                                                              </Expression>
+                                                              <Expression xsi:type="fstep:CreateMessage">
+                                                                <harp:MessageType>Write</harp:MessageType>
+                                                                <harp:Payload xsi:type="fstep:CreateHomeStepsPayload">
+                                                                  <fstep:HomeSteps>-1000</fstep:HomeSteps>
+                                                                </harp:Payload>
+                                                              </Expression>
+                                                              <Expression xsi:type="MulticastSubject">
+                                                                <Name>Commands</Name>
+                                                              </Expression>
+                                                            </Nodes>
+                                                            <Edges>
+                                                              <Edge From="0" To="1" Label="Source1" />
+                                                              <Edge From="1" To="2" Label="Source1" />
+                                                              <Edge From="1" To="5" Label="Source1" />
+                                                              <Edge From="2" To="3" Label="Source1" />
+                                                              <Edge From="3" To="4" Label="Source1" />
+                                                              <Edge From="5" To="6" Label="Source1" />
+                                                              <Edge From="7" To="9" Label="Source1" />
+                                                              <Edge From="8" To="9" Label="Source2" />
+                                                              <Edge From="9" To="10" Label="Source1" />
+                                                            </Edges>
+                                                          </Workflow>
+                                                        </Expression>
+                                                        <Expression xsi:type="ExternalizedMapping">
+                                                          <Property Name="HomeOffsetPauseTime" Category="Timings" />
+                                                        </Expression>
+                                                        <Expression xsi:type="rx:SelectMany">
+                                                          <Name>Home</Name>
+                                                          <Workflow>
+                                                            <Nodes>
+                                                              <Expression xsi:type="WorkflowInput">
+                                                                <Name>Source1</Name>
+                                                              </Expression>
+                                                              <Expression xsi:type="ExternalizedMapping">
+                                                                <Property Name="DueTime" DisplayName="HomeOffsetPauseTime" />
+                                                              </Expression>
+                                                              <Expression xsi:type="Combinator">
+                                                                <Combinator xsi:type="rx:Delay">
+                                                                  <rx:DueTime>PT0.2S</rx:DueTime>
+                                                                </Combinator>
+                                                              </Expression>
+                                                              <Expression xsi:type="Combinator">
+                                                                <Combinator xsi:type="rx:Take">
+                                                                  <rx:Count>1</rx:Count>
+                                                                </Combinator>
+                                                              </Expression>
+                                                              <Expression xsi:type="WorkflowOutput" />
+                                                            </Nodes>
+                                                            <Edges>
+                                                              <Edge From="0" To="2" Label="Source1" />
+                                                              <Edge From="1" To="2" Label="Source2" />
+                                                              <Edge From="2" To="3" Label="Source1" />
+                                                              <Edge From="3" To="4" Label="Source1" />
+                                                            </Edges>
+                                                          </Workflow>
+                                                        </Expression>
+                                                        <Expression xsi:type="ExternalizedMapping">
+                                                          <Property Name="HomeDistanceOffset" />
+                                                        </Expression>
+                                                        <Expression xsi:type="rx:SelectMany">
+                                                          <Name>Home Offset</Name>
+                                                          <Workflow>
+                                                            <Nodes>
+                                                              <Expression xsi:type="SubscribeSubject">
+                                                                <Name>Events</Name>
+                                                              </Expression>
+                                                              <Expression xsi:type="fstep:Parse">
+                                                                <harp:Register xsi:type="fstep:MoveToEvents" />
+                                                              </Expression>
+                                                              <Expression xsi:type="rx:Condition">
+                                                                <Name>MoveSuccessful</Name>
+                                                                <Workflow>
+                                                                  <Nodes>
+                                                                    <Expression xsi:type="WorkflowInput">
+                                                                      <Name>Source1</Name>
+                                                                    </Expression>
+                                                                    <Expression xsi:type="Equal">
+                                                                      <Operand xsi:type="WorkflowProperty" TypeArguments="fstep:MoveToEventsFlags">
+                                                                        <Value>MoveSuccessful</Value>
+                                                                      </Operand>
+                                                                    </Expression>
+                                                                    <Expression xsi:type="WorkflowOutput" />
+                                                                  </Nodes>
+                                                                  <Edges>
+                                                                    <Edge From="0" To="1" Label="Source1" />
+                                                                    <Edge From="1" To="2" Label="Source1" />
+                                                                  </Edges>
+                                                                </Workflow>
+                                                              </Expression>
+                                                              <Expression xsi:type="Combinator">
+                                                                <Combinator xsi:type="rx:Take">
+                                                                  <rx:Count>1</rx:Count>
+                                                                </Combinator>
+                                                              </Expression>
+                                                              <Expression xsi:type="WorkflowOutput" />
+                                                              <Expression xsi:type="rx:Condition">
+                                                                <Name>MoveNotSuccessful</Name>
+                                                                <Workflow>
+                                                                  <Nodes>
+                                                                    <Expression xsi:type="WorkflowInput">
+                                                                      <Name>Source1</Name>
+                                                                    </Expression>
+                                                                    <Expression xsi:type="NotEqual">
+                                                                      <Operand xsi:type="WorkflowProperty" TypeArguments="fstep:MoveToEventsFlags">
+                                                                        <Value>MoveSuccessful</Value>
+                                                                      </Operand>
+                                                                    </Expression>
+                                                                    <Expression xsi:type="WorkflowOutput" />
+                                                                  </Nodes>
+                                                                  <Edges>
+                                                                    <Edge From="0" To="1" Label="Source1" />
+                                                                    <Edge From="1" To="2" Label="Source1" />
+                                                                  </Edges>
+                                                                </Workflow>
+                                                              </Expression>
+                                                              <Expression xsi:type="Combinator">
+                                                                <Combinator xsi:type="aeon:ThrowException">
+                                                                  <aeon:Message>MoveNotSuccessful</aeon:Message>
+                                                                </Combinator>
+                                                              </Expression>
+                                                              <Expression xsi:type="WorkflowInput">
+                                                                <Name>Source1</Name>
+                                                              </Expression>
+                                                              <Expression xsi:type="ExternalizedMapping">
+                                                                <Property Name="MoveTo" DisplayName="HomeDistanceOffset" />
+                                                              </Expression>
+                                                              <Expression xsi:type="IncludeWorkflow" Path="Extensions\MoveToParametric.bonsai">
+                                                                <MoveTo>42</MoveTo>
+                                                                <MinVelocity>200</MinVelocity>
+                                                                <MaxVelocity>400</MaxVelocity>
+                                                                <Acceleration>500</Acceleration>
+                                                                <Deceleration>-500</Deceleration>
+                                                                <AccelerationJerk>0</AccelerationJerk>
+                                                                <DecelerationJerk>0</DecelerationJerk>
+                                                              </Expression>
+                                                            </Nodes>
+                                                            <Edges>
+                                                              <Edge From="0" To="1" Label="Source1" />
+                                                              <Edge From="1" To="2" Label="Source1" />
+                                                              <Edge From="1" To="5" Label="Source1" />
+                                                              <Edge From="2" To="3" Label="Source1" />
+                                                              <Edge From="3" To="4" Label="Source1" />
+                                                              <Edge From="5" To="6" Label="Source1" />
+                                                              <Edge From="7" To="9" Label="Source1" />
+                                                              <Edge From="8" To="9" Label="Source2" />
+                                                            </Edges>
+                                                          </Workflow>
+                                                        </Expression>
+                                                        <Expression xsi:type="WorkflowOutput" />
+                                                      </Nodes>
+                                                      <Edges>
+                                                        <Edge From="0" To="2" Label="Source1" />
+                                                        <Edge From="1" To="2" Label="Source2" />
+                                                        <Edge From="2" To="4" Label="Source1" />
+                                                        <Edge From="3" To="4" Label="Source2" />
+                                                        <Edge From="4" To="6" Label="Source1" />
+                                                        <Edge From="5" To="6" Label="Source2" />
+                                                        <Edge From="6" To="8" Label="Source1" />
+                                                        <Edge From="7" To="8" Label="Source2" />
+                                                        <Edge From="8" To="9" Label="Source1" />
+                                                      </Edges>
+                                                    </Workflow>
+                                                  </Expression>
+                                                  <Expression xsi:type="ExternalizedMapping">
+                                                    <Property Name="MotorDeactivationTime" />
+                                                  </Expression>
+                                                  <Expression xsi:type="Disable">
+                                                    <Builder xsi:type="GroupWorkflow">
+                                                      <Name>DisengagingMotor</Name>
+                                                      <Workflow>
+                                                        <Nodes>
+                                                          <Expression xsi:type="WorkflowInput">
+                                                            <Name>Source1</Name>
+                                                          </Expression>
+                                                          <Expression xsi:type="Disable">
+                                                            <Builder xsi:type="ExternalizedMapping">
+                                                              <Property Name="BrakeLockTime" Category="DisengageMotorTimings" />
+                                                            </Builder>
+                                                          </Expression>
+                                                          <Expression xsi:type="Disable">
+                                                            <Builder xsi:type="rx:SelectMany">
+                                                              <Name>LockingBrake</Name>
+                                                              <Workflow>
+                                                                <Nodes>
+                                                                  <Expression xsi:type="WorkflowInput">
+                                                                    <Name>Source1</Name>
+                                                                  </Expression>
+                                                                  <Expression xsi:type="rx:Sink">
+                                                                    <Name>LogStateMachine</Name>
+                                                                    <Workflow>
+                                                                      <Nodes>
+                                                                        <Expression xsi:type="WorkflowInput">
+                                                                          <Name>Source1</Name>
+                                                                        </Expression>
+                                                                        <Expression xsi:type="Combinator">
+                                                                          <Combinator xsi:type="StringProperty">
+                                                                            <Value>LockingBrake</Value>
+                                                                          </Combinator>
+                                                                        </Expression>
+                                                                        <Expression xsi:type="MulticastSubject">
+                                                                          <Name>LoomStateLog</Name>
+                                                                        </Expression>
+                                                                        <Expression xsi:type="WorkflowOutput" />
+                                                                      </Nodes>
+                                                                      <Edges>
+                                                                        <Edge From="0" To="1" Label="Source1" />
+                                                                        <Edge From="1" To="2" Label="Source1" />
+                                                                        <Edge From="2" To="3" Label="Source1" />
+                                                                      </Edges>
+                                                                    </Workflow>
+                                                                  </Expression>
+                                                                  <Expression xsi:type="fstep:CreateMessage">
+                                                                    <harp:MessageType>Write</harp:MessageType>
+                                                                    <harp:Payload xsi:type="fstep:CreateMotorBrakePayload">
+                                                                      <fstep:MotorBrake>BreakOn</fstep:MotorBrake>
+                                                                    </harp:Payload>
+                                                                  </Expression>
+                                                                  <Expression xsi:type="MulticastSubject">
+                                                                    <Name>FastStepperCommands</Name>
+                                                                  </Expression>
+                                                                  <Expression xsi:type="ExternalizedMapping">
+                                                                    <Property Name="DueTime" DisplayName="BrakeLockTime" />
+                                                                  </Expression>
+                                                                  <Expression xsi:type="Combinator">
+                                                                    <Combinator xsi:type="rx:Delay">
+                                                                      <rx:DueTime>PT1S</rx:DueTime>
+                                                                    </Combinator>
+                                                                  </Expression>
+                                                                  <Expression xsi:type="Combinator">
+                                                                    <Combinator xsi:type="rx:Take">
+                                                                      <rx:Count>1</rx:Count>
+                                                                    </Combinator>
+                                                                  </Expression>
+                                                                  <Expression xsi:type="WorkflowOutput" />
+                                                                </Nodes>
+                                                                <Edges>
+                                                                  <Edge From="0" To="1" Label="Source1" />
+                                                                  <Edge From="1" To="2" Label="Source1" />
+                                                                  <Edge From="2" To="3" Label="Source1" />
+                                                                  <Edge From="3" To="5" Label="Source1" />
+                                                                  <Edge From="4" To="5" Label="Source2" />
+                                                                  <Edge From="5" To="6" Label="Source1" />
+                                                                  <Edge From="6" To="7" Label="Source1" />
+                                                                </Edges>
+                                                              </Workflow>
+                                                            </Builder>
+                                                          </Expression>
+                                                          <Expression xsi:type="ExternalizedMapping">
+                                                            <Property Name="MotorDeactivationTime" Category="Timings" />
+                                                          </Expression>
+                                                          <Expression xsi:type="rx:SelectMany">
+                                                            <Name>DisablingMotor</Name>
+                                                            <Workflow>
+                                                              <Nodes>
+                                                                <Expression xsi:type="WorkflowInput">
+                                                                  <Name>Source1</Name>
+                                                                </Expression>
+                                                                <Expression xsi:type="Disable">
+                                                                  <Builder xsi:type="rx:Sink">
+                                                                    <Workflow>
+                                                                      <Nodes>
+                                                                        <Expression xsi:type="WorkflowInput">
+                                                                          <Name>Source1</Name>
+                                                                        </Expression>
+                                                                        <Expression xsi:type="Combinator">
+                                                                          <Combinator xsi:type="StringProperty">
+                                                                            <Value>DisablingMotor</Value>
+                                                                          </Combinator>
+                                                                        </Expression>
+                                                                        <Expression xsi:type="MulticastSubject">
+                                                                          <Name>LoomStateLog</Name>
+                                                                        </Expression>
+                                                                        <Expression xsi:type="WorkflowOutput" />
+                                                                      </Nodes>
+                                                                      <Edges>
+                                                                        <Edge From="0" To="1" Label="Source1" />
+                                                                        <Edge From="1" To="2" Label="Source1" />
+                                                                        <Edge From="2" To="3" Label="Source1" />
+                                                                      </Edges>
+                                                                    </Workflow>
+                                                                  </Builder>
+                                                                </Expression>
+                                                                <Expression xsi:type="fstep:CreateMessage">
+                                                                  <harp:MessageType>Write</harp:MessageType>
+                                                                  <harp:Payload xsi:type="fstep:CreateControlPayload">
+                                                                    <fstep:Control>DisableMotor</fstep:Control>
+                                                                  </harp:Payload>
+                                                                </Expression>
+                                                                <Expression xsi:type="MulticastSubject">
+                                                                  <Name>Commands</Name>
+                                                                </Expression>
+                                                                <Expression xsi:type="ExternalizedMapping">
+                                                                  <Property Name="DueTime" DisplayName="MotorDeactivationTime" />
+                                                                </Expression>
+                                                                <Expression xsi:type="Combinator">
+                                                                  <Combinator xsi:type="rx:Delay">
+                                                                    <rx:DueTime>PT0.2S</rx:DueTime>
+                                                                  </Combinator>
+                                                                </Expression>
+                                                                <Expression xsi:type="Combinator">
+                                                                  <Combinator xsi:type="rx:Take">
+                                                                    <rx:Count>1</rx:Count>
+                                                                  </Combinator>
+                                                                </Expression>
+                                                                <Expression xsi:type="WorkflowOutput" />
+                                                              </Nodes>
+                                                              <Edges>
+                                                                <Edge From="0" To="1" Label="Source1" />
+                                                                <Edge From="1" To="2" Label="Source1" />
+                                                                <Edge From="2" To="3" Label="Source1" />
+                                                                <Edge From="3" To="5" Label="Source1" />
+                                                                <Edge From="4" To="5" Label="Source2" />
+                                                                <Edge From="5" To="6" Label="Source1" />
+                                                                <Edge From="6" To="7" Label="Source1" />
+                                                              </Edges>
+                                                            </Workflow>
+                                                          </Expression>
+                                                          <Expression xsi:type="WorkflowOutput" />
+                                                        </Nodes>
+                                                        <Edges>
+                                                          <Edge From="0" To="2" Label="Source1" />
+                                                          <Edge From="1" To="2" Label="Source2" />
+                                                          <Edge From="2" To="4" Label="Source1" />
+                                                          <Edge From="3" To="4" Label="Source2" />
+                                                          <Edge From="4" To="5" Label="Source1" />
+                                                        </Edges>
+                                                      </Workflow>
+                                                    </Builder>
+                                                  </Expression>
+                                                  <Expression xsi:type="WorkflowOutput" />
+                                                </Nodes>
+                                                <Edges>
+                                                  <Edge From="0" To="1" Label="Source1" />
+                                                  <Edge From="1" To="3" Label="Source1" />
+                                                  <Edge From="2" To="3" Label="Source2" />
+                                                  <Edge From="3" To="6" Label="Source1" />
+                                                  <Edge From="4" To="5" Label="Source1" />
+                                                  <Edge From="5" To="6" Label="Source2" />
+                                                  <Edge From="6" To="9" Label="Source1" />
+                                                  <Edge From="7" To="8" Label="Source1" />
+                                                  <Edge From="8" To="9" Label="Source2" />
+                                                  <Edge From="9" To="11" Label="Source1" />
+                                                  <Edge From="10" To="11" Label="Source2" />
+                                                  <Edge From="11" To="13" Label="Source1" />
+                                                  <Edge From="12" To="13" Label="Source2" />
+                                                  <Edge From="13" To="14" Label="Source1" />
+                                                </Edges>
+                                              </Workflow>
+                                            </Expression>
+                                            <Expression xsi:type="rx:Sink">
+                                              <Name>ReleasePermission</Name>
+                                              <Workflow>
+                                                <Nodes>
+                                                  <Expression xsi:type="WorkflowInput">
+                                                    <Name>Source1</Name>
+                                                  </Expression>
+                                                  <Expression xsi:type="Combinator">
+                                                    <Combinator xsi:type="BooleanProperty">
+                                                      <Value>false</Value>
+                                                    </Combinator>
+                                                  </Expression>
+                                                  <Expression xsi:type="MulticastSubject">
+                                                    <Name>LoomSequenceActive</Name>
+                                                  </Expression>
+                                                  <Expression xsi:type="WorkflowOutput" />
+                                                </Nodes>
+                                                <Edges>
+                                                  <Edge From="0" To="1" Label="Source1" />
+                                                  <Edge From="1" To="2" Label="Source1" />
+                                                  <Edge From="2" To="3" Label="Source1" />
+                                                </Edges>
+                                              </Workflow>
+                                            </Expression>
+                                            <Expression xsi:type="WorkflowOutput" />
+                                          </Nodes>
+                                          <Edges>
+                                            <Edge From="0" To="1" Label="Source1" />
+                                            <Edge From="1" To="3" Label="Source1" />
+                                            <Edge From="2" To="3" Label="Source2" />
+                                            <Edge From="3" To="4" Label="Source1" />
+                                            <Edge From="4" To="5" Label="Source1" />
+                                          </Edges>
+                                        </Workflow>
+                                      </Expression>
+                                      <Expression xsi:type="Combinator">
+                                        <Combinator xsi:type="rx:Take">
+                                          <rx:Count>1</rx:Count>
+                                        </Combinator>
+                                      </Expression>
+                                      <Expression xsi:type="WorkflowOutput" />
+                                    </Nodes>
+                                    <Edges>
+                                      <Edge From="0" To="2" Label="Source1" />
+                                      <Edge From="1" To="2" Label="Source2" />
+                                      <Edge From="2" To="3" Label="Source1" />
+                                      <Edge From="3" To="4" Label="Source1" />
+                                    </Edges>
+                                  </Workflow>
+                                </Builder>
+                              </Expression>
+                              <Expression xsi:type="rx:Condition">
+                                <Name>Homming</Name>
+                                <Workflow>
+                                  <Nodes>
+                                    <Expression xsi:type="WorkflowInput">
+                                      <Name>Source1</Name>
+                                    </Expression>
+                                    <Expression xsi:type="ExternalizedMapping">
+                                      <Property Name="Value" />
+                                    </Expression>
+                                    <Expression xsi:type="Equal">
+                                      <Operand xsi:type="WorkflowProperty" TypeArguments="p1:LoomAction">
+                                        <Value>Home</Value>
+                                      </Operand>
+                                    </Expression>
+                                    <Expression xsi:type="WorkflowOutput" />
+                                  </Nodes>
+                                  <Edges>
+                                    <Edge From="0" To="2" Label="Source1" />
+                                    <Edge From="1" To="2" Label="Source2" />
+                                    <Edge From="2" To="3" Label="Source1" />
+                                  </Edges>
+                                </Workflow>
+                              </Expression>
+                              <Expression xsi:type="Disable">
+                                <Builder xsi:type="rx:CreateObservable">
+                                  <Name>HomeSequence</Name>
+                                  <Workflow>
+                                    <Nodes>
+                                      <Expression xsi:type="WorkflowInput">
+                                        <Name>Source1</Name>
+                                      </Expression>
+                                      <Expression xsi:type="GroupWorkflow">
+                                        <Name>GetPermission</Name>
+                                        <Workflow>
+                                          <Nodes>
+                                            <Expression xsi:type="WorkflowInput">
+                                              <Name>Source1</Name>
+                                            </Expression>
+                                            <Expression xsi:type="SubscribeSubject">
+                                              <Name>LoomSequenceActive</Name>
+                                            </Expression>
+                                            <Expression xsi:type="BitwiseNot" />
+                                            <Expression xsi:type="rx:Condition">
+                                              <Workflow>
+                                                <Nodes>
+                                                  <Expression xsi:type="WorkflowInput">
+                                                    <Name>Source1</Name>
+                                                  </Expression>
+                                                  <Expression xsi:type="WorkflowOutput" />
+                                                </Nodes>
+                                                <Edges>
+                                                  <Edge From="0" To="1" Label="Source1" />
+                                                </Edges>
+                                              </Workflow>
+                                            </Expression>
+                                            <Expression xsi:type="Combinator">
+                                              <Combinator xsi:type="rx:Zip" />
+                                            </Expression>
+                                            <Expression xsi:type="Combinator">
+                                              <Combinator xsi:type="BooleanProperty">
+                                                <Value>true</Value>
+                                              </Combinator>
+                                            </Expression>
+                                            <Expression xsi:type="MulticastSubject">
+                                              <Name>LoomSequenceActive</Name>
+                                            </Expression>
+                                            <Expression xsi:type="WorkflowOutput" />
+                                          </Nodes>
+                                          <Edges>
+                                            <Edge From="0" To="4" Label="Source1" />
+                                            <Edge From="1" To="2" Label="Source1" />
+                                            <Edge From="2" To="3" Label="Source1" />
+                                            <Edge From="3" To="4" Label="Source2" />
+                                            <Edge From="4" To="5" Label="Source1" />
+                                            <Edge From="5" To="6" Label="Source1" />
+                                            <Edge From="6" To="7" Label="Source1" />
+                                          </Edges>
+                                        </Workflow>
+                                      </Expression>
+                                      <Expression xsi:type="ExternalizedMapping">
+                                        <Property Name="MotorActivationTime" />
+                                      </Expression>
+                                      <Expression xsi:type="GroupWorkflow">
+                                        <Name>EngagingMotor</Name>
+                                        <Workflow>
+                                          <Nodes>
+                                            <Expression xsi:type="WorkflowInput">
+                                              <Name>Source1</Name>
+                                            </Expression>
+                                            <Expression xsi:type="ExternalizedMapping">
+                                              <Property Name="MotorActivationTime" Category="Timings" />
+                                            </Expression>
+                                            <Expression xsi:type="rx:SelectMany">
+                                              <Name>EnablingMotor</Name>
+                                              <Workflow>
+                                                <Nodes>
+                                                  <Expression xsi:type="WorkflowInput">
+                                                    <Name>Source1</Name>
+                                                  </Expression>
+                                                  <Expression xsi:type="fstep:CreateMessage">
+                                                    <harp:MessageType>Write</harp:MessageType>
+                                                    <harp:Payload xsi:type="fstep:CreateControlPayload">
+                                                      <fstep:Control>EnableMotor</fstep:Control>
+                                                    </harp:Payload>
+                                                  </Expression>
+                                                  <Expression xsi:type="MulticastSubject">
+                                                    <Name>Commands</Name>
+                                                  </Expression>
+                                                  <Expression xsi:type="ExternalizedMapping">
+                                                    <Property Name="DueTime" DisplayName="MotorActivationTime" Description="Time to wait after we enable the motor untill we can use it" />
+                                                  </Expression>
+                                                  <Expression xsi:type="Combinator">
+                                                    <Combinator xsi:type="rx:Delay">
+                                                      <rx:DueTime>PT0.1S</rx:DueTime>
+                                                    </Combinator>
+                                                  </Expression>
+                                                  <Expression xsi:type="Combinator">
+                                                    <Combinator xsi:type="rx:Take">
+                                                      <rx:Count>1</rx:Count>
+                                                    </Combinator>
+                                                  </Expression>
+                                                  <Expression xsi:type="WorkflowOutput" />
+                                                </Nodes>
+                                                <Edges>
+                                                  <Edge From="0" To="1" Label="Source1" />
+                                                  <Edge From="1" To="2" Label="Source1" />
+                                                  <Edge From="2" To="4" Label="Source1" />
+                                                  <Edge From="3" To="4" Label="Source2" />
+                                                  <Edge From="4" To="5" Label="Source1" />
+                                                  <Edge From="5" To="6" Label="Source1" />
+                                                </Edges>
+                                              </Workflow>
+                                            </Expression>
+                                            <Expression xsi:type="Disable">
+                                              <Builder xsi:type="ExternalizedMapping">
+                                                <Property Name="BrakeReleaseTime" Category="EngageMotorTimings" />
+                                              </Builder>
+                                            </Expression>
+                                            <Expression xsi:type="Disable">
+                                              <Builder xsi:type="rx:SelectMany">
+                                                <Name>ReleasingBrake</Name>
+                                                <Workflow>
+                                                  <Nodes>
+                                                    <Expression xsi:type="WorkflowInput">
+                                                      <Name>Source1</Name>
+                                                    </Expression>
+                                                    <Expression xsi:type="rx:Sink">
+                                                      <Name>LogStateMachine</Name>
+                                                      <Workflow>
+                                                        <Nodes>
+                                                          <Expression xsi:type="WorkflowInput">
+                                                            <Name>Source1</Name>
+                                                          </Expression>
+                                                          <Expression xsi:type="Combinator">
+                                                            <Combinator xsi:type="StringProperty">
+                                                              <Value>ReleasingBrake</Value>
+                                                            </Combinator>
+                                                          </Expression>
+                                                          <Expression xsi:type="MulticastSubject">
+                                                            <Name>LoomStateLog</Name>
+                                                          </Expression>
+                                                          <Expression xsi:type="WorkflowOutput" />
+                                                        </Nodes>
+                                                        <Edges>
+                                                          <Edge From="0" To="1" Label="Source1" />
+                                                          <Edge From="1" To="2" Label="Source1" />
+                                                          <Edge From="2" To="3" Label="Source1" />
+                                                        </Edges>
+                                                      </Workflow>
+                                                    </Expression>
+                                                    <Expression xsi:type="fstep:CreateMessage">
+                                                      <harp:MessageType>Write</harp:MessageType>
+                                                      <harp:Payload xsi:type="fstep:CreateMotorBrakePayload">
+                                                        <fstep:MotorBrake>BreakOff</fstep:MotorBrake>
+                                                      </harp:Payload>
+                                                    </Expression>
+                                                    <Expression xsi:type="MulticastSubject">
+                                                      <Name>FastStepperCommands</Name>
+                                                    </Expression>
+                                                    <Expression xsi:type="ExternalizedMapping">
+                                                      <Property Name="DueTime" DisplayName="BrakeReleaseTime" />
+                                                    </Expression>
+                                                    <Expression xsi:type="Combinator">
+                                                      <Combinator xsi:type="rx:Delay">
+                                                        <rx:DueTime>PT0S</rx:DueTime>
+                                                      </Combinator>
+                                                    </Expression>
+                                                    <Expression xsi:type="Combinator">
+                                                      <Combinator xsi:type="rx:Take">
+                                                        <rx:Count>1</rx:Count>
+                                                      </Combinator>
+                                                    </Expression>
+                                                    <Expression xsi:type="WorkflowOutput" />
+                                                  </Nodes>
+                                                  <Edges>
+                                                    <Edge From="0" To="1" Label="Source1" />
+                                                    <Edge From="1" To="2" Label="Source1" />
+                                                    <Edge From="2" To="3" Label="Source1" />
+                                                    <Edge From="3" To="5" Label="Source1" />
+                                                    <Edge From="4" To="5" Label="Source2" />
+                                                    <Edge From="5" To="6" Label="Source1" />
+                                                    <Edge From="6" To="7" Label="Source1" />
+                                                  </Edges>
+                                                </Workflow>
+                                              </Builder>
+                                            </Expression>
+                                            <Expression xsi:type="WorkflowOutput" />
+                                          </Nodes>
+                                          <Edges>
+                                            <Edge From="0" To="2" Label="Source1" />
+                                            <Edge From="1" To="2" Label="Source2" />
+                                            <Edge From="2" To="4" Label="Source1" />
+                                            <Edge From="3" To="4" Label="Source2" />
+                                            <Edge From="4" To="5" Label="Source1" />
+                                          </Edges>
+                                        </Workflow>
+                                      </Expression>
+                                      <Expression xsi:type="ExternalizedMapping">
+                                        <Property Name="HomeDistance" Category="Distances" />
+                                      </Expression>
+                                      <Expression xsi:type="rx:SelectMany">
+                                        <Name>Homing</Name>
+                                        <Workflow>
+                                          <Nodes>
+                                            <Expression xsi:type="SubscribeSubject">
+                                              <Name>Events</Name>
+                                            </Expression>
+                                            <Expression xsi:type="fstep:Parse">
+                                              <harp:Register xsi:type="fstep:HomeStepsEvents" />
+                                            </Expression>
+                                            <Expression xsi:type="rx:Condition">
+                                              <Name>HomingSuccessful</Name>
+                                              <Workflow>
+                                                <Nodes>
+                                                  <Expression xsi:type="WorkflowInput">
+                                                    <Name>Source1</Name>
+                                                  </Expression>
+                                                  <Expression xsi:type="Equal">
+                                                    <Operand xsi:type="WorkflowProperty" TypeArguments="fstep:HomeStepsEventsFlags">
+                                                      <Value>HomingSuccessful</Value>
+                                                    </Operand>
+                                                  </Expression>
+                                                  <Expression xsi:type="WorkflowOutput" />
+                                                </Nodes>
+                                                <Edges>
+                                                  <Edge From="0" To="1" Label="Source1" />
+                                                  <Edge From="1" To="2" Label="Source1" />
+                                                </Edges>
+                                              </Workflow>
+                                            </Expression>
+                                            <Expression xsi:type="Combinator">
+                                              <Combinator xsi:type="rx:Take">
+                                                <rx:Count>1</rx:Count>
+                                              </Combinator>
+                                            </Expression>
+                                            <Expression xsi:type="WorkflowOutput" />
+                                            <Expression xsi:type="rx:Condition">
+                                              <Name>HomingNotSuccessful</Name>
+                                              <Workflow>
+                                                <Nodes>
+                                                  <Expression xsi:type="WorkflowInput">
+                                                    <Name>Source1</Name>
+                                                  </Expression>
+                                                  <Expression xsi:type="NotEqual">
+                                                    <Operand xsi:type="WorkflowProperty" TypeArguments="fstep:HomeStepsEventsFlags">
+                                                      <Value>HomingSuccessful</Value>
+                                                    </Operand>
+                                                  </Expression>
+                                                  <Expression xsi:type="WorkflowOutput" />
+                                                </Nodes>
+                                                <Edges>
+                                                  <Edge From="0" To="1" Label="Source1" />
+                                                  <Edge From="1" To="2" Label="Source1" />
+                                                </Edges>
+                                              </Workflow>
+                                            </Expression>
+                                            <Expression xsi:type="Combinator">
+                                              <Combinator xsi:type="aeon:ThrowException">
+                                                <aeon:Message>HomingNotSuccessful</aeon:Message>
+                                              </Combinator>
+                                            </Expression>
+                                            <Expression xsi:type="WorkflowInput">
+                                              <Name>Source1</Name>
+                                            </Expression>
+                                            <Expression xsi:type="ExternalizedMapping">
+                                              <Property Name="HomeSteps" DisplayName="HomeDistance" />
+                                            </Expression>
+                                            <Expression xsi:type="fstep:CreateMessage">
+                                              <harp:MessageType>Write</harp:MessageType>
+                                              <harp:Payload xsi:type="fstep:CreateHomeStepsPayload">
+                                                <fstep:HomeSteps>-3500</fstep:HomeSteps>
+                                              </harp:Payload>
+                                            </Expression>
+                                            <Expression xsi:type="MulticastSubject">
+                                              <Name>Commands</Name>
+                                            </Expression>
+                                          </Nodes>
+                                          <Edges>
+                                            <Edge From="0" To="1" Label="Source1" />
+                                            <Edge From="1" To="2" Label="Source1" />
+                                            <Edge From="1" To="5" Label="Source1" />
+                                            <Edge From="2" To="3" Label="Source1" />
+                                            <Edge From="3" To="4" Label="Source1" />
+                                            <Edge From="5" To="6" Label="Source1" />
+                                            <Edge From="7" To="9" Label="Source1" />
+                                            <Edge From="8" To="9" Label="Source2" />
+                                            <Edge From="9" To="10" Label="Source1" />
+                                          </Edges>
+                                        </Workflow>
+                                      </Expression>
+                                      <Expression xsi:type="ExternalizedMapping">
+                                        <Property Name="HomeOffsetPauseTime" Category="Timings" />
+                                      </Expression>
+                                      <Expression xsi:type="rx:SelectMany">
+                                        <Name>Home</Name>
+                                        <Workflow>
+                                          <Nodes>
+                                            <Expression xsi:type="WorkflowInput">
+                                              <Name>Source1</Name>
+                                            </Expression>
+                                            <Expression xsi:type="ExternalizedMapping">
+                                              <Property Name="DueTime" DisplayName="HomeOffsetPauseTime" />
+                                            </Expression>
+                                            <Expression xsi:type="Combinator">
+                                              <Combinator xsi:type="rx:Delay">
+                                                <rx:DueTime>PT0.2S</rx:DueTime>
+                                              </Combinator>
+                                            </Expression>
+                                            <Expression xsi:type="Combinator">
+                                              <Combinator xsi:type="rx:Take">
+                                                <rx:Count>1</rx:Count>
+                                              </Combinator>
+                                            </Expression>
+                                            <Expression xsi:type="WorkflowOutput" />
+                                          </Nodes>
+                                          <Edges>
+                                            <Edge From="0" To="2" Label="Source1" />
+                                            <Edge From="1" To="2" Label="Source2" />
+                                            <Edge From="2" To="3" Label="Source1" />
+                                            <Edge From="3" To="4" Label="Source1" />
+                                          </Edges>
+                                        </Workflow>
+                                      </Expression>
+                                      <Expression xsi:type="ExternalizedMapping">
+                                        <Property Name="HomeDistanceOffset" Category="Distances" />
+                                      </Expression>
+                                      <Expression xsi:type="rx:SelectMany">
+                                        <Name>Home Offset</Name>
+                                        <Workflow>
+                                          <Nodes>
+                                            <Expression xsi:type="SubscribeSubject">
+                                              <Name>Events</Name>
+                                            </Expression>
+                                            <Expression xsi:type="fstep:Parse">
+                                              <harp:Register xsi:type="fstep:MoveToEvents" />
+                                            </Expression>
+                                            <Expression xsi:type="rx:Condition">
+                                              <Name>MoveSuccessful</Name>
+                                              <Workflow>
+                                                <Nodes>
+                                                  <Expression xsi:type="WorkflowInput">
+                                                    <Name>Source1</Name>
+                                                  </Expression>
+                                                  <Expression xsi:type="Equal">
+                                                    <Operand xsi:type="WorkflowProperty" TypeArguments="fstep:MoveToEventsFlags">
+                                                      <Value>MoveSuccessful</Value>
+                                                    </Operand>
+                                                  </Expression>
+                                                  <Expression xsi:type="WorkflowOutput" />
+                                                </Nodes>
+                                                <Edges>
+                                                  <Edge From="0" To="1" Label="Source1" />
+                                                  <Edge From="1" To="2" Label="Source1" />
+                                                </Edges>
+                                              </Workflow>
+                                            </Expression>
+                                            <Expression xsi:type="Combinator">
+                                              <Combinator xsi:type="rx:Take">
+                                                <rx:Count>1</rx:Count>
+                                              </Combinator>
+                                            </Expression>
+                                            <Expression xsi:type="WorkflowOutput" />
+                                            <Expression xsi:type="rx:Condition">
+                                              <Name>MoveNotSuccessful</Name>
+                                              <Workflow>
+                                                <Nodes>
+                                                  <Expression xsi:type="WorkflowInput">
+                                                    <Name>Source1</Name>
+                                                  </Expression>
+                                                  <Expression xsi:type="NotEqual">
+                                                    <Operand xsi:type="WorkflowProperty" TypeArguments="fstep:MoveToEventsFlags">
+                                                      <Value>MoveSuccessful</Value>
+                                                    </Operand>
+                                                  </Expression>
+                                                  <Expression xsi:type="WorkflowOutput" />
+                                                </Nodes>
+                                                <Edges>
+                                                  <Edge From="0" To="1" Label="Source1" />
+                                                  <Edge From="1" To="2" Label="Source1" />
+                                                </Edges>
+                                              </Workflow>
+                                            </Expression>
+                                            <Expression xsi:type="Combinator">
+                                              <Combinator xsi:type="aeon:ThrowException">
+                                                <aeon:Message>MoveNotSuccessful</aeon:Message>
+                                              </Combinator>
+                                            </Expression>
+                                            <Expression xsi:type="WorkflowInput">
+                                              <Name>Source1</Name>
+                                            </Expression>
+                                            <Expression xsi:type="ExternalizedMapping">
+                                              <Property Name="MoveTo" DisplayName="HomeDistanceOffset" />
+                                            </Expression>
+                                            <Expression xsi:type="IncludeWorkflow" Path="Extensions\MoveToParametric.bonsai">
+                                              <MoveTo>42</MoveTo>
+                                              <MinVelocity>200</MinVelocity>
+                                              <MaxVelocity>400</MaxVelocity>
+                                              <Acceleration>500</Acceleration>
+                                              <Deceleration>-500</Deceleration>
+                                              <AccelerationJerk>0</AccelerationJerk>
+                                              <DecelerationJerk>0</DecelerationJerk>
+                                            </Expression>
+                                          </Nodes>
+                                          <Edges>
+                                            <Edge From="0" To="1" Label="Source1" />
+                                            <Edge From="1" To="2" Label="Source1" />
+                                            <Edge From="1" To="5" Label="Source1" />
+                                            <Edge From="2" To="3" Label="Source1" />
+                                            <Edge From="3" To="4" Label="Source1" />
+                                            <Edge From="5" To="6" Label="Source1" />
+                                            <Edge From="7" To="9" Label="Source1" />
+                                            <Edge From="8" To="9" Label="Source2" />
+                                          </Edges>
+                                        </Workflow>
+                                      </Expression>
+                                      <Expression xsi:type="ExternalizedMapping">
+                                        <Property Name="MotorDeactivationTime" />
+                                      </Expression>
+                                      <Expression xsi:type="Disable">
+                                        <Builder xsi:type="GroupWorkflow">
+                                          <Name>DisengagingMotor</Name>
+                                          <Workflow>
+                                            <Nodes>
+                                              <Expression xsi:type="WorkflowInput">
+                                                <Name>Source1</Name>
+                                              </Expression>
+                                              <Expression xsi:type="Disable">
+                                                <Builder xsi:type="ExternalizedMapping">
+                                                  <Property Name="BrakeLockTime" Category="DisengageMotorTimings" />
+                                                </Builder>
+                                              </Expression>
+                                              <Expression xsi:type="Disable">
+                                                <Builder xsi:type="rx:SelectMany">
+                                                  <Name>LockingBrake</Name>
+                                                  <Workflow>
+                                                    <Nodes>
+                                                      <Expression xsi:type="WorkflowInput">
+                                                        <Name>Source1</Name>
+                                                      </Expression>
+                                                      <Expression xsi:type="rx:Sink">
+                                                        <Name>LogStateMachine</Name>
+                                                        <Workflow>
+                                                          <Nodes>
+                                                            <Expression xsi:type="WorkflowInput">
+                                                              <Name>Source1</Name>
+                                                            </Expression>
+                                                            <Expression xsi:type="Combinator">
+                                                              <Combinator xsi:type="StringProperty">
+                                                                <Value>LockingBrake</Value>
+                                                              </Combinator>
+                                                            </Expression>
+                                                            <Expression xsi:type="MulticastSubject">
+                                                              <Name>LoomStateLog</Name>
+                                                            </Expression>
+                                                            <Expression xsi:type="WorkflowOutput" />
+                                                          </Nodes>
+                                                          <Edges>
+                                                            <Edge From="0" To="1" Label="Source1" />
+                                                            <Edge From="1" To="2" Label="Source1" />
+                                                            <Edge From="2" To="3" Label="Source1" />
+                                                          </Edges>
+                                                        </Workflow>
+                                                      </Expression>
+                                                      <Expression xsi:type="fstep:CreateMessage">
+                                                        <harp:MessageType>Write</harp:MessageType>
+                                                        <harp:Payload xsi:type="fstep:CreateMotorBrakePayload">
+                                                          <fstep:MotorBrake>BreakOn</fstep:MotorBrake>
+                                                        </harp:Payload>
+                                                      </Expression>
+                                                      <Expression xsi:type="MulticastSubject">
+                                                        <Name>FastStepperCommands</Name>
+                                                      </Expression>
+                                                      <Expression xsi:type="ExternalizedMapping">
+                                                        <Property Name="DueTime" DisplayName="BrakeLockTime" />
+                                                      </Expression>
+                                                      <Expression xsi:type="Combinator">
+                                                        <Combinator xsi:type="rx:Delay">
+                                                          <rx:DueTime>PT1S</rx:DueTime>
+                                                        </Combinator>
+                                                      </Expression>
+                                                      <Expression xsi:type="Combinator">
+                                                        <Combinator xsi:type="rx:Take">
+                                                          <rx:Count>1</rx:Count>
+                                                        </Combinator>
+                                                      </Expression>
+                                                      <Expression xsi:type="WorkflowOutput" />
+                                                    </Nodes>
+                                                    <Edges>
+                                                      <Edge From="0" To="1" Label="Source1" />
+                                                      <Edge From="1" To="2" Label="Source1" />
+                                                      <Edge From="2" To="3" Label="Source1" />
+                                                      <Edge From="3" To="5" Label="Source1" />
+                                                      <Edge From="4" To="5" Label="Source2" />
+                                                      <Edge From="5" To="6" Label="Source1" />
+                                                      <Edge From="6" To="7" Label="Source1" />
+                                                    </Edges>
+                                                  </Workflow>
+                                                </Builder>
+                                              </Expression>
+                                              <Expression xsi:type="ExternalizedMapping">
+                                                <Property Name="MotorDeactivationTime" Category="Timings" />
+                                              </Expression>
+                                              <Expression xsi:type="rx:SelectMany">
+                                                <Name>DisablingMotor</Name>
+                                                <Workflow>
+                                                  <Nodes>
+                                                    <Expression xsi:type="WorkflowInput">
+                                                      <Name>Source1</Name>
+                                                    </Expression>
+                                                    <Expression xsi:type="Disable">
+                                                      <Builder xsi:type="rx:Sink">
+                                                        <Workflow>
+                                                          <Nodes>
+                                                            <Expression xsi:type="WorkflowInput">
+                                                              <Name>Source1</Name>
+                                                            </Expression>
+                                                            <Expression xsi:type="Combinator">
+                                                              <Combinator xsi:type="StringProperty">
+                                                                <Value>DisablingMotor</Value>
+                                                              </Combinator>
+                                                            </Expression>
+                                                            <Expression xsi:type="MulticastSubject">
+                                                              <Name>LoomStateLog</Name>
+                                                            </Expression>
+                                                            <Expression xsi:type="WorkflowOutput" />
+                                                          </Nodes>
+                                                          <Edges>
+                                                            <Edge From="0" To="1" Label="Source1" />
+                                                            <Edge From="1" To="2" Label="Source1" />
+                                                            <Edge From="2" To="3" Label="Source1" />
+                                                          </Edges>
+                                                        </Workflow>
+                                                      </Builder>
+                                                    </Expression>
+                                                    <Expression xsi:type="fstep:CreateMessage">
+                                                      <harp:MessageType>Write</harp:MessageType>
+                                                      <harp:Payload xsi:type="fstep:CreateControlPayload">
+                                                        <fstep:Control>DisableMotor</fstep:Control>
+                                                      </harp:Payload>
+                                                    </Expression>
+                                                    <Expression xsi:type="MulticastSubject">
+                                                      <Name>Commands</Name>
+                                                    </Expression>
+                                                    <Expression xsi:type="ExternalizedMapping">
+                                                      <Property Name="DueTime" DisplayName="MotorDeactivationTime" />
+                                                    </Expression>
+                                                    <Expression xsi:type="Combinator">
+                                                      <Combinator xsi:type="rx:Delay">
+                                                        <rx:DueTime>PT0.2S</rx:DueTime>
+                                                      </Combinator>
+                                                    </Expression>
+                                                    <Expression xsi:type="Combinator">
+                                                      <Combinator xsi:type="rx:Take">
+                                                        <rx:Count>1</rx:Count>
+                                                      </Combinator>
+                                                    </Expression>
+                                                    <Expression xsi:type="WorkflowOutput" />
+                                                  </Nodes>
+                                                  <Edges>
+                                                    <Edge From="0" To="1" Label="Source1" />
+                                                    <Edge From="1" To="2" Label="Source1" />
+                                                    <Edge From="2" To="3" Label="Source1" />
+                                                    <Edge From="3" To="5" Label="Source1" />
+                                                    <Edge From="4" To="5" Label="Source2" />
+                                                    <Edge From="5" To="6" Label="Source1" />
+                                                    <Edge From="6" To="7" Label="Source1" />
+                                                  </Edges>
+                                                </Workflow>
+                                              </Expression>
+                                              <Expression xsi:type="WorkflowOutput" />
+                                            </Nodes>
+                                            <Edges>
+                                              <Edge From="0" To="2" Label="Source1" />
+                                              <Edge From="1" To="2" Label="Source2" />
+                                              <Edge From="2" To="4" Label="Source1" />
+                                              <Edge From="3" To="4" Label="Source2" />
+                                              <Edge From="4" To="5" Label="Source1" />
+                                            </Edges>
+                                          </Workflow>
+                                        </Builder>
+                                      </Expression>
+                                      <Expression xsi:type="rx:Sink">
+                                        <Name>ReleasePermission</Name>
+                                        <Workflow>
+                                          <Nodes>
+                                            <Expression xsi:type="WorkflowInput">
+                                              <Name>Source1</Name>
+                                            </Expression>
+                                            <Expression xsi:type="Combinator">
+                                              <Combinator xsi:type="BooleanProperty">
+                                                <Value>false</Value>
+                                              </Combinator>
+                                            </Expression>
+                                            <Expression xsi:type="MulticastSubject">
+                                              <Name>LoomSequenceActive</Name>
+                                            </Expression>
+                                            <Expression xsi:type="WorkflowOutput" />
+                                          </Nodes>
+                                          <Edges>
+                                            <Edge From="0" To="1" Label="Source1" />
+                                            <Edge From="1" To="2" Label="Source1" />
+                                            <Edge From="2" To="3" Label="Source1" />
+                                          </Edges>
+                                        </Workflow>
+                                      </Expression>
+                                      <Expression xsi:type="Combinator">
+                                        <Combinator xsi:type="rx:Take">
+                                          <rx:Count>1</rx:Count>
+                                        </Combinator>
+                                      </Expression>
+                                      <Expression xsi:type="WorkflowOutput" />
+                                    </Nodes>
+                                    <Edges>
+                                      <Edge From="0" To="1" Label="Source1" />
+                                      <Edge From="1" To="3" Label="Source1" />
+                                      <Edge From="2" To="3" Label="Source2" />
+                                      <Edge From="3" To="5" Label="Source1" />
+                                      <Edge From="4" To="5" Label="Source2" />
+                                      <Edge From="5" To="7" Label="Source1" />
+                                      <Edge From="6" To="7" Label="Source2" />
+                                      <Edge From="7" To="9" Label="Source1" />
+                                      <Edge From="8" To="9" Label="Source2" />
+                                      <Edge From="9" To="11" Label="Source1" />
+                                      <Edge From="10" To="11" Label="Source2" />
+                                      <Edge From="11" To="12" Label="Source1" />
+                                      <Edge From="12" To="13" Label="Source1" />
+                                      <Edge From="13" To="14" Label="Source1" />
+                                    </Edges>
+                                  </Workflow>
+                                </Builder>
+                              </Expression>
+                              <Expression xsi:type="Disable">
+                                <Builder xsi:type="Combinator">
+                                  <Combinator xsi:type="rx:Merge" />
+                                </Builder>
+                              </Expression>
+                              <Expression xsi:type="Disable">
+                                <Builder xsi:type="Combinator">
+                                  <Combinator xsi:type="rx:Merge" />
+                                </Builder>
+                              </Expression>
+                            </Nodes>
+                            <Edges>
+                              <Edge From="0" To="1" Label="Source1" />
+                              <Edge From="1" To="2" Label="Source1" />
+                              <Edge From="3" To="4" Label="Source1" />
+                              <Edge From="5" To="6" Label="Source1" />
+                              <Edge From="6" To="7" Label="Source1" />
+                              <Edge From="7" To="8" Label="Source1" />
+                              <Edge From="9" To="12" Label="Source1" />
+                              <Edge From="10" To="11" Label="Source1" />
+                              <Edge From="11" To="12" Label="Source2" />
+                              <Edge From="12" To="13" Label="Source1" />
+                              <Edge From="13" To="16" Label="Source1" />
+                              <Edge From="14" To="15" Label="Source1" />
+                              <Edge From="15" To="16" Label="Source2" />
+                              <Edge From="16" To="19" Label="Source1" />
+                              <Edge From="17" To="18" Label="Source1" />
+                              <Edge From="18" To="19" Label="Source2" />
+                              <Edge From="19" To="20" Label="Source1" />
+                              <Edge From="20" To="21" Label="Source1" />
+                              <Edge From="22" To="23" Label="Source1" />
+                              <Edge From="23" To="24" Label="Source1" />
+                              <Edge From="23" To="27" Label="Source1" />
+                              <Edge From="24" To="26" Label="Source1" />
+                              <Edge From="25" To="26" Label="Source2" />
+                              <Edge From="25" To="28" Label="Source2" />
+                              <Edge From="26" To="29" Label="Source1" />
+                              <Edge From="27" To="28" Label="Source1" />
+                              <Edge From="28" To="29" Label="Source2" />
+                              <Edge From="29" To="30" Label="Source1" />
+                            </Edges>
+                          </Workflow>
+                        </Expression>
+                        <Expression xsi:type="rx:ReplaySubject">
+                          <Name>LoomEvents</Name>
+                          <rx:BufferSize xsi:nil="true" />
+                        </Expression>
+                        <Expression xsi:type="rx:ReplaySubject" TypeArguments="p4:IGroupedObservable(sys:Int32,p1:LoomAction)">
+                          <rx:Name>LoomTrigger</rx:Name>
+                          <rx:BufferSize xsi:nil="true" />
+                        </Expression>
+                      </Nodes>
+                      <Edges>
+                        <Edge From="0" To="1" Label="Source1" />
+                        <Edge From="1" To="2" Label="Source1" />
+                        <Edge From="2" To="3" Label="Source1" />
+                        <Edge From="3" To="4" Label="Source1" />
                       </Edges>
                     </Workflow>
                   </Expression>
@@ -2879,7 +5139,64 @@
         <WorkflowName>Exp0-PHIELDS01.bonsai</WorkflowName>
       </Expression>
       <Expression xsi:type="IncludeWorkflow" Path="Extensions\ControlPanel.bonsai" />
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="wie:KeyDown">
+          <wie:Filter>D</wie:Filter>
+          <wie:SuppressRepetitions>false</wie:SuppressRepetitions>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="PropertySource" TypeArguments="p1:LoomTrigger,p1:LoomAction">
+        <MemberName>Trigger</MemberName>
+        <Value>Drop</Value>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="IntProperty">
+          <Value>0</Value>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="rx:WithLatestFrom" />
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="wie:KeyDown">
+          <wie:Filter>H</wie:Filter>
+          <wie:SuppressRepetitions>false</wie:SuppressRepetitions>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="PropertySource" TypeArguments="p1:LoomTrigger,p1:LoomAction">
+        <MemberName>Trigger</MemberName>
+        <Value>Home</Value>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="IntProperty">
+          <Value>0</Value>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="rx:WithLatestFrom" />
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="rx:Merge" />
+      </Expression>
+      <Expression xsi:type="rx:GroupBy">
+        <rx:KeySelector>Item2</rx:KeySelector>
+        <rx:ElementSelector>Item1</rx:ElementSelector>
+      </Expression>
+      <Expression xsi:type="MulticastSubject">
+        <Name>LoomTrigger</Name>
+      </Expression>
     </Nodes>
-    <Edges />
+    <Edges>
+      <Edge From="3" To="4" Label="Source1" />
+      <Edge From="4" To="6" Label="Source1" />
+      <Edge From="5" To="6" Label="Source2" />
+      <Edge From="6" To="11" Label="Source1" />
+      <Edge From="7" To="8" Label="Source1" />
+      <Edge From="8" To="10" Label="Source1" />
+      <Edge From="9" To="10" Label="Source2" />
+      <Edge From="10" To="11" Label="Source2" />
+      <Edge From="11" To="12" Label="Source1" />
+      <Edge From="12" To="13" Label="Source1" />
+    </Edges>
   </Workflow>
 </WorkflowBuilder>

@@ -10,6 +10,68 @@ namespace RigConfiguration
     #pragma warning disable // Disable all warnings
 
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.4.0.0 (YamlDotNet v13.0.0.0)")]
+    [Bonsai.CombinatorAttribute()]
+    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
+    public partial class LoomTrigger
+    {
+    
+        private LoomAction _trigger;
+    
+        public LoomTrigger()
+        {
+        }
+    
+        protected LoomTrigger(LoomTrigger other)
+        {
+            _trigger = other._trigger;
+        }
+    
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="trigger")]
+        public LoomAction Trigger
+        {
+            get
+            {
+                return _trigger;
+            }
+            set
+            {
+                _trigger = value;
+            }
+        }
+    
+        public System.IObservable<LoomTrigger> Process()
+        {
+            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new LoomTrigger(this)));
+        }
+    
+        public System.IObservable<LoomTrigger> Process<TSource>(System.IObservable<TSource> source)
+        {
+            return System.Reactive.Linq.Observable.Select(source, _ => new LoomTrigger(this));
+        }
+    
+        protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
+        {
+            stringBuilder.Append("trigger = " + _trigger);
+            return true;
+        }
+    
+        public override string ToString()
+        {
+            System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
+            stringBuilder.Append(GetType().Name);
+            stringBuilder.Append(" { ");
+            if (PrintMembers(stringBuilder))
+            {
+                stringBuilder.Append(" ");
+            }
+            stringBuilder.Append("}");
+            return stringBuilder.ToString();
+        }
+    }
+
+
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.4.0.0 (YamlDotNet v13.0.0.0)")]
     public enum ClockSynchronizerName
     {
     
@@ -37,7 +99,7 @@ namespace RigConfiguration
 
 
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.4.0.0 (YamlDotNet v13.0.0.0)")]
-    public enum TriggerName
+    public enum CameraTriggerName
     {
     
         [YamlDotNet.Serialization.YamlMemberAttribute(Alias="Trigger0")]
@@ -51,18 +113,18 @@ namespace RigConfiguration
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.4.0.0 (YamlDotNet v13.0.0.0)")]
     [Bonsai.CombinatorAttribute()]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
-    public partial class TriggerSource
+    public partial class CameraTriggerSource
     {
     
-        private TriggerName _triggerName = RigConfiguration.TriggerName.Trigger0;
+        private CameraTriggerName _triggerName = RigConfiguration.CameraTriggerName.Trigger0;
     
         private int _triggerFrequency = 50;
     
-        public TriggerSource()
+        public CameraTriggerSource()
         {
         }
     
-        protected TriggerSource(TriggerSource other)
+        protected CameraTriggerSource(CameraTriggerSource other)
         {
             _triggerName = other._triggerName;
             _triggerFrequency = other._triggerFrequency;
@@ -70,7 +132,7 @@ namespace RigConfiguration
     
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [YamlDotNet.Serialization.YamlMemberAttribute(Alias="TriggerName")]
-        public TriggerName TriggerName
+        public CameraTriggerName TriggerName
         {
             get
             {
@@ -95,14 +157,14 @@ namespace RigConfiguration
             }
         }
     
-        public System.IObservable<TriggerSource> Process()
+        public System.IObservable<CameraTriggerSource> Process()
         {
-            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new TriggerSource(this)));
+            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new CameraTriggerSource(this)));
         }
     
-        public System.IObservable<TriggerSource> Process<TSource>(System.IObservable<TSource> source)
+        public System.IObservable<CameraTriggerSource> Process<TSource>(System.IObservable<TSource> source)
         {
-            return System.Reactive.Linq.Observable.Select(source, _ => new TriggerSource(this));
+            return System.Reactive.Linq.Observable.Select(source, _ => new CameraTriggerSource(this));
         }
     
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
@@ -147,7 +209,7 @@ namespace RigConfiguration
     
         private CameraName _cameraName = RigConfiguration.CameraName.CameraTop;
     
-        private TriggerName _triggerName;
+        private CameraTriggerName _triggerName;
     
         private double _exposureTime = 15000D;
     
@@ -187,7 +249,7 @@ namespace RigConfiguration
     
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [YamlDotNet.Serialization.YamlMemberAttribute(Alias="triggerName")]
-        public TriggerName TriggerName
+        public CameraTriggerName TriggerName
         {
             get
             {
@@ -303,6 +365,185 @@ namespace RigConfiguration
     }
 
 
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.4.0.0 (YamlDotNet v13.0.0.0)")]
+    [Bonsai.CombinatorAttribute()]
+    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
+    public partial class MechanicalLoom
+    {
+    
+        private string _portName = "COM9";
+    
+        private int _id = 0;
+    
+        private int _homeVelocity = 200;
+    
+        private int _bottomPosition = 3000;
+    
+        private double _bottomPauseTimeSeconds = 1D;
+    
+        private int _dropAcceleration = 18000;
+    
+        private int _dropMaxVelocity = 10000;
+    
+        public MechanicalLoom()
+        {
+        }
+    
+        protected MechanicalLoom(MechanicalLoom other)
+        {
+            _portName = other._portName;
+            _id = other._id;
+            _homeVelocity = other._homeVelocity;
+            _bottomPosition = other._bottomPosition;
+            _bottomPauseTimeSeconds = other._bottomPauseTimeSeconds;
+            _dropAcceleration = other._dropAcceleration;
+            _dropMaxVelocity = other._dropMaxVelocity;
+        }
+    
+        /// <summary>
+        /// The COM port for the timestamp generator board
+        /// </summary>
+        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="portName")]
+        [System.ComponentModel.DescriptionAttribute("The COM port for the timestamp generator board")]
+        public string PortName
+        {
+            get
+            {
+                return _portName;
+            }
+            set
+            {
+                _portName = value;
+            }
+        }
+    
+        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="id")]
+        public int Id
+        {
+            get
+            {
+                return _id;
+            }
+            set
+            {
+                _id = value;
+            }
+        }
+    
+        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="homeVelocity")]
+        public int HomeVelocity
+        {
+            get
+            {
+                return _homeVelocity;
+            }
+            set
+            {
+                _homeVelocity = value;
+            }
+        }
+    
+        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="bottomPosition")]
+        public int BottomPosition
+        {
+            get
+            {
+                return _bottomPosition;
+            }
+            set
+            {
+                _bottomPosition = value;
+            }
+        }
+    
+        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="bottomPauseTimeSeconds")]
+        public double BottomPauseTimeSeconds
+        {
+            get
+            {
+                return _bottomPauseTimeSeconds;
+            }
+            set
+            {
+                _bottomPauseTimeSeconds = value;
+            }
+        }
+    
+        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="dropAcceleration")]
+        public int DropAcceleration
+        {
+            get
+            {
+                return _dropAcceleration;
+            }
+            set
+            {
+                _dropAcceleration = value;
+            }
+        }
+    
+        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="dropMaxVelocity")]
+        public int DropMaxVelocity
+        {
+            get
+            {
+                return _dropMaxVelocity;
+            }
+            set
+            {
+                _dropMaxVelocity = value;
+            }
+        }
+    
+        public System.IObservable<MechanicalLoom> Process()
+        {
+            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new MechanicalLoom(this)));
+        }
+    
+        public System.IObservable<MechanicalLoom> Process<TSource>(System.IObservable<TSource> source)
+        {
+            return System.Reactive.Linq.Observable.Select(source, _ => new MechanicalLoom(this));
+        }
+    
+        protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
+        {
+            stringBuilder.Append("portName = " + _portName + ", ");
+            stringBuilder.Append("id = " + _id + ", ");
+            stringBuilder.Append("homeVelocity = " + _homeVelocity + ", ");
+            stringBuilder.Append("bottomPosition = " + _bottomPosition + ", ");
+            stringBuilder.Append("bottomPauseTimeSeconds = " + _bottomPauseTimeSeconds + ", ");
+            stringBuilder.Append("dropAcceleration = " + _dropAcceleration + ", ");
+            stringBuilder.Append("dropMaxVelocity = " + _dropMaxVelocity);
+            return true;
+        }
+    
+        public override string ToString()
+        {
+            System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
+            stringBuilder.Append(GetType().Name);
+            stringBuilder.Append(" { ");
+            if (PrintMembers(stringBuilder))
+            {
+                stringBuilder.Append(" ");
+            }
+            stringBuilder.Append("}");
+            return stringBuilder.ToString();
+        }
+    }
+
+
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.4.0.0 (YamlDotNet v13.0.0.0)")]
+    public enum LoomAction
+    {
+    
+        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="Drop")]
+        Drop = 0,
+    
+        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="Home")]
+        Home = 1,
+    }
+
+
     /// <summary>
     /// Describes the hardware and tracking configuration for the rig
     /// </summary>
@@ -319,6 +560,8 @@ namespace RigConfiguration
     
         private System.Collections.Generic.List<SpinnakerSettings> _cameras = new System.Collections.Generic.List<SpinnakerSettings>();
     
+        private System.Collections.Generic.List<MechanicalLoom> _looms = new System.Collections.Generic.List<MechanicalLoom>();
+    
         public RigConfig()
         {
         }
@@ -328,6 +571,7 @@ namespace RigConfiguration
             _clockSynchronizer = other._clockSynchronizer;
             _cameraController = other._cameraController;
             _cameras = other._cameras;
+            _looms = other._looms;
         }
     
         [System.Xml.Serialization.XmlIgnoreAttribute()]
@@ -372,6 +616,20 @@ namespace RigConfiguration
             }
         }
     
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="looms")]
+        public System.Collections.Generic.List<MechanicalLoom> Looms
+        {
+            get
+            {
+                return _looms;
+            }
+            set
+            {
+                _looms = value;
+            }
+        }
+    
         public System.IObservable<RigConfig> Process()
         {
             return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new RigConfig(this)));
@@ -386,7 +644,8 @@ namespace RigConfiguration
         {
             stringBuilder.Append("clockSynchronizer = " + _clockSynchronizer + ", ");
             stringBuilder.Append("cameraController = " + _cameraController + ", ");
-            stringBuilder.Append("cameras = " + _cameras);
+            stringBuilder.Append("cameras = " + _cameras + ", ");
+            stringBuilder.Append("looms = " + _looms);
             return true;
         }
     
@@ -498,7 +757,7 @@ namespace RigConfiguration
     
         private string _portName = "COM7";
     
-        private System.Collections.Generic.List<TriggerSource> _triggers = new System.Collections.Generic.List<TriggerSource>();
+        private System.Collections.Generic.List<CameraTriggerSource> _triggers = new System.Collections.Generic.List<CameraTriggerSource>();
     
         public CameraController()
         {
@@ -544,7 +803,7 @@ namespace RigConfiguration
     
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [YamlDotNet.Serialization.YamlMemberAttribute(Alias="triggers")]
-        public System.Collections.Generic.List<TriggerSource> Triggers
+        public System.Collections.Generic.List<CameraTriggerSource> Triggers
         {
             get
             {
@@ -609,14 +868,24 @@ namespace RigConfiguration
             });
         }
 
-        public System.IObservable<string> Process(System.IObservable<TriggerSource> source)
+        public System.IObservable<string> Process(System.IObservable<LoomTrigger> source)
         {
-            return Process<TriggerSource>(source);
+            return Process<LoomTrigger>(source);
+        }
+
+        public System.IObservable<string> Process(System.IObservable<CameraTriggerSource> source)
+        {
+            return Process<CameraTriggerSource>(source);
         }
 
         public System.IObservable<string> Process(System.IObservable<SpinnakerSettings> source)
         {
             return Process<SpinnakerSettings>(source);
+        }
+
+        public System.IObservable<string> Process(System.IObservable<MechanicalLoom> source)
+        {
+            return Process<MechanicalLoom>(source);
         }
 
         public System.IObservable<string> Process(System.IObservable<RigConfig> source)
@@ -643,8 +912,10 @@ namespace RigConfiguration
     [System.ComponentModel.DescriptionAttribute("Deserializes a sequence of YAML strings into data model objects.")]
     [System.ComponentModel.DefaultPropertyAttribute("Type")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Transform)]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<TriggerSource>))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<LoomTrigger>))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<CameraTriggerSource>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<SpinnakerSettings>))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<MechanicalLoom>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<RigConfig>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<ClockSynchronizer>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<CameraController>))]

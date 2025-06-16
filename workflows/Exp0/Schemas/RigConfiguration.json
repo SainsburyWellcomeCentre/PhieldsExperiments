@@ -3,7 +3,18 @@
     "$schema": "https://json-schema.org/draft-07/schema",
     "description": "Describes the hardware and tracking configuration for the rig",
     "title": "RigConfig",
-    "definitions": {
+    "definitions": 
+    {
+        "loomTrigger":
+        {
+            "properties": 
+            {
+                "trigger":
+                {
+                    "$ref":"LoomConfiguration.json#/definitions/loomAction"
+                }
+            }
+        },
         "clockSynchronizerName":
         {
             "enum": ["TimestampGeneratorGen3","ClockSynchronizer"],
@@ -16,18 +27,19 @@
             "default": "CameraControllerGen2",
             "type": "string"
         },
-        "triggerName":
+        "cameraTriggerName":
         {   
             "enum": ["Trigger0","Trigger1"],
             "default": "Trigger1",
             "type": "string"
 
         },
-        "triggerSource":
+        "cameraTriggerSource":
         {
             "properties": {
                 "TriggerName":
-                { "$ref":"#/definitions/triggerName",
+                { 
+                    "$ref":"#/definitions/cameraTriggerName",
                     "default": "Trigger0"
                 },
                 "triggerFrequency":
@@ -52,7 +64,7 @@
                 },
                 "triggerName":
                 {
-                    "$ref":"#/definitions/triggerName"
+                    "$ref":"#/definitions/cameraTriggerName"
                 },
                 "exposureTime": {
                     "type": "number",
@@ -129,7 +141,7 @@
                 "triggers":{
                     "type":"array",
                     "items": {
-                        "$ref":"#/definitions/triggerSource"
+                        "$ref":"#/definitions/cameraTriggerSource"
                     }
                 }
             },
@@ -145,6 +157,14 @@
             "items": 
             {
                 "$ref": "#/definitions/spinnakerSettings"
+            }
+        },
+        "looms":
+        {
+            "type" : "array",
+            "items":
+            {
+                "$ref": "LoomConfiguration.json#/definitions/mechanicalLoom"
             }
         }
     },
