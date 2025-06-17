@@ -1,7 +1,7 @@
 {
     "$id": "...h",
     "$schema": "https://json-schema.org/draft-07/schema",
-    "description": "Describes the Loom hardware for Phields hardware",
+    "description": "Describes the Loom hardware for Phields project",
     "title": "LoomConfig",
     "definitions": 
     {
@@ -19,39 +19,45 @@
                 {
                     "type": "string",
                     "default": "COM9",
-                    "description": "The COM port for the timestamp generator board"
+                    "description": "The COM port for the fast stepper board"
                 },
                 "id":
                 {
                     "type": "integer",
-                    "default":0
+                    "default":0,
+                    "description": "The id of the loom in the arena"
                 },
                 "homeVelocity" :
                 {
                     "type":"integer",
-                    "default": 200
+                    "default": 200,
+                    "description": "The velocity that the system pulls the loom up, until reaches a point near the home switch"
                 },
                 "bottomPosition":
                 {
                     "type":"integer",
-                    "default":3000
+                    "default":3000,
+                    "description": "The position to where the loom is dropped"
                 },
                 "bottomPauseTimeSeconds":
                 {
                     "type":"number",
-                    "default": 1.0
+                    "default": 1.0,
+                    "description": "The time that loom remains in the bottom"
                 },
                 "dropAcceleration" :
                 {
                     "type":"integer",
                     "default": 18000,
                     "minimum": 10000,
-                    "maximum": 20000
+                    "maximum": 20000,
+                    "description": "The acceleration of loom drop"
                 },
                 "dropMaxVelocity":
                 {
                     "type":"integer",
-                    "default": 10000
+                    "default": 10000,
+                    "description": "Maximum drop velocity"
                 }
             },
             "required": [
