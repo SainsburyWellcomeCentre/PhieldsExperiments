@@ -15,6 +15,16 @@
                 }
             }
         },
+        "feederTrigger":
+        {
+            "properties": 
+            {
+                "trigger":
+                {
+                    "$ref":"FeederConfiguration.json#/definitions/feederAction"
+                }
+            }
+        },
         "clockSynchronizerName":
         {
             "enum": ["TimestampGeneratorGen3","ClockSynchronizer"],
@@ -165,6 +175,14 @@
             "items":
             {
                 "$ref": "LoomConfiguration.json#/definitions/mechanicalLoom"
+            }
+        },
+        "feeders":
+        {
+            "type" : "array",
+            "items":
+            {
+                "$ref": "FeederConfiguration.json#/definitions/underGroundFeeder"
             }
         }
     },

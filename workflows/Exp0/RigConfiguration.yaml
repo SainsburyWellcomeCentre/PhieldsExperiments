@@ -18,6 +18,17 @@ looms:
     dropMaxVelocity: 10000
     homeVelocity: 200
     id: 00
+feeders:
+  - portName: COM15
+    id: 0
+    pelletDeliveryRetryCount: 2
+    pelletDeliveryTimeoutSeconds: 1
+    wheelRadius: -4
+  - portName: COM16
+    id: 1
+    pelletDeliveryRetryCount: 2
+    pelletDeliveryTimeoutSeconds: 1
+    wheelRadius: -4
 cameras:
   - cameraName: CameraSide
     triggerName: Trigger1

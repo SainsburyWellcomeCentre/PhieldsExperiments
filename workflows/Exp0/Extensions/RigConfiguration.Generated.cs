@@ -72,6 +72,68 @@ namespace RigConfiguration
 
 
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.4.0.0 (YamlDotNet v13.0.0.0)")]
+    [Bonsai.CombinatorAttribute()]
+    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
+    public partial class FeederTrigger
+    {
+    
+        private FeederAction _trigger;
+    
+        public FeederTrigger()
+        {
+        }
+    
+        protected FeederTrigger(FeederTrigger other)
+        {
+            _trigger = other._trigger;
+        }
+    
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="trigger")]
+        public FeederAction Trigger
+        {
+            get
+            {
+                return _trigger;
+            }
+            set
+            {
+                _trigger = value;
+            }
+        }
+    
+        public System.IObservable<FeederTrigger> Process()
+        {
+            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new FeederTrigger(this)));
+        }
+    
+        public System.IObservable<FeederTrigger> Process<TSource>(System.IObservable<TSource> source)
+        {
+            return System.Reactive.Linq.Observable.Select(source, _ => new FeederTrigger(this));
+        }
+    
+        protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
+        {
+            stringBuilder.Append("trigger = " + _trigger);
+            return true;
+        }
+    
+        public override string ToString()
+        {
+            System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
+            stringBuilder.Append(GetType().Name);
+            stringBuilder.Append(" { ");
+            if (PrintMembers(stringBuilder))
+            {
+                stringBuilder.Append(" ");
+            }
+            stringBuilder.Append("}");
+            return stringBuilder.ToString();
+        }
+    }
+
+
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.4.0.0 (YamlDotNet v13.0.0.0)")]
     public enum ClockSynchronizerName
     {
     
@@ -401,10 +463,10 @@ namespace RigConfiguration
         }
     
         /// <summary>
-        /// The COM port for the timestamp generator board
+        /// The COM port for the fast stepper board
         /// </summary>
         [YamlDotNet.Serialization.YamlMemberAttribute(Alias="portName")]
-        [System.ComponentModel.DescriptionAttribute("The COM port for the timestamp generator board")]
+        [System.ComponentModel.DescriptionAttribute("The COM port for the fast stepper board")]
         public string PortName
         {
             get
@@ -417,7 +479,11 @@ namespace RigConfiguration
             }
         }
     
+        /// <summary>
+        /// The id of the loom in the arena
+        /// </summary>
         [YamlDotNet.Serialization.YamlMemberAttribute(Alias="id")]
+        [System.ComponentModel.DescriptionAttribute("The id of the loom in the arena")]
         public int Id
         {
             get
@@ -430,7 +496,12 @@ namespace RigConfiguration
             }
         }
     
+        /// <summary>
+        /// The velocity that the system pulls the loom up, until reaches a point near the home switch
+        /// </summary>
         [YamlDotNet.Serialization.YamlMemberAttribute(Alias="homeVelocity")]
+        [System.ComponentModel.DescriptionAttribute("The velocity that the system pulls the loom up, until reaches a point near the ho" +
+            "me switch")]
         public int HomeVelocity
         {
             get
@@ -443,7 +514,11 @@ namespace RigConfiguration
             }
         }
     
+        /// <summary>
+        /// The position to where the loom is dropped
+        /// </summary>
         [YamlDotNet.Serialization.YamlMemberAttribute(Alias="bottomPosition")]
+        [System.ComponentModel.DescriptionAttribute("The position to where the loom is dropped")]
         public int BottomPosition
         {
             get
@@ -456,7 +531,11 @@ namespace RigConfiguration
             }
         }
     
+        /// <summary>
+        /// The time that loom remains in the bottom
+        /// </summary>
         [YamlDotNet.Serialization.YamlMemberAttribute(Alias="bottomPauseTimeSeconds")]
+        [System.ComponentModel.DescriptionAttribute("The time that loom remains in the bottom")]
         public double BottomPauseTimeSeconds
         {
             get
@@ -469,7 +548,11 @@ namespace RigConfiguration
             }
         }
     
+        /// <summary>
+        /// The acceleration of loom drop
+        /// </summary>
         [YamlDotNet.Serialization.YamlMemberAttribute(Alias="dropAcceleration")]
+        [System.ComponentModel.DescriptionAttribute("The acceleration of loom drop")]
         public int DropAcceleration
         {
             get
@@ -482,7 +565,11 @@ namespace RigConfiguration
             }
         }
     
+        /// <summary>
+        /// Maximum drop velocity
+        /// </summary>
         [YamlDotNet.Serialization.YamlMemberAttribute(Alias="dropMaxVelocity")]
+        [System.ComponentModel.DescriptionAttribute("Maximum drop velocity")]
         public int DropMaxVelocity
         {
             get
@@ -533,6 +620,157 @@ namespace RigConfiguration
 
 
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.4.0.0 (YamlDotNet v13.0.0.0)")]
+    [Bonsai.CombinatorAttribute()]
+    [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Source)]
+    public partial class UnderGroundFeeder
+    {
+    
+        private string _portName = "COM9";
+    
+        private int _id = 0;
+    
+        private int _pelletDeliveryRetryCount = 2;
+    
+        private double _pelletDeliveryTimeoutSeconds = 1D;
+    
+        private double _wheelRadius = -4D;
+    
+        public UnderGroundFeeder()
+        {
+        }
+    
+        protected UnderGroundFeeder(UnderGroundFeeder other)
+        {
+            _portName = other._portName;
+            _id = other._id;
+            _pelletDeliveryRetryCount = other._pelletDeliveryRetryCount;
+            _pelletDeliveryTimeoutSeconds = other._pelletDeliveryTimeoutSeconds;
+            _wheelRadius = other._wheelRadius;
+        }
+    
+        /// <summary>
+        /// The COM port for the underground feeder (output expander) board
+        /// </summary>
+        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="portName")]
+        [System.ComponentModel.DescriptionAttribute("The COM port for the underground feeder (output expander) board")]
+        public string PortName
+        {
+            get
+            {
+                return _portName;
+            }
+            set
+            {
+                _portName = value;
+            }
+        }
+    
+        /// <summary>
+        /// The id of the feeder in the arena
+        /// </summary>
+        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="id")]
+        [System.ComponentModel.DescriptionAttribute("The id of the feeder in the arena")]
+        public int Id
+        {
+            get
+            {
+                return _id;
+            }
+            set
+            {
+                _id = value;
+            }
+        }
+    
+        /// <summary>
+        /// The number of times that retries to deliver a pellet before reporting an error
+        /// </summary>
+        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="pelletDeliveryRetryCount")]
+        [System.ComponentModel.DescriptionAttribute("The number of times that retries to deliver a pellet before reporting an error")]
+        public int PelletDeliveryRetryCount
+        {
+            get
+            {
+                return _pelletDeliveryRetryCount;
+            }
+            set
+            {
+                _pelletDeliveryRetryCount = value;
+            }
+        }
+    
+        /// <summary>
+        /// The amount of time that waits for a pellet to be delivered before reporting as failed to deliver
+        /// </summary>
+        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="pelletDeliveryTimeoutSeconds")]
+        [System.ComponentModel.DescriptionAttribute("The amount of time that waits for a pellet to be delivered before reporting as fa" +
+            "iled to deliver")]
+        public double PelletDeliveryTimeoutSeconds
+        {
+            get
+            {
+                return _pelletDeliveryTimeoutSeconds;
+            }
+            set
+            {
+                _pelletDeliveryTimeoutSeconds = value;
+            }
+        }
+    
+        /// <summary>
+        /// The radius of the wheel used for distance calculations, positive or negative related to the side where the encoder is placed in the wheel
+        /// </summary>
+        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="wheelRadius")]
+        [System.ComponentModel.DescriptionAttribute("The radius of the wheel used for distance calculations, positive or negative rela" +
+            "ted to the side where the encoder is placed in the wheel")]
+        public double WheelRadius
+        {
+            get
+            {
+                return _wheelRadius;
+            }
+            set
+            {
+                _wheelRadius = value;
+            }
+        }
+    
+        public System.IObservable<UnderGroundFeeder> Process()
+        {
+            return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new UnderGroundFeeder(this)));
+        }
+    
+        public System.IObservable<UnderGroundFeeder> Process<TSource>(System.IObservable<TSource> source)
+        {
+            return System.Reactive.Linq.Observable.Select(source, _ => new UnderGroundFeeder(this));
+        }
+    
+        protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
+        {
+            stringBuilder.Append("portName = " + _portName + ", ");
+            stringBuilder.Append("id = " + _id + ", ");
+            stringBuilder.Append("pelletDeliveryRetryCount = " + _pelletDeliveryRetryCount + ", ");
+            stringBuilder.Append("pelletDeliveryTimeoutSeconds = " + _pelletDeliveryTimeoutSeconds + ", ");
+            stringBuilder.Append("wheelRadius = " + _wheelRadius);
+            return true;
+        }
+    
+        public override string ToString()
+        {
+            System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
+            stringBuilder.Append(GetType().Name);
+            stringBuilder.Append(" { ");
+            if (PrintMembers(stringBuilder))
+            {
+                stringBuilder.Append(" ");
+            }
+            stringBuilder.Append("}");
+            return stringBuilder.ToString();
+        }
+    }
+
+
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.4.0.0 (YamlDotNet v13.0.0.0)")]
     public enum LoomAction
     {
     
@@ -541,6 +779,18 @@ namespace RigConfiguration
     
         [YamlDotNet.Serialization.YamlMemberAttribute(Alias="Home")]
         Home = 1,
+    }
+
+
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Bonsai.Sgen", "0.4.0.0 (YamlDotNet v13.0.0.0)")]
+    public enum FeederAction
+    {
+    
+        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="DeliverPellet")]
+        DeliverPellet = 0,
+    
+        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="ResetFeeder")]
+        ResetFeeder = 1,
     }
 
 
@@ -562,6 +812,8 @@ namespace RigConfiguration
     
         private System.Collections.Generic.List<MechanicalLoom> _looms = new System.Collections.Generic.List<MechanicalLoom>();
     
+        private System.Collections.Generic.List<UnderGroundFeeder> _feeders = new System.Collections.Generic.List<UnderGroundFeeder>();
+    
         public RigConfig()
         {
         }
@@ -572,6 +824,7 @@ namespace RigConfiguration
             _cameraController = other._cameraController;
             _cameras = other._cameras;
             _looms = other._looms;
+            _feeders = other._feeders;
         }
     
         [System.Xml.Serialization.XmlIgnoreAttribute()]
@@ -630,6 +883,20 @@ namespace RigConfiguration
             }
         }
     
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="feeders")]
+        public System.Collections.Generic.List<UnderGroundFeeder> Feeders
+        {
+            get
+            {
+                return _feeders;
+            }
+            set
+            {
+                _feeders = value;
+            }
+        }
+    
         public System.IObservable<RigConfig> Process()
         {
             return System.Reactive.Linq.Observable.Defer(() => System.Reactive.Linq.Observable.Return(new RigConfig(this)));
@@ -645,7 +912,8 @@ namespace RigConfiguration
             stringBuilder.Append("clockSynchronizer = " + _clockSynchronizer + ", ");
             stringBuilder.Append("cameraController = " + _cameraController + ", ");
             stringBuilder.Append("cameras = " + _cameras + ", ");
-            stringBuilder.Append("looms = " + _looms);
+            stringBuilder.Append("looms = " + _looms + ", ");
+            stringBuilder.Append("feeders = " + _feeders);
             return true;
         }
     
@@ -873,6 +1141,11 @@ namespace RigConfiguration
             return Process<LoomTrigger>(source);
         }
 
+        public System.IObservable<string> Process(System.IObservable<FeederTrigger> source)
+        {
+            return Process<FeederTrigger>(source);
+        }
+
         public System.IObservable<string> Process(System.IObservable<CameraTriggerSource> source)
         {
             return Process<CameraTriggerSource>(source);
@@ -886,6 +1159,11 @@ namespace RigConfiguration
         public System.IObservable<string> Process(System.IObservable<MechanicalLoom> source)
         {
             return Process<MechanicalLoom>(source);
+        }
+
+        public System.IObservable<string> Process(System.IObservable<UnderGroundFeeder> source)
+        {
+            return Process<UnderGroundFeeder>(source);
         }
 
         public System.IObservable<string> Process(System.IObservable<RigConfig> source)
@@ -913,9 +1191,11 @@ namespace RigConfiguration
     [System.ComponentModel.DefaultPropertyAttribute("Type")]
     [Bonsai.WorkflowElementCategoryAttribute(Bonsai.ElementCategory.Transform)]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<LoomTrigger>))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<FeederTrigger>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<CameraTriggerSource>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<SpinnakerSettings>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<MechanicalLoom>))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<UnderGroundFeeder>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<RigConfig>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<ClockSynchronizer>))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Bonsai.Expressions.TypeMapping<CameraController>))]
