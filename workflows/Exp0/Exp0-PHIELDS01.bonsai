@@ -3319,7 +3319,7 @@
                               </Expression>
                               <Expression xsi:type="IncludeWorkflow" Path="Extensions\GroupBySettingsId.bonsai" />
                               <Expression xsi:type="MulticastSubject">
-                                <Name>WheelDisplacement</Name>
+                                <Name>FeederWheelDisplacement</Name>
                               </Expression>
                               <Expression xsi:type="SubscribeSubject">
                                 <Name>Events</Name>
@@ -3369,7 +3369,7 @@
                               </Expression>
                               <Expression xsi:type="IncludeWorkflow" Path="Extensions\GroupBySettingsId.bonsai" />
                               <Expression xsi:type="MulticastSubject">
-                                <Name>PelletDelivered</Name>
+                                <Name>FeederPelletDelivered</Name>
                               </Expression>
                               <Expression xsi:type="SubscribeSubject">
                                 <Name>ResetFeeder</Name>
@@ -3652,11 +3652,11 @@ Item2.Seconds as Seconds)</scr:Expression>
                           <rx:BufferSize xsi:nil="true" />
                         </Expression>
                         <Expression xsi:type="rx:ReplaySubject" TypeArguments="p4:IGroupedObservable(sys:Int32,harp:Timestamped(sys:Boolean))">
-                          <rx:Name>PelletDelivered</rx:Name>
+                          <rx:Name>FeederPelletDelivered</rx:Name>
                           <rx:BufferSize xsi:nil="true" />
                         </Expression>
                         <Expression xsi:type="rx:ReplaySubject" TypeArguments="p4:IGroupedObservable(sys:Int32,harp:Timestamped(sys:Double))">
-                          <rx:Name>WheelDisplacement</rx:Name>
+                          <rx:Name>FeederWheelDisplacement</rx:Name>
                           <rx:BufferSize xsi:nil="true" />
                         </Expression>
                       </Nodes>
