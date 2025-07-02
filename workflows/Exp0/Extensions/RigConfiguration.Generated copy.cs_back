@@ -260,9 +260,6 @@ namespace RigConfiguration
     
         [YamlDotNet.Serialization.YamlMemberAttribute(Alias="CameraSide")]
         CameraSide = 1,
-    
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="CameraExtra")]
-        CameraExtra = 2,
     }
 
 
