@@ -312,6 +312,12 @@
                                         <p3:ConfigureCam0Event>EventOnTrigger</p3:ConfigureCam0Event>
                                       </harp:Payload>
                                     </Expression>
+                                    <Expression xsi:type="p3:CreateMessage">
+                                      <harp:MessageType>Write</harp:MessageType>
+                                      <harp:Payload xsi:type="p3:CreateTriggerConfigCam0Payload">
+                                        <p3:TriggerConfigCam0>Internal</p3:TriggerConfigCam0>
+                                      </harp:Payload>
+                                    </Expression>
                                     <Expression xsi:type="ExternalizedMapping">
                                       <Property Name="Value" DisplayName="Frequency" />
                                     </Expression>
@@ -330,17 +336,18 @@
                                       <harp:Register xsi:type="p3:TriggerFrequencyCam0" />
                                     </Expression>
                                     <Expression xsi:type="Combinator">
-                                      <Combinator xsi:type="rx:Merge" />
+                                      <Combinator xsi:type="rx:Concat" />
                                     </Expression>
                                     <Expression xsi:type="WorkflowOutput" />
                                   </Nodes>
                                   <Edges>
-                                    <Edge From="0" To="5" Label="Source1" />
-                                    <Edge From="1" To="2" Label="Source1" />
+                                    <Edge From="0" To="6" Label="Source1" />
+                                    <Edge From="1" To="6" Label="Source2" />
                                     <Edge From="2" To="3" Label="Source1" />
                                     <Edge From="3" To="4" Label="Source1" />
-                                    <Edge From="4" To="5" Label="Source2" />
-                                    <Edge From="5" To="6" Label="Source1" />
+                                    <Edge From="4" To="5" Label="Source1" />
+                                    <Edge From="5" To="6" Label="Source3" />
+                                    <Edge From="6" To="7" Label="Source1" />
                                   </Edges>
                                 </Workflow>
                               </Expression>
@@ -366,6 +373,12 @@
                                         <p3:ConfigureCam1Event>EventOnTrigger</p3:ConfigureCam1Event>
                                       </harp:Payload>
                                     </Expression>
+                                    <Expression xsi:type="p3:CreateMessage">
+                                      <harp:MessageType>Write</harp:MessageType>
+                                      <harp:Payload xsi:type="p3:CreateTriggerConfigCam1Payload">
+                                        <p3:TriggerConfigCam1>Internal</p3:TriggerConfigCam1>
+                                      </harp:Payload>
+                                    </Expression>
                                     <Expression xsi:type="ExternalizedMapping">
                                       <Property Name="Value" DisplayName="Frequency" />
                                     </Expression>
@@ -384,17 +397,18 @@
                                       <harp:Register xsi:type="p3:TriggerFrequencyCam1" />
                                     </Expression>
                                     <Expression xsi:type="Combinator">
-                                      <Combinator xsi:type="rx:Merge" />
+                                      <Combinator xsi:type="rx:Concat" />
                                     </Expression>
                                     <Expression xsi:type="WorkflowOutput" />
                                   </Nodes>
                                   <Edges>
-                                    <Edge From="0" To="5" Label="Source1" />
-                                    <Edge From="1" To="2" Label="Source1" />
+                                    <Edge From="0" To="6" Label="Source1" />
+                                    <Edge From="1" To="6" Label="Source2" />
                                     <Edge From="2" To="3" Label="Source1" />
                                     <Edge From="3" To="4" Label="Source1" />
-                                    <Edge From="4" To="5" Label="Source2" />
-                                    <Edge From="5" To="6" Label="Source1" />
+                                    <Edge From="4" To="5" Label="Source1" />
+                                    <Edge From="5" To="6" Label="Source3" />
+                                    <Edge From="6" To="7" Label="Source1" />
                                   </Edges>
                                 </Workflow>
                               </Expression>
