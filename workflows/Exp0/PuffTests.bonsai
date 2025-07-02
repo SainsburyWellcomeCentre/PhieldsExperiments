@@ -113,12 +113,18 @@
                             <p2:ConfigureCam0Event>EventOnTrigger</p2:ConfigureCam0Event>
                           </harp:Payload>
                         </Expression>
+                        <Expression xsi:type="p2:CreateMessage">
+                          <harp:MessageType>Write</harp:MessageType>
+                          <harp:Payload xsi:type="p2:CreateTriggerConfigCam0Payload">
+                            <p2:TriggerConfigCam0>Internal</p2:TriggerConfigCam0>
+                          </harp:Payload>
+                        </Expression>
                         <Expression xsi:type="ExternalizedMapping">
                           <Property Name="Value" DisplayName="Frequency" />
                         </Expression>
                         <Expression xsi:type="Combinator">
                           <Combinator xsi:type="IntProperty">
-                            <Value>50</Value>
+                            <Value>60</Value>
                           </Combinator>
                         </Expression>
                         <Expression xsi:type="Combinator">
@@ -131,17 +137,18 @@
                           <harp:Register xsi:type="p2:TriggerFrequencyCam0" />
                         </Expression>
                         <Expression xsi:type="Combinator">
-                          <Combinator xsi:type="rx:Merge" />
+                          <Combinator xsi:type="rx:Concat" />
                         </Expression>
                         <Expression xsi:type="WorkflowOutput" />
                       </Nodes>
                       <Edges>
-                        <Edge From="0" To="5" Label="Source1" />
-                        <Edge From="1" To="2" Label="Source1" />
+                        <Edge From="0" To="6" Label="Source1" />
+                        <Edge From="1" To="6" Label="Source2" />
                         <Edge From="2" To="3" Label="Source1" />
                         <Edge From="3" To="4" Label="Source1" />
-                        <Edge From="4" To="5" Label="Source2" />
-                        <Edge From="5" To="6" Label="Source1" />
+                        <Edge From="4" To="5" Label="Source1" />
+                        <Edge From="5" To="6" Label="Source3" />
+                        <Edge From="6" To="7" Label="Source1" />
                       </Edges>
                     </Workflow>
                   </Expression>
@@ -154,6 +161,12 @@
                           <harp:MessageType>Write</harp:MessageType>
                           <harp:Payload xsi:type="p2:CreateConfigureCam1EventPayload">
                             <p2:ConfigureCam1Event>EventOnTrigger</p2:ConfigureCam1Event>
+                          </harp:Payload>
+                        </Expression>
+                        <Expression xsi:type="p2:CreateMessage">
+                          <harp:MessageType>Write</harp:MessageType>
+                          <harp:Payload xsi:type="p2:CreateTriggerConfigCam1Payload">
+                            <p2:TriggerConfigCam1>Internal</p2:TriggerConfigCam1>
                           </harp:Payload>
                         </Expression>
                         <Expression xsi:type="ExternalizedMapping">
@@ -174,17 +187,18 @@
                           <harp:Register xsi:type="p2:TriggerFrequencyCam1" />
                         </Expression>
                         <Expression xsi:type="Combinator">
-                          <Combinator xsi:type="rx:Merge" />
+                          <Combinator xsi:type="rx:Concat" />
                         </Expression>
                         <Expression xsi:type="WorkflowOutput" />
                       </Nodes>
                       <Edges>
-                        <Edge From="0" To="5" Label="Source1" />
-                        <Edge From="1" To="2" Label="Source1" />
+                        <Edge From="0" To="6" Label="Source1" />
+                        <Edge From="1" To="6" Label="Source2" />
                         <Edge From="2" To="3" Label="Source1" />
                         <Edge From="3" To="4" Label="Source1" />
-                        <Edge From="4" To="5" Label="Source2" />
-                        <Edge From="5" To="6" Label="Source1" />
+                        <Edge From="4" To="5" Label="Source1" />
+                        <Edge From="5" To="6" Label="Source3" />
+                        <Edge From="6" To="7" Label="Source1" />
                       </Edges>
                     </Workflow>
                   </Expression>
@@ -330,9 +344,9 @@
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="aeon:SpinnakerCapture">
                       <spk:Index xsi:nil="true" />
-                      <spk:SerialNumber>23425449</spk:SerialNumber>
+                      <spk:SerialNumber>23459421</spk:SerialNumber>
                       <spk:ColorProcessing>Default</spk:ColorProcessing>
-                      <aeon:ExposureTime>15000</aeon:ExposureTime>
+                      <aeon:ExposureTime>5000</aeon:ExposureTime>
                       <aeon:Gain>1</aeon:Gain>
                       <aeon:Binning>1</aeon:Binning>
                     </Combinator>
@@ -3166,18 +3180,10 @@
                     <Selector>Value.Image</Selector>
                   </Expression>
                   <Expression xsi:type="VisualizerMapping" />
-                  <Expression xsi:type="gui:PropertyGridBuilder">
-                    <gui:Enabled>true</gui:Enabled>
-                    <gui:Visible>true</gui:Visible>
-                    <gui:HelpVisible>false</gui:HelpVisible>
-                    <gui:ToolbarVisible>true</gui:ToolbarVisible>
-                    <gui:AutoRefresh>false</gui:AutoRefresh>
-                  </Expression>
-                  <Expression xsi:type="VisualizerMapping" />
                   <Expression xsi:type="viz:TableLayoutPanelBuilder">
                     <viz:Name>CameraOutput</viz:Name>
                     <viz:ColumnCount>1</viz:ColumnCount>
-                    <viz:RowCount>2</viz:RowCount>
+                    <viz:RowCount>1</viz:RowCount>
                     <viz:ColumnStyles />
                     <viz:RowStyles>
                       <viz:RowStyle>
@@ -3192,24 +3198,12 @@
                     <viz:CellSpans />
                   </Expression>
                   <Expression xsi:type="WorkflowOutput" />
-                  <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="rx:BufferTime">
-                      <rx:TimeSpan>PT1S</rx:TimeSpan>
-                    </Combinator>
-                  </Expression>
-                  <Expression xsi:type="MemberSelector">
-                    <Selector>Count</Selector>
-                  </Expression>
                 </Nodes>
                 <Edges>
                   <Edge From="0" To="1" Label="Source1" />
                   <Edge From="1" To="2" Label="Source1" />
-                  <Edge From="1" To="7" Label="Source1" />
-                  <Edge From="2" To="5" Label="Source1" />
+                  <Edge From="2" To="3" Label="Source1" />
                   <Edge From="3" To="4" Label="Source1" />
-                  <Edge From="4" To="5" Label="Source2" />
-                  <Edge From="5" To="6" Label="Source1" />
-                  <Edge From="7" To="8" Label="Source1" />
                 </Edges>
               </Workflow>
             </Expression>
