@@ -4272,6 +4272,13 @@
             <Expression xsi:type="IncludeWorkflow" Path="Extensions\ExportMetadata.bonsai">
               <WorkflowName>PuffTests.bonsai</WorkflowName>
             </Expression>
+            <Expression xsi:type="SubscribeSubject">
+              <Name>SynchronizerEvents</Name>
+            </Expression>
+            <Expression xsi:type="IncludeWorkflow" Path="Aeon.Acquisition:LogHarpState.bonsai">
+              <LogName>ClockSynchronizer</LogName>
+              <Heartbeats>Heartbeats</Heartbeats>
+              <ClosingDuration>PT2S</ClosingDuration>
             </Expression>
             <Expression xsi:type="SubscribeSubject">
               <Name>CameraControllerEvents</Name>
