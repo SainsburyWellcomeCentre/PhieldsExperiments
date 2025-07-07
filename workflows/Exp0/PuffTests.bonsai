@@ -4266,10 +4266,12 @@
             <Expression xsi:type="MemberSelector">
               <Selector>Count</Selector>
             </Expression>
+            <Expression xsi:type="ExternalizedMapping">
               <Property Name="WorkflowName" />
             </Expression>
             <Expression xsi:type="IncludeWorkflow" Path="Extensions\ExportMetadata.bonsai">
-              <WorkflowName>Exp0-PHIELDS01.bonsai</WorkflowName>
+              <WorkflowName>PuffTests.bonsai</WorkflowName>
+            </Expression>
             </Expression>
             <Expression xsi:type="SubscribeSubject">
               <Name>CameraControllerEvents</Name>
