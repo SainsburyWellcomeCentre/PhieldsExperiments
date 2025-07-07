@@ -4325,6 +4325,10 @@
               <ClosingDuration>PT2S</ClosingDuration>
             </Expression>
             <Expression xsi:type="Annotation">
+              <Name>ChangeToBinaryFormat</Name>
+              <Text><![CDATA[]]></Text>
+            </Expression>
+            <Expression xsi:type="Annotation">
               <Name>BinaryRegionsObservable</Name>
               <Text><![CDATA[]]></Text>
             </Expression>
