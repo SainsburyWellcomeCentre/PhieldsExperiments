@@ -4304,14 +4304,14 @@
               <Heartbeats />
               <ClosingDuration>PT2S</ClosingDuration>
             </Expression>
-            <Expression xsi:type="rx:BehaviorSubject" TypeArguments="harp:Timestamped(aeon-env:EnvironmentStateMetadata)">
-              <rx:Name>EnvironmentState</rx:Name>
+            <Expression xsi:type="rx:BehaviorSubject" TypeArguments="harp:Timestamped(aeon-env:EnvironmentSubjectStateMetadata)">
+              <rx:Name>SubjectState</rx:Name>
             </Expression>
             <Expression xsi:type="IncludeWorkflow" Path="Aeon.Acquisition:LogData.bonsai">
               <Heartbeats>Heartbeats</Heartbeats>
               <ClosingDuration>PT2S</ClosingDuration>
-              <LogName>Environment_EnvironmentState</LogName>
-              <Selector>Seconds,Value.Type</Selector>
+              <LogName>Environment_SubjectState</LogName>
+              <Selector>Seconds,Value.Id,Value.Weight,Value.Type</Selector>
             </Expression>
             <Expression xsi:type="rx:BehaviorSubject" TypeArguments="harp:Timestamped(aeon-env:EnvironmentSubjectStateMetadata)">
               <rx:Name>SubjectState</rx:Name>
