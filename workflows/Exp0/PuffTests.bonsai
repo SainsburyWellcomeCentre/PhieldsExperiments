@@ -2744,6 +2744,155 @@
                 </Edges>
               </Workflow>
             </Expression>
+            <Expression xsi:type="GroupWorkflow">
+              <Name>TrackingTop</Name>
+              <Workflow>
+                <Nodes>
+                  <Expression xsi:type="ExternalizedMapping">
+                    <Property Name="Name" DisplayName="FrameEvents" />
+                  </Expression>
+                  <Expression xsi:type="SubscribeSubject">
+                    <Name>ProcessedImage</Name>
+                  </Expression>
+                  <Expression xsi:type="ExternalizedMapping">
+                    <Property Name="WholeImageThreshold" />
+                  </Expression>
+                  <Expression xsi:type="GroupWorkflow">
+                    <Name>BlobTracking</Name>
+                    <Workflow>
+                      <Nodes>
+                        <Expression xsi:type="WorkflowInput">
+                          <Name>Source1</Name>
+                        </Expression>
+                        <Expression xsi:type="ExternalizedMapping">
+                          <Property Name="WholeImageThreshold" />
+                        </Expression>
+                        <Expression xsi:type="harp:ConvertTimestamped">
+                          <Name>BinaryRegions</Name>
+                          <Workflow>
+                            <Nodes>
+                              <Expression xsi:type="WorkflowInput">
+                                <Name>Source1</Name>
+                              </Expression>
+                              <Expression xsi:type="MemberSelector">
+                                <Selector>Image</Selector>
+                              </Expression>
+                              <Expression xsi:type="Combinator">
+                                <Combinator xsi:type="cv:MaskPolygon">
+                                  <cv:Regions>
+                                    <cv:ArrayOfPoint>
+                                      <cv:Point>
+                                        <cv:X>2</cv:X>
+                                        <cv:Y>0</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>2436</cv:X>
+                                        <cv:Y>10</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>2444</cv:X>
+                                        <cv:Y>2047</cv:Y>
+                                      </cv:Point>
+                                      <cv:Point>
+                                        <cv:X>38</cv:X>
+                                        <cv:Y>2022</cv:Y>
+                                      </cv:Point>
+                                    </cv:ArrayOfPoint>
+                                  </cv:Regions>
+                                  <cv:MaskType>ToZero</cv:MaskType>
+                                  <cv:FillValue>
+                                    <cv:Val0>255</cv:Val0>
+                                    <cv:Val1>0</cv:Val1>
+                                    <cv:Val2>0</cv:Val2>
+                                    <cv:Val3>0</cv:Val3>
+                                  </cv:FillValue>
+                                </Combinator>
+                              </Expression>
+                              <Expression xsi:type="ExternalizedMapping">
+                                <Property Name="ThresholdValue" DisplayName="WholeImageThreshold" />
+                              </Expression>
+                              <Expression xsi:type="Combinator">
+                                <Combinator xsi:type="cv:Threshold">
+                                  <cv:ThresholdValue>32</cv:ThresholdValue>
+                                  <cv:MaxValue>255</cv:MaxValue>
+                                  <cv:ThresholdType>BinaryInv</cv:ThresholdType>
+                                </Combinator>
+                              </Expression>
+                              <Expression xsi:type="Combinator">
+                                <Combinator xsi:type="cv:MorphologicalOperator">
+                                  <cv:Size>
+                                    <cv:Width>4</cv:Width>
+                                    <cv:Height>4</cv:Height>
+                                  </cv:Size>
+                                  <cv:Anchor>
+                                    <cv:X>-1</cv:X>
+                                    <cv:Y>-1</cv:Y>
+                                  </cv:Anchor>
+                                  <cv:Shape>Rectangle</cv:Shape>
+                                  <cv:Iterations>1</cv:Iterations>
+                                  <cv:Operation>Open</cv:Operation>
+                                </Combinator>
+                              </Expression>
+                              <Expression xsi:type="Combinator">
+                                <Combinator xsi:type="cv:FindContours">
+                                  <cv:Mode>External</cv:Mode>
+                                  <cv:Method>ChainApproxSimple</cv:Method>
+                                  <cv:Offset>
+                                    <cv:X>0</cv:X>
+                                    <cv:Y>0</cv:Y>
+                                  </cv:Offset>
+                                  <cv:MinArea>10</cv:MinArea>
+                                  <cv:MaxArea xsi:nil="true" />
+                                </Combinator>
+                              </Expression>
+                              <Expression xsi:type="Combinator">
+                                <Combinator xsi:type="cv:BinaryRegionAnalysis" />
+                              </Expression>
+                              <Expression xsi:type="Combinator">
+                                <Combinator xsi:type="cv:SortBinaryRegions" />
+                              </Expression>
+                              <Expression xsi:type="WorkflowOutput" />
+                            </Nodes>
+                            <Edges>
+                              <Edge From="0" To="1" Label="Source1" />
+                              <Edge From="1" To="2" Label="Source1" />
+                              <Edge From="2" To="4" Label="Source1" />
+                              <Edge From="3" To="4" Label="Source2" />
+                              <Edge From="4" To="5" Label="Source1" />
+                              <Edge From="5" To="6" Label="Source1" />
+                              <Edge From="6" To="7" Label="Source1" />
+                              <Edge From="7" To="8" Label="Source1" />
+                              <Edge From="8" To="9" Label="Source1" />
+                            </Edges>
+                          </Workflow>
+                        </Expression>
+                        <Expression xsi:type="WorkflowOutput" />
+                      </Nodes>
+                      <Edges>
+                        <Edge From="0" To="2" Label="Source1" />
+                        <Edge From="1" To="2" Label="Source2" />
+                        <Edge From="2" To="3" Label="Source1" />
+                      </Edges>
+                    </Workflow>
+                  </Expression>
+                  <Expression xsi:type="ExternalizedMapping">
+                    <Property Name="Name" DisplayName="TrackingEvents" />
+                  </Expression>
+                  <Expression xsi:type="rx:PublishSubject">
+                    <Name>TrackingTop</Name>
+                  </Expression>
+                  <Expression xsi:type="WorkflowOutput" />
+                </Nodes>
+                <Edges>
+                  <Edge From="0" To="1" Label="Source1" />
+                  <Edge From="1" To="3" Label="Source1" />
+                  <Edge From="2" To="3" Label="Source2" />
+                  <Edge From="3" To="5" Label="Source1" />
+                  <Edge From="4" To="5" Label="Source2" />
+                  <Edge From="5" To="6" Label="Source1" />
+                </Edges>
+              </Workflow>
+            </Expression>
         <Name>Logger</Name>
         <Workflow>
           <Nodes>
