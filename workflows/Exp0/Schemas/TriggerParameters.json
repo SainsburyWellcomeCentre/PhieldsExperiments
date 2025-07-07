@@ -1,0 +1,35 @@
+{
+    "$schema": "https://json-schema.org/draft-07/schema",
+    "$id": "https://github.com/SainsburyWellcomeCentre/aeon_experiments/tree/social",
+    "description": "Represents patch configuration parameters used in foraging experiments.",
+    "title": "TriggerParameters",
+    "type": "object",
+    "properties": {
+        "probability": {
+            "type": "number",
+            "description": "Specifies probability of a loom to be triggered",
+            "minimum": 0, 
+            "maximum": 1,
+            "default": 0.5
+        },
+        "angleThreshold": {
+            "type": "number",
+            "description": "Specifies Angle between Subject and point to be triggered",
+            "minimum": 0, 
+            "maximum": 3.1415,
+            "default": 1.57079633
+        },
+        "refractoryPeriodSeconds": {
+            "type": "number",
+            "description": "Specifies minimum time without Triggers after one",
+            "minimum": 0, 
+            "default": 60
+        },
+        "timeInAreaThreshold": {
+            "type": "number",
+            "description": "Specifies threshold time for subject to be within specified region to be triggered",
+            "minimum": 0, 
+            "default": 0.5
+        }
+    }
+}
