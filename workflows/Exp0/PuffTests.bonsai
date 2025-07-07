@@ -2627,6 +2627,123 @@
         </Workflow>
       </Expression>
       <Expression xsi:type="GroupWorkflow">
+              <Name>CameraTopImagePreProcessing</Name>
+              <Workflow>
+                <Nodes>
+                  <Expression xsi:type="Disable">
+                    <Builder xsi:type="Combinator">
+                      <Combinator xsi:type="cv:Resize">
+                        <cv:Size>
+                          <cv:Width>1440</cv:Width>
+                          <cv:Height>1080</cv:Height>
+                        </cv:Size>
+                        <cv:Interpolation>Linear</cv:Interpolation>
+                      </Combinator>
+                    </Builder>
+                  </Expression>
+                  <Expression xsi:type="SubscribeSubject">
+                    <Name>CameraEvents</Name>
+                  </Expression>
+                  <Expression xsi:type="Disable">
+                    <Builder xsi:type="harp:ConvertTimestamped">
+                      <Name>Undistort</Name>
+                      <Workflow>
+                        <Nodes>
+                          <Expression xsi:type="WorkflowInput">
+                            <Name>Source1</Name>
+                          </Expression>
+                          <Expression xsi:type="MemberSelector">
+                            <Selector>Image</Selector>
+                          </Expression>
+                          <Expression xsi:type="Combinator">
+                            <Combinator xsi:type="cv:ResizeCanvas">
+                              <cv:Size>
+                                <cv:Width>1680</cv:Width>
+                                <cv:Height>1260</cv:Height>
+                              </cv:Size>
+                              <cv:BorderType>Constant</cv:BorderType>
+                              <cv:FillValue>
+                                <cv:Val0>255</cv:Val0>
+                                <cv:Val1>255</cv:Val1>
+                                <cv:Val2>255</cv:Val2>
+                                <cv:Val3>0</cv:Val3>
+                              </cv:FillValue>
+                              <cv:Offset xsi:nil="true" />
+                            </Combinator>
+                          </Expression>
+                          <Expression xsi:type="Combinator">
+                            <Combinator xsi:type="cv:Undistort">
+                              <cv:ImageSize xsi:nil="true" />
+                              <cv:Alpha>0</cv:Alpha>
+                              <cv:FocalLength>
+                                <cv:X>1000</cv:X>
+                                <cv:Y>1000</cv:Y>
+                              </cv:FocalLength>
+                              <cv:PrincipalPoint>
+                                <cv:X>840</cv:X>
+                                <cv:Y>630</cv:Y>
+                              </cv:PrincipalPoint>
+                              <cv:RadialDistortion>
+                                <cv:X>-0.3</cv:X>
+                                <cv:Y>0</cv:Y>
+                                <cv:Z>0</cv:Z>
+                              </cv:RadialDistortion>
+                              <cv:TangentialDistortion>
+                                <cv:X>0</cv:X>
+                                <cv:Y>0</cv:Y>
+                              </cv:TangentialDistortion>
+                            </Combinator>
+                          </Expression>
+                          <Expression xsi:type="Combinator">
+                            <Combinator xsi:type="cv:Resize">
+                              <cv:Size>
+                                <cv:Width>1440</cv:Width>
+                                <cv:Height>1080</cv:Height>
+                              </cv:Size>
+                              <cv:Interpolation>Linear</cv:Interpolation>
+                            </Combinator>
+                          </Expression>
+                          <Expression xsi:type="MemberSelector">
+                            <Selector>ChunkData</Selector>
+                          </Expression>
+                          <Expression xsi:type="Combinator">
+                            <Combinator xsi:type="rx:Zip" />
+                          </Expression>
+                          <Expression xsi:type="Combinator">
+                            <Combinator xsi:type="p4:CreateVideoDataFrame" />
+                          </Expression>
+                          <Expression xsi:type="WorkflowOutput" />
+                        </Nodes>
+                        <Edges>
+                          <Edge From="0" To="1" Label="Source1" />
+                          <Edge From="0" To="5" Label="Source1" />
+                          <Edge From="1" To="2" Label="Source1" />
+                          <Edge From="2" To="3" Label="Source1" />
+                          <Edge From="3" To="4" Label="Source1" />
+                          <Edge From="4" To="6" Label="Source1" />
+                          <Edge From="5" To="6" Label="Source2" />
+                          <Edge From="6" To="7" Label="Source1" />
+                          <Edge From="7" To="8" Label="Source1" />
+                        </Edges>
+                      </Workflow>
+                    </Builder>
+                  </Expression>
+                  <Expression xsi:type="ExternalizedMapping">
+                    <Property Name="Name" DisplayName="ImagePreProcessingEvents" Description="The name of the shared subject" Category="Subject" />
+                  </Expression>
+                  <Expression xsi:type="rx:PublishSubject">
+                    <Name>ProcessedImage</Name>
+                  </Expression>
+                  <Expression xsi:type="WorkflowOutput" />
+                </Nodes>
+                <Edges>
+                  <Edge From="1" To="2" Label="Source1" />
+                  <Edge From="2" To="4" Label="Source1" />
+                  <Edge From="3" To="4" Label="Source2" />
+                  <Edge From="4" To="5" Label="Source2" />
+                </Edges>
+              </Workflow>
+            </Expression>
         <Name>Logger</Name>
         <Workflow>
           <Nodes>
