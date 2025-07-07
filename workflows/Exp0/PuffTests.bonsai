@@ -4324,6 +4324,10 @@
               <Heartbeats>Heartbeats</Heartbeats>
               <ClosingDuration>PT2S</ClosingDuration>
             </Expression>
+            <Expression xsi:type="Annotation">
+              <Name>BinaryRegionsObservable</Name>
+              <Text><![CDATA[]]></Text>
+            </Expression>
             </Expression>
             <Expression xsi:type="IncludeWorkflow" Path="Aeon.Acquisition:LogData.bonsai">
               <Heartbeats>Heartbeats</Heartbeats>
