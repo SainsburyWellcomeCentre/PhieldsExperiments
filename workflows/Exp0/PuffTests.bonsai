@@ -4313,8 +4313,17 @@
               <LogName>Environment_SubjectState</LogName>
               <Selector>Seconds,Value.Id,Value.Weight,Value.Type</Selector>
             </Expression>
-            <Expression xsi:type="rx:BehaviorSubject" TypeArguments="harp:Timestamped(aeon-env:EnvironmentSubjectStateMetadata)">
-              <rx:Name>SubjectState</rx:Name>
+            <Expression xsi:type="SubscribeSubject">
+              <Name>TrackingTop</Name>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="aeon:FormatBinaryRegions" />
+            </Expression>
+            <Expression xsi:type="IncludeWorkflow" Path="Aeon.Acquisition:LogHarpState.bonsai">
+              <LogName>CameraTop</LogName>
+              <Heartbeats>Heartbeats</Heartbeats>
+              <ClosingDuration>PT2S</ClosingDuration>
+            </Expression>
             </Expression>
             <Expression xsi:type="IncludeWorkflow" Path="Aeon.Acquisition:LogData.bonsai">
               <Heartbeats>Heartbeats</Heartbeats>
