@@ -11,10 +11,22 @@
                  xmlns:beh="clr-namespace:Harp.Behavior;assembly=Harp.Behavior"
                  xmlns:fstep="clr-namespace:Harp.FastStepper;assembly=Harp.FastStepper"
                  xmlns:p3="clr-namespace:RigConfiguration;assembly=Extensions"
+                 xmlns:cv="clr-namespace:Bonsai.Vision;assembly=Bonsai.Vision"
+                 xmlns:p4="clr-namespace:;assembly=Extensions"
+                 xmlns:scr="clr-namespace:Bonsai.Scripting.Expressions;assembly=Bonsai.Scripting.Expressions"
+                 xmlns:p5="clr-namespace:OpenCV.Net;assembly=OpenCV.Net"
+                 xmlns:p6="clr-namespace:System.Reactive.Linq;assembly=System.Reactive.Interfaces"
                  xmlns:aeon-env="clr-namespace:Aeon.Environment;assembly=Aeon.Environment"
                  xmlns:wie="clr-namespace:Bonsai.Windows.Input;assembly=Bonsai.Windows.Input"
                  xmlns:viz="clr-namespace:Bonsai.Design.Visualizers;assembly=Bonsai.Design.Visualizers"
                  xmlns:gui="clr-namespace:Bonsai.Gui;assembly=Bonsai.Gui"
+                 xmlns:drw="clr-namespace:Bonsai.Vision.Drawing;assembly=Bonsai.Vision"
+                 xmlns:zg="clr-namespace:Bonsai.Gui.ZedGraph;assembly=Bonsai.Gui.ZedGraph"
+                 xmlns:dsp="clr-namespace:Bonsai.Dsp;assembly=Bonsai.Dsp"
+                 xmlns:p7="clr-namespace:DataSchema;assembly=Extensions"
+                 xmlns:p8="clr-namespace:Trigger;assembly=Extensions"
+                 xmlns:num="clr-namespace:Bonsai.Numerics;assembly=Bonsai.Numerics"
+                 xmlns:p9="clr-namespace:Bonsai.Numerics.Distributions;assembly=Bonsai.Numerics"
                  xmlns="https://bonsai-rx.org/2018/workflow">
   <Workflow>
     <Nodes>
@@ -128,7 +140,7 @@
                         </Expression>
                         <Expression xsi:type="Combinator">
                           <Combinator xsi:type="IntProperty">
-                            <Value>60</Value>
+                                  <Value>50</Value>
                           </Combinator>
                         </Expression>
                         <Expression xsi:type="Combinator">
@@ -348,9 +360,9 @@
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="aeon:SpinnakerCapture">
                       <spk:Index xsi:nil="true" />
-                      <spk:SerialNumber>23459421</spk:SerialNumber>
+                            <spk:SerialNumber>23425449</spk:SerialNumber>
                       <spk:ColorProcessing>Default</spk:ColorProcessing>
-                      <aeon:ExposureTime>5000</aeon:ExposureTime>
+                            <aeon:ExposureTime>10000</aeon:ExposureTime>
                       <aeon:Gain>1</aeon:Gain>
                       <aeon:Binning>1</aeon:Binning>
                     </Combinator>
