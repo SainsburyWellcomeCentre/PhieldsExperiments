@@ -4258,7 +4258,14 @@
               <LogName>VideoData</LogName>
               <FrameRate>50</FrameRate>
             </Expression>
-            <Expression xsi:type="ExternalizedMapping">
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:BufferTime">
+                <rx:TimeSpan>PT1S</rx:TimeSpan>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="MemberSelector">
+              <Selector>Count</Selector>
+            </Expression>
               <Property Name="WorkflowName" />
             </Expression>
             <Expression xsi:type="IncludeWorkflow" Path="Extensions\ExportMetadata.bonsai">
