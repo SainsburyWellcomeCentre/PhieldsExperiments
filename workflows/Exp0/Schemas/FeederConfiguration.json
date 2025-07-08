@@ -1,0 +1,58 @@
+{
+    "$id": "...h",
+    "$schema": "https://json-schema.org/draft-07/schema",
+    "description": "Describes the underground feeder hardware for Phields project",
+    "title": "FeederConfig",
+    "definitions": 
+    {
+        "feederAction":
+        {
+            "enum": ["DeliverPellet","ResetFeeder"],
+            "default": "DeliverPellet",
+            "type": "string"
+        },
+        "underGroundFeeder":
+        {
+            "properties": 
+            {
+                "portName": 
+                {
+                    "type": "string",
+                    "default": "COM9",
+                    "description": "The COM port for the underground feeder (output expander) board"
+                },
+                "id":
+                {
+                    "type": "integer",
+                    "default":0,
+                    "description": "The id of the feeder in the arena"
+                },
+                "pelletDeliveryRetryCount" :
+                {
+                    "type":"integer",
+                    "default": 2,
+                    "description": "The number of times that retries to deliver a pellet before reporting an error"
+                },
+                "pelletDeliveryTimeoutSeconds":
+                {
+                    "type":"number",
+                    "default": 1.0,
+                    "description": "The amount of time that waits for a pellet to be delivered before reporting as failed to deliver"
+                },
+                "wheelRadius":
+                {
+                    "type":"number",
+                    "default": -4.0,
+                    "description": "The radius of the wheel used for distance calculations, positive or negative related to the side where the encoder is placed in the wheel"
+                }
+            },
+            "required": [
+                "portName",
+                "id",
+                "pelletDeliveryRetryCount",
+                "pelletDeliveryTimeoutSeconds",
+                "wheelRadius"
+            ]
+        }
+    }
+}

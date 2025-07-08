@@ -15,6 +15,16 @@
                 }
             }
         },
+        "feederTrigger":
+        {
+            "properties": 
+            {
+                "trigger":
+                {
+                    "$ref":"FeederConfiguration.json#/definitions/feederAction"
+                }
+            }
+        },
         "clockSynchronizerName":
         {
             "enum": ["TimestampGeneratorGen3","ClockSynchronizer"],
@@ -51,7 +61,7 @@
         },
         "cameraName":
         {
-            "enum": ["CameraTop","CameraSide"],
+            "enum": ["CameraTop","CameraSide","CameraExtra"],
             "default": "CameraTop",
             "type": "string"
         },
@@ -165,6 +175,14 @@
             "items":
             {
                 "$ref": "LoomConfiguration.json#/definitions/mechanicalLoom"
+            }
+        },
+        "feeders":
+        {
+            "type" : "array",
+            "items":
+            {
+                "$ref": "FeederConfiguration.json#/definitions/underGroundFeeder"
             }
         }
     },

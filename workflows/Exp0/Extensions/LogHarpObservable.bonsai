@@ -12,6 +12,14 @@
       <Expression xsi:type="ExternalizedMapping">
         <Property Name="LogName" />
       </Expression>
+      <Expression xsi:type="SubscribeSubject">
+        <Name>PathPrefix</Name>
+      </Expression>
+      <Expression xsi:type="PropertyMapping">
+        <PropertyMappings>
+          <Property Name="PathPrefix" Selector="it" />
+        </PropertyMappings>
+      </Expression>
       <Expression xsi:type="rx:SelectMany">
         <Name>LogHarpObservable</Name>
         <Workflow>
@@ -25,7 +33,7 @@
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="StringProperty">
-                <Value>Loom</Value>
+                <Value>Feeder</Value>
               </Combinator>
             </Expression>
             <Expression xsi:type="Combinator">
@@ -36,37 +44,66 @@
             <Expression xsi:type="rx:AsyncSubject">
               <Name>LogName</Name>
             </Expression>
+            <Expression xsi:type="ExternalizedMapping">
+              <Property Name="Value" DisplayName="PathPrefix" />
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="StringProperty">
+                <Value>D:\Tests\exp0-prototype-feeders-dev-ad5ffb2\2025-06-17T23-06-08</Value>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="SubscribeSubject">
+              <Name>LogName</Name>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:Zip" />
+            </Expression>
+            <Expression xsi:type="Format">
+              <Format>{0}\{1}</Format>
+              <Selector>Item1,Item2</Selector>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:Take">
+                <rx:Count>1</rx:Count>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="rx:AsyncSubject">
+              <Name>PathPrefix</Name>
+            </Expression>
+            <Expression xsi:type="SubscribeSubject">
+              <Name>StreamId</Name>
+            </Expression>
+            <Expression xsi:type="SubscribeSubject">
+              <Name>LogName</Name>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:Zip" />
+            </Expression>
+            <Expression xsi:type="scr:ExpressionTransform">
+              <scr:Expression>item2+item1.ToString()</scr:Expression>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:Take">
+                <rx:Count>1</rx:Count>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="rx:AsyncSubject">
+              <Name>InstanceLogName</Name>
+            </Expression>
             <Expression xsi:type="SubscribeSubject">
               <Name>source</Name>
             </Expression>
             <Expression xsi:type="SubscribeSubject">
-              <Name>PathPrefix</Name>
+              <Name>InstanceLogName</Name>
             </Expression>
-            <Expression xsi:type="PropertyMapping">
-              <PropertyMappings>
-                <Property Name="PathPrefix" />
-              </PropertyMappings>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:Zip" />
             </Expression>
             <Expression xsi:type="rx:SelectMany">
               <Workflow>
                 <Nodes>
-                  <Expression xsi:type="ExternalizedMapping">
-                    <Property Name="Value" DisplayName="PathPrefix" />
-                  </Expression>
-                  <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="StringProperty">
-                      <Value>D:\Tests\exp0-prototype-loom-dev-61a381c\2025-05-29T17-35-35</Value>
-                    </Combinator>
-                  </Expression>
-                  <Expression xsi:type="SubscribeSubject">
-                    <Name>LogName</Name>
-                  </Expression>
-                  <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="rx:Zip" />
-                  </Expression>
-                  <Expression xsi:type="Format">
-                    <Format>{0}\{1}</Format>
-                    <Selector>Item1,Item2</Selector>
+                  <Expression xsi:type="WorkflowInput">
+                    <Name>Source1</Name>
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:Take">
@@ -74,33 +111,34 @@
                     </Combinator>
                   </Expression>
                   <Expression xsi:type="rx:AsyncSubject">
-                    <Name>PathPrefix</Name>
+                    <Name>source</Name>
                   </Expression>
-                  <Expression xsi:type="WorkflowInput">
-                    <Name>Source1</Name>
+                  <Expression xsi:type="SubscribeSubject">
+                    <Name>source</Name>
+                  </Expression>
+                  <Expression xsi:type="MemberSelector">
+                    <Selector>Item1</Selector>
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:Merge" />
                   </Expression>
                   <Expression xsi:type="SubscribeSubject">
-                    <Name>StreamId</Name>
+                    <Name>source</Name>
                   </Expression>
-                  <Expression xsi:type="SubscribeSubject">
-                    <Name>LogName</Name>
+                  <Expression xsi:type="MemberSelector">
+                    <Selector>Item2</Selector>
                   </Expression>
                   <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="rx:Zip" />
+                    <Combinator xsi:type="rx:WithLatestFrom" />
                   </Expression>
-                  <Expression xsi:type="scr:ExpressionTransform">
-                    <scr:Expression>item2+item1.ToString()</scr:Expression>
-                  </Expression>
-                  <Expression xsi:type="PropertyMapping">
+                  <Expression xsi:type="InputMapping">
                     <PropertyMappings>
-                      <Property Name="LogName" />
+                      <Property Name="LogName" Selector="Item2" />
                     </PropertyMappings>
+                    <Selector>Item1</Selector>
                   </Expression>
                   <Expression xsi:type="IncludeWorkflow" Path="Aeon.Acquisition:LogHarpState.bonsai">
-                    <LogName>Loom0</LogName>
+                    <LogName>Feeder1</LogName>
                     <Heartbeats />
                     <ClosingDuration xsi:nil="true" />
                   </Expression>
@@ -108,19 +146,15 @@
                 </Nodes>
                 <Edges>
                   <Edge From="0" To="1" Label="Source1" />
-                  <Edge From="1" To="3" Label="Source1" />
-                  <Edge From="2" To="3" Label="Source2" />
+                  <Edge From="1" To="2" Label="Source1" />
                   <Edge From="3" To="4" Label="Source1" />
                   <Edge From="4" To="5" Label="Source1" />
-                  <Edge From="5" To="6" Label="Source1" />
-                  <Edge From="7" To="8" Label="Source1" />
-                  <Edge From="8" To="14" Label="Source1" />
-                  <Edge From="9" To="11" Label="Source1" />
-                  <Edge From="10" To="11" Label="Source2" />
-                  <Edge From="11" To="12" Label="Source1" />
-                  <Edge From="12" To="13" Label="Source1" />
-                  <Edge From="13" To="14" Label="Source2" />
-                  <Edge From="14" To="15" Label="Source1" />
+                  <Edge From="5" To="8" Label="Source1" />
+                  <Edge From="6" To="7" Label="Source1" />
+                  <Edge From="7" To="8" Label="Source2" />
+                  <Edge From="8" To="9" Label="Source1" />
+                  <Edge From="9" To="10" Label="Source1" />
+                  <Edge From="10" To="11" Label="Source1" />
                 </Edges>
               </Workflow>
             </Expression>
@@ -131,19 +165,32 @@
             <Edge From="2" To="3" Label="Source1" />
             <Edge From="3" To="4" Label="Source1" />
             <Edge From="4" To="5" Label="Source1" />
-            <Edge From="6" To="9" Label="Source1" />
-            <Edge From="7" To="8" Label="Source1" />
+            <Edge From="6" To="7" Label="Source1" />
+            <Edge From="7" To="9" Label="Source1" />
             <Edge From="8" To="9" Label="Source2" />
             <Edge From="9" To="10" Label="Source1" />
+            <Edge From="10" To="11" Label="Source1" />
+            <Edge From="11" To="12" Label="Source1" />
+            <Edge From="13" To="15" Label="Source1" />
+            <Edge From="14" To="15" Label="Source2" />
+            <Edge From="15" To="16" Label="Source1" />
+            <Edge From="16" To="17" Label="Source1" />
+            <Edge From="17" To="18" Label="Source1" />
+            <Edge From="19" To="21" Label="Source1" />
+            <Edge From="20" To="21" Label="Source2" />
+            <Edge From="21" To="22" Label="Source1" />
+            <Edge From="22" To="23" Label="Source1" />
           </Edges>
         </Workflow>
       </Expression>
       <Expression xsi:type="WorkflowOutput" />
     </Nodes>
     <Edges>
-      <Edge From="0" To="2" Label="Source1" />
-      <Edge From="1" To="2" Label="Source2" />
+      <Edge From="0" To="4" Label="Source1" />
+      <Edge From="1" To="4" Label="Source2" />
       <Edge From="2" To="3" Label="Source1" />
+      <Edge From="3" To="4" Label="Source3" />
+      <Edge From="4" To="5" Label="Source1" />
     </Edges>
   </Workflow>
 </WorkflowBuilder>

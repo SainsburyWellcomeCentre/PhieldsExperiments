@@ -18,16 +18,33 @@ looms:
     dropMaxVelocity: 10000
     homeVelocity: 200
     id: 00
+feeders:
+  - portName: COM15
+    id: 0
+    pelletDeliveryRetryCount: 2
+    pelletDeliveryTimeoutSeconds: 1
+    wheelRadius: -4
+  - portName: COM16
+    id: 1
+    pelletDeliveryRetryCount: 2
+    pelletDeliveryTimeoutSeconds: 1
+    wheelRadius: -4
 cameras:
   - cameraName: CameraSide
-    triggerName: Trigger1
+    triggerName: Trigger0
     exposureTime: 5000
-    serialNumber: "23391028"
+    serialNumber: "23425448"
+    gain: 1
+    binning: 1  
+  - cameraName: CameraExtra
+    triggerName: Trigger0
+    exposureTime: 5000
+    serialNumber: "23459421"
     gain: 1
     binning: 1
   - cameraName: CameraTop
     triggerName: Trigger0
-    exposureTime: 30000
-    serialNumber: "23391015"
+    exposureTime: 5000
+    serialNumber: "23425449"
     gain: 1
     binning: 1
