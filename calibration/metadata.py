@@ -51,7 +51,7 @@ def list_metadata(elements, **kwargs):
 
 root = etree.parse(args.workflow)
 workflow = root.xpath('/x:WorkflowBuilder/x:Workflow/x:Nodes', namespaces=ns)[0]
-metadata_group = workflow.xpath('./x:Expression[@xsi:type="GroupWorkflow" and ./x:Name[text()="Metadata"]]/x:Workflow/x:Nodes', namespaces=ns)[0]
+metadata_group = workflow.xpath('./x:Expression[@xsi:type="GroupWorkflow" and ./x:Name[text()="Devices"]]/x:Workflow/x:Nodes', namespaces=ns)[0]
 metadata = {
     'Workflow' : args.workflow,
     'Commit' : repo.head.commit.hexsha
