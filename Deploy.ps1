@@ -7,12 +7,8 @@ This script performs the following actions:
 9. Install python environment .venv with uv using the pyproject.toml specs
 #>
 
-git clean -fdx bonsai
-Set-Location -Path ./bonsai
-Invoke-Expression -Command "./setup.ps1"
+git clean -fdx .bonsai
 
-
-Set-Location -Path ../
 git clean -fdx .venv
 git clean -fx uv.lock
 irm https://astral.sh/uv/install.ps1 | iex

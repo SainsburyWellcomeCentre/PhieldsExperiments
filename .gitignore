@@ -3,18 +3,9 @@
 *.log
 
 # Bonsai scripting and environment files
-.vs
-bin
-obj
-Packages
-*.nupkg
-*.bin
-*.avi
-*.dll
-*.exe
-*.exe.settings
-*.WebView2
-SessionSummary
+.bonsai/*
+!.bonsai/Bonsai.config
+!.bonsai/NuGet.config
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
