@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<WorkflowBuilder Version="2.8.5"
+<WorkflowBuilder Version="2.9.0"
                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                  xmlns:wie="clr-namespace:Bonsai.Windows.Input;assembly=Bonsai.Windows.Input"
                  xmlns:rx="clr-namespace:Bonsai.Reactive;assembly=Bonsai.Core"
@@ -11,7 +11,6 @@
                  xmlns:gui="clr-namespace:Bonsai.Gui;assembly=Bonsai.Gui"
                  xmlns:aeon="clr-namespace:Aeon.Acquisition;assembly=Aeon.Acquisition"
                  xmlns:aeon-env="clr-namespace:Aeon.Environment;assembly=Aeon.Environment"
-                 xmlns:viz="clr-namespace:Bonsai.Design.Visualizers;assembly=Bonsai.Design.Visualizers"
                  xmlns:harp="clr-namespace:Bonsai.Harp;assembly=Bonsai.Harp"
                  xmlns="https://bonsai-rx.org/2018/workflow">
   <Workflow>
@@ -189,8 +188,8 @@
                               <Expression xsi:type="Combinator">
                                 <Combinator xsi:type="drw:CreateCanvas">
                                   <drw:Size>
-                                    <drw:Width>1440</drw:Width>
-                                    <drw:Height>1080</drw:Height>
+                                    <drw:Width>2448</drw:Width>
+                                    <drw:Height>2048</drw:Height>
                                   </drw:Size>
                                   <drw:Depth>U8</drw:Depth>
                                   <drw:Channels>4</drw:Channels>
@@ -253,8 +252,8 @@
                                   <drw:Destination>
                                     <drw:X>0</drw:X>
                                     <drw:Y>0</drw:Y>
-                                    <drw:Width>1440</drw:Width>
-                                    <drw:Height>1080</drw:Height>
+                                    <drw:Width>2448</drw:Width>
+                                    <drw:Height>2048</drw:Height>
                                   </drw:Destination>
                                   <drw:Interpolation>Linear</drw:Interpolation>
                                 </Combinator>
@@ -715,13 +714,15 @@
               <Name>SubjectState</Name>
             </Expression>
             <Expression xsi:type="VisualizerMapping" />
-            <Expression xsi:type="viz:TableLayoutPanelBuilder">
-              <viz:Name>EvironmentSubjectState</viz:Name>
-              <viz:ColumnCount>1</viz:ColumnCount>
-              <viz:RowCount>1</viz:RowCount>
-              <viz:ColumnStyles />
-              <viz:RowStyles />
-              <viz:CellSpans />
+            <Expression xsi:type="gui:TableLayoutPanelBuilder">
+              <gui:Name>EnvironmentSubjectState</gui:Name>
+              <gui:Enabled>true</gui:Enabled>
+              <gui:Visible>true</gui:Visible>
+              <gui:ColumnCount>1</gui:ColumnCount>
+              <gui:RowCount>1</gui:RowCount>
+              <gui:ColumnStyles />
+              <gui:RowStyles />
+              <gui:CellSpans />
             </Expression>
             <Expression xsi:type="WorkflowOutput" />
           </Nodes>
@@ -800,19 +801,15 @@
               </Builder>
             </Expression>
             <Expression xsi:type="VisualizerMapping" />
-            <Expression xsi:type="viz:TableLayoutPanelBuilder">
-              <viz:Name>ExperimentMetadata</viz:Name>
-              <viz:ColumnCount>2</viz:ColumnCount>
-              <viz:RowCount>2</viz:RowCount>
-              <viz:ColumnStyles>
-                <viz:ColumnStyle>
-                  <viz:Width>0</viz:Width>
-                </viz:ColumnStyle>
-              </viz:ColumnStyles>
-              <viz:RowStyles />
-              <viz:CellSpans>
-                <viz:CellSpan ColumnSpan="1" RowSpan="2" />
-              </viz:CellSpans>
+            <Expression xsi:type="gui:TableLayoutPanelBuilder">
+              <gui:Name>ExperimentMetadata</gui:Name>
+              <gui:Enabled>true</gui:Enabled>
+              <gui:Visible>true</gui:Visible>
+              <gui:ColumnCount>2</gui:ColumnCount>
+              <gui:RowCount>2</gui:RowCount>
+              <gui:ColumnStyles />
+              <gui:RowStyles />
+              <gui:CellSpans />
             </Expression>
             <Expression xsi:type="WorkflowOutput" />
           </Nodes>
@@ -1030,7 +1027,7 @@
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="rx:Take">
-                <rx:Count>3</rx:Count>
+                <rx:Count>2</rx:Count>
               </Combinator>
             </Expression>
             <Expression xsi:type="Combinator">
@@ -1042,22 +1039,15 @@
               <gui:DisplayMember />
             </Expression>
             <Expression xsi:type="VisualizerMapping" />
-            <Expression xsi:type="viz:TableLayoutPanelBuilder">
-              <viz:Name>CameraOutput</viz:Name>
-              <viz:ColumnCount>1</viz:ColumnCount>
-              <viz:RowCount>2</viz:RowCount>
-              <viz:ColumnStyles />
-              <viz:RowStyles>
-                <viz:RowStyle>
-                  <viz:SizeType>Percent</viz:SizeType>
-                  <viz:Height>0.8</viz:Height>
-                </viz:RowStyle>
-                <viz:RowStyle>
-                  <viz:SizeType>Percent</viz:SizeType>
-                  <viz:Height>0.2</viz:Height>
-                </viz:RowStyle>
-              </viz:RowStyles>
-              <viz:CellSpans />
+            <Expression xsi:type="gui:TableLayoutPanelBuilder">
+              <gui:Name>CameraOutput</gui:Name>
+              <gui:Enabled>true</gui:Enabled>
+              <gui:Visible>true</gui:Visible>
+              <gui:ColumnCount>1</gui:ColumnCount>
+              <gui:RowCount>2</gui:RowCount>
+              <gui:ColumnStyles />
+              <gui:RowStyles />
+              <gui:CellSpans />
             </Expression>
             <Expression xsi:type="WorkflowOutput" />
             <Expression xsi:type="rx:BehaviorSubject">
