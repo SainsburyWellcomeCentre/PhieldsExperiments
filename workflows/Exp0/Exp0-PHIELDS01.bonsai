@@ -3629,7 +3629,8 @@ Item2.Seconds as Seconds)</scr:Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:Merge" />
                   </Expression>
-                  <Expression xsi:type="harp:ConvertTimestamped">
+                  <Expression xsi:type="Disable">
+                    <Builder xsi:type="harp:ConvertTimestamped">
                     <Name>Undistort</Name>
                     <Workflow>
                       <Nodes>
@@ -3710,6 +3711,7 @@ Item2.Seconds as Seconds)</scr:Expression>
                         <Edge From="7" To="8" Label="Source1" />
                       </Edges>
                     </Workflow>
+                    </Builder>
                   </Expression>
                   <Expression xsi:type="ExternalizedMapping">
                     <Property Name="Name" DisplayName="ImagePreProcessingEvents" Description="The name of the shared subject" Category="Subject" />
