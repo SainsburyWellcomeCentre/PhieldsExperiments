@@ -456,6 +456,12 @@
                                 <Name>CameraControllerEvents</Name>
                               </Expression>
                               <Expression xsi:type="WorkflowOutput" />
+                              <Expression xsi:type="Combinator">
+                                <Combinator xsi:type="harp:FilterMessageType">
+                                  <harp:FilterType>Include</harp:FilterType>
+                                  <harp:MessageType>Event</harp:MessageType>
+                                </Combinator>
+                              </Expression>
                               <Expression xsi:type="p3:Parse">
                                 <harp:Register xsi:type="p3:TimestampedCam0Event" />
                               </Expression>
