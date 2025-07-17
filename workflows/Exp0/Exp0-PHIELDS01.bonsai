@@ -433,8 +433,13 @@
                               <Expression xsi:type="Combinator">
                                 <Combinator xsi:type="rx:Merge" />
                               </Expression>
-                              <Expression xsi:type="ExternalizedMapping">
-                                <Property Name="PortName" />
+                              <Expression xsi:type="SubscribeSubject">
+                                <Name>ControllerSettings</Name>
+                              </Expression>
+                              <Expression xsi:type="PropertyMapping">
+                                <PropertyMappings>
+                                  <Property Name="PortName" Selector="PortName" />
+                                </PropertyMappings>
                               </Expression>
                               <Expression xsi:type="Combinator">
                                 <Combinator xsi:type="p3:Device">
