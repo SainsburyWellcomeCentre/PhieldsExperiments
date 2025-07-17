@@ -18,3 +18,7 @@ winpython
 
 # uv local files
 uv.lock
+
+##bins
+obj
+bin
