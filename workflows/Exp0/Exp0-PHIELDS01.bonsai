@@ -3631,86 +3631,86 @@ Item2.Seconds as Seconds)</scr:Expression>
                   </Expression>
                   <Expression xsi:type="Disable">
                     <Builder xsi:type="harp:ConvertTimestamped">
-                    <Name>Undistort</Name>
-                    <Workflow>
-                      <Nodes>
-                        <Expression xsi:type="WorkflowInput">
-                          <Name>Source1</Name>
-                        </Expression>
-                        <Expression xsi:type="MemberSelector">
-                          <Selector>Image</Selector>
-                        </Expression>
-                        <Expression xsi:type="Combinator">
-                          <Combinator xsi:type="cv:ResizeCanvas">
-                            <cv:Size>
-                              <cv:Width>1680</cv:Width>
-                              <cv:Height>1260</cv:Height>
-                            </cv:Size>
-                            <cv:BorderType>Constant</cv:BorderType>
-                            <cv:FillValue>
-                              <cv:Val0>255</cv:Val0>
-                              <cv:Val1>255</cv:Val1>
-                              <cv:Val2>255</cv:Val2>
-                              <cv:Val3>0</cv:Val3>
-                            </cv:FillValue>
-                            <cv:Offset xsi:nil="true" />
-                          </Combinator>
-                        </Expression>
-                        <Expression xsi:type="Combinator">
-                          <Combinator xsi:type="cv:Undistort">
-                            <cv:ImageSize xsi:nil="true" />
-                            <cv:Alpha>0</cv:Alpha>
-                            <cv:FocalLength>
-                              <cv:X>1000</cv:X>
-                              <cv:Y>1000</cv:Y>
-                            </cv:FocalLength>
-                            <cv:PrincipalPoint>
-                              <cv:X>840</cv:X>
-                              <cv:Y>630</cv:Y>
-                            </cv:PrincipalPoint>
-                            <cv:RadialDistortion>
-                              <cv:X>-0.3</cv:X>
-                              <cv:Y>0</cv:Y>
-                              <cv:Z>0</cv:Z>
-                            </cv:RadialDistortion>
-                            <cv:TangentialDistortion>
-                              <cv:X>0</cv:X>
-                              <cv:Y>0</cv:Y>
-                            </cv:TangentialDistortion>
-                          </Combinator>
-                        </Expression>
-                        <Expression xsi:type="Combinator">
-                          <Combinator xsi:type="cv:Resize">
-                            <cv:Size>
-                              <cv:Width>1440</cv:Width>
-                              <cv:Height>1080</cv:Height>
-                            </cv:Size>
-                            <cv:Interpolation>Linear</cv:Interpolation>
-                          </Combinator>
-                        </Expression>
-                        <Expression xsi:type="MemberSelector">
-                          <Selector>ChunkData</Selector>
-                        </Expression>
-                        <Expression xsi:type="Combinator">
-                          <Combinator xsi:type="rx:Zip" />
-                        </Expression>
-                        <Expression xsi:type="Combinator">
-                          <Combinator xsi:type="p6:CreateVideoDataFrame" />
-                        </Expression>
-                        <Expression xsi:type="WorkflowOutput" />
-                      </Nodes>
-                      <Edges>
-                        <Edge From="0" To="1" Label="Source1" />
-                        <Edge From="0" To="5" Label="Source1" />
-                        <Edge From="1" To="2" Label="Source1" />
-                        <Edge From="2" To="3" Label="Source1" />
-                        <Edge From="3" To="4" Label="Source1" />
-                        <Edge From="4" To="6" Label="Source1" />
-                        <Edge From="5" To="6" Label="Source2" />
-                        <Edge From="6" To="7" Label="Source1" />
-                        <Edge From="7" To="8" Label="Source1" />
-                      </Edges>
-                    </Workflow>
+                      <Name>Undistort</Name>
+                      <Workflow>
+                        <Nodes>
+                          <Expression xsi:type="WorkflowInput">
+                            <Name>Source1</Name>
+                          </Expression>
+                          <Expression xsi:type="MemberSelector">
+                            <Selector>Image</Selector>
+                          </Expression>
+                          <Expression xsi:type="Combinator">
+                            <Combinator xsi:type="cv:ResizeCanvas">
+                              <cv:Size>
+                                <cv:Width>1680</cv:Width>
+                                <cv:Height>1260</cv:Height>
+                              </cv:Size>
+                              <cv:BorderType>Constant</cv:BorderType>
+                              <cv:FillValue>
+                                <cv:Val0>255</cv:Val0>
+                                <cv:Val1>255</cv:Val1>
+                                <cv:Val2>255</cv:Val2>
+                                <cv:Val3>0</cv:Val3>
+                              </cv:FillValue>
+                              <cv:Offset xsi:nil="true" />
+                            </Combinator>
+                          </Expression>
+                          <Expression xsi:type="Combinator">
+                            <Combinator xsi:type="cv:Undistort">
+                              <cv:ImageSize xsi:nil="true" />
+                              <cv:Alpha>0</cv:Alpha>
+                              <cv:FocalLength>
+                                <cv:X>1000</cv:X>
+                                <cv:Y>1000</cv:Y>
+                              </cv:FocalLength>
+                              <cv:PrincipalPoint>
+                                <cv:X>840</cv:X>
+                                <cv:Y>630</cv:Y>
+                              </cv:PrincipalPoint>
+                              <cv:RadialDistortion>
+                                <cv:X>-0.3</cv:X>
+                                <cv:Y>0</cv:Y>
+                                <cv:Z>0</cv:Z>
+                              </cv:RadialDistortion>
+                              <cv:TangentialDistortion>
+                                <cv:X>0</cv:X>
+                                <cv:Y>0</cv:Y>
+                              </cv:TangentialDistortion>
+                            </Combinator>
+                          </Expression>
+                          <Expression xsi:type="Combinator">
+                            <Combinator xsi:type="cv:Resize">
+                              <cv:Size>
+                                <cv:Width>1440</cv:Width>
+                                <cv:Height>1080</cv:Height>
+                              </cv:Size>
+                              <cv:Interpolation>Linear</cv:Interpolation>
+                            </Combinator>
+                          </Expression>
+                          <Expression xsi:type="MemberSelector">
+                            <Selector>ChunkData</Selector>
+                          </Expression>
+                          <Expression xsi:type="Combinator">
+                            <Combinator xsi:type="rx:Zip" />
+                          </Expression>
+                          <Expression xsi:type="Combinator">
+                            <Combinator xsi:type="p6:CreateVideoDataFrame" />
+                          </Expression>
+                          <Expression xsi:type="WorkflowOutput" />
+                        </Nodes>
+                        <Edges>
+                          <Edge From="0" To="1" Label="Source1" />
+                          <Edge From="0" To="5" Label="Source1" />
+                          <Edge From="1" To="2" Label="Source1" />
+                          <Edge From="2" To="3" Label="Source1" />
+                          <Edge From="3" To="4" Label="Source1" />
+                          <Edge From="4" To="6" Label="Source1" />
+                          <Edge From="5" To="6" Label="Source2" />
+                          <Edge From="6" To="7" Label="Source1" />
+                          <Edge From="7" To="8" Label="Source1" />
+                        </Edges>
+                      </Workflow>
                     </Builder>
                   </Expression>
                   <Expression xsi:type="ExternalizedMapping">
@@ -3731,6 +3731,10 @@ Item2.Seconds as Seconds)</scr:Expression>
                   <Edge From="6" To="7" Label="Source2" />
                 </Edges>
               </Workflow>
+            </Expression>
+            <Expression xsi:type="Annotation">
+              <Name>Add thresholds to the Yaml</Name>
+              <Text><![CDATA[]]></Text>
             </Expression>
             <Expression xsi:type="GroupWorkflow">
               <Name>TrackingTop</Name>
@@ -3772,24 +3776,20 @@ Item2.Seconds as Seconds)</scr:Expression>
                                   <cv:Regions>
                                     <cv:ArrayOfPoint>
                                       <cv:Point>
-                                        <cv:X>1254</cv:X>
-                                        <cv:Y>26</cv:Y>
+                                        <cv:X>1392</cv:X>
+                                        <cv:Y>597</cv:Y>
                                       </cv:Point>
                                       <cv:Point>
-                                        <cv:X>317</cv:X>
-                                        <cv:Y>15</cv:Y>
+                                        <cv:X>1797</cv:X>
+                                        <cv:Y>597</cv:Y>
                                       </cv:Point>
                                       <cv:Point>
-                                        <cv:X>300</cv:X>
-                                        <cv:Y>548</cv:Y>
+                                        <cv:X>1797</cv:X>
+                                        <cv:Y>947</cv:Y>
                                       </cv:Point>
                                       <cv:Point>
-                                        <cv:X>302</cv:X>
-                                        <cv:Y>1066</cv:Y>
-                                      </cv:Point>
-                                      <cv:Point>
-                                        <cv:X>1281</cv:X>
-                                        <cv:Y>1067</cv:Y>
+                                        <cv:X>1392</cv:X>
+                                        <cv:Y>947</cv:Y>
                                       </cv:Point>
                                     </cv:ArrayOfPoint>
                                   </cv:Regions>
@@ -3807,7 +3807,7 @@ Item2.Seconds as Seconds)</scr:Expression>
                               </Expression>
                               <Expression xsi:type="Combinator">
                                 <Combinator xsi:type="cv:Threshold">
-                                  <cv:ThresholdValue>255</cv:ThresholdValue>
+                                  <cv:ThresholdValue>33</cv:ThresholdValue>
                                   <cv:MaxValue>255</cv:MaxValue>
                                   <cv:ThresholdType>BinaryInv</cv:ThresholdType>
                                 </Combinator>
@@ -4044,121 +4044,13 @@ Item2.Seconds as Seconds)</scr:Expression>
                               </Expression>
                               <Expression xsi:type="Combinator">
                                 <Combinator xsi:type="cv:Threshold">
-                                  <cv:ThresholdValue>237</cv:ThresholdValue>
+                                  <cv:ThresholdValue>0</cv:ThresholdValue>
                                   <cv:MaxValue>255</cv:MaxValue>
                                   <cv:ThresholdType>BinaryInv</cv:ThresholdType>
                                 </Combinator>
                               </Expression>
                               <Expression xsi:type="Combinator">
                                 <Combinator xsi:type="cv:MaskPolygon">
-                                  <cv:Regions>
-                                    <cv:ArrayOfPoint>
-                                      <cv:Point>
-                                        <cv:X>335</cv:X>
-                                        <cv:Y>391</cv:Y>
-                                      </cv:Point>
-                                      <cv:Point>
-                                        <cv:X>330</cv:X>
-                                        <cv:Y>552</cv:Y>
-                                      </cv:Point>
-                                      <cv:Point>
-                                        <cv:X>329</cv:X>
-                                        <cv:Y>722</cv:Y>
-                                      </cv:Point>
-                                      <cv:Point>
-                                        <cv:X>330</cv:X>
-                                        <cv:Y>967</cv:Y>
-                                      </cv:Point>
-                                      <cv:Point>
-                                        <cv:X>328</cv:X>
-                                        <cv:Y>1046</cv:Y>
-                                      </cv:Point>
-                                      <cv:Point>
-                                        <cv:X>462</cv:X>
-                                        <cv:Y>1040</cv:Y>
-                                      </cv:Point>
-                                      <cv:Point>
-                                        <cv:X>614</cv:X>
-                                        <cv:Y>1042</cv:Y>
-                                      </cv:Point>
-                                      <cv:Point>
-                                        <cv:X>845</cv:X>
-                                        <cv:Y>1040</cv:Y>
-                                      </cv:Point>
-                                      <cv:Point>
-                                        <cv:X>967</cv:X>
-                                        <cv:Y>1037</cv:Y>
-                                      </cv:Point>
-                                      <cv:Point>
-                                        <cv:X>1081</cv:X>
-                                        <cv:Y>1037</cv:Y>
-                                      </cv:Point>
-                                      <cv:Point>
-                                        <cv:X>1166</cv:X>
-                                        <cv:Y>1038</cv:Y>
-                                      </cv:Point>
-                                      <cv:Point>
-                                        <cv:X>1214</cv:X>
-                                        <cv:Y>1042</cv:Y>
-                                      </cv:Point>
-                                      <cv:Point>
-                                        <cv:X>1259</cv:X>
-                                        <cv:Y>1048</cv:Y>
-                                      </cv:Point>
-                                      <cv:Point>
-                                        <cv:X>1252</cv:X>
-                                        <cv:Y>1000</cv:Y>
-                                      </cv:Point>
-                                      <cv:Point>
-                                        <cv:X>1247</cv:X>
-                                        <cv:Y>929</cv:Y>
-                                      </cv:Point>
-                                      <cv:Point>
-                                        <cv:X>1244</cv:X>
-                                        <cv:Y>788</cv:Y>
-                                      </cv:Point>
-                                      <cv:Point>
-                                        <cv:X>1242</cv:X>
-                                        <cv:Y>612</cv:Y>
-                                      </cv:Point>
-                                      <cv:Point>
-                                        <cv:X>1241</cv:X>
-                                        <cv:Y>525</cv:Y>
-                                      </cv:Point>
-                                      <cv:Point>
-                                        <cv:X>1239</cv:X>
-                                        <cv:Y>436</cv:Y>
-                                      </cv:Point>
-                                      <cv:Point>
-                                        <cv:X>1231</cv:X>
-                                        <cv:Y>277</cv:Y>
-                                      </cv:Point>
-                                      <cv:Point>
-                                        <cv:X>1228</cv:X>
-                                        <cv:Y>181</cv:Y>
-                                      </cv:Point>
-                                      <cv:Point>
-                                        <cv:X>1228</cv:X>
-                                        <cv:Y>44</cv:Y>
-                                      </cv:Point>
-                                      <cv:Point>
-                                        <cv:X>1150</cv:X>
-                                        <cv:Y>47</cv:Y>
-                                      </cv:Point>
-                                      <cv:Point>
-                                        <cv:X>1043</cv:X>
-                                        <cv:Y>44</cv:Y>
-                                      </cv:Point>
-                                      <cv:Point>
-                                        <cv:X>701</cv:X>
-                                        <cv:Y>36</cv:Y>
-                                      </cv:Point>
-                                      <cv:Point>
-                                        <cv:X>349</cv:X>
-                                        <cv:Y>41</cv:Y>
-                                      </cv:Point>
-                                    </cv:ArrayOfPoint>
-                                  </cv:Regions>
                                   <cv:MaskType>ToZero</cv:MaskType>
                                   <cv:FillValue>
                                     <cv:Val0>255</cv:Val0>
@@ -4173,7 +4065,7 @@ Item2.Seconds as Seconds)</scr:Expression>
                               </Expression>
                               <Expression xsi:type="Combinator">
                                 <Combinator xsi:type="cv:Threshold">
-                                  <cv:ThresholdValue>104</cv:ThresholdValue>
+                                  <cv:ThresholdValue>0</cv:ThresholdValue>
                                   <cv:MaxValue>255</cv:MaxValue>
                                   <cv:ThresholdType>BinaryInv</cv:ThresholdType>
                                 </Combinator>
@@ -5564,8 +5456,9 @@ Item2.Seconds as Seconds)</scr:Expression>
             <Edge From="0" To="1" Label="Source1" />
             <Edge From="1" To="2" Label="Source1" />
             <Edge From="2" To="3" Label="Source1" />
-            <Edge From="10" To="11" Label="Source1" />
+            <Edge From="6" To="7" Label="Source1" />
             <Edge From="11" To="12" Label="Source1" />
+            <Edge From="12" To="13" Label="Source1" />
           </Edges>
         </Workflow>
       </Expression>
