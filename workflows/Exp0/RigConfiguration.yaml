@@ -30,12 +30,6 @@ feeders:
     pelletDeliveryTimeoutSeconds: 1
     wheelRadius: -4
 cameras:
-  - cameraName: CameraSide
-    triggerName: Trigger0
-    exposureTime: 5000
-    serialNumber: "23425448"
-    gain: 1
-    binning: 1  
   - cameraName: CameraExtra
     triggerName: Trigger0
     exposureTime: 5000
@@ -44,7 +38,7 @@ cameras:
     binning: 1
   - cameraName: CameraTop
     triggerName: Trigger0
-    exposureTime: 5000
+    exposureTime: 10000
     serialNumber: "23425449"
     gain: 1
     binning: 1
