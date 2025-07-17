@@ -23,7 +23,7 @@
   <Workflow>
     <Nodes>
       <Expression xsi:type="GroupWorkflow">
-        <Name>Metadata</Name>
+        <Name>Devices</Name>
         <Workflow>
           <Nodes>
             <Expression xsi:type="Combinator">
@@ -43,7 +43,7 @@
               <Name>RigConfig</Name>
             </Expression>
             <Expression xsi:type="GroupWorkflow">
-              <Name>Devices</Name>
+              <Name>HardwareDevices</Name>
               <Workflow>
                 <Nodes>
                   <Expression xsi:type="GroupWorkflow">
