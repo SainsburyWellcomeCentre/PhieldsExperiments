@@ -1,0 +1,39 @@
+{
+  "$id": "...h",
+  "$schema": "https://json-schema.org/draft-07/schema",
+  "description": "Describes the hardware and tracking configuration for the rig",
+  "title": "RigConfiguration",
+  "type": "object",
+  "properties": {
+    "TimestampSynchronizer": {
+      "$ref": "TimestampSynchronizer_annotated.json"
+    },
+    "CameraController": {
+      "$ref": "CameraController_annotated.json"
+    },
+    "Cameras": {
+      "type": "array",
+      "items": {
+        "$ref": "Spinnaker_annotated.json"
+      }
+    },
+    "Looms": {
+      "type": "array",
+      "items": {
+        "$ref": "MechanicalLoom_annotated.json"
+      }
+    },
+    "Feeders": {
+    "type": "array",
+      "items": {
+        "$ref": "UndergroundFeeder_annotated.json"
+      }
+    }
+  },
+  "required": [
+    "TimestampSynchronizer",
+    "CameraController",
+    "Cameras",
+    "Looms"
+  ]
+}
