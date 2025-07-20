@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<WorkflowBuilder Version="2.9.0"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xmlns:p1="clr-namespace:CameraController;assembly=Extensions"
+                 xmlns:p2="clr-namespace:Looms;assembly=Extensions"
+                 xmlns:p3="clr-namespace:Cameras;assembly=Extensions"
+                 xmlns:p4="clr-namespace:TimestampSynchronizer;assembly=Extensions"
+                 xmlns:p5="clr-namespace:Feeders;assembly=Extensions"
+                 xmlns:p6="clr-namespace:RigConfiguration;assembly=Extensions"
+                 xmlns="https://bonsai-rx.org/2018/workflow">
+  <Workflow>
+    <Nodes>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="p1:CameraControllerSettings">
+          <p1:PortName>COM9</p1:PortName>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="p2:MechanicalLoom">
+          <p2:PortName>COM9</p2:PortName>
+          <p2:Id>0</p2:Id>
+          <p2:HomeVelocity>200</p2:HomeVelocity>
+          <p2:BottomPosition>3000</p2:BottomPosition>
+          <p2:BottomPauseTimeSeconds>1</p2:BottomPauseTimeSeconds>
+          <p2:DropAcceleration>18000</p2:DropAcceleration>
+          <p2:DropMaxVelocity>10000</p2:DropMaxVelocity>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="p3:SpinnakerSettings">
+          <p3:ExposureTime>15000</p3:ExposureTime>
+          <p3:SerialNumber>00000</p3:SerialNumber>
+          <p3:Gain>1</p3:Gain>
+          <p3:Binning>1</p3:Binning>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="p4:Synchronizer">
+          <p4:PortName>COM9</p4:PortName>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="p5:UndergroundFeeder">
+          <p5:PortName>COM9</p5:PortName>
+          <p5:Id>0</p5:Id>
+          <p5:PelletDeliveryRetryCount>2</p5:PelletDeliveryRetryCount>
+          <p5:PelletDeliveryTimeoutSeconds>1</p5:PelletDeliveryTimeoutSeconds>
+          <p5:WheelRadius>-4</p5:WheelRadius>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="p6:RigConfiguration" />
+      </Expression>
+    </Nodes>
+    <Edges />
+  </Workflow>
+</WorkflowBuilder>
