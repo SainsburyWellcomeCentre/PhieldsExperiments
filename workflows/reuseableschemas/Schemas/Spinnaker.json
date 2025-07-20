@@ -1,0 +1,46 @@
+{
+    "$id": "S...h",
+    "$schema": "https://json-schema.org/draft-07/schema",
+    "title": "SpinnakerSettings",
+    "description": "Camera-specific settings for Spinnaker-compatible devices",
+    "type": "object",
+    "properties": {
+        "cameraName": {
+            "type": "string",
+            "enum": ["CameraTop", "CameraSide", "CameraExtra"],
+            "default": "CameraTop"
+        },
+        "triggerName": {
+            "type": "string",
+            "enum": ["Trigger0", "Trigger1"],
+            "default": "Trigger1"
+        },
+        "exposureTime": {
+            "type": "number",
+            "default": 15000,
+            "minimum": 0
+        },
+        "serialNumber": {
+            "type": ["string", "null"],
+            "default": "00000"
+        },
+        "gain": {
+            "type": "number",
+            "default": 1,
+            "minimum": 0
+        },
+        "binning": {
+            "type": "integer",
+            "default": 1,
+            "minimum": 1
+        }
+    },
+    "required": [
+        "cameraName",
+        "triggerName", 
+        "exposureTime", 
+        "serialNumber", 
+        "gain", 
+        "binning"
+    ]
+}
