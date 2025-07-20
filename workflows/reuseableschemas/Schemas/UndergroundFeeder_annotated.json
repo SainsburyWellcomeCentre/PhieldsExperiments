@@ -1,0 +1,41 @@
+{
+  "$id": "...h",
+  "$schema": "https://json-schema.org/draft-07/schema",
+  "title": "UndergroundFeeder",
+  "description": "Describes an underground feeder in the Phields arena",
+  "x-sgen-typename": "Feeders.UndergroundFeeder",
+  "properties": {
+    "portName": {
+      "type": "string",
+      "default": "COM9",
+      "description": "The COM port for the underground feeder (output expander) board"
+    },
+    "id": {
+      "type": "integer",
+      "default": 0,
+      "description": "The ID of the feeder in the arena"
+    },
+    "pelletDeliveryRetryCount": {
+      "type": "integer",
+      "default": 2,
+      "description": "Number of retries for delivering a pellet before reporting an error"
+    },
+    "pelletDeliveryTimeoutSeconds": {
+      "type": "number",
+      "default": 1.0,
+      "description": "Time to wait for pellet delivery before reporting failure"
+    },
+    "wheelRadius": {
+      "type": "number",
+      "default": -4.0,
+      "description": "Wheel radius for distance calculation (sign encodes encoder side)"
+    }
+  },
+  "required": [
+    "portName",
+    "id",
+    "pelletDeliveryRetryCount",
+    "pelletDeliveryTimeoutSeconds",
+    "wheelRadius"
+  ]
+}
