@@ -1,0 +1,62 @@
+{
+    "$id": "...h",
+    "$schema": "https://json-schema.org/draft-07/schema",
+    "description": "Describes the camera controller hardware",
+    "title": "CameraControllerSettings",
+    "x-sgen-typename": "CameraController.CameraControllerSettings",
+    "definitions": {
+        "CameraTriggerName": {
+            "enum": [
+                "Trigger0",
+                "Trigger1"
+            ],
+            "default": "Trigger1",
+            "type": "string"
+        },
+        "CameraTriggerSource": {
+            "properties": {
+                "triggerName": {
+                    "$ref": "#/definitions/CameraTriggerName"
+                },
+                "triggerFrequency": {
+                    "type": "integer",
+                    "default": "50"
+                }
+            },
+            "required": [
+                "triggerName",
+                "triggerFrequency"
+            ]
+        },
+        "CameraControllerName": {
+            "enum": [
+                "Behavior",
+                "CameraControllerGen2",
+                "OutputExpander"
+            ],
+            "default": "CameraControllerGen2",
+            "type": "string"
+        }
+    },
+    "properties": {
+        "deviceName": {
+            "$ref": "#/definitions/CameraControllerName"
+        },
+        "portName": {
+            "type": "string",
+            "default": "COM9",
+            "description": "The COM port for the camera controller board"
+        },
+        "triggers": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/CameraTriggerSource"
+            }
+        }
+    },
+    "required": [
+        "deviceName",
+        "portName",
+        "triggers"
+    ]
+}
