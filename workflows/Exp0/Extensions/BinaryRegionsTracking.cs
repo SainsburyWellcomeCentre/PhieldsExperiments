@@ -100,6 +100,7 @@ public class BinaryRegionsTracking
         return source.Select(value => 
         {
             var valueCopy = new ConnectedComponentCollection(value.ImageSize);
+            
             int max = (value.Count >= ExpectedNumberOfConnectedComponents) ? ExpectedNumberOfConnectedComponents : value.Count;
             for (int i = 0; i < max; i++)
             {
@@ -111,7 +112,26 @@ public class BinaryRegionsTracking
             if (previous==null)
             {
                 if (valueCopy.Count != ExpectedNumberOfConnectedComponents)
-                    return null;
+                {
+
+                    if (valueCopy.Count > 0)
+                    {
+                        for (int count = valueCopy.Count; count < ExpectedNumberOfConnectedComponents; count++)
+                        {
+                            ConnectedComponent fakeComponent = ConnectedComponent.FromContour(valueCopy[0].Contour);
+                            fakeComponent.Centroid = new OpenCV.Net.Point2f(0, 0);
+                            fakeComponent.Area = 1;
+                            fakeComponent.MajorAxisLength = 1;
+                            fakeComponent.MinorAxisLength = 1;
+                            fakeComponent.Orientation = 1;
+                            valueCopy.Add(fakeComponent);
+                        }
+                    }
+                    else
+                        return null;
+
+                }
+
                 previous = new ConnectedComponentCollection(valueCopy, valueCopy.ImageSize);
                 var previousDistanceComponentsCollection = new DistanceConnectedComponentCollection() { ConnCompCollection =previous, Distance =0};
                 var res = new DistanceConnectedComponents(){ DistConnCompCollection = previousDistanceComponentsCollection, Crossings = ExpectedNumberOfConnectedComponents-value.Count};
@@ -129,12 +149,10 @@ public class BinaryRegionsTracking
                     valueCopy.Add(VirtualConnectedComponent);
                 }
             }
-
-
+    
             var bestPermute = permute(valueCopy,0,valueCopy.Count-1,previous);
             previous = bestPermute.ConnCompCollection;
             var crossings = (ExpectedNumberOfConnectedComponents- value.Count >0)?ExpectedNumberOfConnectedComponents- value.Count:0;
-
             return  new DistanceConnectedComponents(){ DistConnCompCollection = bestPermute, Crossings = crossings};
         });
     }

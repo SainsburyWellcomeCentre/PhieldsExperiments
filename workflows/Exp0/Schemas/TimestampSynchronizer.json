@@ -1,0 +1,31 @@
+{
+    "$id": "...h",
+    "$schema": "https://json-schema.org/draft-07/schema",
+    "description": "Describes the configuration for the Clock synchronizer device",
+    "title": "Synchronizer",
+    "definitions": {
+        "synchronizerType": {
+            "enum": [
+                "TimestampGeneratorGen3",
+                "ClockSynchronizer"
+            ],
+            "default": "TimestampGeneratorGen3",
+            "type": "string"
+        }
+    },
+    "properties": {
+        "deviceType": {
+            "$ref": "#/definitions/synchronizerType",
+            "default": "TimestampGeneratorGen3"
+        },
+        "portName": {
+            "type": "string",
+            "default": "COM9",
+            "description": "The COM port for the timestamp generator board"
+        }
+    },
+    "required": [
+        "deviceType",
+        "portName"
+    ]
+}
