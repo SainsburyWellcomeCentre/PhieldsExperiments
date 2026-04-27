@@ -12,4 +12,5 @@ git clean -fdx .bonsai
 git clean -fdx .venv
 git clean -fx uv.lock
 irm https://astral.sh/uv/install.ps1 | iex
+# TODO: if uv is not installed this script fails since one must restart the terminal
 uv sync --all-extras
