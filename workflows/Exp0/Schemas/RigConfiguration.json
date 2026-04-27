@@ -61,7 +61,7 @@
         },
         "cameraName":
         {
-            "enum": ["CameraTop","CameraSide","CameraExtra"],
+            "enum": ["CameraTop","CameraWest","CameraEast", "CameraNorth", "CameraSouth"],
             "default": "CameraTop",
             "type": "string"
         },

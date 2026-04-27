@@ -1,0 +1,37 @@
+# yaml-language-server: $schema=./Schemas/RigConfiguration.json
+clockSynchronizer:
+  deviceName: TimestampGeneratorGen3
+  portName: COM9
+cameraController:
+  deviceName: CameraControllerGen2
+  portName: COM7
+  triggers:
+    - TriggerName: Trigger0
+      triggerFrequency: 50
+    - TriggerName: Trigger1
+      triggerFrequency: 125
+cameras:
+  - cameraName: CameraTop
+    triggerName: Trigger0
+    exposureTime: 2000
+    serialNumber: "25454414"
+    gain: 0
+    binning: 1
+  - cameraName: CameraWest
+    triggerName: Trigger0
+    exposureTime: 1500
+    serialNumber: "25205962"
+    gain: 0
+    binning: 1
+  - cameraName: CameraEast
+    triggerName: Trigger0
+    exposureTime: 1500
+    serialNumber: "23459421"
+    gain: 0
+    binning: 1
+  - cameraName: CameraNorth
+    triggerName: Trigger0
+    exposureTime: 3000
+    serialNumber: "23425448"
+    gain: 1
+    binning: 1
