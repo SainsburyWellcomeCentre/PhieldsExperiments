@@ -1,0 +1,350 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<WorkflowBuilder Version="2.9.0"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xmlns:rx="clr-namespace:Bonsai.Reactive;assembly=Bonsai.Core"
+                 xmlns:p1="clr-namespace:;assembly=Extensions"
+                 xmlns:p2="clr-namespace:OpenCV.Net;assembly=OpenCV.Net"
+                 xmlns:gui="clr-namespace:Bonsai.Gui;assembly=Bonsai.Gui"
+                 xmlns:p3="clr-namespace:RigConfiguration;assembly=Extensions"
+                 xmlns="https://bonsai-rx.org/2018/workflow">
+  <Workflow>
+    <Nodes>
+      <Expression xsi:type="WorkflowInput">
+        <Name>Source1</Name>
+      </Expression>
+      <Expression xsi:type="ExternalizedMapping">
+        <Property Name="MinArea" />
+        <Property Name="Source" />
+        <Property Name="Destination" />
+        <Property Name="VignetteImageFileName" />
+        <Property Name="OutputImage" />
+        <Property Name="ThresholdValue" />
+        <Property Name="OutputSubject" />
+        <Property Name="Value" />
+      </Expression>
+      <Expression xsi:type="rx:Defer">
+        <Workflow>
+          <Nodes>
+            <Expression xsi:type="WorkflowInput">
+              <Name>Source1</Name>
+            </Expression>
+            <Expression xsi:type="SubscribeSubject">
+              <Name>Image</Name>
+            </Expression>
+            <Expression xsi:type="ExternalizedMapping">
+              <Property Name="MinArea" />
+            </Expression>
+            <Expression xsi:type="ExternalizedMapping">
+              <Property Name="Value" DisplayName="Source" />
+            </Expression>
+            <Expression xsi:type="PropertySource" TypeArguments="p1:ContoursPerspectiveTransform,p2:Point2f[]">
+              <MemberName>Source</MemberName>
+              <Value>
+                <Point2f>
+                  <X>420.75</X>
+                  <Y>247.46666</Y>
+                </Point2f>
+                <Point2f>
+                  <X>527.85</X>
+                  <Y>1553.06665</Y>
+                </Point2f>
+                <Point2f>
+                  <X>1667.7</X>
+                  <Y>1570.1333</Y>
+                </Point2f>
+                <Point2f>
+                  <X>1598.85</X>
+                  <Y>145.066666</Y>
+                </Point2f>
+              </Value>
+            </Expression>
+            <Expression xsi:type="PropertyMapping">
+              <PropertyMappings>
+                <Property Name="Source" />
+              </PropertyMappings>
+            </Expression>
+            <Expression xsi:type="ExternalizedMapping">
+              <Property Name="Value" DisplayName="Destination" />
+            </Expression>
+            <Expression xsi:type="PropertySource" TypeArguments="p1:ContoursPerspectiveTransform,p2:Point2f[]">
+              <MemberName>Destination</MemberName>
+              <Value>
+                <Point2f>
+                  <X>0</X>
+                  <Y>0</Y>
+                </Point2f>
+                <Point2f>
+                  <X>0</X>
+                  <Y>2048</Y>
+                </Point2f>
+                <Point2f>
+                  <X>2448</X>
+                  <Y>2048</Y>
+                </Point2f>
+                <Point2f>
+                  <X>2448</X>
+                  <Y>0</Y>
+                </Point2f>
+              </Value>
+            </Expression>
+            <Expression xsi:type="PropertyMapping">
+              <PropertyMappings>
+                <Property Name="Destination" />
+              </PropertyMappings>
+            </Expression>
+            <Expression xsi:type="ExternalizedMapping">
+              <Property Name="VignetteImageFileName" />
+            </Expression>
+            <Expression xsi:type="IncludeWorkflow" Path="Extensions\PointHomography.bonsai">
+              <ThresholdValue>154</ThresholdValue>
+              <VignetteImageFileName>Y:\phields\config\4mmVigneting2.png</VignetteImageFileName>
+              <MinArea>100</MinArea>
+              <Source>
+                <Point2f>
+                  <X>420.75</X>
+                  <Y>247.46666</Y>
+                </Point2f>
+                <Point2f>
+                  <X>527.85</X>
+                  <Y>1553.06665</Y>
+                </Point2f>
+                <Point2f>
+                  <X>1667.7</X>
+                  <Y>1570.1333</Y>
+                </Point2f>
+                <Point2f>
+                  <X>1598.85</X>
+                  <Y>145.066666</Y>
+                </Point2f>
+              </Source>
+              <Destination>
+                <Point2f>
+                  <X>0</X>
+                  <Y>0</Y>
+                </Point2f>
+                <Point2f>
+                  <X>0</X>
+                  <Y>2048</Y>
+                </Point2f>
+                <Point2f>
+                  <X>2448</X>
+                  <Y>2048</Y>
+                </Point2f>
+                <Point2f>
+                  <X>2448</X>
+                  <Y>0</Y>
+                </Point2f>
+              </Destination>
+            </Expression>
+            <Expression xsi:type="ExternalizedMapping">
+              <Property Name="Name" DisplayName="OutputImage" />
+              <Property Name="ThresholdValue" />
+            </Expression>
+            <Expression xsi:type="SubscribeSubject">
+              <Name>Image</Name>
+            </Expression>
+            <Expression xsi:type="IncludeWorkflow" Path="Extensions\Homography.bonsai">
+              <ThresholdValue>145</ThresholdValue>
+              <VignetteImageFileName>Y:\phields\config\4mmVigneting2.png</VignetteImageFileName>
+              <Source>
+                <Point2f>
+                  <X>420.75</X>
+                  <Y>247.46666</Y>
+                </Point2f>
+                <Point2f>
+                  <X>527.85</X>
+                  <Y>1553.06665</Y>
+                </Point2f>
+                <Point2f>
+                  <X>1667.7</X>
+                  <Y>1570.1333</Y>
+                </Point2f>
+                <Point2f>
+                  <X>1598.85</X>
+                  <Y>145.066666</Y>
+                </Point2f>
+              </Source>
+              <Destination>
+                <Point2f>
+                  <X>0</X>
+                  <Y>0</Y>
+                </Point2f>
+                <Point2f>
+                  <X>0</X>
+                  <Y>2048</Y>
+                </Point2f>
+                <Point2f>
+                  <X>2448</X>
+                  <Y>2048</Y>
+                </Point2f>
+                <Point2f>
+                  <X>2448</X>
+                  <Y>0</Y>
+                </Point2f>
+              </Destination>
+              <Name>NorthImage</Name>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:WithLatestFrom" />
+            </Expression>
+            <Expression xsi:type="ExternalizedMapping">
+              <Property Name="Name" DisplayName="OutputSubject" Category="Subject" />
+            </Expression>
+            <Expression xsi:type="MulticastSubject">
+              <Name>cam1</Name>
+            </Expression>
+            <Expression xsi:type="MemberSelector">
+              <Selector>Item2</Selector>
+            </Expression>
+            <Expression xsi:type="Disable">
+              <Builder xsi:type="rx:Visualizer">
+                <Workflow>
+                  <Nodes>
+                    <Expression xsi:type="SubscribeSubject">
+                      <Name>Image</Name>
+                    </Expression>
+                    <Expression xsi:type="VisualizerMapping" />
+                    <Expression xsi:type="SubscribeSubject">
+                      <Name>threshold</Name>
+                    </Expression>
+                    <Expression xsi:type="VisualizerMapping" />
+                    <Expression xsi:type="SubscribeSubject">
+                      <Name>FindContours</Name>
+                    </Expression>
+                    <Expression xsi:type="VisualizerMapping" />
+                    <Expression xsi:type="SubscribeSubject">
+                      <Name>BinaryRegionanalysis</Name>
+                    </Expression>
+                    <Expression xsi:type="VisualizerMapping" />
+                    <Expression xsi:type="gui:TableLayoutPanelBuilder">
+                      <gui:Enabled>true</gui:Enabled>
+                      <gui:Visible>true</gui:Visible>
+                      <gui:ColumnCount>2</gui:ColumnCount>
+                      <gui:RowCount>2</gui:RowCount>
+                      <gui:ColumnStyles />
+                      <gui:RowStyles />
+                      <gui:CellSpans />
+                    </Expression>
+                    <Expression xsi:type="VisualizerMapping" />
+                    <Expression xsi:type="WorkflowInput">
+                      <Name>Source1</Name>
+                    </Expression>
+                    <Expression xsi:type="VisualizerMapping" />
+                    <Expression xsi:type="gui:TableLayoutPanelBuilder">
+                      <gui:Enabled>true</gui:Enabled>
+                      <gui:Visible>true</gui:Visible>
+                      <gui:ColumnCount>1</gui:ColumnCount>
+                      <gui:RowCount>2</gui:RowCount>
+                      <gui:ColumnStyles />
+                      <gui:RowStyles />
+                      <gui:CellSpans />
+                    </Expression>
+                    <Expression xsi:type="WorkflowOutput" />
+                  </Nodes>
+                  <Edges>
+                    <Edge From="0" To="1" Label="Source1" />
+                    <Edge From="1" To="8" Label="Source1" />
+                    <Edge From="2" To="3" Label="Source1" />
+                    <Edge From="3" To="8" Label="Source2" />
+                    <Edge From="4" To="5" Label="Source1" />
+                    <Edge From="5" To="8" Label="Source3" />
+                    <Edge From="6" To="7" Label="Source1" />
+                    <Edge From="7" To="8" Label="Source4" />
+                    <Edge From="8" To="9" Label="Source1" />
+                    <Edge From="9" To="12" Label="Source1" />
+                    <Edge From="10" To="11" Label="Source1" />
+                    <Edge From="11" To="12" Label="Source2" />
+                    <Edge From="12" To="13" Label="Source1" />
+                  </Edges>
+                </Workflow>
+              </Builder>
+            </Expression>
+            <Expression xsi:type="WorkflowOutput" />
+            <Expression xsi:type="SubscribeSubject">
+              <Name>FrameEvents</Name>
+            </Expression>
+            <Expression xsi:type="ExternalizedMapping">
+              <Property Name="Value" />
+            </Expression>
+            <Expression xsi:type="rx:Condition">
+              <Workflow>
+                <Nodes>
+                  <Expression xsi:type="WorkflowInput">
+                    <Name>Source1</Name>
+                  </Expression>
+                  <Expression xsi:type="MemberSelector">
+                    <Selector>Key.Item1</Selector>
+                  </Expression>
+                  <Expression xsi:type="ExternalizedMapping">
+                    <Property Name="Value" />
+                  </Expression>
+                  <Expression xsi:type="Equal">
+                    <Operand xsi:type="WorkflowProperty" TypeArguments="p3:CameraName">
+                      <Value>CameraNorth</Value>
+                    </Operand>
+                  </Expression>
+                  <Expression xsi:type="WorkflowOutput" />
+                </Nodes>
+                <Edges>
+                  <Edge From="0" To="1" Label="Source1" />
+                  <Edge From="1" To="3" Label="Source1" />
+                  <Edge From="2" To="3" Label="Source2" />
+                  <Edge From="3" To="4" Label="Source1" />
+                </Edges>
+              </Workflow>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:Merge" />
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:ObserveOn">
+                <rx:Scheduler>TaskPoolScheduler</rx:Scheduler>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="MemberSelector">
+              <Selector>Value.Image</Selector>
+            </Expression>
+            <Expression xsi:type="rx:PublishSubject">
+              <Name>Image</Name>
+            </Expression>
+          </Nodes>
+          <Edges>
+            <Edge From="1" To="10" Label="Source1" />
+            <Edge From="2" To="10" Label="Source2" />
+            <Edge From="3" To="4" Label="Source1" />
+            <Edge From="4" To="5" Label="Source1" />
+            <Edge From="5" To="10" Label="Source3" />
+            <Edge From="5" To="13" Label="Source3" />
+            <Edge From="6" To="7" Label="Source1" />
+            <Edge From="7" To="8" Label="Source1" />
+            <Edge From="8" To="10" Label="Source4" />
+            <Edge From="8" To="13" Label="Source4" />
+            <Edge From="9" To="10" Label="Source5" />
+            <Edge From="9" To="13" Label="Source5" />
+            <Edge From="10" To="14" Label="Source1" />
+            <Edge From="11" To="13" Label="Source1" />
+            <Edge From="12" To="13" Label="Source2" />
+            <Edge From="13" To="14" Label="Source2" />
+            <Edge From="14" To="16" Label="Source1" />
+            <Edge From="15" To="16" Label="Source2" />
+            <Edge From="16" To="17" Label="Source1" />
+            <Edge From="17" To="18" Label="Source1" />
+            <Edge From="18" To="19" Label="Source1" />
+            <Edge From="20" To="22" Label="Source1" />
+            <Edge From="21" To="22" Label="Source2" />
+            <Edge From="22" To="23" Label="Source1" />
+            <Edge From="23" To="24" Label="Source1" />
+            <Edge From="24" To="25" Label="Source1" />
+            <Edge From="25" To="26" Label="Source1" />
+          </Edges>
+        </Workflow>
+      </Expression>
+      <Expression xsi:type="WorkflowOutput" />
+    </Nodes>
+    <Edges>
+      <Edge From="0" To="2" Label="Source1" />
+      <Edge From="1" To="2" Label="Source2" />
+      <Edge From="2" To="3" Label="Source1" />
+    </Edges>
+  </Workflow>
+</WorkflowBuilder>
