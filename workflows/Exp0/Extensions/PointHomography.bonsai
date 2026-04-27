@@ -1,9 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <WorkflowBuilder Version="2.9.0"
                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                 xmlns:cv="clr-namespace:Bonsai.Vision;assembly=Bonsai.Vision"
-                 xmlns:dsp="clr-namespace:Bonsai.Dsp;assembly=Bonsai.Dsp"
                  xmlns:rx="clr-namespace:Bonsai.Reactive;assembly=Bonsai.Core"
+                 xmlns:cv="clr-namespace:Bonsai.Vision;assembly=Bonsai.Vision"
                  xmlns:p1="clr-namespace:;assembly=Extensions"
                  xmlns:gui="clr-namespace:Bonsai.Gui;assembly=Bonsai.Gui"
                  xmlns="https://bonsai-rx.org/2018/workflow">
@@ -13,44 +12,12 @@
         <Name>Source1</Name>
       </Expression>
       <Expression xsi:type="ExternalizedMapping">
-        <Property Name="FileName" />
-      </Expression>
-      <Expression xsi:type="Combinator">
-        <Combinator xsi:type="cv:LoadImage">
-          <cv:FileName></cv:FileName>
-          <cv:Mode>Grayscale</cv:Mode>
-        </Combinator>
-      </Expression>
-      <Expression xsi:type="Combinator">
-        <Combinator xsi:type="cv:Smooth">
-          <cv:SmoothType>Gaussian</cv:SmoothType>
-          <cv:Size1>311</cv:Size1>
-          <cv:Size2>311</cv:Size2>
-          <cv:Sigma1>0</cv:Sigma1>
-          <cv:Sigma2>0</cv:Sigma2>
-        </Combinator>
-      </Expression>
-      <Expression xsi:type="BitwiseNot" />
-      <Expression xsi:type="Combinator">
-        <Combinator xsi:type="dsp:ConvertScale">
-          <dsp:Depth xsi:nil="true" />
-          <dsp:Scale>2</dsp:Scale>
-          <dsp:Shift>0</dsp:Shift>
-        </Combinator>
-      </Expression>
-      <Expression xsi:type="Combinator">
-        <Combinator xsi:type="rx:WithLatestFrom" />
-      </Expression>
-      <Expression xsi:type="Add" />
-      <Expression xsi:type="ExternalizedMapping">
         <Property Name="ThresholdValue" />
+        <Property Name="VignetteImageFileName" />
       </Expression>
-      <Expression xsi:type="Combinator">
-        <Combinator xsi:type="cv:Threshold">
-          <cv:ThresholdValue>172</cv:ThresholdValue>
-          <cv:MaxValue>255</cv:MaxValue>
-          <cv:ThresholdType>BinaryInv</cv:ThresholdType>
-        </Combinator>
+      <Expression xsi:type="IncludeWorkflow" Path="Extensions\NormalizedThreshold.bonsai">
+        <VignetteImageFileName>Y:\phields\config\4mmVigneting2.png</VignetteImageFileName>
+        <ThresholdValue>240</ThresholdValue>
       </Expression>
       <Expression xsi:type="rx:PublishSubject">
         <Name>threshold</Name>
@@ -66,7 +33,7 @@
             <cv:X>0</cv:X>
             <cv:Y>0</cv:Y>
           </cv:Offset>
-          <cv:MinArea>10000</cv:MinArea>
+          <cv:MinArea>100</cv:MinArea>
           <cv:MaxArea xsi:nil="true" />
         </Combinator>
       </Expression>
@@ -83,30 +50,30 @@
         <Combinator xsi:type="p1:ContoursPerspectiveTransform">
           <p1:Source>
             <p1:Point2f>
-              <p1:X>543.15</p1:X>
-              <p1:Y>414.387146</p1:Y>
+              <p1:X>2327.51245</p1:X>
+              <p1:Y>203.453613</p1:Y>
             </p1:Point2f>
             <p1:Point2f>
-              <p1:X>508.725</p1:X>
-              <p1:Y>1656.05261</p1:Y>
+              <p1:X>77.45625</p1:X>
+              <p1:Y>119.6786</p1:Y>
             </p1:Point2f>
             <p1:Point2f>
-              <p1:X>2004.3</p1:X>
-              <p1:Y>1642.58875</p1:Y>
+              <p1:X>123.356247</p1:X>
+              <p1:Y>1409.21545</p1:Y>
             </p1:Point2f>
             <p1:Point2f>
-              <p1:X>1964.13745</p1:X>
-              <p1:Y>411.395172</p1:Y>
+              <p1:X>2299.78125</p1:X>
+              <p1:Y>1398.74365</p1:Y>
             </p1:Point2f>
           </p1:Source>
           <p1:Destination>
             <p1:Point2f>
-              <p1:X>0</p1:X>
-              <p1:Y>0</p1:Y>
+              <p1:X>1291.42371</p1:X>
+              <p1:Y>-11.3149176</p1:Y>
             </p1:Point2f>
             <p1:Point2f>
-              <p1:X>0</p1:X>
-              <p1:Y>2048</p1:Y>
+              <p1:X>1293.15259</p1:X>
+              <p1:Y>2053.65747</p1:Y>
             </p1:Point2f>
             <p1:Point2f>
               <p1:X>2448</p1:X>
@@ -175,25 +142,18 @@
       <Expression xsi:type="WorkflowOutput" />
     </Nodes>
     <Edges>
-      <Edge From="0" To="6" Label="Source1" />
-      <Edge From="1" To="2" Label="Source1" />
+      <Edge From="0" To="2" Label="Source1" />
+      <Edge From="1" To="2" Label="Source2" />
       <Edge From="2" To="3" Label="Source1" />
-      <Edge From="3" To="4" Label="Source1" />
-      <Edge From="4" To="5" Label="Source1" />
-      <Edge From="5" To="6" Label="Source2" />
-      <Edge From="6" To="7" Label="Source1" />
-      <Edge From="7" To="9" Label="Source1" />
-      <Edge From="8" To="9" Label="Source2" />
+      <Edge From="3" To="5" Label="Source1" />
+      <Edge From="4" To="5" Label="Source2" />
+      <Edge From="5" To="6" Label="Source1" />
+      <Edge From="6" To="9" Label="Source1" />
+      <Edge From="7" To="9" Label="Source2" />
+      <Edge From="8" To="9" Label="Source3" />
       <Edge From="9" To="10" Label="Source1" />
-      <Edge From="10" To="12" Label="Source1" />
-      <Edge From="11" To="12" Label="Source2" />
-      <Edge From="12" To="13" Label="Source1" />
-      <Edge From="13" To="16" Label="Source1" />
-      <Edge From="14" To="16" Label="Source2" />
-      <Edge From="15" To="16" Label="Source3" />
-      <Edge From="16" To="17" Label="Source1" />
-      <Edge From="17" To="18" Label="Source1" />
-      <Edge From="18" To="19" Label="Source1" />
+      <Edge From="10" To="11" Label="Source1" />
+      <Edge From="11" To="12" Label="Source1" />
     </Edges>
   </Workflow>
 </WorkflowBuilder>

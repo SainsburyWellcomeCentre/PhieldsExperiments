@@ -1,0 +1,107 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<WorkflowBuilder Version="2.9.0"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xmlns:rx="clr-namespace:Bonsai.Reactive;assembly=Bonsai.Core"
+                 xmlns:cv="clr-namespace:Bonsai.Vision;assembly=Bonsai.Vision"
+                 xmlns:dsp="clr-namespace:Bonsai.Dsp;assembly=Bonsai.Dsp"
+                 xmlns="https://bonsai-rx.org/2018/workflow">
+  <Workflow>
+    <Nodes>
+      <Expression xsi:type="WorkflowInput">
+        <Name>Source1</Name>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="rx:SampleInterval">
+          <rx:Interval>PT1S</rx:Interval>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="ExternalizedMapping">
+        <Property Name="ThresholdValue" />
+        <Property Name="VignetteImageFileName" />
+      </Expression>
+      <Expression xsi:type="IncludeWorkflow" Path="Extensions\NormalizedThreshold.bonsai">
+        <VignetteImageFileName>Y:\phields\config\4mmVigneting2.png</VignetteImageFileName>
+        <ThresholdValue>240</ThresholdValue>
+      </Expression>
+      <Expression xsi:type="ExternalizedMapping">
+        <Property Name="Source" />
+      </Expression>
+      <Expression xsi:type="ExternalizedMapping">
+        <Property Name="Destination" />
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="cv:WarpPerspective">
+          <cv:Source>
+            <cv:Point2f>
+              <cv:X>2327.51245</cv:X>
+              <cv:Y>203.453613</cv:Y>
+            </cv:Point2f>
+            <cv:Point2f>
+              <cv:X>77.45625</cv:X>
+              <cv:Y>119.6786</cv:Y>
+            </cv:Point2f>
+            <cv:Point2f>
+              <cv:X>123.356247</cv:X>
+              <cv:Y>1409.21545</cv:Y>
+            </cv:Point2f>
+            <cv:Point2f>
+              <cv:X>2299.78125</cv:X>
+              <cv:Y>1398.74365</cv:Y>
+            </cv:Point2f>
+          </cv:Source>
+          <cv:Destination>
+            <cv:Point2f>
+              <cv:X>1291.42371</cv:X>
+              <cv:Y>-11.3149176</cv:Y>
+            </cv:Point2f>
+            <cv:Point2f>
+              <cv:X>1293.15259</cv:X>
+              <cv:Y>2053.65747</cv:Y>
+            </cv:Point2f>
+            <cv:Point2f>
+              <cv:X>2448</cv:X>
+              <cv:Y>2048</cv:Y>
+            </cv:Point2f>
+            <cv:Point2f>
+              <cv:X>2448</cv:X>
+              <cv:Y>0</cv:Y>
+            </cv:Point2f>
+          </cv:Destination>
+          <cv:Flags>Linear</cv:Flags>
+          <cv:FillValue>
+            <cv:Val0>0</cv:Val0>
+            <cv:Val1>0</cv:Val1>
+            <cv:Val2>0</cv:Val2>
+            <cv:Val3>0</cv:Val3>
+          </cv:FillValue>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="ExternalizedMapping">
+        <Property Name="Name" />
+      </Expression>
+      <Expression xsi:type="rx:BehaviorSubject">
+        <Name>EastImage</Name>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="dsp:ConvertScale">
+          <dsp:Depth xsi:nil="true" />
+          <dsp:Scale>0.3</dsp:Scale>
+          <dsp:Shift>0</dsp:Shift>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="WorkflowOutput" />
+    </Nodes>
+    <Edges>
+      <Edge From="0" To="1" Label="Source1" />
+      <Edge From="1" To="3" Label="Source1" />
+      <Edge From="2" To="3" Label="Source2" />
+      <Edge From="3" To="6" Label="Source1" />
+      <Edge From="4" To="6" Label="Source2" />
+      <Edge From="5" To="6" Label="Source3" />
+      <Edge From="6" To="8" Label="Source1" />
+      <Edge From="7" To="8" Label="Source2" />
+      <Edge From="8" To="9" Label="Source1" />
+      <Edge From="9" To="10" Label="Source1" />
+    </Edges>
+  </Workflow>
+</WorkflowBuilder>
