@@ -17,7 +17,7 @@
       </Expression>
       <Expression xsi:type="IncludeWorkflow" Path="Extensions\NormalizedThreshold.bonsai">
         <VignetteImageFileName>Y:\phields\config\4mmVigneting2.png</VignetteImageFileName>
-        <ThresholdValue>240</ThresholdValue>
+        <ThresholdValue>154</ThresholdValue>
       </Expression>
       <Expression xsi:type="rx:PublishSubject">
         <Name>threshold</Name>
@@ -33,7 +33,7 @@
             <cv:X>0</cv:X>
             <cv:Y>0</cv:Y>
           </cv:Offset>
-          <cv:MinArea>100</cv:MinArea>
+          <cv:MinArea>500</cv:MinArea>
           <cv:MaxArea xsi:nil="true" />
         </Combinator>
       </Expression>
@@ -42,6 +42,7 @@
       </Expression>
       <Expression xsi:type="ExternalizedMapping">
         <Property Name="Source" />
+        <Property Name="Size" />
       </Expression>
       <Expression xsi:type="ExternalizedMapping">
         <Property Name="Destination" />
@@ -50,44 +51,44 @@
         <Combinator xsi:type="p1:ContoursPerspectiveTransform">
           <p1:Source>
             <p1:Point2f>
-              <p1:X>2327.51245</p1:X>
-              <p1:Y>203.453613</p1:Y>
+              <p1:X>498.206238</p1:X>
+              <p1:Y>405.411255</p1:Y>
             </p1:Point2f>
             <p1:Point2f>
-              <p1:X>77.45625</p1:X>
-              <p1:Y>119.6786</p1:Y>
+              <p1:X>442.743744</p1:X>
+              <p1:Y>1665.02844</p1:Y>
             </p1:Point2f>
             <p1:Point2f>
-              <p1:X>123.356247</p1:X>
-              <p1:Y>1409.21545</p1:Y>
+              <p1:X>1906.76245</p1:X>
+              <p1:Y>1618.65308</p1:Y>
             </p1:Point2f>
             <p1:Point2f>
-              <p1:X>2299.78125</p1:X>
-              <p1:Y>1398.74365</p1:Y>
+              <p1:X>1876.16248</p1:X>
+              <p1:Y>478.7144</p1:Y>
             </p1:Point2f>
           </p1:Source>
           <p1:Destination>
             <p1:Point2f>
-              <p1:X>1291.42371</p1:X>
-              <p1:Y>-11.3149176</p1:Y>
+              <p1:X>100</p1:X>
+              <p1:Y>100</p1:Y>
             </p1:Point2f>
             <p1:Point2f>
-              <p1:X>1293.15259</p1:X>
-              <p1:Y>2053.65747</p1:Y>
+              <p1:X>100</p1:X>
+              <p1:Y>2600</p1:Y>
             </p1:Point2f>
             <p1:Point2f>
-              <p1:X>2448</p1:X>
-              <p1:Y>2048</p1:Y>
+              <p1:X>3100</p1:X>
+              <p1:Y>2600</p1:Y>
             </p1:Point2f>
             <p1:Point2f>
-              <p1:X>2448</p1:X>
-              <p1:Y>0</p1:Y>
+              <p1:X>3100</p1:X>
+              <p1:Y>100</p1:Y>
             </p1:Point2f>
           </p1:Destination>
-          <p1:ImageSize>
+          <p1:Size>
             <p1:Width>0</p1:Width>
             <p1:Height>0</p1:Height>
-          </p1:ImageSize>
+          </p1:Size>
         </Combinator>
       </Expression>
       <Expression xsi:type="rx:PublishSubject">

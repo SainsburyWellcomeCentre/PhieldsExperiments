@@ -12,6 +12,8 @@
                  xmlns:sys="clr-namespace:System;assembly=mscorlib"
                  xmlns:p3="clr-namespace:System.Reactive.Linq;assembly=System.Reactive.Interfaces"
                  xmlns:p4="clr-namespace:Harp.TimestampGeneratorGen3;assembly=Harp.TimestampGeneratorGen3"
+                 xmlns:cv="clr-namespace:Bonsai.Vision;assembly=Bonsai.Vision"
+                 xmlns:p5="clr-namespace:OpenCV.Net;assembly=OpenCV.Net"
                  xmlns:gui="clr-namespace:Bonsai.Gui;assembly=Bonsai.Gui"
                  xmlns="https://bonsai-rx.org/2018/workflow">
   <Workflow>
@@ -166,10 +168,10 @@
                         <Expression xsi:type="Combinator">
                           <Combinator xsi:type="aeon-video:SpinnakerCapture">
                             <spk:Index xsi:nil="true" />
-                            <spk:SerialNumber>23425448</spk:SerialNumber>
+                            <spk:SerialNumber>23425450</spk:SerialNumber>
                             <spk:ColorProcessing>Default</spk:ColorProcessing>
-                            <aeon-video:ExposureTime>3000</aeon-video:ExposureTime>
-                            <aeon-video:Gain>1</aeon-video:Gain>
+                            <aeon-video:ExposureTime>1500</aeon-video:ExposureTime>
+                            <aeon-video:Gain>0</aeon-video:Gain>
                             <aeon-video:Binning>1</aeon-video:Binning>
                           </Combinator>
                         </Expression>
@@ -804,11 +806,797 @@
                 </Edges>
               </Workflow>
             </Expression>
-            <Expression xsi:type="IncludeWorkflow" Path="Extensions\CameraImagePreProcessing.bonsai">
-              <StreamId4>CameraNorth</StreamId4>
-              <StreamId3>CameraEast</StreamId3>
-              <StreamId2>CameraWest</StreamId2>
-              <StreamId1>CameraTop</StreamId1>
+            <Expression xsi:type="GroupWorkflow">
+              <Name>CameraImagePreProcessing</Name>
+              <Workflow>
+                <Nodes>
+                  <Expression xsi:type="rx:PublishSubject" TypeArguments="sys:Tuple(cv:Contours,p5:IplImage)">
+                    <rx:Name>cam0</rx:Name>
+                  </Expression>
+                  <Expression xsi:type="rx:PublishSubject" TypeArguments="sys:Tuple(cv:Contours,p5:IplImage)">
+                    <rx:Name>cam1</rx:Name>
+                  </Expression>
+                  <Expression xsi:type="rx:PublishSubject" TypeArguments="sys:Tuple(cv:Contours,p5:IplImage)">
+                    <rx:Name>cam2</rx:Name>
+                  </Expression>
+                  <Expression xsi:type="rx:PublishSubject" TypeArguments="sys:Tuple(cv:Contours,p5:IplImage)">
+                    <rx:Name>cam3</rx:Name>
+                  </Expression>
+                  <Expression xsi:type="rx:PublishSubject" TypeArguments="sys:Tuple(cv:Contours,p5:IplImage)">
+                    <rx:Name>cam4</rx:Name>
+                  </Expression>
+                  <Expression xsi:type="SubscribeSubject">
+                    <Name>FrameEvents</Name>
+                  </Expression>
+                  <Expression xsi:type="ExternalizedMapping">
+                    <Property Name="Value" DisplayName="StreamId0" />
+                  </Expression>
+                  <Expression xsi:type="rx:Condition">
+                    <Workflow>
+                      <Nodes>
+                        <Expression xsi:type="WorkflowInput">
+                          <Name>Source1</Name>
+                        </Expression>
+                        <Expression xsi:type="MemberSelector">
+                          <Selector>Key.Item1</Selector>
+                        </Expression>
+                        <Expression xsi:type="ExternalizedMapping">
+                          <Property Name="Value" />
+                        </Expression>
+                        <Expression xsi:type="Equal">
+                          <Operand xsi:type="WorkflowProperty" TypeArguments="p1:CameraName">
+                            <Value>CameraTop</Value>
+                          </Operand>
+                        </Expression>
+                        <Expression xsi:type="WorkflowOutput" />
+                      </Nodes>
+                      <Edges>
+                        <Edge From="0" To="1" Label="Source1" />
+                        <Edge From="1" To="3" Label="Source1" />
+                        <Edge From="2" To="3" Label="Source2" />
+                        <Edge From="3" To="4" Label="Source1" />
+                      </Edges>
+                    </Workflow>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="rx:Merge" />
+                  </Expression>
+                  <Expression xsi:type="MemberSelector">
+                    <Selector>Value.Image</Selector>
+                  </Expression>
+                  <Expression xsi:type="IncludeWorkflow" Path="Extensions\CameraPipeline.bonsai">
+                    <MinArea>500</MinArea>
+                    <Source>
+                      <Point2f>
+                        <X>498.206238</X>
+                        <Y>405.411255</Y>
+                      </Point2f>
+                      <Point2f>
+                        <X>442.743744</X>
+                        <Y>1665.02844</Y>
+                      </Point2f>
+                      <Point2f>
+                        <X>1906.76245</X>
+                        <Y>1618.65308</Y>
+                      </Point2f>
+                      <Point2f>
+                        <X>1876.16248</X>
+                        <Y>478.7144</Y>
+                      </Point2f>
+                    </Source>
+                    <Destination>
+                      <Point2f>
+                        <X>100</X>
+                        <Y>100</Y>
+                      </Point2f>
+                      <Point2f>
+                        <X>100</X>
+                        <Y>2600</Y>
+                      </Point2f>
+                      <Point2f>
+                        <X>3100</X>
+                        <Y>2600</Y>
+                      </Point2f>
+                      <Point2f>
+                        <X>3100</X>
+                        <Y>100</Y>
+                      </Point2f>
+                    </Destination>
+                    <OutputImage>WestImage</OutputImage>
+                    <ThresholdValue>150</ThresholdValue>
+                    <OutputSubject>cam0</OutputSubject>
+                    <Value>CameraTop</Value>
+                    <Size>
+                      <Width>3200</Width>
+                      <Height>2700</Height>
+                    </Size>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="rx:BufferTime">
+                      <rx:TimeSpan>PT1S</rx:TimeSpan>
+                    </Combinator>
+                  </Expression>
+                  <Expression xsi:type="MemberSelector">
+                    <Selector>Count</Selector>
+                  </Expression>
+                  <Expression xsi:type="SubscribeSubject">
+                    <Name>FrameEvents</Name>
+                  </Expression>
+                  <Expression xsi:type="ExternalizedMapping">
+                    <Property Name="Value" DisplayName="StreamId1" />
+                  </Expression>
+                  <Expression xsi:type="rx:Condition">
+                    <Workflow>
+                      <Nodes>
+                        <Expression xsi:type="WorkflowInput">
+                          <Name>Source1</Name>
+                        </Expression>
+                        <Expression xsi:type="MemberSelector">
+                          <Selector>Key.Item1</Selector>
+                        </Expression>
+                        <Expression xsi:type="ExternalizedMapping">
+                          <Property Name="Value" />
+                        </Expression>
+                        <Expression xsi:type="Equal">
+                          <Operand xsi:type="WorkflowProperty" TypeArguments="p1:CameraName">
+                            <Value>CameraNorth</Value>
+                          </Operand>
+                        </Expression>
+                        <Expression xsi:type="WorkflowOutput" />
+                      </Nodes>
+                      <Edges>
+                        <Edge From="0" To="1" Label="Source1" />
+                        <Edge From="1" To="3" Label="Source1" />
+                        <Edge From="2" To="3" Label="Source2" />
+                        <Edge From="3" To="4" Label="Source1" />
+                      </Edges>
+                    </Workflow>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="rx:Merge" />
+                  </Expression>
+                  <Expression xsi:type="MemberSelector">
+                    <Selector>Value.Image</Selector>
+                  </Expression>
+                  <Expression xsi:type="IncludeWorkflow" Path="Extensions\CameraPipeline.bonsai">
+                    <MinArea>500</MinArea>
+                    <Source>
+                      <Point2f>
+                        <X>2327.512</X>
+                        <Y>203.4536</Y>
+                      </Point2f>
+                      <Point2f>
+                        <X>527.85</X>
+                        <Y>1553.06665</Y>
+                      </Point2f>
+                      <Point2f>
+                        <X>1667.7</X>
+                        <Y>1570.1333</Y>
+                      </Point2f>
+                      <Point2f>
+                        <X>1598.85</X>
+                        <Y>145.066666</Y>
+                      </Point2f>
+                    </Source>
+                    <Destination>
+                      <Point2f>
+                        <X>1291.424</X>
+                        <Y>-11.31492</Y>
+                      </Point2f>
+                      <Point2f>
+                        <X>1293.153</X>
+                        <Y>2053.657</Y>
+                      </Point2f>
+                      <Point2f>
+                        <X>2448</X>
+                        <Y>2048</Y>
+                      </Point2f>
+                      <Point2f>
+                        <X>2448</X>
+                        <Y>0</Y>
+                      </Point2f>
+                    </Destination>
+                    <OutputImage>TopImage</OutputImage>
+                    <ThresholdValue>150</ThresholdValue>
+                    <OutputSubject>cam1</OutputSubject>
+                    <Value>CameraNorth</Value>
+                    <Size>
+                      <Width>3200</Width>
+                      <Height>2700</Height>
+                    </Size>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="rx:BufferTime">
+                      <rx:TimeSpan>PT1S</rx:TimeSpan>
+                    </Combinator>
+                  </Expression>
+                  <Expression xsi:type="MemberSelector">
+                    <Selector>Count</Selector>
+                  </Expression>
+                  <Expression xsi:type="SubscribeSubject">
+                    <Name>FrameEvents</Name>
+                  </Expression>
+                  <Expression xsi:type="ExternalizedMapping">
+                    <Property Name="Value" DisplayName="StreamId2" />
+                  </Expression>
+                  <Expression xsi:type="rx:Condition">
+                    <Workflow>
+                      <Nodes>
+                        <Expression xsi:type="WorkflowInput">
+                          <Name>Source1</Name>
+                        </Expression>
+                        <Expression xsi:type="MemberSelector">
+                          <Selector>Key.Item1</Selector>
+                        </Expression>
+                        <Expression xsi:type="ExternalizedMapping">
+                          <Property Name="Value" />
+                        </Expression>
+                        <Expression xsi:type="Equal">
+                          <Operand xsi:type="WorkflowProperty" TypeArguments="p1:CameraName">
+                            <Value>CameraSouth</Value>
+                          </Operand>
+                        </Expression>
+                        <Expression xsi:type="WorkflowOutput" />
+                      </Nodes>
+                      <Edges>
+                        <Edge From="0" To="1" Label="Source1" />
+                        <Edge From="1" To="3" Label="Source1" />
+                        <Edge From="2" To="3" Label="Source2" />
+                        <Edge From="3" To="4" Label="Source1" />
+                      </Edges>
+                    </Workflow>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="rx:Merge" />
+                  </Expression>
+                  <Expression xsi:type="MemberSelector">
+                    <Selector>Value.Image</Selector>
+                  </Expression>
+                  <Expression xsi:type="IncludeWorkflow" Path="Extensions\CameraPipeline.bonsai">
+                    <MinArea>500</MinArea>
+                    <Source>
+                      <Point2f>
+                        <X>2327.512</X>
+                        <Y>203.4536</Y>
+                      </Point2f>
+                      <Point2f>
+                        <X>527.85</X>
+                        <Y>1553.06665</Y>
+                      </Point2f>
+                      <Point2f>
+                        <X>1667.7</X>
+                        <Y>1570.1333</Y>
+                      </Point2f>
+                      <Point2f>
+                        <X>1598.85</X>
+                        <Y>145.066666</Y>
+                      </Point2f>
+                    </Source>
+                    <Destination>
+                      <Point2f>
+                        <X>1291.424</X>
+                        <Y>-11.31492</Y>
+                      </Point2f>
+                      <Point2f>
+                        <X>1293.153</X>
+                        <Y>2053.657</Y>
+                      </Point2f>
+                      <Point2f>
+                        <X>2448</X>
+                        <Y>2048</Y>
+                      </Point2f>
+                      <Point2f>
+                        <X>2448</X>
+                        <Y>0</Y>
+                      </Point2f>
+                    </Destination>
+                    <OutputImage>WestImage</OutputImage>
+                    <ThresholdValue>150</ThresholdValue>
+                    <OutputSubject>cam2</OutputSubject>
+                    <Value>CameraSouth</Value>
+                    <Size>
+                      <Width>3200</Width>
+                      <Height>2700</Height>
+                    </Size>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="rx:BufferTime">
+                      <rx:TimeSpan>PT1S</rx:TimeSpan>
+                    </Combinator>
+                  </Expression>
+                  <Expression xsi:type="MemberSelector">
+                    <Selector>Count</Selector>
+                  </Expression>
+                  <Expression xsi:type="SubscribeSubject">
+                    <Name>FrameEvents</Name>
+                  </Expression>
+                  <Expression xsi:type="ExternalizedMapping">
+                    <Property Name="Value" DisplayName="StreamId3" />
+                  </Expression>
+                  <Expression xsi:type="rx:Condition">
+                    <Workflow>
+                      <Nodes>
+                        <Expression xsi:type="WorkflowInput">
+                          <Name>Source1</Name>
+                        </Expression>
+                        <Expression xsi:type="MemberSelector">
+                          <Selector>Key.Item1</Selector>
+                        </Expression>
+                        <Expression xsi:type="ExternalizedMapping">
+                          <Property Name="Value" />
+                        </Expression>
+                        <Expression xsi:type="Equal">
+                          <Operand xsi:type="WorkflowProperty" TypeArguments="p1:CameraName">
+                            <Value>CameraEast</Value>
+                          </Operand>
+                        </Expression>
+                        <Expression xsi:type="WorkflowOutput" />
+                      </Nodes>
+                      <Edges>
+                        <Edge From="0" To="1" Label="Source1" />
+                        <Edge From="1" To="3" Label="Source1" />
+                        <Edge From="2" To="3" Label="Source2" />
+                        <Edge From="3" To="4" Label="Source1" />
+                      </Edges>
+                    </Workflow>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="rx:Merge" />
+                  </Expression>
+                  <Expression xsi:type="MemberSelector">
+                    <Selector>Value.Image</Selector>
+                  </Expression>
+                  <Expression xsi:type="IncludeWorkflow" Path="Extensions\CameraPipeline.bonsai">
+                    <MinArea>500</MinArea>
+                    <Source>
+                      <Point2f>
+                        <X>2302.65</X>
+                        <Y>197.469681</Y>
+                      </Point2f>
+                      <Point2f>
+                        <X>44.94375</X>
+                        <Y>127.158508</Y>
+                      </Point2f>
+                      <Point2f>
+                        <X>80.325</X>
+                        <Y>1403.23157</Y>
+                      </Point2f>
+                      <Point2f>
+                        <X>2267.2688</X>
+                        <Y>1383.78381</Y>
+                      </Point2f>
+                    </Source>
+                    <Destination>
+                      <Point2f>
+                        <X>1700</X>
+                        <Y>100</Y>
+                      </Point2f>
+                      <Point2f>
+                        <X>1700</X>
+                        <Y>2600</Y>
+                      </Point2f>
+                      <Point2f>
+                        <X>3100</X>
+                        <Y>2600</Y>
+                      </Point2f>
+                      <Point2f>
+                        <X>3100</X>
+                        <Y>100</Y>
+                      </Point2f>
+                    </Destination>
+                    <OutputImage>EastImage</OutputImage>
+                    <ThresholdValue>150</ThresholdValue>
+                    <OutputSubject>cam3</OutputSubject>
+                    <Value>CameraEast</Value>
+                    <Size>
+                      <Width>3200</Width>
+                      <Height>2700</Height>
+                    </Size>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="rx:BufferTime">
+                      <rx:TimeSpan>PT1S</rx:TimeSpan>
+                    </Combinator>
+                  </Expression>
+                  <Expression xsi:type="MemberSelector">
+                    <Selector>Count</Selector>
+                  </Expression>
+                  <Expression xsi:type="SubscribeSubject">
+                    <Name>FrameEvents</Name>
+                  </Expression>
+                  <Expression xsi:type="ExternalizedMapping">
+                    <Property Name="Value" DisplayName="StreamId4" />
+                  </Expression>
+                  <Expression xsi:type="rx:Condition">
+                    <Workflow>
+                      <Nodes>
+                        <Expression xsi:type="WorkflowInput">
+                          <Name>Source1</Name>
+                        </Expression>
+                        <Expression xsi:type="MemberSelector">
+                          <Selector>Key.Item1</Selector>
+                        </Expression>
+                        <Expression xsi:type="ExternalizedMapping">
+                          <Property Name="Value" />
+                        </Expression>
+                        <Expression xsi:type="Equal">
+                          <Operand xsi:type="WorkflowProperty" TypeArguments="p1:CameraName">
+                            <Value>CameraWest</Value>
+                          </Operand>
+                        </Expression>
+                        <Expression xsi:type="WorkflowOutput" />
+                      </Nodes>
+                      <Edges>
+                        <Edge From="0" To="1" Label="Source1" />
+                        <Edge From="1" To="3" Label="Source1" />
+                        <Edge From="2" To="3" Label="Source2" />
+                        <Edge From="3" To="4" Label="Source1" />
+                      </Edges>
+                    </Workflow>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="rx:Merge" />
+                  </Expression>
+                  <Expression xsi:type="MemberSelector">
+                    <Selector>Value.Image</Selector>
+                  </Expression>
+                  <Expression xsi:type="IncludeWorkflow" Path="Extensions\CameraPipeline.bonsai">
+                    <MinArea>500</MinArea>
+                    <Source>
+                      <Point2f>
+                        <X>130.05</X>
+                        <Y>1419.68738</Y>
+                      </Point2f>
+                      <Point2f>
+                        <X>2384.88745</X>
+                        <Y>1419.68738</Y>
+                      </Point2f>
+                      <Point2f>
+                        <X>2337.075</X>
+                        <Y>34.4075966</Y>
+                      </Point2f>
+                      <Point2f>
+                        <X>170.2125</X>
+                        <Y>91.25493</Y>
+                      </Point2f>
+                    </Source>
+                    <Destination>
+                      <Point2f>
+                        <X>100</X>
+                        <Y>100</Y>
+                      </Point2f>
+                      <Point2f>
+                        <X>100</X>
+                        <Y>2600</Y>
+                      </Point2f>
+                      <Point2f>
+                        <X>1650</X>
+                        <Y>2600</Y>
+                      </Point2f>
+                      <Point2f>
+                        <X>1650</X>
+                        <Y>100</Y>
+                      </Point2f>
+                    </Destination>
+                    <OutputImage>NorthImage</OutputImage>
+                    <ThresholdValue>150</ThresholdValue>
+                    <OutputSubject>cam4</OutputSubject>
+                    <Value>CameraWest</Value>
+                    <Size>
+                      <Width>3200</Width>
+                      <Height>2700</Height>
+                    </Size>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="rx:BufferTime">
+                      <rx:TimeSpan>PT1S</rx:TimeSpan>
+                    </Combinator>
+                  </Expression>
+                  <Expression xsi:type="MemberSelector">
+                    <Selector>Count</Selector>
+                  </Expression>
+                  <Expression xsi:type="SubscribeSubject">
+                    <Name>cam0</Name>
+                  </Expression>
+                  <Expression xsi:type="MemberSelector">
+                    <Selector>Item2</Selector>
+                  </Expression>
+                  <Expression xsi:type="Disable">
+                    <Builder xsi:type="SubscribeSubject">
+                      <Name>cam1</Name>
+                    </Builder>
+                  </Expression>
+                  <Expression xsi:type="Disable">
+                    <Builder xsi:type="MemberSelector">
+                      <Selector>Item2</Selector>
+                    </Builder>
+                  </Expression>
+                  <Expression xsi:type="Disable">
+                    <Builder xsi:type="SubscribeSubject">
+                      <Name>cam2</Name>
+                    </Builder>
+                  </Expression>
+                  <Expression xsi:type="Disable">
+                    <Builder xsi:type="MemberSelector">
+                      <Selector>Item2</Selector>
+                    </Builder>
+                  </Expression>
+                  <Expression xsi:type="SubscribeSubject">
+                    <Name>cam3</Name>
+                  </Expression>
+                  <Expression xsi:type="MemberSelector">
+                    <Selector>Item2</Selector>
+                  </Expression>
+                  <Expression xsi:type="SubscribeSubject">
+                    <Name>cam4</Name>
+                  </Expression>
+                  <Expression xsi:type="MemberSelector">
+                    <Selector>Item2</Selector>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="rx:Zip" />
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="rx:ObserveOn">
+                      <rx:Scheduler>TaskPoolScheduler</rx:Scheduler>
+                    </Combinator>
+                  </Expression>
+                  <Expression xsi:type="Add" />
+                  <Expression xsi:type="Disable">
+                    <Builder xsi:type="GroupWorkflow">
+                      <Name>FindContours</Name>
+                      <Workflow>
+                        <Nodes>
+                          <Expression xsi:type="WorkflowInput">
+                            <Name>Source1</Name>
+                          </Expression>
+                          <Expression xsi:type="Combinator">
+                            <Combinator xsi:type="cv:Threshold">
+                              <cv:ThresholdValue>145</cv:ThresholdValue>
+                              <cv:MaxValue>255</cv:MaxValue>
+                              <cv:ThresholdType>Binary</cv:ThresholdType>
+                            </Combinator>
+                          </Expression>
+                          <Expression xsi:type="rx:PublishSubject">
+                            <Name>threshold</Name>
+                          </Expression>
+                          <Expression xsi:type="ExternalizedMapping">
+                            <Property Name="MinArea" />
+                          </Expression>
+                          <Expression xsi:type="Combinator">
+                            <Combinator xsi:type="cv:FindContours">
+                              <cv:Mode>External</cv:Mode>
+                              <cv:Method>ChainApproxNone</cv:Method>
+                              <cv:Offset>
+                                <cv:X>0</cv:X>
+                                <cv:Y>0</cv:Y>
+                              </cv:Offset>
+                              <cv:MinArea>500</cv:MinArea>
+                              <cv:MaxArea xsi:nil="true" />
+                            </Combinator>
+                          </Expression>
+                          <Expression xsi:type="rx:PublishSubject">
+                            <Name>FindContours</Name>
+                          </Expression>
+                          <Expression xsi:type="Combinator">
+                            <Combinator xsi:type="cv:BinaryRegionAnalysis" />
+                          </Expression>
+                          <Expression xsi:type="rx:PublishSubject">
+                            <Name>BinaryRegionanalysis</Name>
+                          </Expression>
+                          <Expression xsi:type="Combinator">
+                            <Combinator xsi:type="cv:LargestBinaryRegion" />
+                          </Expression>
+                          <Expression xsi:type="MemberSelector">
+                            <Selector>Centroid</Selector>
+                          </Expression>
+                          <Expression xsi:type="WorkflowOutput" />
+                        </Nodes>
+                        <Edges>
+                          <Edge From="0" To="1" Label="Source1" />
+                          <Edge From="1" To="2" Label="Source1" />
+                          <Edge From="2" To="4" Label="Source1" />
+                          <Edge From="3" To="4" Label="Source2" />
+                          <Edge From="4" To="5" Label="Source1" />
+                          <Edge From="5" To="6" Label="Source1" />
+                          <Edge From="6" To="7" Label="Source1" />
+                          <Edge From="7" To="8" Label="Source1" />
+                          <Edge From="8" To="9" Label="Source1" />
+                          <Edge From="9" To="10" Label="Source1" />
+                        </Edges>
+                      </Workflow>
+                    </Builder>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="rx:BufferTime">
+                      <rx:TimeSpan>PT1S</rx:TimeSpan>
+                    </Combinator>
+                  </Expression>
+                  <Expression xsi:type="MemberSelector">
+                    <Selector>Count</Selector>
+                  </Expression>
+                  <Expression xsi:type="SubscribeSubject">
+                    <Name>cam1</Name>
+                  </Expression>
+                  <Expression xsi:type="MemberSelector">
+                    <Selector>Item1</Selector>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="cv:DrawContours">
+                      <cv:MaxLevel>1</cv:MaxLevel>
+                      <cv:Thickness>-1</cv:Thickness>
+                    </Combinator>
+                  </Expression>
+                  <Expression xsi:type="SubscribeSubject">
+                    <Name>cam2</Name>
+                  </Expression>
+                  <Expression xsi:type="MemberSelector">
+                    <Selector>Item1</Selector>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="cv:DrawContours">
+                      <cv:MaxLevel>1</cv:MaxLevel>
+                      <cv:Thickness>-1</cv:Thickness>
+                    </Combinator>
+                  </Expression>
+                  <Expression xsi:type="SubscribeSubject">
+                    <Name>cam3</Name>
+                  </Expression>
+                  <Expression xsi:type="MemberSelector">
+                    <Selector>Item1</Selector>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="cv:DrawContours">
+                      <cv:MaxLevel>1</cv:MaxLevel>
+                      <cv:Thickness>-1</cv:Thickness>
+                    </Combinator>
+                  </Expression>
+                  <Expression xsi:type="SubscribeSubject">
+                    <Name>cam4</Name>
+                  </Expression>
+                  <Expression xsi:type="MemberSelector">
+                    <Selector>Item1</Selector>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="cv:DrawContours">
+                      <cv:MaxLevel>1</cv:MaxLevel>
+                      <cv:Thickness>-1</cv:Thickness>
+                    </Combinator>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="rx:Zip" />
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="rx:ObserveOn">
+                      <rx:Scheduler>TaskPoolScheduler</rx:Scheduler>
+                    </Combinator>
+                  </Expression>
+                  <Expression xsi:type="Add" />
+                  <Expression xsi:type="GroupWorkflow">
+                    <Name>FindContours</Name>
+                    <Workflow>
+                      <Nodes>
+                        <Expression xsi:type="WorkflowInput">
+                          <Name>Source1</Name>
+                        </Expression>
+                        <Expression xsi:type="Combinator">
+                          <Combinator xsi:type="cv:Threshold">
+                            <cv:ThresholdValue>145</cv:ThresholdValue>
+                            <cv:MaxValue>255</cv:MaxValue>
+                            <cv:ThresholdType>Binary</cv:ThresholdType>
+                          </Combinator>
+                        </Expression>
+                        <Expression xsi:type="ExternalizedMapping">
+                          <Property Name="MinArea" />
+                        </Expression>
+                        <Expression xsi:type="Combinator">
+                          <Combinator xsi:type="cv:FindContours">
+                            <cv:Mode>External</cv:Mode>
+                            <cv:Method>ChainApproxNone</cv:Method>
+                            <cv:Offset>
+                              <cv:X>0</cv:X>
+                              <cv:Y>0</cv:Y>
+                            </cv:Offset>
+                            <cv:MinArea>500</cv:MinArea>
+                            <cv:MaxArea xsi:nil="true" />
+                          </Combinator>
+                        </Expression>
+                        <Expression xsi:type="Combinator">
+                          <Combinator xsi:type="cv:BinaryRegionAnalysis" />
+                        </Expression>
+                        <Expression xsi:type="Combinator">
+                          <Combinator xsi:type="cv:LargestBinaryRegion" />
+                        </Expression>
+                        <Expression xsi:type="MemberSelector">
+                          <Selector>Centroid</Selector>
+                        </Expression>
+                        <Expression xsi:type="WorkflowOutput" />
+                      </Nodes>
+                      <Edges>
+                        <Edge From="0" To="1" Label="Source1" />
+                        <Edge From="1" To="3" Label="Source1" />
+                        <Edge From="2" To="3" Label="Source2" />
+                        <Edge From="3" To="4" Label="Source1" />
+                        <Edge From="4" To="5" Label="Source1" />
+                        <Edge From="5" To="6" Label="Source1" />
+                        <Edge From="6" To="7" Label="Source1" />
+                      </Edges>
+                    </Workflow>
+                  </Expression>
+                </Nodes>
+                <Edges>
+                  <Edge From="5" To="7" Label="Source1" />
+                  <Edge From="6" To="7" Label="Source2" />
+                  <Edge From="6" To="10" Label="Source2" />
+                  <Edge From="7" To="8" Label="Source1" />
+                  <Edge From="8" To="9" Label="Source1" />
+                  <Edge From="9" To="10" Label="Source1" />
+                  <Edge From="10" To="11" Label="Source1" />
+                  <Edge From="11" To="12" Label="Source1" />
+                  <Edge From="13" To="15" Label="Source1" />
+                  <Edge From="14" To="15" Label="Source2" />
+                  <Edge From="14" To="18" Label="Source2" />
+                  <Edge From="15" To="16" Label="Source1" />
+                  <Edge From="16" To="17" Label="Source1" />
+                  <Edge From="17" To="18" Label="Source1" />
+                  <Edge From="18" To="19" Label="Source1" />
+                  <Edge From="19" To="20" Label="Source1" />
+                  <Edge From="21" To="23" Label="Source1" />
+                  <Edge From="22" To="23" Label="Source2" />
+                  <Edge From="22" To="26" Label="Source2" />
+                  <Edge From="23" To="24" Label="Source1" />
+                  <Edge From="24" To="25" Label="Source1" />
+                  <Edge From="25" To="26" Label="Source1" />
+                  <Edge From="26" To="27" Label="Source1" />
+                  <Edge From="27" To="28" Label="Source1" />
+                  <Edge From="29" To="31" Label="Source1" />
+                  <Edge From="30" To="31" Label="Source2" />
+                  <Edge From="30" To="34" Label="Source2" />
+                  <Edge From="31" To="32" Label="Source1" />
+                  <Edge From="32" To="33" Label="Source1" />
+                  <Edge From="33" To="34" Label="Source1" />
+                  <Edge From="34" To="35" Label="Source1" />
+                  <Edge From="35" To="36" Label="Source1" />
+                  <Edge From="37" To="39" Label="Source1" />
+                  <Edge From="38" To="39" Label="Source2" />
+                  <Edge From="38" To="42" Label="Source2" />
+                  <Edge From="39" To="40" Label="Source1" />
+                  <Edge From="40" To="41" Label="Source1" />
+                  <Edge From="41" To="42" Label="Source1" />
+                  <Edge From="42" To="43" Label="Source1" />
+                  <Edge From="43" To="44" Label="Source1" />
+                  <Edge From="45" To="46" Label="Source1" />
+                  <Edge From="46" To="55" Label="Source1" />
+                  <Edge From="47" To="48" Label="Source1" />
+                  <Edge From="48" To="55" Label="Source2" />
+                  <Edge From="49" To="50" Label="Source1" />
+                  <Edge From="50" To="55" Label="Source3" />
+                  <Edge From="51" To="52" Label="Source1" />
+                  <Edge From="52" To="55" Label="Source4" />
+                  <Edge From="53" To="54" Label="Source1" />
+                  <Edge From="54" To="55" Label="Source5" />
+                  <Edge From="55" To="56" Label="Source1" />
+                  <Edge From="56" To="57" Label="Source1" />
+                  <Edge From="57" To="58" Label="Source1" />
+                  <Edge From="58" To="59" Label="Source1" />
+                  <Edge From="59" To="60" Label="Source1" />
+                  <Edge From="61" To="62" Label="Source1" />
+                  <Edge From="62" To="63" Label="Source1" />
+                  <Edge From="63" To="73" Label="Source1" />
+                  <Edge From="64" To="65" Label="Source1" />
+                  <Edge From="65" To="66" Label="Source1" />
+                  <Edge From="66" To="73" Label="Source2" />
+                  <Edge From="67" To="68" Label="Source1" />
+                  <Edge From="68" To="69" Label="Source1" />
+                  <Edge From="69" To="73" Label="Source3" />
+                  <Edge From="70" To="71" Label="Source1" />
+                  <Edge From="71" To="72" Label="Source1" />
+                  <Edge From="72" To="73" Label="Source4" />
+                  <Edge From="73" To="74" Label="Source1" />
+                  <Edge From="74" To="75" Label="Source1" />
+                  <Edge From="75" To="76" Label="Source1" />
+                </Edges>
+              </Workflow>
             </Expression>
           </Nodes>
           <Edges />
@@ -937,7 +1725,7 @@
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="rx:Take">
-                <rx:Count>4</rx:Count>
+                <rx:Count>5</rx:Count>
               </Combinator>
             </Expression>
             <Expression xsi:type="Combinator">

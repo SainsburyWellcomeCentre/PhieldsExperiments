@@ -2,7 +2,7 @@
 <WorkflowBuilder Version="2.9.0"
                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                  xmlns:rx="clr-namespace:Bonsai.Reactive;assembly=Bonsai.Core"
-                 xmlns:cv="clr-namespace:Bonsai.Vision;assembly=Bonsai.Vision"
+                 xmlns:p1="clr-namespace:;assembly=Extensions"
                  xmlns:dsp="clr-namespace:Bonsai.Dsp;assembly=Bonsai.Dsp"
                  xmlns="https://bonsai-rx.org/2018/workflow">
   <Workflow>
@@ -19,68 +19,75 @@
         <Property Name="ThresholdValue" />
         <Property Name="VignetteImageFileName" />
       </Expression>
-      <Expression xsi:type="IncludeWorkflow" Path="Extensions\NormalizedThreshold.bonsai">
-        <VignetteImageFileName>Y:\phields\config\4mmVigneting2.png</VignetteImageFileName>
-        <ThresholdValue>240</ThresholdValue>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="IncludeWorkflow" Path="Extensions\NormalizedThreshold.bonsai">
+          <VignetteImageFileName>Y:\phields\config\4mmVigneting2.png</VignetteImageFileName>
+          <ThresholdValue>150</ThresholdValue>
+        </Builder>
       </Expression>
       <Expression xsi:type="ExternalizedMapping">
         <Property Name="Source" />
+        <Property Name="Size" />
       </Expression>
       <Expression xsi:type="ExternalizedMapping">
         <Property Name="Destination" />
       </Expression>
       <Expression xsi:type="Combinator">
-        <Combinator xsi:type="cv:WarpPerspective">
-          <cv:Source>
-            <cv:Point2f>
-              <cv:X>2327.51245</cv:X>
-              <cv:Y>203.453613</cv:Y>
-            </cv:Point2f>
-            <cv:Point2f>
-              <cv:X>77.45625</cv:X>
-              <cv:Y>119.6786</cv:Y>
-            </cv:Point2f>
-            <cv:Point2f>
-              <cv:X>123.356247</cv:X>
-              <cv:Y>1409.21545</cv:Y>
-            </cv:Point2f>
-            <cv:Point2f>
-              <cv:X>2299.78125</cv:X>
-              <cv:Y>1398.74365</cv:Y>
-            </cv:Point2f>
-          </cv:Source>
-          <cv:Destination>
-            <cv:Point2f>
-              <cv:X>1291.42371</cv:X>
-              <cv:Y>-11.3149176</cv:Y>
-            </cv:Point2f>
-            <cv:Point2f>
-              <cv:X>1293.15259</cv:X>
-              <cv:Y>2053.65747</cv:Y>
-            </cv:Point2f>
-            <cv:Point2f>
-              <cv:X>2448</cv:X>
-              <cv:Y>2048</cv:Y>
-            </cv:Point2f>
-            <cv:Point2f>
-              <cv:X>2448</cv:X>
-              <cv:Y>0</cv:Y>
-            </cv:Point2f>
-          </cv:Destination>
-          <cv:Flags>Linear</cv:Flags>
-          <cv:FillValue>
-            <cv:Val0>0</cv:Val0>
-            <cv:Val1>0</cv:Val1>
-            <cv:Val2>0</cv:Val2>
-            <cv:Val3>0</cv:Val3>
-          </cv:FillValue>
+        <Combinator xsi:type="p1:WarpPerspective">
+          <p1:Source>
+            <p1:Point2f>
+              <p1:X>498.206238</p1:X>
+              <p1:Y>405.411255</p1:Y>
+            </p1:Point2f>
+            <p1:Point2f>
+              <p1:X>442.743744</p1:X>
+              <p1:Y>1665.02844</p1:Y>
+            </p1:Point2f>
+            <p1:Point2f>
+              <p1:X>1906.76245</p1:X>
+              <p1:Y>1618.65308</p1:Y>
+            </p1:Point2f>
+            <p1:Point2f>
+              <p1:X>1876.16248</p1:X>
+              <p1:Y>478.7144</p1:Y>
+            </p1:Point2f>
+          </p1:Source>
+          <p1:Destination>
+            <p1:Point2f>
+              <p1:X>100</p1:X>
+              <p1:Y>100</p1:Y>
+            </p1:Point2f>
+            <p1:Point2f>
+              <p1:X>100</p1:X>
+              <p1:Y>2600</p1:Y>
+            </p1:Point2f>
+            <p1:Point2f>
+              <p1:X>3100</p1:X>
+              <p1:Y>2600</p1:Y>
+            </p1:Point2f>
+            <p1:Point2f>
+              <p1:X>3100</p1:X>
+              <p1:Y>100</p1:Y>
+            </p1:Point2f>
+          </p1:Destination>
+          <p1:Flags>Linear</p1:Flags>
+          <p1:FillValue>
+            <p1:Val0>0</p1:Val0>
+            <p1:Val1>0</p1:Val1>
+            <p1:Val2>0</p1:Val2>
+            <p1:Val3>0</p1:Val3>
+          </p1:FillValue>
+          <p1:Size>
+            <p1:Width>3200</p1:Width>
+            <p1:Height>2700</p1:Height>
+          </p1:Size>
         </Combinator>
       </Expression>
       <Expression xsi:type="ExternalizedMapping">
         <Property Name="Name" />
       </Expression>
       <Expression xsi:type="rx:BehaviorSubject">
-        <Name>EastImage</Name>
+        <Name>WestImage</Name>
       </Expression>
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="dsp:ConvertScale">

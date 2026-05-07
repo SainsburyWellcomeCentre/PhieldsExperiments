@@ -22,16 +22,16 @@ public class ContoursPerspectiveTransform
     [Editor("Bonsai.Vision.Design.IplImageOutputQuadrangleEditor, Bonsai.Vision.Design", "System.Drawing.Design.UITypeEditor, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")]
     public Point2f[] Destination { get; set; }
 
-    public Size ImageSize { get; set; }
+    public Size Size { get; set; }
 
     private Point2f[] InitializeQuadrangle()
     {
         return new[]
         {
             new Point2f(0, 0),
-            new Point2f(0, ImageSize.Height),
-            new Point2f(ImageSize.Width, ImageSize.Height),
-            new Point2f(ImageSize.Width, 0)
+            new Point2f(0, Size.Height),
+            new Point2f(Size.Width, Size.Height),
+            new Point2f(Size.Width, 0)
         };
     }
 
@@ -89,7 +89,12 @@ public class ContoursPerspectiveTransform
                     }
                     seq = seq.HNext;
                 }
-                return new Contours(outHead, value.ImageSize);
+                    OpenCV.Net.Size finalSize;
+                    if (Size.Height*Size.Width == 0)
+                        finalSize = value.ImageSize;
+                    else
+                        finalSize = Size;
+                return new Contours(outHead, finalSize);
             });
         });
     }
