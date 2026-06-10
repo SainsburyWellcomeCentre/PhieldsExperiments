@@ -4,7 +4,6 @@ using System.ComponentModel;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Reactive.Linq;
 using System.Reactive.Disposables;
 
@@ -14,13 +13,20 @@ using System.Reactive.Disposables;
 public class HelvarNetClient
 {
     [Description("IP address or hostname of the Helvar router.")]
-    public string Host { get; set; } = "10.254.1.4";
+    public string Host { get; set; }
 
     [Description("TCP port of the HelvarNet interface (fixed at 50000 on Helvar routers).")]
-    public int Port { get; set; } = 50000;
+    public int Port { get; set; }
 
     [Description("Extra bytes appended after each command. The protocol terminator '#' is already part of the command string, so leave this empty unless your router needs a trailing CR/LF. The escapes \\r \\n \\t are interpreted.")]
-    public string Terminator { get; set; } = string.Empty;
+    public string Terminator { get; set; }
+
+    public HelvarNetClient()
+    {
+        Host = "10.254.1.4";
+        Port = 50000;
+        Terminator = string.Empty;
+    }
 
     public IObservable<string> Process(IObservable<string> source)
     {
@@ -32,20 +38,21 @@ public class HelvarNetClient
             var client = new TcpClient();
             client.Connect(Host, Port);
             var stream = client.GetStream();
-            var cancellation = new CancellationTokenSource();
             var writeLock = new object();
+            var running = true;
 
-            // Background reader: accumulate incoming bytes and emit each complete
-            // '#'-terminated reply as it arrives.
-            Task.Run(async () =>
+            // Background thread: read incoming bytes with a blocking read and emit
+            // each complete '#'-terminated reply as it arrives. Disposing the stream
+            // unblocks the read on shutdown.
+            var reader = new Thread(() =>
             {
                 var buffer = new byte[4096];
                 var pending = string.Empty;
                 try
                 {
-                    while (!cancellation.IsCancellationRequested)
+                    while (running)
                     {
-                        var count = await stream.ReadAsync(buffer, 0, buffer.Length, cancellation.Token);
+                        var count = stream.Read(buffer, 0, buffer.Length);
                         if (count == 0) break; // router closed the connection
                         pending += encoding.GetString(buffer, 0, count);
                         int end;
@@ -58,9 +65,11 @@ public class HelvarNetClient
                 }
                 catch (Exception ex)
                 {
-                    if (!cancellation.IsCancellationRequested) observer.OnError(ex);
+                    if (running) observer.OnError(ex);
                 }
             });
+            reader.IsBackground = true;
+            reader.Start();
 
             // Forward each incoming command string to the router.
             var subscription = source.Subscribe(
@@ -73,14 +82,14 @@ public class HelvarNetClient
                     }
                     catch (Exception ex)
                     {
-                        if (!cancellation.IsCancellationRequested) observer.OnError(ex);
+                        if (running) observer.OnError(ex);
                     }
                 },
                 observer.OnError);
 
             return Disposable.Create(() =>
             {
-                cancellation.Cancel();
+                running = false;
                 subscription.Dispose();
                 try { stream.Dispose(); } catch { }
                 try { client.Close(); } catch { }
