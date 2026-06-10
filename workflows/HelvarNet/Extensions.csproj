@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- TcpClient lives in the .NET Framework itself, so Bonsai.Core is the only dependency. -->
+    <PackageReference Include="Bonsai.Core" Version="2.9.0" />
+  </ItemGroup>
+</Project>

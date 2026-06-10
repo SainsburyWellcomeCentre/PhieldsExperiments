@@ -1,0 +1,3 @@
+# Build output from the local Extensions project
+bin/
+obj/
