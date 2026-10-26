@@ -23,6 +23,7 @@
         <Property Name="ThresholdValue" />
         <Property Name="OutputSubject" />
         <Property Name="Size" />
+        <Property Name="Interval" />
       </Expression>
       <Expression xsi:type="ExternalizedMapping">
         <Property Name="CameraName" />
@@ -112,20 +113,20 @@
               <MemberName>Source</MemberName>
               <Value>
                 <Point2f>
-                  <X>2327.512</X>
-                  <Y>203.4536</Y>
+                  <X>1908.675</X>
+                  <Y>1618.65308</Y>
                 </Point2f>
                 <Point2f>
-                  <X>527.85</X>
-                  <Y>1553.06665</Y>
+                  <X>1881.9</X>
+                  <Y>472.730469</Y>
                 </Point2f>
                 <Point2f>
-                  <X>1667.7</X>
-                  <Y>1570.1333</Y>
+                  <X>501.075</X>
+                  <Y>405.411255</Y>
                 </Point2f>
                 <Point2f>
-                  <X>1598.85</X>
-                  <Y>145.066666</Y>
+                  <X>439.875</X>
+                  <Y>1669.51648</Y>
                 </Point2f>
               </Value>
             </Expression>
@@ -141,20 +142,20 @@
               <MemberName>Destination</MemberName>
               <Value>
                 <Point2f>
-                  <X>480</X>
-                  <Y>495</Y>
+                  <X>100</X>
+                  <Y>100</Y>
                 </Point2f>
                 <Point2f>
-                  <X>0</X>
-                  <Y>2700</Y>
+                  <X>100</X>
+                  <Y>2770</Y>
                 </Point2f>
                 <Point2f>
-                  <X>3200</X>
-                  <Y>2700</Y>
+                  <X>2860</X>
+                  <Y>2770</Y>
                 </Point2f>
                 <Point2f>
-                  <X>1990</X>
-                  <Y>731.25</Y>
+                  <X>2860</X>
+                  <Y>100</Y>
                 </Point2f>
               </Value>
             </Expression>
@@ -169,8 +170,8 @@
             <Expression xsi:type="PropertySource" TypeArguments="p2:ContoursPerspectiveTransform,p3:Size">
               <MemberName>Size</MemberName>
               <Value>
-                <Width>3200</Width>
-                <Height>2700</Height>
+                <Width>3345</Width>
+                <Height>2870</Height>
               </Value>
             </Expression>
             <Expression xsi:type="PropertyMapping">
@@ -191,15 +192,15 @@
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="cv:MorphologicalOperator">
                       <cv:Size>
-                        <cv:Width>6</cv:Width>
-                        <cv:Height>6</cv:Height>
+                        <cv:Width>4</cv:Width>
+                        <cv:Height>4</cv:Height>
                       </cv:Size>
                       <cv:Anchor>
                         <cv:X>-1</cv:X>
                         <cv:Y>-1</cv:Y>
                       </cv:Anchor>
                       <cv:Shape>Rectangle</cv:Shape>
-                      <cv:Iterations>10</cv:Iterations>
+                      <cv:Iterations>1</cv:Iterations>
                       <cv:Operation>Open</cv:Operation>
                     </Combinator>
                   </Expression>
@@ -217,42 +218,42 @@
                     <MinArea>500</MinArea>
                     <Source>
                       <Point2f>
-                        <X>2327.512</X>
-                        <Y>203.4536</Y>
+                        <X>1908.675</X>
+                        <Y>1618.65308</Y>
                       </Point2f>
                       <Point2f>
-                        <X>527.85</X>
-                        <Y>1553.06665</Y>
+                        <X>1881.9</X>
+                        <Y>472.730469</Y>
                       </Point2f>
                       <Point2f>
-                        <X>1667.7</X>
-                        <Y>1570.1333</Y>
+                        <X>501.075</X>
+                        <Y>405.411255</Y>
                       </Point2f>
                       <Point2f>
-                        <X>1598.85</X>
-                        <Y>145.066666</Y>
+                        <X>439.875</X>
+                        <Y>1669.51648</Y>
                       </Point2f>
                     </Source>
                     <Size>
-                      <Width>3200</Width>
-                      <Height>2700</Height>
+                      <Width>3345</Width>
+                      <Height>2870</Height>
                     </Size>
                     <Destination>
                       <Point2f>
-                        <X>480</X>
-                        <Y>495</Y>
+                        <X>100</X>
+                        <Y>100</Y>
                       </Point2f>
                       <Point2f>
-                        <X>0</X>
-                        <Y>2700</Y>
+                        <X>100</X>
+                        <Y>2770</Y>
                       </Point2f>
                       <Point2f>
-                        <X>3200</X>
-                        <Y>2700</Y>
+                        <X>2860</X>
+                        <Y>2770</Y>
                       </Point2f>
                       <Point2f>
-                        <X>1990</X>
-                        <Y>731.25</Y>
+                        <X>2860</X>
+                        <Y>100</Y>
                       </Point2f>
                     </Destination>
                   </Expression>
@@ -273,6 +274,14 @@
             <Expression xsi:type="SubscribeSubject">
               <Name>Image</Name>
             </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:Take">
+                <rx:Count>1</rx:Count>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="SubscribeSubject">
+              <Name>Image</Name>
+            </Expression>
             <Expression xsi:type="ExternalizedMapping">
               <Property Name="Interval" />
             </Expression>
@@ -280,6 +289,9 @@
               <Combinator xsi:type="rx:SampleInterval">
                 <rx:Interval>PT1S</rx:Interval>
               </Combinator>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:Concat" />
             </Expression>
             <Expression xsi:type="harp:ConvertTimestamped">
               <Name>ImageHomography</Name>
@@ -300,25 +312,25 @@
                   <Expression xsi:type="IncludeWorkflow" Path="Extensions\Homography.bonsai">
                     <Source>
                       <Point2f>
-                        <X>498.206238</X>
-                        <Y>405.411255</Y>
-                      </Point2f>
-                      <Point2f>
-                        <X>442.743744</X>
-                        <Y>1665.02844</Y>
-                      </Point2f>
-                      <Point2f>
-                        <X>1906.76245</X>
+                        <X>1908.675</X>
                         <Y>1618.65308</Y>
                       </Point2f>
                       <Point2f>
-                        <X>1876.16248</X>
-                        <Y>478.7144</Y>
+                        <X>1881.9</X>
+                        <Y>472.730469</Y>
+                      </Point2f>
+                      <Point2f>
+                        <X>501.075</X>
+                        <Y>405.411255</Y>
+                      </Point2f>
+                      <Point2f>
+                        <X>439.875</X>
+                        <Y>1669.51648</Y>
                       </Point2f>
                     </Source>
                     <Size>
-                      <Width>3200</Width>
-                      <Height>2700</Height>
+                      <Width>3345</Width>
+                      <Height>2870</Height>
                     </Size>
                     <Destination>
                       <Point2f>
@@ -327,14 +339,14 @@
                       </Point2f>
                       <Point2f>
                         <X>100</X>
-                        <Y>2600</Y>
+                        <Y>2770</Y>
                       </Point2f>
                       <Point2f>
-                        <X>3100</X>
-                        <Y>2600</Y>
+                        <X>2860</X>
+                        <Y>2770</Y>
                       </Point2f>
                       <Point2f>
-                        <X>3100</X>
+                        <X>2860</X>
                         <Y>100</Y>
                       </Point2f>
                     </Destination>
@@ -442,26 +454,29 @@
             <Edge From="13" To="14" Label="Source1" />
             <Edge From="14" To="15" Label="Source1" />
             <Edge From="15" To="22" Label="Source3" />
-            <Edge From="15" To="27" Label="Source3" />
+            <Edge From="15" To="30" Label="Source3" />
             <Edge From="16" To="17" Label="Source1" />
             <Edge From="17" To="18" Label="Source1" />
             <Edge From="18" To="22" Label="Source4" />
-            <Edge From="18" To="27" Label="Source4" />
+            <Edge From="18" To="30" Label="Source4" />
             <Edge From="19" To="20" Label="Source1" />
             <Edge From="20" To="21" Label="Source1" />
             <Edge From="21" To="22" Label="Source5" />
-            <Edge From="21" To="27" Label="Source5" />
-            <Edge From="22" To="28" Label="Source1" />
-            <Edge From="23" To="27" Label="Source1" />
-            <Edge From="24" To="26" Label="Source1" />
-            <Edge From="25" To="26" Label="Source2" />
-            <Edge From="26" To="27" Label="Source2" />
+            <Edge From="21" To="30" Label="Source5" />
+            <Edge From="22" To="31" Label="Source1" />
+            <Edge From="23" To="30" Label="Source1" />
+            <Edge From="24" To="25" Label="Source1" />
+            <Edge From="25" To="29" Label="Source1" />
+            <Edge From="26" To="28" Label="Source1" />
             <Edge From="27" To="28" Label="Source2" />
-            <Edge From="28" To="30" Label="Source1" />
+            <Edge From="28" To="29" Label="Source2" />
             <Edge From="29" To="30" Label="Source2" />
-            <Edge From="30" To="31" Label="Source1" />
-            <Edge From="31" To="32" Label="Source1" />
-            <Edge From="32" To="33" Label="Source1" />
+            <Edge From="30" To="31" Label="Source2" />
+            <Edge From="31" To="33" Label="Source1" />
+            <Edge From="32" To="33" Label="Source2" />
+            <Edge From="33" To="34" Label="Source1" />
+            <Edge From="34" To="35" Label="Source1" />
+            <Edge From="35" To="36" Label="Source1" />
           </Edges>
         </Workflow>
       </Expression>

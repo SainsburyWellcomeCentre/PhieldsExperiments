@@ -1,19 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <WorkflowBuilder Version="2.9.1"
                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                 xmlns:rx="clr-namespace:Bonsai.Reactive;assembly=Bonsai.Core"
                  xmlns:p1="clr-namespace:;assembly=Extensions"
-                 xmlns:dsp="clr-namespace:Bonsai.Dsp;assembly=Bonsai.Dsp"
+                 xmlns:rx="clr-namespace:Bonsai.Reactive;assembly=Bonsai.Core"
                  xmlns="https://bonsai-rx.org/2018/workflow">
   <Workflow>
     <Nodes>
       <Expression xsi:type="WorkflowInput">
         <Name>Source1</Name>
-      </Expression>
-      <Expression xsi:type="Combinator">
-        <Combinator xsi:type="rx:SampleInterval">
-          <rx:Interval>PT1S</rx:Interval>
-        </Combinator>
       </Expression>
       <Expression xsi:type="ExternalizedMapping">
         <Property Name="Source" />
@@ -26,20 +20,20 @@
         <Combinator xsi:type="p1:WarpPerspective">
           <p1:Source>
             <p1:Point2f>
-              <p1:X>498.206238</p1:X>
-              <p1:Y>405.411255</p1:Y>
-            </p1:Point2f>
-            <p1:Point2f>
-              <p1:X>442.743744</p1:X>
-              <p1:Y>1665.02844</p1:Y>
-            </p1:Point2f>
-            <p1:Point2f>
-              <p1:X>1906.76245</p1:X>
+              <p1:X>1908.675</p1:X>
               <p1:Y>1618.65308</p1:Y>
             </p1:Point2f>
             <p1:Point2f>
-              <p1:X>1876.16248</p1:X>
-              <p1:Y>478.7144</p1:Y>
+              <p1:X>1881.9</p1:X>
+              <p1:Y>472.730469</p1:Y>
+            </p1:Point2f>
+            <p1:Point2f>
+              <p1:X>501.075</p1:X>
+              <p1:Y>405.411255</p1:Y>
+            </p1:Point2f>
+            <p1:Point2f>
+              <p1:X>439.875</p1:X>
+              <p1:Y>1669.51648</p1:Y>
             </p1:Point2f>
           </p1:Source>
           <p1:Destination>
@@ -49,14 +43,14 @@
             </p1:Point2f>
             <p1:Point2f>
               <p1:X>100</p1:X>
-              <p1:Y>2600</p1:Y>
+              <p1:Y>2770</p1:Y>
             </p1:Point2f>
             <p1:Point2f>
-              <p1:X>3100</p1:X>
-              <p1:Y>2600</p1:Y>
+              <p1:X>3245</p1:X>
+              <p1:Y>2770</p1:Y>
             </p1:Point2f>
             <p1:Point2f>
-              <p1:X>3100</p1:X>
+              <p1:X>3245</p1:X>
               <p1:Y>100</p1:Y>
             </p1:Point2f>
           </p1:Destination>
@@ -68,8 +62,8 @@
             <p1:Val3>0</p1:Val3>
           </p1:FillValue>
           <p1:Size>
-            <p1:Width>3200</p1:Width>
-            <p1:Height>2700</p1:Height>
+            <p1:Width>3345</p1:Width>
+            <p1:Height>2870</p1:Height>
           </p1:Size>
         </Combinator>
       </Expression>
@@ -79,24 +73,15 @@
       <Expression xsi:type="rx:BehaviorSubject">
         <Name>WestImage</Name>
       </Expression>
-      <Expression xsi:type="Combinator">
-        <Combinator xsi:type="dsp:ConvertScale">
-          <dsp:Depth xsi:nil="true" />
-          <dsp:Scale>0.3</dsp:Scale>
-          <dsp:Shift>0</dsp:Shift>
-        </Combinator>
-      </Expression>
       <Expression xsi:type="WorkflowOutput" />
     </Nodes>
     <Edges>
-      <Edge From="0" To="1" Label="Source1" />
-      <Edge From="1" To="4" Label="Source1" />
-      <Edge From="2" To="4" Label="Source2" />
-      <Edge From="3" To="4" Label="Source3" />
-      <Edge From="4" To="6" Label="Source1" />
-      <Edge From="5" To="6" Label="Source2" />
-      <Edge From="6" To="7" Label="Source1" />
-      <Edge From="7" To="8" Label="Source1" />
+      <Edge From="0" To="3" Label="Source1" />
+      <Edge From="1" To="3" Label="Source2" />
+      <Edge From="2" To="3" Label="Source3" />
+      <Edge From="3" To="5" Label="Source1" />
+      <Edge From="4" To="5" Label="Source2" />
+      <Edge From="5" To="6" Label="Source1" />
     </Edges>
   </Workflow>
 </WorkflowBuilder>

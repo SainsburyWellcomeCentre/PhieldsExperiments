@@ -1,10 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<WorkflowBuilder Version="2.9.0"
+<WorkflowBuilder Version="2.9.1"
                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                  xmlns:rx="clr-namespace:Bonsai.Reactive;assembly=Bonsai.Core"
                  xmlns:cv="clr-namespace:Bonsai.Vision;assembly=Bonsai.Vision"
                  xmlns:p1="clr-namespace:;assembly=Extensions"
-                 xmlns:gui="clr-namespace:Bonsai.Gui;assembly=Bonsai.Gui"
                  xmlns="https://bonsai-rx.org/2018/workflow">
   <Workflow>
     <Nodes>
@@ -51,20 +50,20 @@
         <Combinator xsi:type="p1:ContoursPerspectiveTransform">
           <p1:Source>
             <p1:Point2f>
-              <p1:X>498.206238</p1:X>
-              <p1:Y>405.411255</p1:Y>
-            </p1:Point2f>
-            <p1:Point2f>
-              <p1:X>442.743744</p1:X>
-              <p1:Y>1665.02844</p1:Y>
-            </p1:Point2f>
-            <p1:Point2f>
-              <p1:X>1906.76245</p1:X>
+              <p1:X>1908.675</p1:X>
               <p1:Y>1618.65308</p1:Y>
             </p1:Point2f>
             <p1:Point2f>
-              <p1:X>1876.16248</p1:X>
-              <p1:Y>478.7144</p1:Y>
+              <p1:X>1881.9</p1:X>
+              <p1:Y>472.730469</p1:Y>
+            </p1:Point2f>
+            <p1:Point2f>
+              <p1:X>501.075</p1:X>
+              <p1:Y>405.411255</p1:Y>
+            </p1:Point2f>
+            <p1:Point2f>
+              <p1:X>439.875</p1:X>
+              <p1:Y>1669.51648</p1:Y>
             </p1:Point2f>
           </p1:Source>
           <p1:Destination>
@@ -74,71 +73,25 @@
             </p1:Point2f>
             <p1:Point2f>
               <p1:X>100</p1:X>
-              <p1:Y>2600</p1:Y>
+              <p1:Y>2770</p1:Y>
             </p1:Point2f>
             <p1:Point2f>
-              <p1:X>3100</p1:X>
-              <p1:Y>2600</p1:Y>
+              <p1:X>2860</p1:X>
+              <p1:Y>2770</p1:Y>
             </p1:Point2f>
             <p1:Point2f>
-              <p1:X>3100</p1:X>
+              <p1:X>2860</p1:X>
               <p1:Y>100</p1:Y>
             </p1:Point2f>
           </p1:Destination>
           <p1:Size>
-            <p1:Width>0</p1:Width>
-            <p1:Height>0</p1:Height>
+            <p1:Width>3345</p1:Width>
+            <p1:Height>2870</p1:Height>
           </p1:Size>
         </Combinator>
       </Expression>
       <Expression xsi:type="rx:PublishSubject">
         <Name>WarpContours</Name>
-      </Expression>
-      <Expression xsi:type="rx:Visualizer">
-        <Workflow>
-          <Nodes>
-            <Expression xsi:type="SubscribeSubject">
-              <Name>Image</Name>
-            </Expression>
-            <Expression xsi:type="VisualizerMapping" />
-            <Expression xsi:type="SubscribeSubject">
-              <Name>threshold</Name>
-            </Expression>
-            <Expression xsi:type="VisualizerMapping" />
-            <Expression xsi:type="SubscribeSubject">
-              <Name>FindContours</Name>
-            </Expression>
-            <Expression xsi:type="VisualizerMapping" />
-            <Expression xsi:type="SubscribeSubject">
-              <Name>WarpContours</Name>
-            </Expression>
-            <Expression xsi:type="VisualizerMapping" />
-            <Expression xsi:type="gui:TableLayoutPanelBuilder">
-              <gui:Enabled>true</gui:Enabled>
-              <gui:Visible>true</gui:Visible>
-              <gui:ColumnCount>2</gui:ColumnCount>
-              <gui:RowCount>2</gui:RowCount>
-              <gui:ColumnStyles />
-              <gui:RowStyles />
-              <gui:CellSpans />
-            </Expression>
-            <Expression xsi:type="WorkflowOutput" />
-            <Expression xsi:type="WorkflowInput">
-              <Name>Source1</Name>
-            </Expression>
-          </Nodes>
-          <Edges>
-            <Edge From="0" To="1" Label="Source1" />
-            <Edge From="1" To="8" Label="Source1" />
-            <Edge From="2" To="3" Label="Source1" />
-            <Edge From="3" To="8" Label="Source2" />
-            <Edge From="4" To="5" Label="Source1" />
-            <Edge From="5" To="8" Label="Source3" />
-            <Edge From="6" To="7" Label="Source1" />
-            <Edge From="7" To="8" Label="Source4" />
-            <Edge From="8" To="9" Label="Source1" />
-          </Edges>
-        </Workflow>
       </Expression>
       <Expression xsi:type="WorkflowOutput" />
     </Nodes>
@@ -154,7 +107,6 @@
       <Edge From="8" To="9" Label="Source3" />
       <Edge From="9" To="10" Label="Source1" />
       <Edge From="10" To="11" Label="Source1" />
-      <Edge From="11" To="12" Label="Source1" />
     </Edges>
   </Workflow>
 </WorkflowBuilder>
