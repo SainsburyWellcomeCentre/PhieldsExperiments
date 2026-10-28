@@ -32,12 +32,12 @@ cameras:
   - cameraName: CameraNorth
     triggerName: Trigger0
     exposureTime: 1500
-    serialNumber: "23425448"
+    serialNumber: "23425450"
     gain: 0
     binning: 1
   - cameraName: CameraSouth
     triggerName: Trigger0
     exposureTime: 1500
-    serialNumber: "23425450"
+    serialNumber: "23425448"
     gain: 0
     binning: 1

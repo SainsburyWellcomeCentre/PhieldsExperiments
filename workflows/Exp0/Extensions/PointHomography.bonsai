@@ -16,7 +16,7 @@
       </Expression>
       <Expression xsi:type="IncludeWorkflow" Path="Extensions\NormalizedThreshold.bonsai">
         <VignetteImageFileName>Y:\phields\config\4mmVigneting2.png</VignetteImageFileName>
-        <ThresholdValue>154</ThresholdValue>
+        <ThresholdValue>80</ThresholdValue>
       </Expression>
       <Expression xsi:type="rx:PublishSubject">
         <Name>threshold</Name>
@@ -54,16 +54,16 @@
               <p1:Y>1618.65308</p1:Y>
             </p1:Point2f>
             <p1:Point2f>
-              <p1:X>1881.9</p1:X>
-              <p1:Y>472.730469</p1:Y>
+              <p1:X>1880.625</p1:X>
+              <p1:Y>474.9574</p1:Y>
             </p1:Point2f>
             <p1:Point2f>
               <p1:X>501.075</p1:X>
               <p1:Y>405.411255</p1:Y>
             </p1:Point2f>
             <p1:Point2f>
-              <p1:X>439.875</p1:X>
-              <p1:Y>1669.51648</p1:Y>
+              <p1:X>442.425</p1:X>
+              <p1:Y>1662.35083</p1:Y>
             </p1:Point2f>
           </p1:Source>
           <p1:Destination>
@@ -76,11 +76,11 @@
               <p1:Y>2770</p1:Y>
             </p1:Point2f>
             <p1:Point2f>
-              <p1:X>2860</p1:X>
+              <p1:X>3245</p1:X>
               <p1:Y>2770</p1:Y>
             </p1:Point2f>
             <p1:Point2f>
-              <p1:X>2860</p1:X>
+              <p1:X>3245</p1:X>
               <p1:Y>100</p1:Y>
             </p1:Point2f>
           </p1:Destination>
