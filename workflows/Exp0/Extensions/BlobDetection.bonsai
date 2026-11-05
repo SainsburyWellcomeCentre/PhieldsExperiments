@@ -1,0 +1,80 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<WorkflowBuilder Version="2.9.1"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xmlns:p1="clr-namespace:;assembly=Extensions"
+                 xmlns:rx="clr-namespace:Bonsai.Reactive;assembly=Bonsai.Core"
+                 xmlns:cv="clr-namespace:Bonsai.Vision;assembly=Bonsai.Vision"
+                 xmlns="https://bonsai-rx.org/2018/workflow">
+  <Description>The blobs of a frame paired with its vignette gain map: the threshold of NormalizedThreshold, then the contours of PointHomography, in camera pixels.</Description>
+  <Workflow>
+    <Nodes>
+      <Expression xsi:type="WorkflowInput">
+        <Name>Source1</Name>
+      </Expression>
+      <Expression xsi:type="ExternalizedMapping">
+        <Property Name="ThresholdValue" />
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="p1:VignetteThreshold">
+          <p1:ThresholdValue>100</p1:ThresholdValue>
+          <p1:ThresholdType>BinaryInv</p1:ThresholdType>
+          <p1:Size>
+            <p1:Width>4</p1:Width>
+            <p1:Height>4</p1:Height>
+          </p1:Size>
+          <p1:Anchor>
+            <p1:X>-1</p1:X>
+            <p1:Y>-1</p1:Y>
+          </p1:Anchor>
+          <p1:Shape>Rectangle</p1:Shape>
+          <p1:Iterations>1</p1:Iterations>
+          <p1:Operation>Open</p1:Operation>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="rx:PublishSubject">
+        <Name>threshold</Name>
+      </Expression>
+      <Expression xsi:type="ExternalizedMapping">
+        <Property Name="MinArea" />
+        <Property Name="MaxArea" />
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="cv:FindContours">
+          <cv:Mode>ConnectedComponent</cv:Mode>
+          <cv:Method>ChainApproxNone</cv:Method>
+          <cv:Offset>
+            <cv:X>0</cv:X>
+            <cv:Y>0</cv:Y>
+          </cv:Offset>
+          <cv:MinArea>500</cv:MinArea>
+          <cv:MaxArea>20000</cv:MaxArea>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="rx:PublishSubject">
+        <Name>FindContours</Name>
+      </Expression>
+      <Expression xsi:type="ExternalizedMapping">
+        <Property Name="MinDensity" />
+        <Property Name="MaxElongation" />
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="p1:FilterBlobs">
+          <p1:MinDensity>0.7</p1:MinDensity>
+          <p1:MaxElongation>5</p1:MaxElongation>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="WorkflowOutput" />
+    </Nodes>
+    <Edges>
+      <Edge From="0" To="2" Label="Source1" />
+      <Edge From="1" To="2" Label="Source2" />
+      <Edge From="2" To="3" Label="Source1" />
+      <Edge From="3" To="5" Label="Source1" />
+      <Edge From="4" To="5" Label="Source2" />
+      <Edge From="5" To="6" Label="Source1" />
+      <Edge From="6" To="8" Label="Source1" />
+      <Edge From="7" To="8" Label="Source2" />
+      <Edge From="8" To="9" Label="Source1" />
+    </Edges>
+  </Workflow>
+</WorkflowBuilder>
