@@ -16,28 +16,41 @@
       </Expression>
       <Expression xsi:type="IncludeWorkflow" Path="Extensions\NormalizedThreshold.bonsai">
         <VignetteImageFileName>Y:\phields\config\4mmVigneting2.png</VignetteImageFileName>
-        <ThresholdValue>80</ThresholdValue>
+        <ThresholdValue>100</ThresholdValue>
       </Expression>
       <Expression xsi:type="rx:PublishSubject">
         <Name>threshold</Name>
       </Expression>
       <Expression xsi:type="ExternalizedMapping">
         <Property Name="MinArea" />
+        <Property Name="MaxArea" />
       </Expression>
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="cv:FindContours">
-          <cv:Mode>List</cv:Mode>
+          <cv:Mode>ConnectedComponent</cv:Mode>
           <cv:Method>ChainApproxNone</cv:Method>
           <cv:Offset>
             <cv:X>0</cv:X>
             <cv:Y>0</cv:Y>
           </cv:Offset>
           <cv:MinArea>500</cv:MinArea>
-          <cv:MaxArea xsi:nil="true" />
+          <cv:MaxArea>20000</cv:MaxArea>
         </Combinator>
       </Expression>
       <Expression xsi:type="rx:PublishSubject">
         <Name>FindContours</Name>
+      </Expression>
+      <Expression xsi:type="ExternalizedMapping">
+        <Property Name="MinDensity" />
+        <Property Name="MaxElongation" />
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="Combinator">
+          <Combinator xsi:type="p1:FilterBlobs">
+            <p1:MinDensity>0.7</p1:MinDensity>
+            <p1:MaxElongation>5</p1:MaxElongation>
+          </Combinator>
+        </Builder>
       </Expression>
       <Expression xsi:type="ExternalizedMapping">
         <Property Name="Source" />
@@ -50,38 +63,38 @@
         <Combinator xsi:type="p1:ContoursPerspectiveTransform">
           <p1:Source>
             <p1:Point2f>
-              <p1:X>1908.675</p1:X>
-              <p1:Y>1618.65308</p1:Y>
+              <p1:X>207.825</p1:X>
+              <p1:Y>401.887024</p1:Y>
             </p1:Point2f>
             <p1:Point2f>
-              <p1:X>1880.625</p1:X>
-              <p1:Y>474.9574</p1:Y>
+              <p1:X>218.025</p1:X>
+              <p1:Y>1487.79382</p1:Y>
             </p1:Point2f>
             <p1:Point2f>
-              <p1:X>501.075</p1:X>
-              <p1:Y>405.411255</p1:Y>
+              <p1:X>2331.975</p1:X>
+              <p1:Y>1475.61548</p1:Y>
             </p1:Point2f>
             <p1:Point2f>
-              <p1:X>442.425</p1:X>
-              <p1:Y>1662.35083</p1:Y>
+              <p1:X>2349.825</p1:X>
+              <p1:Y>450.6006</p1:Y>
             </p1:Point2f>
           </p1:Source>
           <p1:Destination>
             <p1:Point2f>
-              <p1:X>100</p1:X>
-              <p1:Y>100</p1:Y>
+              <p1:X>474</p1:X>
+              <p1:Y>1390</p1:Y>
             </p1:Point2f>
             <p1:Point2f>
-              <p1:X>100</p1:X>
-              <p1:Y>2770</p1:Y>
+              <p1:X>474</p1:X>
+              <p1:Y>2656</p1:Y>
             </p1:Point2f>
             <p1:Point2f>
-              <p1:X>3245</p1:X>
-              <p1:Y>2770</p1:Y>
+              <p1:X>3050</p1:X>
+              <p1:Y>2656</p1:Y>
             </p1:Point2f>
             <p1:Point2f>
-              <p1:X>3245</p1:X>
-              <p1:Y>100</p1:Y>
+              <p1:X>3050</p1:X>
+              <p1:Y>1390</p1:Y>
             </p1:Point2f>
           </p1:Destination>
           <p1:Size>
@@ -102,11 +115,13 @@
       <Edge From="3" To="5" Label="Source1" />
       <Edge From="4" To="5" Label="Source2" />
       <Edge From="5" To="6" Label="Source1" />
-      <Edge From="6" To="9" Label="Source1" />
-      <Edge From="7" To="9" Label="Source2" />
-      <Edge From="8" To="9" Label="Source3" />
-      <Edge From="9" To="10" Label="Source1" />
-      <Edge From="10" To="11" Label="Source1" />
+      <Edge From="6" To="8" Label="Source1" />
+      <Edge From="7" To="8" Label="Source2" />
+      <Edge From="8" To="11" Label="Source1" />
+      <Edge From="9" To="11" Label="Source2" />
+      <Edge From="10" To="11" Label="Source3" />
+      <Edge From="11" To="12" Label="Source1" />
+      <Edge From="12" To="13" Label="Source1" />
     </Edges>
   </Workflow>
 </WorkflowBuilder>
