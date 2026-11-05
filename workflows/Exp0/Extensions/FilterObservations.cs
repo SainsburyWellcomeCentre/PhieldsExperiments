@@ -58,7 +58,7 @@ public class FilterObservations
     /// <summary>
     /// Gets or sets the index of the model class that marks a blob as not an animal, or -1 for none.
     /// </summary>
-    [Description("The index of the model class that marks a blob as not an animal, such as the poke or noise, or -1 for none. The class is removed from the scores passed on.")]
+    [Description("The index of the model class that marks a blob as not an animal, such as the poke or noise, or -1 for none. The scores passed on keep every class, so leave this one out of the tracker's Identities.")]
     public int RejectClass { get; set; }
 
     /// <summary>
@@ -83,14 +83,12 @@ public class FilterObservations
             var rejectClass = RejectClass;
             var rejectScore = RejectScore;
             var output = new ViewObservationCollection(view.Camera) { FrameId = view.FrameId, Timestamp = view.Timestamp };
-            foreach (var item in view)
+            foreach (var observation in view)
             {
-                var observation = item;
-                if (rejectClass >= 0 && observation.Scores != null && rejectClass < observation.Scores.Length)
-                {
-                    if (observation.Scores[rejectClass] >= rejectScore) continue;
-                    observation = new ViewObservation(observation.Box, observation.Confidence, observation.Quality, observation.Embedding, AnimalScores(observation.Scores, rejectClass));
-                }
+                // The scores keep the model's classes and order, so the tracker's ClassNames and Identities
+                // index them the same way on every camera, whatever its RejectClass.
+                if (rejectClass >= 0 && observation.Scores != null && rejectClass < observation.Scores.Length &&
+                    observation.Scores[rejectClass] >= rejectScore) continue;
 
                 var x = PackageFields.X(observation.Box);
                 var y = PackageFields.Y(observation.Box);
@@ -116,24 +114,6 @@ public class FilterObservations
             }
             return output;
         });
-    }
-
-    // The scores of the animal classes alone, renormalised to sum to one.
-    static float[] AnimalScores(float[] scores, int rejectClass)
-    {
-        var animals = new float[scores.Length - 1];
-        var total = 0.0;
-        for (int i = 0, j = 0; i < scores.Length; i++)
-        {
-            if (i == rejectClass) continue;
-            animals[j++] = scores[i];
-            total += scores[i];
-        }
-        if (total > 0)
-        {
-            for (int j = 0; j < animals.Length; j++) animals[j] = (float)(animals[j] / total);
-        }
-        return animals;
     }
 }
 

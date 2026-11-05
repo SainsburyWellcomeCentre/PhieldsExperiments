@@ -485,7 +485,13 @@ public class TrackAnimalIdentities
             var total = 0.0;
             foreach (var index in present)
             {
-                if (index >= scores.Length || float.IsNaN(scores[index])) return false;
+                if (index >= scores.Length)
+                {
+                    throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture,
+                        "Identity {0} is beyond the {1} scores of camera {2}: ClassNames or Identities name more classes than the identity model has.",
+                        index, scores.Length, view.Camera));
+                }
+                if (float.IsNaN(scores[index])) return false;
                 total += scores[index];
             }
             if (total <= 0) return false;
