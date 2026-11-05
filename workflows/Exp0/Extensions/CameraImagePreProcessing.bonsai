@@ -41,7 +41,7 @@
             </Expression>
             <Expression xsi:type="Equal">
               <Operand xsi:type="WorkflowProperty" TypeArguments="p2:CameraName">
-                <Value>CameraNorth</Value>
+                <Value>North</Value>
               </Operand>
             </Expression>
             <Expression xsi:type="WorkflowOutput" />
@@ -102,7 +102,7 @@
         <OutputImage>NorthImage</OutputImage>
         <ThresholdValue>145</ThresholdValue>
         <OutputSubject>cam1</OutputSubject>
-        <Value>CameraNorth</Value>
+        <Value>North</Value>
       </Expression>
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="rx:BufferTime">
@@ -132,7 +132,7 @@
             </Expression>
             <Expression xsi:type="Equal">
               <Operand xsi:type="WorkflowProperty" TypeArguments="p2:CameraName">
-                <Value>CameraEast</Value>
+                <Value>East</Value>
               </Operand>
             </Expression>
             <Expression xsi:type="WorkflowOutput" />
@@ -193,7 +193,7 @@
         <OutputImage>EastImage</OutputImage>
         <ThresholdValue>145</ThresholdValue>
         <OutputSubject>cam2</OutputSubject>
-        <Value>CameraEast</Value>
+        <Value>East</Value>
       </Expression>
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="rx:BufferTime">
@@ -223,7 +223,7 @@
             </Expression>
             <Expression xsi:type="Equal">
               <Operand xsi:type="WorkflowProperty" TypeArguments="p2:CameraName">
-                <Value>CameraWest</Value>
+                <Value>West</Value>
               </Operand>
             </Expression>
             <Expression xsi:type="WorkflowOutput" />
@@ -284,7 +284,7 @@
         <OutputImage>WestImage</OutputImage>
         <ThresholdValue>145</ThresholdValue>
         <OutputSubject>cam3</OutputSubject>
-        <Value>CameraWest</Value>
+        <Value>West</Value>
       </Expression>
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="rx:BufferTime">
@@ -314,7 +314,7 @@
             </Expression>
             <Expression xsi:type="Equal">
               <Operand xsi:type="WorkflowProperty" TypeArguments="p2:CameraName">
-                <Value>CameraTop</Value>
+                <Value>Center</Value>
               </Operand>
             </Expression>
             <Expression xsi:type="WorkflowOutput" />
@@ -375,7 +375,7 @@
         <OutputImage>TopImage</OutputImage>
         <ThresholdValue>145</ThresholdValue>
         <OutputSubject>cam4</OutputSubject>
-        <Value>CameraTop</Value>
+        <Value>Center</Value>
       </Expression>
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="rx:BufferTime">

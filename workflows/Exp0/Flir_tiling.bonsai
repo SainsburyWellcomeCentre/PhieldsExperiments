@@ -677,7 +677,7 @@
                               </Expression>
                               <Expression xsi:type="Equal">
                                 <Operand xsi:type="WorkflowProperty" TypeArguments="p1:CameraName">
-                                  <Value>CameraTop</Value>
+                                  <Value>Center</Value>
                                 </Operand>
                               </Expression>
                               <Expression xsi:type="WorkflowOutput" />
@@ -760,7 +760,7 @@
                       <Height>2870</Height>
                     </Size>
                     <Skip>50</Skip>
-                    <CameraName>CameraTop</CameraName>
+                    <CameraName>Center</CameraName>
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:BufferTime">
@@ -797,7 +797,7 @@
                               </Expression>
                               <Expression xsi:type="Equal">
                                 <Operand xsi:type="WorkflowProperty" TypeArguments="p1:CameraName">
-                                  <Value>CameraNorth</Value>
+                                  <Value>North</Value>
                                 </Operand>
                               </Expression>
                               <Expression xsi:type="WorkflowOutput" />
@@ -880,7 +880,7 @@
                       <Height>2870</Height>
                     </Size>
                     <Skip>50</Skip>
-                    <CameraName>CameraNorth</CameraName>
+                    <CameraName>North</CameraName>
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:BufferTime">
@@ -917,7 +917,7 @@
                               </Expression>
                               <Expression xsi:type="Equal">
                                 <Operand xsi:type="WorkflowProperty" TypeArguments="p1:CameraName">
-                                  <Value>CameraSouth</Value>
+                                  <Value>South</Value>
                                 </Operand>
                               </Expression>
                               <Expression xsi:type="WorkflowOutput" />
@@ -1000,7 +1000,7 @@
                       <Height>2870</Height>
                     </Size>
                     <Skip>50</Skip>
-                    <CameraName>CameraSouth</CameraName>
+                    <CameraName>South</CameraName>
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:BufferTime">
@@ -1037,7 +1037,7 @@
                               </Expression>
                               <Expression xsi:type="Equal">
                                 <Operand xsi:type="WorkflowProperty" TypeArguments="p1:CameraName">
-                                  <Value>CameraWest</Value>
+                                  <Value>West</Value>
                                 </Operand>
                               </Expression>
                               <Expression xsi:type="WorkflowOutput" />
@@ -1120,7 +1120,7 @@
                       <Height>2870</Height>
                     </Size>
                     <Skip>50</Skip>
-                    <CameraName>CameraWest</CameraName>
+                    <CameraName>West</CameraName>
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:BufferTime">
@@ -1157,7 +1157,7 @@
                               </Expression>
                               <Expression xsi:type="Equal">
                                 <Operand xsi:type="WorkflowProperty" TypeArguments="p1:CameraName">
-                                  <Value>CameraEast</Value>
+                                  <Value>East</Value>
                                 </Operand>
                               </Expression>
                               <Expression xsi:type="WorkflowOutput" />
@@ -1240,7 +1240,7 @@
                       <Height>2870</Height>
                     </Size>
                     <Skip>50</Skip>
-                    <CameraName>CameraEast</CameraName>
+                    <CameraName>East</CameraName>
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:BufferTime">
@@ -2187,7 +2187,7 @@
       <Expression xsi:type="Disable">
         <Builder xsi:type="PropertySource" TypeArguments="WorkflowProperty(p1:CameraName),p1:CameraName">
           <MemberName>Value</MemberName>
-          <Value>CameraTop</Value>
+          <Value>Center</Value>
         </Builder>
       </Expression>
       <Expression xsi:type="Disable">

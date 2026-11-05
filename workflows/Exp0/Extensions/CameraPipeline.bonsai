@@ -50,7 +50,7 @@
                   </Expression>
                   <Expression xsi:type="Equal">
                     <Operand xsi:type="WorkflowProperty" TypeArguments="p1:CameraName">
-                      <Value>CameraTop</Value>
+                      <Value>Center</Value>
                     </Operand>
                   </Expression>
                   <Expression xsi:type="WorkflowOutput" />

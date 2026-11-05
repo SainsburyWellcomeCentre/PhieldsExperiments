@@ -254,20 +254,20 @@ namespace RigConfiguration
     public enum CameraName
     {
     
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="CameraTop")]
-        CameraTop = 0,
+        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="Center")]
+        Center = 0,
     
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="CameraWest")]
-        CameraWest = 1,
+        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="West")]
+        West = 1,
     
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="CameraEast")]
-        CameraEast = 2,
+        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="East")]
+        East = 2,
     
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="CameraNorth")]
-        CameraNorth = 3,
+        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="North")]
+        North = 3,
     
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="CameraSouth")]
-        CameraSouth = 4,
+        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="South")]
+        South = 4,
     }
 
 
@@ -291,7 +291,7 @@ namespace RigConfiguration
     
         public SpinnakerSettings()
         {
-            _cameraName = RigConfiguration.CameraName.CameraTop;
+            _cameraName = RigConfiguration.CameraName.Center;
             _exposureTime = 15000D;
             _serialNumber = "00000";
             _gain = 1D;

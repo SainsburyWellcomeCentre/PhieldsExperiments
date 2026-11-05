@@ -36,7 +36,7 @@ cameras:
     serialNumber: "23459421"
     gain: 1
     binning: 1
-  - cameraName: CameraTop
+  - cameraName: Center
     triggerName: Trigger0
     exposureTime: 10000
     serialNumber: "23425449"

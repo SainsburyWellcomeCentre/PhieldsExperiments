@@ -61,8 +61,8 @@
         },
         "cameraName":
         {
-            "enum": ["CameraTop","CameraWest","CameraEast", "CameraNorth", "CameraSouth"],
-            "default": "CameraTop",
+            "enum": ["Center","West","East", "North", "South"],
+            "default": "Center",
             "type": "string"
         },
         "spinnakerSettings": {
@@ -70,7 +70,7 @@
                 "cameraName":
                 {
                     "$ref":"#/definitions/cameraName",
-                    "default": "CameraTop"
+                    "default": "Center"
                 },
                 "triggerName":
                 {
