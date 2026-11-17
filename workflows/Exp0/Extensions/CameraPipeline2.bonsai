@@ -94,18 +94,6 @@
                 <rx:Scheduler>TaskPoolScheduler</rx:Scheduler>
               </Combinator>
             </Expression>
-            <Expression xsi:type="Disable">
-              <Builder xsi:type="MemberSelector">
-                <Selector>Value.Image</Selector>
-              </Builder>
-            </Expression>
-            <Expression xsi:type="Disable">
-              <Builder xsi:type="Combinator">
-                <Combinator xsi:type="rx:SampleInterval">
-                  <rx:Interval>PT0.1S</rx:Interval>
-                </Combinator>
-              </Builder>
-            </Expression>
             <Expression xsi:type="rx:PublishSubject">
               <Name>Image</Name>
             </Expression>
@@ -299,11 +287,20 @@
                   <Expression xsi:type="MemberSelector">
                     <Selector>Image</Selector>
                   </Expression>
+                  <Expression xsi:type="rx:PublishSubject">
+                    <Name>Image</Name>
+                  </Expression>
+                  <Expression xsi:type="SubscribeSubject">
+                    <Name>Image</Name>
+                  </Expression>
                   <Expression xsi:type="ExternalizedMapping">
                     <Property Name="VignetteImageFileName" />
                   </Expression>
                   <Expression xsi:type="IncludeWorkflow" Path="Extensions\VignetteGain.bonsai">
                     <VignetteImageFileName>Y:\phields\config\4mmVigneting2.png</VignetteImageFileName>
+                  </Expression>
+                  <Expression xsi:type="MulticastSubject">
+                    <Name>Vignette</Name>
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:WithLatestFrom" />
@@ -331,9 +328,6 @@
                       <p2:Operation>Open</p2:Operation>
                     </Combinator>
                   </Expression>
-                  <Expression xsi:type="rx:PublishSubject">
-                    <Name>threshold</Name>
-                  </Expression>
                   <Expression xsi:type="ExternalizedMapping">
                     <Property Name="MinArea" />
                     <Property Name="MaxArea" />
@@ -350,9 +344,6 @@
                       <cv:MaxArea>20000</cv:MaxArea>
                     </Combinator>
                   </Expression>
-                  <Expression xsi:type="rx:PublishSubject">
-                    <Name>FindContours</Name>
-                  </Expression>
                   <Expression xsi:type="ExternalizedMapping">
                     <Property Name="MinDensity" />
                     <Property Name="MaxElongation" />
@@ -363,11 +354,20 @@
                       <p2:MaxElongation>5</p2:MaxElongation>
                     </Combinator>
                   </Expression>
+                  <Expression xsi:type="MulticastSubject">
+                    <Name>Contours</Name>
+                  </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="cv:BinaryRegionAnalysis" />
                   </Expression>
+                  <Expression xsi:type="SubscribeSubject">
+                    <Name>Image</Name>
+                  </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:Zip" />
+                  </Expression>
+                  <Expression xsi:type="rx:BehaviorSubject" TypeArguments="p3:IplImage">
+                    <rx:Name>Vignette</rx:Name>
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:WithLatestFrom" />
@@ -398,10 +398,12 @@
                   </Expression>
                   <Expression xsi:type="ExternalizedMapping">
                     <Property Name="Camera" DisplayName="CameraIndex" />
-                    <Property Name="Source" />
-                    <Property Name="Destination" />
                     <Property Name="ImageSize" />
                     <Property Name="EdgeBand" />
+                  </Expression>
+                  <Expression xsi:type="ExternalizedMapping">
+                    <Property Name="Source" />
+                    <Property Name="Destination" />
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="p4:ProjectDetections">
@@ -465,39 +467,95 @@
                       <p2:Margin>0</p2:Margin>
                       <p2:VoteDistance>0</p2:VoteDistance>
                       <p2:Exclusions />
-                      <p2:RejectClass>-1</p2:RejectClass>
+                      <p2:RejectClass>4</p2:RejectClass>
                       <p2:RejectScore>0.5</p2:RejectScore>
                     </Combinator>
+                  </Expression>
+                  <Expression xsi:type="rx:PublishSubject" TypeArguments="cv:Contours">
+                    <rx:Name>Contours</rx:Name>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="p2:ContoursPerspectiveTransform">
+                      <p2:Source>
+                        <p2:Point2f>
+                          <p2:X>58.65</p2:X>
+                          <p2:Y>550.0575</p2:Y>
+                        </p2:Point2f>
+                        <p2:Point2f>
+                          <p2:X>66.3</p2:X>
+                          <p2:Y>1631.905</p2:Y>
+                        </p2:Point2f>
+                        <p2:Point2f>
+                          <p2:X>2204.475</p2:X>
+                          <p2:Y>1613.637</p2:Y>
+                        </p2:Point2f>
+                        <p2:Point2f>
+                          <p2:X>2203.2</p2:X>
+                          <p2:Y>570.3548</p2:Y>
+                        </p2:Point2f>
+                      </p2:Source>
+                      <p2:Destination>
+                        <p2:Point2f>
+                          <p2:X>290</p2:X>
+                          <p2:Y>210</p2:Y>
+                        </p2:Point2f>
+                        <p2:Point2f>
+                          <p2:X>290</p2:X>
+                          <p2:Y>1490</p2:Y>
+                        </p2:Point2f>
+                        <p2:Point2f>
+                          <p2:X>2871</p2:X>
+                          <p2:Y>1490</p2:Y>
+                        </p2:Point2f>
+                        <p2:Point2f>
+                          <p2:X>2871</p2:X>
+                          <p2:Y>210</p2:Y>
+                        </p2:Point2f>
+                      </p2:Destination>
+                      <p2:Size>
+                        <p2:Width>3345</p2:Width>
+                        <p2:Height>2870</p2:Height>
+                      </p2:Size>
+                    </Combinator>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="rx:Zip" />
                   </Expression>
                   <Expression xsi:type="WorkflowOutput" />
                 </Nodes>
                 <Edges>
                   <Edge From="0" To="1" Label="Source1" />
-                  <Edge From="1" To="4" Label="Source1" />
-                  <Edge From="1" To="15" Label="Source2" />
-                  <Edge From="2" To="3" Label="Source1" />
-                  <Edge From="3" To="4" Label="Source2" />
-                  <Edge From="3" To="16" Label="Source2" />
+                  <Edge From="1" To="2" Label="Source1" />
+                  <Edge From="3" To="7" Label="Source1" />
                   <Edge From="4" To="5" Label="Source1" />
-                  <Edge From="5" To="7" Label="Source1" />
+                  <Edge From="5" To="6" Label="Source1" />
                   <Edge From="6" To="7" Label="Source2" />
                   <Edge From="7" To="8" Label="Source1" />
                   <Edge From="8" To="10" Label="Source1" />
                   <Edge From="9" To="10" Label="Source2" />
-                  <Edge From="10" To="11" Label="Source1" />
-                  <Edge From="11" To="13" Label="Source1" />
-                  <Edge From="12" To="13" Label="Source2" />
-                  <Edge From="13" To="14" Label="Source1" />
+                  <Edge From="10" To="12" Label="Source1" />
+                  <Edge From="11" To="12" Label="Source2" />
+                  <Edge From="12" To="14" Label="Source1" />
+                  <Edge From="13" To="14" Label="Source2" />
                   <Edge From="14" To="15" Label="Source1" />
                   <Edge From="15" To="16" Label="Source1" />
-                  <Edge From="16" To="17" Label="Source1" />
-                  <Edge From="17" To="19" Label="Source1" />
-                  <Edge From="18" To="19" Label="Source2" />
-                  <Edge From="19" To="21" Label="Source1" />
-                  <Edge From="20" To="21" Label="Source2" />
+                  <Edge From="16" To="18" Label="Source1" />
+                  <Edge From="17" To="18" Label="Source2" />
+                  <Edge From="18" To="20" Label="Source1" />
+                  <Edge From="19" To="20" Label="Source2" />
+                  <Edge From="20" To="21" Label="Source1" />
                   <Edge From="21" To="23" Label="Source1" />
                   <Edge From="22" To="23" Label="Source2" />
-                  <Edge From="23" To="24" Label="Source1" />
+                  <Edge From="23" To="26" Label="Source1" />
+                  <Edge From="24" To="26" Label="Source2" />
+                  <Edge From="25" To="26" Label="Source3" />
+                  <Edge From="25" To="30" Label="Source1" />
+                  <Edge From="26" To="28" Label="Source1" />
+                  <Edge From="27" To="28" Label="Source2" />
+                  <Edge From="28" To="31" Label="Source1" />
+                  <Edge From="29" To="30" Label="Source2" />
+                  <Edge From="30" To="31" Label="Source2" />
+                  <Edge From="31" To="32" Label="Source1" />
                 </Edges>
               </Workflow>
             </Expression>
@@ -523,31 +581,29 @@
             <Edge From="5" To="6" Label="Source1" />
             <Edge From="6" To="7" Label="Source1" />
             <Edge From="7" To="8" Label="Source1" />
-            <Edge From="8" To="9" Label="Source1" />
-            <Edge From="9" To="10" Label="Source1" />
-            <Edge From="11" To="23" Label="Source1" />
-            <Edge From="12" To="23" Label="Source2" />
-            <Edge From="13" To="14" Label="Source1" />
+            <Edge From="9" To="21" Label="Source1" />
+            <Edge From="10" To="21" Label="Source2" />
+            <Edge From="11" To="12" Label="Source1" />
+            <Edge From="12" To="13" Label="Source1" />
+            <Edge From="13" To="21" Label="Source3" />
+            <Edge From="13" To="24" Label="Source5" />
             <Edge From="14" To="15" Label="Source1" />
-            <Edge From="15" To="23" Label="Source3" />
-            <Edge From="15" To="26" Label="Source5" />
-            <Edge From="16" To="17" Label="Source1" />
+            <Edge From="15" To="16" Label="Source1" />
+            <Edge From="16" To="21" Label="Source4" />
+            <Edge From="16" To="24" Label="Source4" />
             <Edge From="17" To="18" Label="Source1" />
-            <Edge From="18" To="23" Label="Source4" />
-            <Edge From="18" To="26" Label="Source4" />
-            <Edge From="19" To="20" Label="Source1" />
-            <Edge From="20" To="21" Label="Source1" />
-            <Edge From="21" To="23" Label="Source5" />
-            <Edge From="22" To="23" Label="Source6" />
-            <Edge From="22" To="26" Label="Source3" />
-            <Edge From="23" To="27" Label="Source1" />
-            <Edge From="24" To="26" Label="Source1" />
-            <Edge From="25" To="26" Label="Source2" />
+            <Edge From="18" To="19" Label="Source1" />
+            <Edge From="19" To="21" Label="Source5" />
+            <Edge From="20" To="21" Label="Source6" />
+            <Edge From="20" To="24" Label="Source3" />
+            <Edge From="21" To="25" Label="Source1" />
+            <Edge From="22" To="24" Label="Source1" />
+            <Edge From="23" To="24" Label="Source2" />
+            <Edge From="24" To="25" Label="Source2" />
+            <Edge From="25" To="27" Label="Source1" />
             <Edge From="26" To="27" Label="Source2" />
-            <Edge From="27" To="29" Label="Source1" />
-            <Edge From="28" To="29" Label="Source2" />
-            <Edge From="29" To="30" Label="Source1" />
-            <Edge From="30" To="31" Label="Source1" />
+            <Edge From="27" To="28" Label="Source1" />
+            <Edge From="28" To="29" Label="Source1" />
           </Edges>
         </Workflow>
       </Expression>

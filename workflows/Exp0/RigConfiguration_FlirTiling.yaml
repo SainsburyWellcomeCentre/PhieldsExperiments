@@ -7,37 +7,43 @@ cameraController:
   portName: COM7
   triggers:
     - TriggerName: Trigger0
-      triggerFrequency: 50
+      triggerFrequency: 20
     - TriggerName: Trigger1
       triggerFrequency: 125
 cameras:
   - cameraName: Center
     triggerName: Trigger0
     exposureTime: 2000
-    serialNumber: "25454414"
+    serialNumber: "25511624"
     gain: 0
     binning: 1
   - cameraName: West
     triggerName: Trigger0
     exposureTime: 1500
-    serialNumber: "25205962"
+    serialNumber: "25511623"
     gain: 0
     binning: 1
   - cameraName: East
     triggerName: Trigger0
     exposureTime: 1500
-    serialNumber: "23459421"
+    serialNumber: "25511622"
     gain: 0
     binning: 1
   - cameraName: North
     triggerName: Trigger0
     exposureTime: 1500
-    serialNumber: "23425450"
+    serialNumber: "25511621"
     gain: 0
     binning: 1
   - cameraName: South
     triggerName: Trigger0
     exposureTime: 1500
-    serialNumber: "23425448"
+    serialNumber: "25511620"
     gain: 0
     binning: 1
+  # - cameraName: South
+  #   triggerName: Trigger0
+  #   exposureTime: 1500
+  #   serialNumber: "25511619"
+  #   gain: 0
+  #   binning: 1

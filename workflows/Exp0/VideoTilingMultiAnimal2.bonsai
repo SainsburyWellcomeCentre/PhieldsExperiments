@@ -15,9 +15,9 @@
                  xmlns:p4="clr-namespace:Harp.TimestampGeneratorGen3;assembly=Harp.TimestampGeneratorGen3"
                  xmlns:p5="clr-namespace:OpenCV.Net;assembly=OpenCV.Net"
                  xmlns:p6="clr-namespace:Bonsai.MultiAnimalTracking;assembly=Bonsai.MultiAnimalTracking"
+                 xmlns:cv="clr-namespace:Bonsai.Vision;assembly=Bonsai.Vision"
                  xmlns:p7="clr-namespace:;assembly=Extensions"
                  xmlns:zg="clr-namespace:Bonsai.Gui.ZedGraph;assembly=Bonsai.Gui.ZedGraph"
-                 xmlns:dsp="clr-namespace:Bonsai.Dsp;assembly=Bonsai.Dsp"
                  xmlns:gui="clr-namespace:Bonsai.Gui;assembly=Bonsai.Gui"
                  xmlns="https://bonsai-rx.org/2018/workflow">
   <Workflow>
@@ -1385,16 +1385,16 @@
                   <Expression xsi:type="rx:PublishSubject" TypeArguments="harp:Timestamped(p5:IplImage)">
                     <rx:Name>cam0</rx:Name>
                   </Expression>
-                  <Expression xsi:type="rx:PublishSubject" TypeArguments="sys:Tuple(harp:Timestamped(p5:IplImage),harp:Timestamped(p6:ViewObservationCollection))">
+                  <Expression xsi:type="rx:PublishSubject" TypeArguments="sys:Tuple(harp:Timestamped(p5:IplImage),harp:Timestamped(sys:Tuple(p6:ViewObservationCollection,cv:Contours)))">
                     <rx:Name>cam1</rx:Name>
                   </Expression>
-                  <Expression xsi:type="rx:PublishSubject" TypeArguments="sys:Tuple(harp:Timestamped(p5:IplImage),harp:Timestamped(p6:ViewObservationCollection))">
+                  <Expression xsi:type="rx:PublishSubject" TypeArguments="sys:Tuple(harp:Timestamped(p5:IplImage),harp:Timestamped(sys:Tuple(p6:ViewObservationCollection,cv:Contours)))">
                     <rx:Name>cam2</rx:Name>
                   </Expression>
-                  <Expression xsi:type="rx:PublishSubject" TypeArguments="sys:Tuple(harp:Timestamped(p5:IplImage),harp:Timestamped(p6:ViewObservationCollection))">
+                  <Expression xsi:type="rx:PublishSubject" TypeArguments="sys:Tuple(harp:Timestamped(p5:IplImage),harp:Timestamped(sys:Tuple(p6:ViewObservationCollection,cv:Contours)))">
                     <rx:Name>cam3</rx:Name>
                   </Expression>
-                  <Expression xsi:type="rx:PublishSubject" TypeArguments="sys:Tuple(harp:Timestamped(p5:IplImage),harp:Timestamped(p6:ViewObservationCollection))">
+                  <Expression xsi:type="rx:PublishSubject" TypeArguments="sys:Tuple(harp:Timestamped(p5:IplImage),harp:Timestamped(sys:Tuple(p6:ViewObservationCollection,cv:Contours)))">
                     <rx:Name>cam4</rx:Name>
                   </Expression>
                   <Expression xsi:type="ExternalizedMapping">
@@ -1854,7 +1854,7 @@
                       <Height>2870</Height>
                     </Size>
                     <VignetteImageFileName>Y:\phields\config\4mmVigneting2.png</VignetteImageFileName>
-                    <ThresholdValue>100</ThresholdValue>
+                    <ThresholdValue>110</ThresholdValue>
                     <MinArea>500</MinArea>
                     <MaxArea>20000</MaxArea>
                     <MinDensity>0.7</MinDensity>
@@ -1987,7 +1987,7 @@
                       <Height>2870</Height>
                     </Size>
                     <VignetteImageFileName>Y:\phields\config\4mmVigneting2.png</VignetteImageFileName>
-                    <ThresholdValue>100</ThresholdValue>
+                    <ThresholdValue>110</ThresholdValue>
                     <MinArea>500</MinArea>
                     <MaxArea>20000</MaxArea>
                     <MinDensity>0.7</MinDensity>
@@ -2120,7 +2120,7 @@
                       <Height>2870</Height>
                     </Size>
                     <VignetteImageFileName>Y:\phields\config\4mmVigneting2.png</VignetteImageFileName>
-                    <ThresholdValue>100</ThresholdValue>
+                    <ThresholdValue>110</ThresholdValue>
                     <MinArea>500</MinArea>
                     <MaxArea>20000</MaxArea>
                     <MinDensity>0.7</MinDensity>
@@ -2253,7 +2253,7 @@
                       <Height>2870</Height>
                     </Size>
                     <VignetteImageFileName>Y:\phields\config\4mmVigneting2.png</VignetteImageFileName>
-                    <ThresholdValue>100</ThresholdValue>
+                    <ThresholdValue>110</ThresholdValue>
                     <MinArea>500</MinArea>
                     <MaxArea>20000</MaxArea>
                     <MinDensity>0.7</MinDensity>
@@ -2299,25 +2299,25 @@
                     <Name>cam1</Name>
                   </Expression>
                   <Expression xsi:type="MemberSelector">
-                    <Selector>Item2.Value</Selector>
+                    <Selector>Item2.Value.Item1</Selector>
                   </Expression>
                   <Expression xsi:type="SubscribeSubject">
                     <Name>cam2</Name>
                   </Expression>
                   <Expression xsi:type="MemberSelector">
-                    <Selector>Item2.Value</Selector>
+                    <Selector>Item2.Value.Item1</Selector>
                   </Expression>
                   <Expression xsi:type="SubscribeSubject">
                     <Name>cam3</Name>
                   </Expression>
                   <Expression xsi:type="MemberSelector">
-                    <Selector>Item2.Value</Selector>
+                    <Selector>Item2.Value.Item1</Selector>
                   </Expression>
                   <Expression xsi:type="SubscribeSubject">
                     <Name>cam4</Name>
                   </Expression>
                   <Expression xsi:type="MemberSelector">
-                    <Selector>Item2.Value</Selector>
+                    <Selector>Item2.Value.Item1</Selector>
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:Zip" />
@@ -2360,30 +2360,10 @@
                     </Combinator>
                   </Expression>
                   <Expression xsi:type="SubscribeSubject">
-                    <Name>cam0</Name>
-                  </Expression>
-                  <Expression xsi:type="MemberSelector">
-                    <Selector>Value</Selector>
-                  </Expression>
-                  <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="dsp:ConvertScale">
-                      <dsp:Depth xsi:nil="true" />
-                      <dsp:Scale>0</dsp:Scale>
-                      <dsp:Shift>0</dsp:Shift>
-                    </Combinator>
-                  </Expression>
-                  <Expression xsi:type="SubscribeSubject">
                     <Name>cam1</Name>
                   </Expression>
                   <Expression xsi:type="MemberSelector">
                     <Selector>Item1.Value</Selector>
-                  </Expression>
-                  <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="dsp:ConvertScale">
-                      <dsp:Depth xsi:nil="true" />
-                      <dsp:Scale>0.25</dsp:Scale>
-                      <dsp:Shift>0</dsp:Shift>
-                    </Combinator>
                   </Expression>
                   <Expression xsi:type="SubscribeSubject">
                     <Name>cam2</Name>
@@ -2391,25 +2371,11 @@
                   <Expression xsi:type="MemberSelector">
                     <Selector>Item1.Value</Selector>
                   </Expression>
-                  <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="dsp:ConvertScale">
-                      <dsp:Depth xsi:nil="true" />
-                      <dsp:Scale>0.25</dsp:Scale>
-                      <dsp:Shift>0</dsp:Shift>
-                    </Combinator>
-                  </Expression>
                   <Expression xsi:type="SubscribeSubject">
                     <Name>cam3</Name>
                   </Expression>
                   <Expression xsi:type="MemberSelector">
                     <Selector>Item1.Value</Selector>
-                  </Expression>
-                  <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="dsp:ConvertScale">
-                      <dsp:Depth xsi:nil="true" />
-                      <dsp:Scale>0.25</dsp:Scale>
-                      <dsp:Shift>0</dsp:Shift>
-                    </Combinator>
                   </Expression>
                   <Expression xsi:type="SubscribeSubject">
                     <Name>cam4</Name>
@@ -2418,49 +2384,81 @@
                     <Selector>Item1.Value</Selector>
                   </Expression>
                   <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="dsp:ConvertScale">
-                      <dsp:Depth xsi:nil="true" />
-                      <dsp:Scale>0.25</dsp:Scale>
-                      <dsp:Shift>0</dsp:Shift>
-                    </Combinator>
+                    <Combinator xsi:type="rx:Zip" />
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="rx:WithLatestFrom" />
+                  </Expression>
+                  <Expression xsi:type="SubscribeSubject">
+                    <Name>cam1</Name>
+                  </Expression>
+                  <Expression xsi:type="MemberSelector">
+                    <Selector>Item2.Value.Item2</Selector>
+                  </Expression>
+                  <Expression xsi:type="SubscribeSubject">
+                    <Name>cam2</Name>
+                  </Expression>
+                  <Expression xsi:type="MemberSelector">
+                    <Selector>Item2.Value.Item2</Selector>
+                  </Expression>
+                  <Expression xsi:type="SubscribeSubject">
+                    <Name>cam3</Name>
+                  </Expression>
+                  <Expression xsi:type="MemberSelector">
+                    <Selector>Item2.Value.Item2</Selector>
+                  </Expression>
+                  <Expression xsi:type="SubscribeSubject">
+                    <Name>cam4</Name>
+                  </Expression>
+                  <Expression xsi:type="MemberSelector">
+                    <Selector>Item2.Value.Item2</Selector>
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:Zip" />
                   </Expression>
                   <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="rx:ObserveOn">
-                      <rx:Scheduler>TaskPoolScheduler</rx:Scheduler>
-                    </Combinator>
-                  </Expression>
-                  <Expression xsi:type="Add" />
-                  <Expression xsi:type="rx:PublishSubject">
-                    <Name>CompositeImage</Name>
-                  </Expression>
-                  <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:WithLatestFrom" />
                   </Expression>
-                  <Expression xsi:type="MemberSelector">
-                    <Selector>Item2,Item1</Selector>
+                  <Expression xsi:type="p7:IdentityTrackViewBuilder">
+                    <p7:ImageSelector />
+                    <p7:ContourSelector />
+                    <p7:TrackSelector />
+                    <p7:Scale>1</p7:Scale>
+                    <p7:DisplayScale>0.5</p7:DisplayScale>
+                    <p7:MatchDistance>250</p7:MatchDistance>
+                  </Expression>
+                  <Expression xsi:type="SubscribeSubject">
+                    <Name>cam0</Name>
                   </Expression>
                   <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="rx:ObserveOn">
-                      <rx:Scheduler>TaskPoolScheduler</rx:Scheduler>
-                    </Combinator>
-                  </Expression>
-                  <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="rx:SampleInterval">
-                      <rx:Interval>PT0.2S</rx:Interval>
-                    </Combinator>
+                    <Combinator xsi:type="rx:Zip" />
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="p7:DrawIdentityTracks">
                       <p7:Thickness>4</p7:Thickness>
                       <p7:Radius>40</p7:Radius>
                       <p7:FontScale>1.5</p7:FontScale>
-                      <p7:TrailLength>25</p7:TrailLength>
+                      <p7:TrailLength>50</p7:TrailLength>
                       <p7:Scale>1</p7:Scale>
-                      <p7:DrawUnassigned>true</p7:DrawUnassigned>
+                      <p7:DrawUnassigned>false</p7:DrawUnassigned>
                     </Combinator>
+                  </Expression>
+                  <Expression xsi:type="Disable">
+                    <Builder xsi:type="Combinator">
+                      <Combinator xsi:type="cv:VideoWriter">
+                        <cv:FileName>dentity_tracked.avi</cv:FileName>
+                        <cv:Suffix>None</cv:Suffix>
+                        <cv:Buffered>true</cv:Buffered>
+                        <cv:Overwrite>true</cv:Overwrite>
+                        <cv:FourCC>FMP4</cv:FourCC>
+                        <cv:FrameRate>30</cv:FrameRate>
+                        <cv:FrameSize>
+                          <cv:Width>0</cv:Width>
+                          <cv:Height>0</cv:Height>
+                        </cv:FrameSize>
+                        <cv:ResizeInterpolation>NearestNeighbor</cv:ResizeInterpolation>
+                      </Combinator>
+                    </Builder>
                   </Expression>
                 </Nodes>
                 <Edges>
@@ -2506,30 +2504,31 @@
                   <Edge From="40" To="41" Label="Source4" />
                   <Edge From="41" To="42" Label="Source1" />
                   <Edge From="42" To="43" Label="Source1" />
-                  <Edge From="43" To="63" Label="Source1" />
+                  <Edge From="43" To="53" Label="Source1" />
+                  <Edge From="43" To="66" Label="Source2" />
                   <Edge From="44" To="45" Label="Source1" />
-                  <Edge From="45" To="46" Label="Source1" />
-                  <Edge From="46" To="59" Label="Source1" />
-                  <Edge From="47" To="48" Label="Source1" />
+                  <Edge From="45" To="52" Label="Source1" />
+                  <Edge From="46" To="47" Label="Source1" />
+                  <Edge From="47" To="52" Label="Source2" />
                   <Edge From="48" To="49" Label="Source1" />
-                  <Edge From="49" To="59" Label="Source2" />
+                  <Edge From="49" To="52" Label="Source3" />
                   <Edge From="50" To="51" Label="Source1" />
-                  <Edge From="51" To="52" Label="Source1" />
-                  <Edge From="52" To="59" Label="Source3" />
-                  <Edge From="53" To="54" Label="Source1" />
+                  <Edge From="51" To="52" Label="Source4" />
+                  <Edge From="52" To="53" Label="Source2" />
+                  <Edge From="53" To="63" Label="Source1" />
                   <Edge From="54" To="55" Label="Source1" />
-                  <Edge From="55" To="59" Label="Source4" />
+                  <Edge From="55" To="62" Label="Source1" />
                   <Edge From="56" To="57" Label="Source1" />
-                  <Edge From="57" To="58" Label="Source1" />
-                  <Edge From="58" To="59" Label="Source5" />
-                  <Edge From="59" To="60" Label="Source1" />
+                  <Edge From="57" To="62" Label="Source2" />
+                  <Edge From="58" To="59" Label="Source1" />
+                  <Edge From="59" To="62" Label="Source3" />
                   <Edge From="60" To="61" Label="Source1" />
-                  <Edge From="61" To="62" Label="Source1" />
+                  <Edge From="61" To="62" Label="Source4" />
                   <Edge From="62" To="63" Label="Source2" />
                   <Edge From="63" To="64" Label="Source1" />
-                  <Edge From="64" To="65" Label="Source1" />
                   <Edge From="65" To="66" Label="Source1" />
                   <Edge From="66" To="67" Label="Source1" />
+                  <Edge From="67" To="68" Label="Source1" />
                 </Edges>
               </Workflow>
             </Expression>

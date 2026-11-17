@@ -7,7 +7,7 @@ cameraController:
   portName: COM7
   triggers:
     - TriggerName: Trigger0
-      triggerFrequency: 50
+      triggerFrequency: 20
     - TriggerName: Trigger1
       triggerFrequency: 125
 looms:

@@ -22,3 +22,13 @@ uv.lock
 ##bins
 obj
 bin
+
+# Machine-local executables (ffmpeg, ffplay and ffprobe live in Extensions)
+*.exe
+
+# Videos written by workflows
+*.avi
+
+# Images in the Exp0 workflow folder only (SaveImage snapshots, local vignette copy)
+workflows/Exp0/*.jpg
+workflows/Exp0/*.png

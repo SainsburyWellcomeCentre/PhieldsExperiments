@@ -42,6 +42,7 @@ class IdentityTrackRenderer
         Thickness = 4;
         FontScale = 1.5;
         DrawUnassigned = true;
+        DrawLabels = true;
     }
 
     public int TrailLength { get; set; }
@@ -55,6 +56,8 @@ class IdentityTrackRenderer
     public double FontScale { get; set; }
 
     public bool DrawUnassigned { get; set; }
+
+    public bool DrawLabels { get; set; }
 
     public static Scalar IdentityColor(int identity)
     {
@@ -127,6 +130,7 @@ class IdentityTrackRenderer
             var lost = track.State == TrackState.Lost;
             CV.Circle(image, centre, radius, color, lost ? Math.Max(1, thickness / 2) : thickness, LineFlags.AntiAliased, 0);
             if (!lost) CV.Circle(image, centre, Math.Max(2, radius / 6), color, -1, LineFlags.AntiAliased, 0);
+            if (!DrawLabels) continue;
             var text = lost
                 ? track.Identity + " lost"
                 : string.Format(CultureInfo.InvariantCulture, "{0} {1:F2}", track.Identity, track.IdentityConfidence);

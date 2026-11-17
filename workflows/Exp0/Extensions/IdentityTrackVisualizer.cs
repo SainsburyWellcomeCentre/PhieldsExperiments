@@ -1,34 +1,54 @@
 using Bonsai;
 using Bonsai.Design;
+using Bonsai.Expressions;
 using Bonsai.MultiAnimalTracking;
+using Bonsai.Vision;
+using Bonsai.Vision.Design;
+using OpenCV.Net;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Drawing.Text;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Color = System.Drawing.Color;
+using DrawingFont = System.Drawing.Font;
 
 [assembly: TypeVisualizer(typeof(IdentityTrackVisualizer), Target = typeof(IdentityTrackCollection))]
 
 /// <summary>
-/// Shows the output of TrackAnimalIdentities on the floor: every identity at its position in its own
-/// colour, with its recent path, and a table of each identity's state, confidence, cameras and track
-/// changes. Right-click for options; they are saved with the workflow's layout.
+/// Shows identity tracks over images and contours, drawn like the image visualizers of Bonsai.Vision: on
+/// the OpenGL canvas, only the latest element at the refresh rate of the display, with the options in the
+/// status strip that opens on right-click. On an IdentityTrackView node it shows that node's images, blended,
+/// with each contour in the colour of the nearest identity and the overlapping contours of one identity, as
+/// several cameras see one animal, merged into one outline; on an identity track collection alone it draws
+/// the floor. Each identity has its own colour, its recent path and a label, a yellow ring when it
+/// moves to another track, and a row in the table under the image with its state, confidence, cameras and
+/// track changes. The paths and counts follow every update, also those not drawn. The options are saved
+/// with the workflow's layout.
 /// </summary>
-public class IdentityTrackVisualizer : DialogTypeVisualizer
+public class IdentityTrackVisualizer : IplImageVisualizer
 {
-    IdentityTrackView view;
+    const double DefaultDisplayScale = 0.25;
+    const double MarkerRadius = 40;
+    const double ContourMarkerRadius = 12;
+    readonly object sync = new object();
+    IdentityTrackViewBuilder builder;
+    IdentityTrackSelection selection;
+    IdentityTrackRenderer renderer;
+    IdentityTrackHistory history;
+    IdentityTrackScene scene;
+    IdentityTrackTable table;
+    IdentityTrackCollection lastTracks;
 
     public IdentityTrackVisualizer()
     {
         TrailLength = 80;
         ShowTrails = true;
         ShowUnassigned = true;
+        ShowContours = true;
+        MergeContours = true;
+        ShowLabels = true;
         ShowTable = true;
-        FloorImagePath = string.Empty;
     }
 
     /// <summary>Gets or sets the number of updates each identity's path is drawn over.</summary>
@@ -40,101 +60,455 @@ public class IdentityTrackVisualizer : DialogTypeVisualizer
     /// <summary>Gets or sets whether tracks that hold no identity are drawn.</summary>
     public bool ShowUnassigned { get; set; }
 
-    /// <summary>Gets or sets whether the table of identities is drawn.</summary>
-    public bool ShowTable { get; set; }
+    /// <summary>Gets or sets whether the contours are drawn.</summary>
+    public bool ShowContours { get; set; }
 
-    /// <summary>
-    /// Gets or sets an image of the floor canvas drawn under the tracks, stretched over the whole canvas.
-    /// A relative path is relative to the workflow's folder; empty or a missing file leaves a plain floor.
-    /// To draw the tracks over the live tiling mosaic instead, drop this visualizer onto the mosaic's.
-    /// </summary>
-    public string FloorImagePath { get; set; }
+    /// <summary>Gets or sets whether the overlapping contours of one identity are drawn as one outline.</summary>
+    public bool MergeContours { get; set; }
+
+    /// <summary>Gets or sets whether each identity's name and confidence are drawn.</summary>
+    public bool ShowLabels { get; set; }
+
+    /// <summary>Gets or sets whether the table of identities is shown.</summary>
+    public bool ShowTable { get; set; }
 
     public override void Load(IServiceProvider provider)
     {
-        view = new IdentityTrackView(this);
-        var service = (IDialogTypeVisualizerService)provider.GetService(typeof(IDialogTypeVisualizerService));
-        if (service != null) service.AddControl(view);
+        var context = (ITypeVisualizerContext)provider.GetService(typeof(ITypeVisualizerContext));
+        var element = context != null ? ExpressionBuilder.GetVisualizerElement(context.Source) : null;
+        builder = element != null ? element.Builder as IdentityTrackViewBuilder : null;
+        selection = builder != null && builder.Selection != null ? builder.Selection : IdentityTrackSelection.TracksOnly;
+        renderer = new IdentityTrackRenderer();
+        history = new IdentityTrackHistory();
+        scene = new IdentityTrackScene();
+        base.Load(provider);
+
+        // The table goes between the image and the status strip of the image visualizer's panel.
+        table = new IdentityTrackTable { Dock = DockStyle.Bottom, Visible = ShowTable };
+        var panel = VisualizerCanvas.Parent;
+        panel.Controls.Add(table);
+        panel.Controls.SetChildIndex(table, 1);
+        AddOptions();
+    }
+
+    // Called on the workflow's thread for every element, while only the latest is drawn.
+    protected override void UpdateValues(IList<object> values)
+    {
+        base.UpdateValues(values);
+        var tracks = selection.Tracks(values[0]);
+        if (tracks == null || tracks == lastTracks) return;
+        lastTracks = tracks;
+        lock (sync)
+        {
+            renderer.TrailLength = ShowTrails ? TrailLength : 0;
+            renderer.Update(tracks);
+            history.Add(tracks);
+        }
     }
 
     public override void Show(object value)
     {
-        var tracks = value as IdentityTrackCollection;
-        if (tracks != null && view != null) view.Add(tracks);
+        var tracks = selection.Tracks(value);
+        var scale = builder != null && builder.Scale > 0 ? builder.Scale : 1.0;
+        var displayScale = builder != null && builder.DisplayScale > 0 ? builder.DisplayScale : DefaultDisplayScale;
+        var matchDistance = builder != null ? builder.MatchDistance : 0.0;
+        var contours = ShowContours ? selection.ContourSets(value) : new List<object>();
+        var image = scene.Compose(selection.Images(value), scale, displayScale);
+
+        // Lines and text keep about the same size on screen whatever the sizes of the image and the window.
+        var canvas = VisualizerCanvas;
+        var pixelsPerPoint = Math.Max((double)image.Width / Math.Max(canvas.Width, 1), (double)image.Height / Math.Max(canvas.Height, 1));
+        var thickness = Math.Max(1, (int)Math.Round(2 * pixelsPerPoint));
+        lock (sync)
+        {
+            // A marker the size of an animal would hide its contours.
+            renderer.Radius = contours.Count > 0 ? ContourMarkerRadius : MarkerRadius;
+            renderer.Scale = scale * displayScale;
+            renderer.Thickness = thickness;
+            renderer.FontScale = Math.Max(0.3, 0.5 * pixelsPerPoint);
+            renderer.DrawUnassigned = ShowUnassigned;
+            renderer.DrawLabels = ShowLabels;
+            scene.Draw(image, contours, tracks, renderer, history, scale, displayScale, matchDistance, thickness, MergeContours);
+            if (table.Visible) table.SetTracks(tracks, history);
+        }
+        base.Show(image);
+    }
+
+    void AddOptions()
+    {
+        var length = new ToolStripDropDownButton("Path length");
+        foreach (var updates in new[] { 40, 80, 200, 400, 1000 })
+        {
+            var count = updates;
+            var item = new ToolStripMenuItem(string.Format(CultureInfo.InvariantCulture, "{0} updates ({1:0.#} s at 40 Hz)", count, count / 40.0)) { Tag = count };
+            item.Click += delegate { TrailLength = count; };
+            length.DropDownItems.Add(item);
+        }
+        length.DropDownOpening += delegate
+        {
+            foreach (ToolStripMenuItem item in length.DropDownItems) item.Checked = (int)item.Tag == TrailLength;
+        };
+        var clear = new ToolStripButton("Clear paths and counts");
+        clear.Click += delegate
+        {
+            lock (sync)
+            {
+                history.Reset();
+                renderer = new IdentityTrackRenderer();
+            }
+        };
+
+        StatusStrip.Items.AddRange(new ToolStripItem[]
+        {
+            Toggle("Paths", ShowTrails, value => ShowTrails = value),
+            length,
+            Toggle("Unassigned", ShowUnassigned, value => ShowUnassigned = value),
+            Toggle("Contours", ShowContours, value => ShowContours = value),
+            Toggle("Merge", MergeContours, value => MergeContours = value),
+            Toggle("Labels", ShowLabels, value => ShowLabels = value),
+            Toggle("Table", ShowTable, value => { ShowTable = value; table.Visible = value; }),
+            clear
+        });
+    }
+
+    static ToolStripButton Toggle(string text, bool initialValue, Action<bool> setValue)
+    {
+        var button = new ToolStripButton(text) { CheckOnClick = true, Checked = initialValue };
+        button.CheckedChanged += delegate { setValue(button.Checked); };
+        return button;
     }
 
     public override void Unload()
     {
-        if (view != null)
+        // The image visualizer's panel disposes the table with it.
+        base.Unload();
+        lock (sync)
         {
-            view.Dispose();
-            view = null;
+            table = null;
+            scene = null;
+            builder = null;
+            lastTracks = null;
         }
     }
 }
 
 /// <summary>
-/// The control that draws identity tracks on the floor canvas for IdentityTrackVisualizer.
+/// Composes the images of an element into the image IdentityTrackVisualizer displays, and draws the
+/// contours and tracks over it.
 /// </summary>
-public class IdentityTrackView : Control
+class IdentityTrackScene
 {
     // The floor canvas of the tiling workflow, in mm, and the arena floor inside it (the 100 mm margin
-    // keeps a rearing animal in view).
-    const float CanvasWidth = 3345;
-    const float CanvasHeight = 2870;
-    static readonly RectangleF Arena = RectangleF.FromLTRB(100, 100, 3245, 2770);
-    const float BodyRadius = 40;
-    const float VelocitySeconds = 0.25f;
-    const int FlashUpdates = 40;
-    const int Border = 8;
+    // keeps a rearing animal in view), drawn when there is no image.
+    const int CanvasWidth = 3345;
+    const int CanvasHeight = 2870;
+    static readonly Rect Arena = new Rect(100, 100, 3145, 2670);
+    static readonly Scalar UnmatchedColor = Scalar.Rgb(90, 90, 90);
+    static readonly Scalar FlashColor = Scalar.Rgb(255, 255, 0);
 
-    static readonly Color[] Palette =
+    // FindContours clears the border of the mask, so the shapes keep this margin from it.
+    const int MaskMargin = 2;
+
+    IplImage canvas;
+    IplImage floor;
+    IplImage blend;
+    IplImage part;
+    IplImage depthBuffer;
+    IplImage sizeBuffer;
+    IplImage mask;
+    readonly MemStorage storage = new MemStorage();
+
+    // The points and bounds of a contour at the display scale, and its centroid in image pixels.
+    class ContourShape
     {
-        Color.FromArgb(230, 50, 50),
-        Color.FromArgb(40, 180, 60),
-        Color.FromArgb(50, 110, 240),
-        Color.FromArgb(245, 170, 0),
-        Color.FromArgb(170, 70, 210),
-        Color.FromArgb(0, 175, 175),
-        Color.FromArgb(160, 100, 40),
-        Color.FromArgb(235, 100, 180)
-    };
+        public Point[] Points;
+        public Rect Bounds;
+        public Point2f Centroid;
+    }
 
-    static readonly PointF Break = new PointF(float.NaN, float.NaN);
+    class ShapeCluster
+    {
+        public List<ContourShape> Shapes;
+        public Rect Bounds;
+    }
 
-    readonly IdentityTrackVisualizer settings;
-    readonly Dictionary<int, Queue<PointF>> trails = new Dictionary<int, Queue<PointF>>();
+    /// <summary>
+    /// Composes the images, or the floor when there are none, into one color image at the display scale.
+    /// The returned image is reused by the next call.
+    /// </summary>
+    public IplImage Compose(IList<IplImage> images, double scale, double displayScale)
+    {
+        if (images.Count == 0) return ComposeFloor(scale * displayScale);
+        return ComposeBlend(images, displayScale);
+    }
+
+    IplImage ComposeFloor(double pixelsPerUnit)
+    {
+        var size = Scaled(new Size(CanvasWidth, CanvasHeight), pixelsPerUnit);
+        if (floor == null || floor.Size != size)
+        {
+            floor = new IplImage(size, IplDepth.U8, 3);
+            floor.Set(Scalar.Rgb(95, 95, 100), null);
+            var arena = new Rect(
+                (int)Math.Round(Arena.X * pixelsPerUnit), (int)Math.Round(Arena.Y * pixelsPerUnit),
+                (int)Math.Round(Arena.Width * pixelsPerUnit), (int)Math.Round(Arena.Height * pixelsPerUnit));
+            CV.Rectangle(floor, arena, Scalar.Rgb(205, 205, 205), -1, LineFlags.Connected8, 0);
+            var grid = Scalar.Rgb(180, 180, 180);
+            for (int x = 500; x < Arena.X + Arena.Width; x += 500)
+            {
+                CV.Line(floor, ToPoint(x, Arena.Y, pixelsPerUnit), ToPoint(x, Arena.Y + Arena.Height, pixelsPerUnit), grid, 1, LineFlags.Connected8, 0);
+            }
+            for (int y = 500; y < Arena.Y + Arena.Height; y += 500)
+            {
+                CV.Line(floor, ToPoint(Arena.X, y, pixelsPerUnit), ToPoint(Arena.X + Arena.Width, y, pixelsPerUnit), grid, 1, LineFlags.Connected8, 0);
+            }
+            CV.Rectangle(floor, arena, Scalar.Rgb(235, 235, 235), 1, LineFlags.Connected8, 0);
+        }
+
+        canvas = Ensure(canvas, size, 3);
+        CV.Copy(floor, canvas);
+        return canvas;
+    }
+
+    // The mean of the images, all at the size of the first, as the tiling mosaic sums its quarters.
+    IplImage ComposeBlend(IList<IplImage> images, double displayScale)
+    {
+        var size = Scaled(images[0].Size, displayScale);
+        var channels = images.All(image => image.Channels == 1) ? 1 : 3;
+        canvas = Ensure(canvas, size, 3);
+        var target = channels == 3 ? canvas : (blend = Ensure(blend, size, 1));
+        if (images.Count == 1) Fit(images[0], target);
+        else
+        {
+            part = Ensure(part, size, channels);
+            for (int i = 0; i < images.Count; i++)
+            {
+                Fit(images[i], part);
+                if (i == 0) CV.ConvertScale(part, target, 1.0 / images.Count, 0);
+                else CV.AddWeighted(target, 1, part, 1.0 / images.Count, 0, target);
+            }
+        }
+        if (target != canvas) CV.CvtColor(target, canvas, ColorConversion.Gray2Bgr);
+        return canvas;
+    }
+
+    // Converts an image to 8 bits, resizes it and converts its colours into the destination.
+    void Fit(IplImage source, IplImage destination)
+    {
+        if (source.Depth != IplDepth.U8)
+        {
+            depthBuffer = Ensure(depthBuffer, source.Size, source.Channels);
+            CV.Convert(source, depthBuffer);
+            source = depthBuffer;
+        }
+        if (source.Size != destination.Size)
+        {
+            if (source.Channels == destination.Channels)
+            {
+                CV.Resize(source, destination, SubPixelInterpolation.Linear);
+                return;
+            }
+            sizeBuffer = Ensure(sizeBuffer, destination.Size, source.Channels);
+            CV.Resize(source, sizeBuffer, SubPixelInterpolation.Linear);
+            source = sizeBuffer;
+        }
+        if (source.Channels == destination.Channels) CV.Copy(source, destination);
+        else CV.CvtColor(source, destination, source.Channels == 1 ? ColorConversion.Gray2Bgr : ColorConversion.Bgra2Bgr);
+    }
+
+    /// <summary>
+    /// Draws the contours, then the paths and tracks, over the image last composed. Each contour takes the
+    /// colour of the nearest track; when merging, the overlapping contours of one track are drawn as the
+    /// outline of their union.
+    /// </summary>
+    public void Draw(IplImage image, IList<object> contourSets, IdentityTrackCollection tracks, IdentityTrackRenderer renderer,
+        IdentityTrackHistory history, double scale, double displayScale, double matchDistance, int thickness, bool merge)
+    {
+        var shapes = contourSets.SelectMany(set => Shapes(set, displayScale)).Where(shape => shape.Points.Length >= 2);
+        foreach (var group in shapes.GroupBy(shape => NearestTrack(shape.Centroid, tracks, scale, matchDistance)))
+        {
+            // Grey for a track without identity, dark grey for no track.
+            var color = group.Key != null ? IdentityTrackRenderer.IdentityColor(group.Key.IdentityIndex) : UnmatchedColor;
+            if (merge) DrawUnions(image, group.ToList(), color, thickness);
+            else CV.PolyLine(image, group.Select(shape => shape.Points).ToArray(), true, color, thickness, LineFlags.AntiAliased, 0);
+        }
+        if (tracks != null)
+        {
+            renderer.Draw(image, tracks);
+            DrawFlashes(image, tracks, renderer, history, thickness);
+        }
+    }
+
+    static List<ContourShape> Shapes(object set, double displayScale)
+    {
+        var shapes = new List<ContourShape>();
+        var contours = set as Contours;
+        if (contours != null)
+        {
+            for (var contour = contours.FirstContour; contour != null; contour = contour.HNext)
+            {
+                shapes.Add(Shape(contour.ToArray<Point>(), ConnectedComponent.FromContour(contour).Centroid, displayScale));
+            }
+            return shapes;
+        }
+
+        var components = set as IEnumerable<ConnectedComponent> ?? new[] { (ConnectedComponent)set };
+        foreach (var component in components)
+        {
+            if (component == null || component.Contour == null) continue;
+            shapes.Add(Shape(component.Contour.ToArray<Point>(), component.Centroid, displayScale));
+        }
+        return shapes;
+    }
+
+    static ContourShape Shape(Point[] points, Point2f centroid, double displayScale)
+    {
+        var scaled = Array.ConvertAll(points, p => new Point((int)Math.Round(p.X * displayScale), (int)Math.Round(p.Y * displayScale)));
+        int left = int.MaxValue, top = int.MaxValue, right = int.MinValue, bottom = int.MinValue;
+        foreach (var p in scaled)
+        {
+            left = Math.Min(left, p.X);
+            top = Math.Min(top, p.Y);
+            right = Math.Max(right, p.X);
+            bottom = Math.Max(bottom, p.Y);
+        }
+        var bounds = scaled.Length > 0 ? new Rect(left, top, right - left + 1, bottom - top + 1) : new Rect();
+        return new ContourShape { Points = scaled, Bounds = bounds, Centroid = centroid };
+    }
+
+    // Fills the shapes whose bounds overlap into a mask the size of their bounds and draws its outer
+    // contours: one outline for each part of their union.
+    void DrawUnions(IplImage image, List<ContourShape> shapes, Scalar color, int thickness)
+    {
+        foreach (var cluster in Overlapping(shapes))
+        {
+            if (cluster.Shapes.Count == 1)
+            {
+                CV.PolyLine(image, new[] { cluster.Shapes[0].Points }, true, color, thickness, LineFlags.AntiAliased, 0);
+                continue;
+            }
+
+            var origin = new Point(cluster.Bounds.X - MaskMargin, cluster.Bounds.Y - MaskMargin);
+            var size = new Size(cluster.Bounds.Width + 2 * MaskMargin, cluster.Bounds.Height + 2 * MaskMargin);
+            if (mask == null || mask.Width < size.Width || mask.Height < size.Height)
+            {
+                var width = Math.Max(size.Width, mask != null ? mask.Width : 0);
+                var height = Math.Max(size.Height, mask != null ? mask.Height : 0);
+                mask = new IplImage(new Size(width, height), IplDepth.U8, 1);
+            }
+            using (var region = mask.GetSubRect(new Rect(0, 0, size.Width, size.Height)))
+            {
+                region.SetZero();
+                // One polygon at a time, as FillPoly leaves the overlap of several polygons empty.
+                foreach (var shape in cluster.Shapes)
+                {
+                    var points = Array.ConvertAll(shape.Points, p => new Point(p.X - origin.X, p.Y - origin.Y));
+                    CV.FillPoly(region, new[] { points }, Scalar.All(255), LineFlags.Connected8, 0);
+                }
+                Seq outlines;
+                CV.FindContours(region, storage, out outlines, Contour.HeaderSize, ContourRetrieval.External, ContourApproximation.ChainApproxSimple, origin);
+                if (outlines != null) CV.DrawContours(image, outlines, color, color, 1, thickness, LineFlags.AntiAliased);
+                storage.Clear();
+            }
+        }
+    }
+
+    // Groups the shapes whose bounds overlap, directly or through others, so that shapes of one colour far
+    // apart are not filled into one large mask.
+    static List<ShapeCluster> Overlapping(List<ContourShape> shapes)
+    {
+        var clusters = shapes.Select(shape => new ShapeCluster { Shapes = new List<ContourShape> { shape }, Bounds = shape.Bounds }).ToList();
+        bool merged;
+        do
+        {
+            merged = false;
+            for (int i = 0; i < clusters.Count; i++)
+            {
+                for (int j = clusters.Count - 1; j > i; j--)
+                {
+                    var a = clusters[i].Bounds;
+                    var b = clusters[j].Bounds;
+                    if (a.X > b.X + b.Width || b.X > a.X + a.Width || a.Y > b.Y + b.Height || b.Y > a.Y + a.Height) continue;
+                    var left = Math.Min(a.X, b.X);
+                    var top = Math.Min(a.Y, b.Y);
+                    clusters[i].Bounds = new Rect(left, top, Math.Max(a.X + a.Width, b.X + b.Width) - left, Math.Max(a.Y + a.Height, b.Y + b.Height) - top);
+                    clusters[i].Shapes.AddRange(clusters[j].Shapes);
+                    clusters.RemoveAt(j);
+                    merged = true;
+                }
+            }
+        }
+        while (merged);
+        return clusters;
+    }
+
+    // The nearest track that is not lost, when it is close enough.
+    static IdentityTrack NearestTrack(Point2f centroid, IdentityTrackCollection tracks, double scale, double matchDistance)
+    {
+        if (tracks == null) return null;
+        var x = centroid.X / scale;
+        var y = centroid.Y / scale;
+        IdentityTrack nearest = null;
+        var best = matchDistance;
+        foreach (var track in tracks)
+        {
+            if (track.State == TrackState.Lost || double.IsNaN(track.X)) continue;
+            var dx = track.X - x;
+            var dy = track.Y - y;
+            var distance = Math.Sqrt(dx * dx + dy * dy);
+            if (distance <= best)
+            {
+                best = distance;
+                nearest = track;
+            }
+        }
+        return nearest;
+    }
+
+    // A ring that fades out around an identity that just moved to another track.
+    static void DrawFlashes(IplImage image, IdentityTrackCollection tracks, IdentityTrackRenderer renderer, IdentityTrackHistory history, int thickness)
+    {
+        var radius = Math.Max(1, (int)Math.Round(renderer.Radius * renderer.Scale)) + 3 * thickness;
+        foreach (var track in tracks)
+        {
+            if (track.IdentityIndex < 0 || double.IsNaN(track.X)) continue;
+            var flash = history.Flash(track.IdentityIndex);
+            if (flash <= 0) continue;
+            CV.Circle(image,ToPoint(track.X, track.Y, renderer.Scale), radius, FlashColor, Math.Max(1, (int)Math.Round(2 * thickness * flash)), LineFlags.AntiAliased, 0);
+        }
+    }
+
+    static Point ToPoint(double x, double y, double scale)
+    {
+        return new Point((int)Math.Round(x * scale), (int)Math.Round(y * scale));
+    }
+
+    static Size Scaled(Size size, double scale)
+    {
+        return new Size(Math.Max(1, (int)Math.Round(size.Width * scale)), Math.Max(1, (int)Math.Round(size.Height * scale)));
+    }
+
+    static IplImage Ensure(IplImage image, Size size, int channels)
+    {
+        return image != null && image.Size == size && image.Channels == channels ? image : new IplImage(size, IplDepth.U8, channels);
+    }
+}
+
+/// <summary>
+/// Follows the identity tracks over every update for IdentityTrackVisualizer: when each identity moves to
+/// another track, how often it has, and the time since the first update.
+/// </summary>
+class IdentityTrackHistory
+{
+    const int FlashUpdates = 40;
     readonly Dictionary<int, int> holders = new Dictionary<int, int>();
     readonly Dictionary<int, int> changes = new Dictionary<int, int>();
     readonly Dictionary<int, int> flashes = new Dictionary<int, int>();
-    readonly Font labelFont = new Font("Segoe UI", 8.25f, FontStyle.Bold);
-    readonly Font tableFont = new Font("Consolas", 8.25f);
-    IdentityTrackCollection current;
     int epoch = int.MinValue;
     long updates;
     double startTime = double.NaN;
-    Image floorImage;
-    string floorImagePath;
 
-    class PendingLabel
-    {
-        public string Text;
-        public PointF Centre;
-        public float Radius;
-        public Color Colour;
-    }
-
-    public IdentityTrackView(IdentityTrackVisualizer settings)
-    {
-        this.settings = settings;
-        DoubleBuffered = true;
-        ResizeRedraw = true;
-        BackColor = Color.FromArgb(45, 45, 48);
-        Size = new Size(760, 660);
-        ContextMenuStrip = CreateMenu();
-    }
-
-    /// <summary>Takes the tracks of one frame and schedules a redraw.</summary>
+    /// <summary>Takes the tracks of one update.</summary>
     public void Add(IdentityTrackCollection tracks)
     {
         if (tracks.Epoch != epoch)
@@ -153,402 +527,146 @@ public class IdentityTrackView : Control
         foreach (var track in tracks)
         {
             var identity = track.IdentityIndex;
-            if (identity < 0) continue;
-
-            Queue<PointF> trail;
-            if (!trails.TryGetValue(identity, out trail))
-            {
-                trail = new Queue<PointF>();
-                trails.Add(identity, trail);
-            }
-            if (track.State != TrackState.Lost && !double.IsNaN(track.X))
-            {
-                trail.Enqueue(new PointF((float)track.X, (float)track.Y));
-            }
-            else if (trail.Count > 0 && !float.IsNaN(trail.Last().X))
-            {
-                trail.Enqueue(Break);
-            }
-            while (trail.Count > Math.Max(settings.TrailLength, 0)) trail.Dequeue();
+            if (identity < 0 || track.TrackId < 0) continue;
 
             // The identity moved to another track: after a loss, or when the votes moved it.
-            if (track.TrackId >= 0)
+            int previous;
+            if (holders.TryGetValue(identity, out previous) && previous != track.TrackId)
             {
-                int previous;
-                if (holders.TryGetValue(identity, out previous) && previous != track.TrackId)
-                {
-                    changes[identity] = Changes(identity) + 1;
-                    flashes[identity] = FlashUpdates;
-                }
-                holders[identity] = track.TrackId;
+                changes[identity] = Changes(identity) + 1;
+                flashes[identity] = FlashUpdates;
             }
+            holders[identity] = track.TrackId;
         }
-
-        current = tracks;
-        Invalidate();
     }
 
-    /// <summary>Clears the paths, the counts of track changes and the start time.</summary>
+    /// <summary>Clears the counts of track changes and the start time.</summary>
     public void Reset()
     {
-        trails.Clear();
         holders.Clear();
         changes.Clear();
         flashes.Clear();
         startTime = double.NaN;
-        Invalidate();
     }
 
-    int Changes(int identity)
+    public int Changes(int identity)
     {
         int count;
         return changes.TryGetValue(identity, out count) ? count : 0;
     }
 
-    static Color IdentityColour(int identity)
+    /// <summary>Returns how much of the ring of an identity that just moved to another track is left, from one to zero.</summary>
+    public double Flash(int identity)
     {
-        return identity >= 0 ? Palette[identity % Palette.Length] : Color.FromArgb(150, 150, 150);
+        int remaining;
+        return flashes.TryGetValue(identity, out remaining) ? (double)remaining / FlashUpdates : 0;
+    }
+
+    public string Header(IdentityTrackCollection current)
+    {
+        if (current == null) return "waiting for tracks";
+        return string.Format(CultureInfo.InvariantCulture, "frame {0}{1}   epoch {2}   {3} tracks",
+            current.FrameId >= 0 ? current.FrameId : updates,
+            double.IsNaN(current.Timestamp) || double.IsNaN(startTime) ? string.Empty : string.Format(CultureInfo.InvariantCulture, "   {0:F2} s", current.Timestamp - startTime),
+            current.Epoch, current.Count(t => t.TrackId >= 0));
+    }
+}
+
+/// <summary>
+/// The table under the image of IdentityTrackVisualizer: each identity's state, confidence, track, cameras,
+/// votes and the number of times it moved to another track.
+/// </summary>
+class IdentityTrackTable : Control
+{
+    const string Columns = "identity     state    conf  track  cameras  votes  changes";
+    static readonly Color TextColor = Color.FromArgb(235, 235, 235);
+    static readonly Color DimColor = Color.FromArgb(150, 150, 150);
+    readonly DrawingFont font = new DrawingFont("Consolas", 8.25f);
+    readonly List<Row> rows = new List<Row>();
+    string header = "waiting for tracks";
+
+    class Row
+    {
+        public string Text;
+        public Color Color;
+        public bool Lost;
+    }
+
+    public IdentityTrackTable()
+    {
+        DoubleBuffered = true;
+        BackColor = Color.FromArgb(45, 45, 48);
+        Height = TableHeight(0);
+    }
+
+    int LineHeight
+    {
+        get { return font.Height + 1; }
+    }
+
+    int TableHeight(int rowCount)
+    {
+        return 8 + LineHeight * (rowCount > 0 ? rowCount + 2 : 1);
+    }
+
+    public void SetTracks(IdentityTrackCollection tracks, IdentityTrackHistory history)
+    {
+        header = history.Header(tracks);
+        rows.Clear();
+        if (tracks != null)
+        {
+            foreach (var t in tracks.Where(t => t.IdentityIndex >= 0).OrderBy(t => t.IdentityIndex))
+            {
+                var name = t.Identity.Length > 0 ? t.Identity : t.IdentityIndex.ToString(CultureInfo.InvariantCulture);
+                var color = IdentityTrackRenderer.IdentityColor(t.IdentityIndex);
+                rows.Add(new Row
+                {
+                    Text = string.Format(CultureInfo.InvariantCulture, "{0,-12} {1,-8} {2,4:F2}  {3,5}  {4,-7}  {5,5}  {6,7}",
+                        name.Length > 12 ? name.Substring(0, 12) : name,
+                        t.State,
+                        t.IdentityConfidence,
+                        t.TrackId >= 0 ? t.TrackId.ToString(CultureInfo.InvariantCulture) : "-",
+                        string.Join(" ", t.Cameras.Select(c => c.ToString(CultureInfo.InvariantCulture)).ToArray()),
+                        t.Votes,
+                        history.Changes(t.IdentityIndex)),
+                    Color = Color.FromArgb((int)color.Val2, (int)color.Val1, (int)color.Val0),
+                    Lost = t.State == TrackState.Lost
+                });
+            }
+        }
+
+        var height = TableHeight(rows.Count);
+        if (Height != height) Height = height;
+        Invalidate();
     }
 
     protected override void OnPaint(PaintEventArgs e)
     {
-        Render(e.Graphics, ClientRectangle);
-    }
-
-    /// <summary>Draws the current tracks into the given bounds.</summary>
-    public void Render(Graphics graphics, Rectangle bounds)
-    {
-        graphics.SmoothingMode = SmoothingMode.AntiAlias;
-        graphics.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
-        using (var background = new SolidBrush(BackColor)) graphics.FillRectangle(background, bounds);
-
-        // The canvas fills the bounds as far as its aspect allows.
-        var scale = Math.Min((bounds.Width - 2f * Border) / CanvasWidth, (bounds.Height - 2f * Border) / CanvasHeight);
-        if (scale <= 0) return;
-        var origin = new PointF(
-            bounds.X + (bounds.Width - CanvasWidth * scale) / 2,
-            bounds.Y + (bounds.Height - CanvasHeight * scale) / 2);
-        Func<double, double, PointF> map = (x, y) => new PointF(origin.X + (float)x * scale, origin.Y + (float)y * scale);
-        var canvas = new RectangleF(origin, new SizeF(CanvasWidth * scale, CanvasHeight * scale));
-
-        DrawFloor(graphics, canvas, map, scale);
-        if (current == null)
+        base.OnPaint(e);
+        var graphics = e.Graphics;
+        graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+        graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
+        var lineHeight = LineHeight;
+        var y = 4f;
+        using (var text = new System.Drawing.SolidBrush(TextColor))
+        using (var dim = new System.Drawing.SolidBrush(DimColor))
         {
-            DrawText(graphics, "Waiting for tracks", map(Arena.X + 40, Arena.Y + 40), Color.White);
-            return;
-        }
-
-        if (settings.ShowTrails) DrawTrails(graphics, map, scale);
-
-        // Markers first, then their labels, placed so they cover neither a marker, another label nor the table.
-        var radius = Math.Max(BodyRadius * scale, 5f);
-        var occupied = new List<RectangleF>();
-        var labels = new List<PendingLabel>();
-        var shown = current.Where(t => !double.IsNaN(t.X) && (t.IdentityIndex >= 0 || settings.ShowUnassigned)).ToList();
-        foreach (var track in shown.OrderBy(t => t.IdentityIndex >= 0))
-        {
-            var centre = map(track.X, track.Y);
-            var text = track.IdentityIndex >= 0 ? DrawIdentity(graphics, track, centre, radius, scale) : DrawUnassigned(graphics, track, centre, radius);
-            labels.Add(new PendingLabel { Text = text, Centre = centre, Radius = radius, Colour = track.IdentityIndex >= 0 ? IdentityColour(track.IdentityIndex) : Color.FromArgb(220, 220, 220) });
-            occupied.Add(new RectangleF(centre.X - radius, centre.Y - radius, 2 * radius, 2 * radius));
-        }
-
-        if (settings.ShowTable)
-        {
-            var table = DrawTable(graphics, canvas, shown.Select(t => map(t.X, t.Y)).ToList());
-            if (!table.IsEmpty) occupied.Add(table);
-        }
-
-        var header = string.Format(CultureInfo.InvariantCulture, "frame {0}{1}   epoch {2}   {3} tracks",
-            current.FrameId >= 0 ? current.FrameId : updates,
-            double.IsNaN(current.Timestamp) || double.IsNaN(startTime) ? string.Empty : string.Format(CultureInfo.InvariantCulture, "   {0:F2} s", current.Timestamp - startTime),
-            current.Epoch, current.Count(t => t.TrackId >= 0));
-        var headerPosition = new PointF(canvas.X + 6, canvas.Bottom - labelFont.GetHeight(graphics) - 6);
-        occupied.Add(DrawText(graphics, header, headerPosition, Color.White));
-
-        foreach (var label in labels)
-        {
-            PlaceLabel(graphics, label, Rectangle.Round(canvas), occupied);
-        }
-    }
-
-    void DrawFloor(Graphics graphics, RectangleF canvas, Func<double, double, PointF> map, float scale)
-    {
-        var arena = new RectangleF(map(Arena.X, Arena.Y), new SizeF(Arena.Width * scale, Arena.Height * scale));
-        var image = FloorImage();
-        if (image != null)
-        {
-            graphics.InterpolationMode = InterpolationMode.Bilinear;
-            graphics.DrawImage(image, canvas);
-        }
-        else
-        {
-            using (var margin = new SolidBrush(Color.FromArgb(95, 95, 100))) graphics.FillRectangle(margin, canvas);
-            using (var floor = new SolidBrush(Color.FromArgb(205, 205, 205))) graphics.FillRectangle(floor, arena);
-            using (var grid = new Pen(Color.FromArgb(180, 180, 180)))
+            graphics.DrawString(header, font, dim, 8, y);
+            if (rows.Count == 0) return;
+            y += lineHeight;
+            graphics.DrawString(Columns, font, text, 26, y);
+            foreach (var row in rows)
             {
-                for (float x = 500; x < Arena.Right; x += 500) graphics.DrawLine(grid, map(x, Arena.Top), map(x, Arena.Bottom));
-                for (float y = 500; y < Arena.Bottom; y += 500) graphics.DrawLine(grid, map(Arena.Left, y), map(Arena.Right, y));
+                y += lineHeight;
+                using (var swatch = new System.Drawing.SolidBrush(row.Color)) graphics.FillEllipse(swatch, 8, y + 2, lineHeight - 4, lineHeight - 4);
+                graphics.DrawString(row.Text, font, row.Lost ? dim : text, 26, y);
             }
         }
-        using (var outline = new Pen(Color.FromArgb(120, 255, 255, 255), 1.5f)) graphics.DrawRectangle(outline, arena.X, arena.Y, arena.Width, arena.Height);
-    }
-
-    Image FloorImage()
-    {
-        var path = settings.FloorImagePath ?? string.Empty;
-        if (path != floorImagePath)
-        {
-            floorImagePath = path;
-            if (floorImage != null) floorImage.Dispose();
-            floorImage = null;
-            if (path.Length > 0 && File.Exists(path))
-            {
-                try
-                {
-                    // Copied, so the file isn't locked while the visualizer is open.
-                    using (var stream = File.OpenRead(path))
-                    using (var loaded = Image.FromStream(stream))
-                    {
-                        floorImage = new Bitmap(loaded);
-                    }
-                }
-                catch (ArgumentException) { }
-                catch (IOException) { }
-            }
-        }
-        return floorImage;
-    }
-
-    void DrawTrails(Graphics graphics, Func<double, double, PointF> map, float scale)
-    {
-        foreach (var entry in trails)
-        {
-            var colour = IdentityColour(entry.Key);
-            using (var pen = new Pen(Color.FromArgb(170, colour), Math.Max(2f, 12 * scale)))
-            {
-                pen.LineJoin = LineJoin.Round;
-                var segment = new List<PointF>();
-                foreach (var point in entry.Value.Concat(new[] { Break }))
-                {
-                    if (float.IsNaN(point.X))
-                    {
-                        if (segment.Count > 1) graphics.DrawLines(pen, segment.ToArray());
-                        segment.Clear();
-                    }
-                    else segment.Add(map(point.X, point.Y));
-                }
-            }
-        }
-    }
-
-    // Draws an identity's marker and returns its label.
-    string DrawIdentity(Graphics graphics, IdentityTrack track, PointF centre, float radius, float scale)
-    {
-        var colour = IdentityColour(track.IdentityIndex);
-        var circle = new RectangleF(centre.X - radius, centre.Y - radius, 2 * radius, 2 * radius);
-        string status;
-        if (track.State == TrackState.Lost)
-        {
-            using (var pen = new Pen(colour, 2f) { DashStyle = DashStyle.Dash }) graphics.DrawEllipse(pen, circle);
-            status = track.LostSeconds > 0 ? string.Format(CultureInfo.InvariantCulture, "lost {0:F1} s", track.LostSeconds) : "lost";
-        }
-        else
-        {
-            using (var fill = new SolidBrush(colour)) graphics.FillEllipse(fill, circle);
-            if (track.State == TrackState.Merged)
-            {
-                using (var pen = new Pen(Color.White, 2f) { DashStyle = DashStyle.Dot }) graphics.DrawEllipse(pen, circle);
-                status = track.GroupId >= 0 ? "merged, group " + track.GroupId.ToString(CultureInfo.InvariantCulture) : "merged";
-            }
-            else
-            {
-                using (var pen = new Pen(Color.White, 1.5f)) graphics.DrawEllipse(pen, circle);
-                status = track.IdentityConfidence.ToString("F2", CultureInfo.InvariantCulture);
-            }
-
-            var vx = track.VelocityX * VelocitySeconds * scale;
-            var vy = track.VelocityY * VelocitySeconds * scale;
-            if (vx * vx + vy * vy > radius * radius)
-            {
-                using (var pen = new Pen(Color.White, 2f) { EndCap = LineCap.ArrowAnchor })
-                {
-                    graphics.DrawLine(pen, centre, new PointF(centre.X + (float)vx, centre.Y + (float)vy));
-                }
-            }
-        }
-
-        int flash;
-        if (flashes.TryGetValue(track.IdentityIndex, out flash))
-        {
-            // The identity just moved to another track: a ring that fades out.
-            using (var pen = new Pen(Color.FromArgb(255 * flash / FlashUpdates, 255, 255, 0), 3f))
-            {
-                graphics.DrawEllipse(pen, circle.X - 6, circle.Y - 6, circle.Width + 12, circle.Height + 12);
-            }
-        }
-
-        var name = track.Identity.Length > 0 ? track.Identity : track.IdentityIndex.ToString(CultureInfo.InvariantCulture);
-        return name + "  " + status;
-    }
-
-    // Draws the marker of a track that holds no identity and returns its label.
-    static string DrawUnassigned(Graphics graphics, IdentityTrack track, PointF centre, float radius)
-    {
-        var circle = new RectangleF(centre.X - radius, centre.Y - radius, 2 * radius, 2 * radius);
-        using (var fill = new SolidBrush(Color.FromArgb(120, 150, 150, 150))) graphics.FillEllipse(fill, circle);
-        using (var pen = new Pen(Color.FromArgb(200, 200, 200), 1.5f) { DashStyle = DashStyle.Dash }) graphics.DrawEllipse(pen, circle);
-        return string.Format(CultureInfo.InvariantCulture, "track {0}{1}", track.TrackId, track.State == TrackState.Lost ? " lost" : string.Empty);
-    }
-
-    // Draws the table of identities in the corner of the canvas with the fewest animals and returns its bounds.
-    RectangleF DrawTable(Graphics graphics, RectangleF canvas, List<PointF> animals)
-    {
-        var rows = current.Where(t => t.IdentityIndex >= 0).OrderBy(t => t.IdentityIndex).ToList();
-        if (rows.Count == 0) return RectangleF.Empty;
-        var lines = new List<string> { "identity     state    conf  track  cameras  votes  changes" };
-        foreach (var t in rows)
-        {
-            var name = t.Identity.Length > 0 ? t.Identity : t.IdentityIndex.ToString(CultureInfo.InvariantCulture);
-            lines.Add(string.Format(CultureInfo.InvariantCulture, "{0,-12} {1,-8} {2,4:F2}  {3,5}  {4,-7}  {5,5}  {6,7}",
-                name.Length > 12 ? name.Substring(0, 12) : name,
-                t.State,
-                t.IdentityConfidence,
-                t.TrackId >= 0 ? t.TrackId.ToString(CultureInfo.InvariantCulture) : "-",
-                string.Join(" ", t.Cameras.Select(c => c.ToString(CultureInfo.InvariantCulture)).ToArray()),
-                t.Votes,
-                Changes(t.IdentityIndex)));
-        }
-
-        var lineHeight = tableFont.GetHeight(graphics) + 1;
-        var size = new SizeF(lines.Max(l => graphics.MeasureString(l, tableFont).Width) + 30, lineHeight * lines.Count + 8);
-        var corners = new[]
-        {
-            new PointF(canvas.X + 8, canvas.Y + 8),
-            new PointF(canvas.Right - size.Width - 8, canvas.Y + 8),
-            new PointF(canvas.Right - size.Width - 8, canvas.Bottom - size.Height - 30),
-            new PointF(canvas.X + 8, canvas.Bottom - size.Height - 30)
-        };
-        var box = corners
-            .Select(c => new RectangleF(c, size))
-            .OrderBy(r => animals.Count(a => RectangleF.Inflate(r, 30, 30).Contains(a)))
-            .First();
-
-        using (var shade = new SolidBrush(Color.FromArgb(185, 25, 25, 28))) graphics.FillRectangle(shade, box);
-        using (var text = new SolidBrush(Color.FromArgb(235, 235, 235)))
-        {
-            graphics.DrawString(lines[0], tableFont, text, box.X + 26, box.Y + 4);
-        }
-        for (int i = 0; i < rows.Count; i++)
-        {
-            var y = box.Y + 4 + lineHeight * (i + 1);
-            using (var swatch = new SolidBrush(IdentityColour(rows[i].IdentityIndex))) graphics.FillEllipse(swatch, box.X + 8, y + 2, lineHeight - 4, lineHeight - 4);
-            using (var rowText = new SolidBrush(rows[i].State == TrackState.Lost ? Color.FromArgb(150, 150, 150) : Color.FromArgb(235, 235, 235)))
-            {
-                graphics.DrawString(lines[i + 1], tableFont, rowText, box.X + 26, y);
-            }
-        }
-        return box;
-    }
-
-    // Puts a label beside its marker where it covers nothing already drawn and stays on the canvas, trying
-    // right then left, above then below, then further down.
-    void PlaceLabel(Graphics graphics, PendingLabel label, Rectangle canvas, List<RectangleF> occupied)
-    {
-        var size = graphics.MeasureString(label.Text, labelFont);
-        var gap = label.Radius + 4;
-        var candidates = new List<PointF>();
-        foreach (var dy in new[] { -gap - size.Height / 2, gap - size.Height / 2, gap + size.Height / 2, -gap - 1.5f * size.Height, gap + 1.5f * size.Height })
-        {
-            candidates.Add(new PointF(label.Centre.X + gap, label.Centre.Y + dy));
-            candidates.Add(new PointF(label.Centre.X - gap - size.Width, label.Centre.Y + dy));
-        }
-
-        var chosen = candidates[0];
-        var best = int.MaxValue;
-        foreach (var candidate in candidates)
-        {
-            var box = new RectangleF(candidate.X - 2, candidate.Y - 1, size.Width + 2, size.Height + 1);
-            var penalty = occupied.Count(r => r.IntersectsWith(box)) + (canvas.Contains(Rectangle.Round(box)) ? 0 : 100);
-            if (penalty < best)
-            {
-                best = penalty;
-                chosen = candidate;
-                if (penalty == 0) break;
-            }
-        }
-        occupied.Add(DrawText(graphics, label.Text, chosen, label.Colour));
-    }
-
-    RectangleF DrawText(Graphics graphics, string text, PointF position, Color colour)
-    {
-        var size = graphics.MeasureString(text, labelFont);
-        var box = new RectangleF(position.X - 2, position.Y - 1, size.Width + 2, size.Height + 1);
-        using (var shade = new SolidBrush(Color.FromArgb(170, 20, 20, 22))) graphics.FillRectangle(shade, box);
-        using (var brush = new SolidBrush(colour)) graphics.DrawString(text, labelFont, brush, position);
-        return box;
-    }
-
-    ContextMenuStrip CreateMenu()
-    {
-        var menu = new ContextMenuStrip();
-        var trailsItem = new ToolStripMenuItem("Paths") { CheckOnClick = true };
-        trailsItem.CheckedChanged += delegate { settings.ShowTrails = trailsItem.Checked; Invalidate(); };
-        var lengthItem = new ToolStripMenuItem("Path length");
-        foreach (var length in new[] { 40, 80, 200, 400, 1000 })
-        {
-            var updatesInPath = length;
-            var item = new ToolStripMenuItem(string.Format(CultureInfo.InvariantCulture, "{0} updates ({1:0.#} s at 40 Hz)", length, length / 40.0)) { Tag = length };
-            item.Click += delegate { settings.TrailLength = updatesInPath; Invalidate(); };
-            lengthItem.DropDownItems.Add(item);
-        }
-        var unassignedItem = new ToolStripMenuItem("Tracks without identity") { CheckOnClick = true };
-        unassignedItem.CheckedChanged += delegate { settings.ShowUnassigned = unassignedItem.Checked; Invalidate(); };
-        var tableItem = new ToolStripMenuItem("Table") { CheckOnClick = true };
-        tableItem.CheckedChanged += delegate { settings.ShowTable = tableItem.Checked; Invalidate(); };
-        var floorItem = new ToolStripMenuItem("Floor image...");
-        floorItem.Click += delegate
-        {
-            using (var dialog = new OpenFileDialog { Filter = "Images|*.png;*.jpg;*.bmp|All files|*.*" })
-            {
-                if (dialog.ShowDialog(this) == DialogResult.OK)
-                {
-                    settings.FloorImagePath = dialog.FileName;
-                    Invalidate();
-                }
-            }
-        };
-        var noFloorItem = new ToolStripMenuItem("No floor image");
-        noFloorItem.Click += delegate { settings.FloorImagePath = string.Empty; Invalidate(); };
-        var resetItem = new ToolStripMenuItem("Clear paths and counts");
-        resetItem.Click += delegate { Reset(); };
-
-        menu.Items.AddRange(new ToolStripItem[]
-        {
-            trailsItem, lengthItem, unassignedItem, tableItem, new ToolStripSeparator(), floorItem, noFloorItem, new ToolStripSeparator(), resetItem
-        });
-        menu.Opening += delegate
-        {
-            trailsItem.Checked = settings.ShowTrails;
-            unassignedItem.Checked = settings.ShowUnassigned;
-            tableItem.Checked = settings.ShowTable;
-            foreach (ToolStripMenuItem item in lengthItem.DropDownItems)
-            {
-                item.Checked = (int)item.Tag == settings.TrailLength;
-            }
-        };
-        return menu;
     }
 
     protected override void Dispose(bool disposing)
     {
-        if (disposing)
-        {
-            if (floorImage != null) floorImage.Dispose();
-            labelFont.Dispose();
-            tableFont.Dispose();
-            if (ContextMenuStrip != null) ContextMenuStrip.Dispose();
-        }
+        if (disposing) font.Dispose();
         base.Dispose(disposing);
     }
 }
