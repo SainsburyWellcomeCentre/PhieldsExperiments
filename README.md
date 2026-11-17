@@ -46,9 +46,9 @@ In case the configuration of the environment ever gets corrupted, you can revert
 
 The `Deploy.ps1` contains scripts which can be installed in each local experiment repository to ensure that the environment is reset to the correct configuration whenever the repository switches to a different experimental branch. To install run the `Deploy.cmd` script from the `root` folder.
 
-### Data Transfer
+### System Startup
 
-Data is continuously transferred to a CEPH partition by calling Robocopy from a scheduled task which runs periodically every hour. This task should be started as soon as the computer boots. For each experiment, a script to launch the periodic task is provided with the following naming convention `SystemStartup-<machine_name>.cmd`. This script should be installed in a new computer using the following steps:
+For each experiment, a `SystemStartup-<machine_name>.cmd` script starts the Harp clock synchronizer, the camera controller and their heartbeat monitors when the computer boots. This script should be installed in a new computer using the following steps:
 
   1. Press `Windows logo key + R` and type `shell:startup` in the run dialog box to open the system startup folder.
   2. Drag the script to the startup folder while holding the `Alt` key to create a new startup link.
@@ -56,9 +56,7 @@ Data is continuously transferred to a CEPH partition by calling Robocopy from a 
   4. Add `-p Synchronize=true` to the end of the `Target` string to ensure the Harp clock is reset to UTC time on system boot.
   5. Click the `OK` button to save the modified link properties.
 
-The raw data folder name in CEPH should be the acquisition machine computer name.
-
-The remote CEPH folder can be subsequently mounted on the local machine as a network drive and accessed as part of the file system.
+Data transfer to remote storage will use Globus, which is set up in a separate repository.
 
 ### Experiment Workflows
 

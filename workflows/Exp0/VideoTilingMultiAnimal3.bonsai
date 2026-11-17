@@ -672,33 +672,33 @@
                                 </Expression>
                                 <Expression xsi:type="Combinator">
                                   <Combinator xsi:type="aeon-video:VideoFileCapture">
-                                    <aeon-video:FileName>Y:\phields\data\raw\PHIELDSCRADL01\social_0.0\2026-10-17T131702Z\South\South_2026-10-19T16-00-00.avi</aeon-video:FileName>
+                                    <aeon-video:FileName>D:\phields\data\raw\PHIELDSCRADL01\social_0.0\2026-10-17T131702Z\South\South_2026-10-19T14-00-00.avi</aeon-video:FileName>
                                   </Combinator>
                                 </Expression>
                                 <Expression xsi:type="WorkflowOutput" />
                                 <Expression xsi:type="Combinator">
                                   <Combinator xsi:type="StringProperty">
-                                    <Value>Y:\phields\data\raw\PHIELDSCRADL01\social_0.0\2026-10-17T131702Z\Center\Center_2026-10-19T16-00-00.avi</Value>
+                                    <Value>D:\phields\data\raw\PHIELDSCRADL01\social_0.0\2026-10-17T131702Z\Center\Center_2026-10-19T14-00-00.avi</Value>
                                   </Combinator>
                                 </Expression>
                                 <Expression xsi:type="Combinator">
                                   <Combinator xsi:type="StringProperty">
-                                    <Value>Y:\phields\data\raw\PHIELDSCRADL01\social_0.0\2026-10-17T131702Z\West\West_2026-10-19T16-00-00.avi</Value>
+                                    <Value>D:\phields\data\raw\PHIELDSCRADL01\social_0.0\2026-10-17T131702Z\West\West_2026-10-19T14-00-00.avi</Value>
                                   </Combinator>
                                 </Expression>
                                 <Expression xsi:type="Combinator">
                                   <Combinator xsi:type="StringProperty">
-                                    <Value>Y:\phields\data\raw\PHIELDSCRADL01\social_0.0\2026-10-17T131702Z\East\East_2026-10-19T16-00-00.avi</Value>
+                                    <Value>D:\phields\data\raw\PHIELDSCRADL01\social_0.0\2026-10-17T131702Z\East\East_2026-10-19T14-00-00.avi</Value>
                                   </Combinator>
                                 </Expression>
                                 <Expression xsi:type="Combinator">
                                   <Combinator xsi:type="StringProperty">
-                                    <Value>Y:\phields\data\raw\PHIELDSCRADL01\social_0.0\2026-10-17T131702Z\North\North_2026-10-19T16-00-00.avi</Value>
+                                    <Value>D:\phields\data\raw\PHIELDSCRADL01\social_0.0\2026-10-17T131702Z\North\North_2026-10-19T14-00-00.avi</Value>
                                   </Combinator>
                                 </Expression>
                                 <Expression xsi:type="Combinator">
                                   <Combinator xsi:type="StringProperty">
-                                    <Value>Y:\phields\data\raw\PHIELDSCRADL01\social_0.0\2026-10-17T131702Z\South\South_2026-10-19T16-00-00.avi</Value>
+                                    <Value>D:\phields\data\raw\PHIELDSCRADL01\social_0.0\2026-10-17T131702Z\South\South_2026-10-19T14-00-00.avi</Value>
                                   </Combinator>
                                 </Expression>
                                 <Expression xsi:type="Combinator">

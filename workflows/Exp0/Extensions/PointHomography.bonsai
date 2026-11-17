@@ -15,7 +15,7 @@
         <Property Name="VignetteImageFileName" />
       </Expression>
       <Expression xsi:type="IncludeWorkflow" Path="Extensions\NormalizedThreshold.bonsai">
-        <VignetteImageFileName>Y:\phields\config\4mmVigneting2.png</VignetteImageFileName>
+        <VignetteImageFileName>D:\phields\config\4mmVigneting2.png</VignetteImageFileName>
         <ThresholdValue>100</ThresholdValue>
       </Expression>
       <Expression xsi:type="rx:PublishSubject">

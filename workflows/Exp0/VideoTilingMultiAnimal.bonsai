@@ -674,33 +674,33 @@
                               </Expression>
                               <Expression xsi:type="Combinator">
                                 <Combinator xsi:type="aeon-video:VideoFileCapture">
-                                  <aeon-video:FileName>Y:\phields\data\raw\PHIELDSCRADL01\social_0.0\2026-10-17T131702Z\South\South_2026-10-19T16-00-00.avi</aeon-video:FileName>
+                                  <aeon-video:FileName>D:\phields\data\raw\PHIELDSCRADL01\social_0.0\2026-10-17T131702Z\South\South_2026-10-19T14-00-00.avi</aeon-video:FileName>
                                 </Combinator>
                               </Expression>
                               <Expression xsi:type="WorkflowOutput" />
                               <Expression xsi:type="Combinator">
                                 <Combinator xsi:type="StringProperty">
-                                  <Value>Y:\phields\data\raw\PHIELDSCRADL01\social_0.0\2026-10-17T131702Z\Center\Center_2026-10-19T16-00-00.avi</Value>
+                                  <Value>D:\phields\data\raw\PHIELDSCRADL01\social_0.0\2026-10-17T131702Z\Center\Center_2026-10-19T14-00-00.avi</Value>
                                 </Combinator>
                               </Expression>
                               <Expression xsi:type="Combinator">
                                 <Combinator xsi:type="StringProperty">
-                                  <Value>Y:\phields\data\raw\PHIELDSCRADL01\social_0.0\2026-10-17T131702Z\West\West_2026-10-19T16-00-00.avi</Value>
+                                  <Value>D:\phields\data\raw\PHIELDSCRADL01\social_0.0\2026-10-17T131702Z\West\West_2026-10-19T14-00-00.avi</Value>
                                 </Combinator>
                               </Expression>
                               <Expression xsi:type="Combinator">
                                 <Combinator xsi:type="StringProperty">
-                                  <Value>Y:\phields\data\raw\PHIELDSCRADL01\social_0.0\2026-10-17T131702Z\East\East_2026-10-19T16-00-00.avi</Value>
+                                  <Value>D:\phields\data\raw\PHIELDSCRADL01\social_0.0\2026-10-17T131702Z\East\East_2026-10-19T14-00-00.avi</Value>
                                 </Combinator>
                               </Expression>
                               <Expression xsi:type="Combinator">
                                 <Combinator xsi:type="StringProperty">
-                                  <Value>Y:\phields\data\raw\PHIELDSCRADL01\social_0.0\2026-10-17T131702Z\North\North_2026-10-19T16-00-00.avi</Value>
+                                  <Value>D:\phields\data\raw\PHIELDSCRADL01\social_0.0\2026-10-17T131702Z\North\North_2026-10-19T14-00-00.avi</Value>
                                 </Combinator>
                               </Expression>
                               <Expression xsi:type="Combinator">
                                 <Combinator xsi:type="StringProperty">
-                                  <Value>Y:\phields\data\raw\PHIELDSCRADL01\social_0.0\2026-10-17T131702Z\South\South_2026-10-19T16-00-00.avi</Value>
+                                  <Value>D:\phields\data\raw\PHIELDSCRADL01\social_0.0\2026-10-17T131702Z\South\South_2026-10-19T14-00-00.avi</Value>
                                 </Combinator>
                               </Expression>
                               <Expression xsi:type="Combinator">
@@ -1665,7 +1665,7 @@
                                     </Expression>
                                     <Expression xsi:type="IncludeWorkflow" Path="Extensions\PointHomography.bonsai">
                                       <ThresholdValue>100</ThresholdValue>
-                                      <VignetteImageFileName>Y:\phields\config\4mmVigneting2.png</VignetteImageFileName>
+                                      <VignetteImageFileName>D:\phields\config\4mmVigneting2.png</VignetteImageFileName>
                                       <MinArea>500</MinArea>
                                       <MaxArea>20000</MaxArea>
                                       <MinDensity>0.7</MinDensity>
@@ -1771,7 +1771,7 @@
                                       <Selector>Image</Selector>
                                     </Expression>
                                     <Expression xsi:type="IncludeWorkflow" Path="Extensions\NormalizedImage.bonsai">
-                                      <VignetteImageFileName>Y:\phields\config\4mmVigneting2.png</VignetteImageFileName>
+                                      <VignetteImageFileName>D:\phields\config\4mmVigneting2.png</VignetteImageFileName>
                                     </Expression>
                                     <Expression xsi:type="ExternalizedMapping">
                                       <Property Name="Source" />
@@ -2379,7 +2379,7 @@
                                         <Selector>Image</Selector>
                                       </Expression>
                                       <Expression xsi:type="IncludeWorkflow" Path="Extensions\NormalizedImage.bonsai">
-                                        <VignetteImageFileName>Y:\phields\config\4mmVigneting2.png</VignetteImageFileName>
+                                        <VignetteImageFileName>D:\phields\config\4mmVigneting2.png</VignetteImageFileName>
                                       </Expression>
                                       <Expression xsi:type="ExternalizedMapping">
                                         <Property Name="Source" />
@@ -2672,7 +2672,7 @@
                                   <Property Name="VignetteImageFileName" />
                                 </Expression>
                                 <Expression xsi:type="IncludeWorkflow" Path="Extensions\VignetteGain.bonsai">
-                                  <VignetteImageFileName>Y:\phields\config\4mmVigneting2.png</VignetteImageFileName>
+                                  <VignetteImageFileName>D:\phields\config\4mmVigneting2.png</VignetteImageFileName>
                                 </Expression>
                                 <Expression xsi:type="Combinator">
                                   <Combinator xsi:type="rx:WithLatestFrom" />
@@ -2869,7 +2869,7 @@
                         <Y>210</Y>
                       </Point2f>
                     </Destination>
-                    <VignetteImageFileName>Y:\phields\config\4mmVigneting2.png</VignetteImageFileName>
+                    <VignetteImageFileName>D:\phields\config\4mmVigneting2.png</VignetteImageFileName>
                     <OutputImage>NorthImage</OutputImage>
                     <ThresholdValue>100</ThresholdValue>
                     <OutputSubject>cam1</OutputSubject>
@@ -3004,7 +3004,7 @@
                         <Y>1390</Y>
                       </Point2f>
                     </Destination>
-                    <VignetteImageFileName>Y:\phields\config\4mmVigneting2.png</VignetteImageFileName>
+                    <VignetteImageFileName>D:\phields\config\4mmVigneting2.png</VignetteImageFileName>
                     <OutputImage>SouthImage</OutputImage>
                     <ThresholdValue>100</ThresholdValue>
                     <OutputSubject>cam2</OutputSubject>
@@ -3139,7 +3139,7 @@
                         <Y>100</Y>
                       </Point2f>
                     </Destination>
-                    <VignetteImageFileName>Y:\phields\config\4mmVigneting2.png</VignetteImageFileName>
+                    <VignetteImageFileName>D:\phields\config\4mmVigneting2.png</VignetteImageFileName>
                     <OutputImage>WestImage</OutputImage>
                     <ThresholdValue>100</ThresholdValue>
                     <OutputSubject>cam3</OutputSubject>
@@ -3274,7 +3274,7 @@
                         <Y>100</Y>
                       </Point2f>
                     </Destination>
-                    <VignetteImageFileName>Y:\phields\config\4mmVigneting2.png</VignetteImageFileName>
+                    <VignetteImageFileName>D:\phields\config\4mmVigneting2.png</VignetteImageFileName>
                     <OutputImage>EastImage</OutputImage>
                     <ThresholdValue>100</ThresholdValue>
                     <OutputSubject>cam4</OutputSubject>

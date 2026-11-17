@@ -193,7 +193,7 @@
                     <Property Name="VignetteImageFileName" />
                   </Expression>
                   <Expression xsi:type="IncludeWorkflow" Path="Extensions\NormalizedImage.bonsai">
-                    <VignetteImageFileName>Y:\phields\config\4mmVigneting2.png</VignetteImageFileName>
+                    <VignetteImageFileName>D:\phields\config\4mmVigneting2.png</VignetteImageFileName>
                   </Expression>
                   <Expression xsi:type="ExternalizedMapping">
                     <Property Name="Source" />
@@ -297,7 +297,7 @@
                     <Property Name="VignetteImageFileName" />
                   </Expression>
                   <Expression xsi:type="IncludeWorkflow" Path="Extensions\VignetteGain.bonsai">
-                    <VignetteImageFileName>Y:\phields\config\4mmVigneting2.png</VignetteImageFileName>
+                    <VignetteImageFileName>D:\phields\config\4mmVigneting2.png</VignetteImageFileName>
                   </Expression>
                   <Expression xsi:type="MulticastSubject">
                     <Name>Vignette</Name>

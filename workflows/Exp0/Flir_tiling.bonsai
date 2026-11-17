@@ -755,7 +755,7 @@
                           <Y>100</Y>
                         </Point2f>
                       </Destination>
-                      <VignetteImageFileName>Y:\phields\config\4mmVigneting2.png</VignetteImageFileName>
+                      <VignetteImageFileName>D:\phields\config\4mmVigneting2.png</VignetteImageFileName>
                       <OutputImage>WestImage</OutputImage>
                       <ThresholdValue>100</ThresholdValue>
                       <OutputSubject>cam0</OutputSubject>
@@ -981,7 +981,7 @@
                                     </Expression>
                                     <Expression xsi:type="IncludeWorkflow" Path="Extensions\PointHomography.bonsai">
                                       <ThresholdValue>100</ThresholdValue>
-                                      <VignetteImageFileName>Y:\phields\config\4mmVigneting2.png</VignetteImageFileName>
+                                      <VignetteImageFileName>D:\phields\config\4mmVigneting2.png</VignetteImageFileName>
                                       <MinArea>500</MinArea>
                                       <MaxArea>20000</MaxArea>
                                       <MinDensity>0.7</MinDensity>
@@ -1087,7 +1087,7 @@
                                       <Selector>Image</Selector>
                                     </Expression>
                                     <Expression xsi:type="IncludeWorkflow" Path="Extensions\NormalizedImage.bonsai">
-                                      <VignetteImageFileName>Y:\phields\config\4mmVigneting2.png</VignetteImageFileName>
+                                      <VignetteImageFileName>D:\phields\config\4mmVigneting2.png</VignetteImageFileName>
                                     </Expression>
                                     <Expression xsi:type="ExternalizedMapping">
                                       <Property Name="Source" />
@@ -1393,7 +1393,7 @@
                         <Y>210</Y>
                       </Point2f>
                     </Destination>
-                    <VignetteImageFileName>Y:\phields\config\4mmVigneting2.png</VignetteImageFileName>
+                    <VignetteImageFileName>D:\phields\config\4mmVigneting2.png</VignetteImageFileName>
                     <OutputImage>NorthImage</OutputImage>
                     <ThresholdValue>100</ThresholdValue>
                     <OutputSubject>cam1</OutputSubject>
@@ -1528,7 +1528,7 @@
                         <Y>1390</Y>
                       </Point2f>
                     </Destination>
-                    <VignetteImageFileName>Y:\phields\config\4mmVigneting2.png</VignetteImageFileName>
+                    <VignetteImageFileName>D:\phields\config\4mmVigneting2.png</VignetteImageFileName>
                     <OutputImage>SouthImage</OutputImage>
                     <ThresholdValue>100</ThresholdValue>
                     <OutputSubject>cam2</OutputSubject>
@@ -1663,7 +1663,7 @@
                         <Y>100</Y>
                       </Point2f>
                     </Destination>
-                    <VignetteImageFileName>Y:\phields\config\4mmVigneting2.png</VignetteImageFileName>
+                    <VignetteImageFileName>D:\phields\config\4mmVigneting2.png</VignetteImageFileName>
                     <OutputImage>WestImage</OutputImage>
                     <ThresholdValue>100</ThresholdValue>
                     <OutputSubject>cam3</OutputSubject>
@@ -1798,7 +1798,7 @@
                         <Y>100</Y>
                       </Point2f>
                     </Destination>
-                    <VignetteImageFileName>Y:\phields\config\4mmVigneting2.png</VignetteImageFileName>
+                    <VignetteImageFileName>D:\phields\config\4mmVigneting2.png</VignetteImageFileName>
                     <OutputImage>EastImage</OutputImage>
                     <ThresholdValue>100</ThresholdValue>
                     <OutputSubject>cam4</OutputSubject>

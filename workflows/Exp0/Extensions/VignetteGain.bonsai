@@ -13,7 +13,7 @@
       </Expression>
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="cv:LoadImage">
-          <cv:FileName>Y:\phields\config\4mmVigneting2.png</cv:FileName>
+          <cv:FileName>D:\phields\config\4mmVigneting2.png</cv:FileName>
           <cv:Mode>Grayscale</cv:Mode>
         </Combinator>
       </Expression>

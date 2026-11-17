@@ -98,7 +98,7 @@
             <Y>0</Y>
           </Point2f>
         </Destination>
-        <VignetteImageFileName>Y:\phields\config\4mmVigneting2.png</VignetteImageFileName>
+        <VignetteImageFileName>D:\phields\config\4mmVigneting2.png</VignetteImageFileName>
         <OutputImage>NorthImage</OutputImage>
         <ThresholdValue>145</ThresholdValue>
         <OutputSubject>cam1</OutputSubject>
@@ -189,7 +189,7 @@
             <Y>0</Y>
           </Point2f>
         </Destination>
-        <VignetteImageFileName>Y:\phields\config\4mmVigneting2.png</VignetteImageFileName>
+        <VignetteImageFileName>D:\phields\config\4mmVigneting2.png</VignetteImageFileName>
         <OutputImage>EastImage</OutputImage>
         <ThresholdValue>145</ThresholdValue>
         <OutputSubject>cam2</OutputSubject>
@@ -280,7 +280,7 @@
             <Y>0</Y>
           </Point2f>
         </Destination>
-        <VignetteImageFileName>Y:\phields\config\4mmVigneting2.png</VignetteImageFileName>
+        <VignetteImageFileName>D:\phields\config\4mmVigneting2.png</VignetteImageFileName>
         <OutputImage>WestImage</OutputImage>
         <ThresholdValue>145</ThresholdValue>
         <OutputSubject>cam3</OutputSubject>
@@ -371,7 +371,7 @@
             <Y>0</Y>
           </Point2f>
         </Destination>
-        <VignetteImageFileName>Y:\phields\config\4mmVigneting2.png</VignetteImageFileName>
+        <VignetteImageFileName>D:\phields\config\4mmVigneting2.png</VignetteImageFileName>
         <OutputImage>TopImage</OutputImage>
         <ThresholdValue>145</ThresholdValue>
         <OutputSubject>cam4</OutputSubject>
