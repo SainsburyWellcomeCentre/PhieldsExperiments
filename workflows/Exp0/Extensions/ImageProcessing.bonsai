@@ -8,6 +8,7 @@
                  xmlns:p2="clr-namespace:Bonsai.MultiAnimalTracking;assembly=Bonsai.MultiAnimalTracking"
                  xmlns:cv="clr-namespace:Bonsai.Vision;assembly=Bonsai.Vision"
                  xmlns:zg="clr-namespace:Bonsai.Gui.ZedGraph;assembly=Bonsai.Gui.ZedGraph"
+                 xmlns:dsp="clr-namespace:Bonsai.Dsp;assembly=Bonsai.Dsp"
                  xmlns:p3="clr-namespace:;assembly=Extensions"
                  xmlns="https://bonsai-rx.org/2018/workflow">
   <Workflow>
@@ -23,42 +24,6 @@
       </Expression>
       <Expression xsi:type="rx:PublishSubject" TypeArguments="sys:Tuple(harp:Timestamped(p1:IplImage),harp:Timestamped(sys:Tuple(p2:ViewObservationCollection,cv:Contours)))">
         <rx:Name>cam3</rx:Name>
-      </Expression>
-      <Expression xsi:type="Disable">
-        <Builder xsi:type="IncludeWorkflow" Path="Extensions\GetCameras.bonsai">
-          <CameraName>FlirNE</CameraName>
-          <RegistrationCamera>ReferenceImage</RegistrationCamera>
-        </Builder>
-      </Expression>
-      <Expression xsi:type="Disable">
-        <Builder xsi:type="IncludeWorkflow" Path="Extensions\GetCameras.bonsai">
-          <CameraName>FlirNW</CameraName>
-          <RegistrationCamera>ReferenceImage</RegistrationCamera>
-        </Builder>
-      </Expression>
-      <Expression xsi:type="Disable">
-        <Builder xsi:type="IncludeWorkflow" Path="Extensions\GetCameras.bonsai">
-          <CameraName>FlirE</CameraName>
-          <RegistrationCamera>ReferenceImage</RegistrationCamera>
-        </Builder>
-      </Expression>
-      <Expression xsi:type="Disable">
-        <Builder xsi:type="IncludeWorkflow" Path="Extensions\GetCameras.bonsai">
-          <CameraName>FlirW</CameraName>
-          <RegistrationCamera>ReferenceImage</RegistrationCamera>
-        </Builder>
-      </Expression>
-      <Expression xsi:type="Disable">
-        <Builder xsi:type="IncludeWorkflow" Path="Extensions\GetCameras.bonsai">
-          <CameraName>FlirSE</CameraName>
-          <RegistrationCamera>ReferenceImage</RegistrationCamera>
-        </Builder>
-      </Expression>
-      <Expression xsi:type="Disable">
-        <Builder xsi:type="IncludeWorkflow" Path="Extensions\GetCameras.bonsai">
-          <CameraName>FlirSW</CameraName>
-          <RegistrationCamera>ReferenceImage</RegistrationCamera>
-        </Builder>
       </Expression>
       <Expression xsi:type="rx:PublishSubject" TypeArguments="sys:Tuple(harp:Timestamped(p1:IplImage),harp:Timestamped(sys:Tuple(p2:ViewObservationCollection,cv:Contours)))">
         <rx:Name>cam4</rx:Name>
@@ -293,89 +258,6 @@
         <zg:Min xsi:nil="true" />
         <zg:Max xsi:nil="true" />
       </Expression>
-      <Expression xsi:type="ExternalizedMapping">
-        <Property Name="CameraName" DisplayName="StreamId1" />
-      </Expression>
-      <Expression xsi:type="ExternalizedMapping">
-        <Property Name="RegistrationCamera" />
-      </Expression>
-      <Expression xsi:type="IncludeWorkflow" Path="Extensions\GetCameras.bonsai">
-        <CameraName>FlirNE</CameraName>
-        <RegistrationCamera>ReferenceImage</RegistrationCamera>
-      </Expression>
-      <Expression xsi:type="IncludeWorkflow" Path="Extensions\CameraPipeline3.bonsai">
-        <CameraName>FlirNE</CameraName>
-        <VignetteImageFileName>4mmVigneting2.png</VignetteImageFileName>
-        <Source>
-          <Point2f>
-            <X>0</X>
-            <Y>0</Y>
-          </Point2f>
-          <Point2f>
-            <X>0</X>
-            <Y>2048</Y>
-          </Point2f>
-          <Point2f>
-            <X>2448</X>
-            <Y>2048</Y>
-          </Point2f>
-          <Point2f>
-            <X>2448</X>
-            <Y>0</Y>
-          </Point2f>
-        </Source>
-        <Destination>
-          <Point2f>
-            <X>-5</X>
-            <Y>-5.5</Y>
-          </Point2f>
-          <Point2f>
-            <X>-5</X>
-            <Y>2646.5</Y>
-          </Point2f>
-          <Point2f>
-            <X>3165</X>
-            <Y>2646.5</Y>
-          </Point2f>
-          <Point2f>
-            <X>3165</X>
-            <Y>-5.5</Y>
-          </Point2f>
-        </Destination>
-        <Size>
-          <Width>0</Width>
-          <Height>0</Height>
-        </Size>
-        <ThresholdValue>110</ThresholdValue>
-        <MinArea>500</MinArea>
-        <MaxArea>20000</MaxArea>
-        <MinDensity>0.7</MinDensity>
-        <MaxElongation>5</MaxElongation>
-        <ModelPath>..\..\model\identity.onnx</ModelPath>
-        <ExecutionProvider>Cuda</ExecutionProvider>
-        <ThreadCount>2</ThreadCount>
-        <CudaLibraryPath>..\..\.bonsai\Libraries\cuda12</CudaLibraryPath>
-        <Interval>1</Interval>
-        <Phase>4</Phase>
-        <CameraIndex>1</CameraIndex>
-        <EdgeBand>100</EdgeBand>
-        <FloorMargin>0</FloorMargin>
-        <VoteDistance>0</VoteDistance>
-        <RejectClass>4</RejectClass>
-        <OutputSubject>cam1</OutputSubject>
-        <RegistrationCamera>ReferenceImage</RegistrationCamera>
-      </Expression>
-      <Expression xsi:type="Combinator">
-        <Combinator xsi:type="rx:BufferTime">
-          <rx:TimeSpan>PT1S</rx:TimeSpan>
-        </Combinator>
-      </Expression>
-      <Expression xsi:type="MemberSelector">
-        <Selector>Count</Selector>
-      </Expression>
-      <Expression xsi:type="ExternalizedMapping">
-        <Property Name="CameraName" DisplayName="StreamId2" />
-      </Expression>
       <Expression xsi:type="IncludeWorkflow" Path="Extensions\GetCameras.bonsai">
         <CameraName>FlirNW</CameraName>
         <RegistrationCamera>ReferenceImage</RegistrationCamera>
@@ -385,38 +267,38 @@
         <VignetteImageFileName>4mmVigneting2.png</VignetteImageFileName>
         <Source>
           <Point2f>
-            <X>0</X>
-            <Y>0</Y>
+            <X>168.3</X>
+            <Y>293.4634</Y>
           </Point2f>
           <Point2f>
-            <X>0</X>
-            <Y>2048</Y>
+            <X>172.125</X>
+            <Y>1773.26831</Y>
           </Point2f>
           <Point2f>
-            <X>2448</X>
-            <Y>2048</Y>
+            <X>2211.80615</X>
+            <Y>1782.63416</Y>
           </Point2f>
           <Point2f>
-            <X>2448</X>
-            <Y>0</Y>
+            <X>2213.71875</X>
+            <Y>296.585358</Y>
           </Point2f>
         </Source>
         <Destination>
           <Point2f>
-            <X>2275</X>
-            <Y>-5.5</Y>
+            <X>106.2</X>
+            <Y>284.9</Y>
           </Point2f>
           <Point2f>
-            <X>2275</X>
-            <Y>2646.5</Y>
+            <X>106.2</X>
+            <Y>2134.6</Y>
           </Point2f>
           <Point2f>
-            <X>5445</X>
-            <Y>2646.5</Y>
+            <X>2670.2</X>
+            <Y>2134.6</Y>
           </Point2f>
           <Point2f>
-            <X>5445</X>
-            <Y>-5.5</Y>
+            <X>2670.2</X>
+            <Y>284.9</Y>
           </Point2f>
         </Destination>
         <Size>
@@ -443,57 +325,53 @@
         <RegistrationCamera>ReferenceImage</RegistrationCamera>
       </Expression>
       <Expression xsi:type="Combinator">
-        <Combinator xsi:type="rx:BufferTime">
-          <rx:TimeSpan>PT1S</rx:TimeSpan>
+        <Combinator xsi:type="dsp:ConvertScale">
+          <dsp:Depth xsi:nil="true" />
+          <dsp:Scale>0.5</dsp:Scale>
+          <dsp:Shift>0</dsp:Shift>
         </Combinator>
       </Expression>
-      <Expression xsi:type="MemberSelector">
-        <Selector>Count</Selector>
-      </Expression>
-      <Expression xsi:type="ExternalizedMapping">
-        <Property Name="CameraName" DisplayName="StreamId3" />
-      </Expression>
       <Expression xsi:type="IncludeWorkflow" Path="Extensions\GetCameras.bonsai">
-        <CameraName>FlirE</CameraName>
+        <CameraName>FlirNE</CameraName>
         <RegistrationCamera>ReferenceImage</RegistrationCamera>
       </Expression>
       <Expression xsi:type="IncludeWorkflow" Path="Extensions\CameraPipeline3.bonsai">
-        <CameraName>FlirE</CameraName>
+        <CameraName>FlirNE</CameraName>
         <VignetteImageFileName>4mmVigneting2.png</VignetteImageFileName>
         <Source>
           <Point2f>
-            <X>0</X>
-            <Y>0</Y>
+            <X>145.35</X>
+            <Y>302.829254</Y>
           </Point2f>
           <Point2f>
-            <X>0</X>
-            <Y>2048</Y>
+            <X>132.918747</X>
+            <Y>1812.29272</Y>
           </Point2f>
           <Point2f>
-            <X>2448</X>
-            <Y>2048</Y>
+            <X>2189.8125</X>
+            <Y>1795.122</Y>
           </Point2f>
           <Point2f>
-            <X>2448</X>
-            <Y>0</Y>
+            <X>2194.59375</X>
+            <Y>337.170746</Y>
           </Point2f>
         </Source>
         <Destination>
           <Point2f>
-            <X>-5</X>
-            <Y>1824.5</Y>
+            <X>2670.2</X>
+            <Y>284.9</Y>
           </Point2f>
           <Point2f>
-            <X>-5</X>
-            <Y>4476.5</Y>
+            <X>2670.2</X>
+            <Y>2134.6</Y>
           </Point2f>
           <Point2f>
-            <X>3165</X>
-            <Y>4476.5</Y>
+            <X>5234.2</X>
+            <Y>2134.6</Y>
           </Point2f>
           <Point2f>
-            <X>3165</X>
-            <Y>1824.5</Y>
+            <X>5234.2</X>
+            <Y>284.9</Y>
           </Point2f>
         </Destination>
         <Size>
@@ -511,24 +389,20 @@
         <CudaLibraryPath>..\..\.bonsai\Libraries\cuda12</CudaLibraryPath>
         <Interval>1</Interval>
         <Phase>4</Phase>
-        <CameraIndex>3</CameraIndex>
+        <CameraIndex>1</CameraIndex>
         <EdgeBand>100</EdgeBand>
         <FloorMargin>0</FloorMargin>
         <VoteDistance>0</VoteDistance>
         <RejectClass>4</RejectClass>
-        <OutputSubject>cam3</OutputSubject>
+        <OutputSubject>cam1</OutputSubject>
         <RegistrationCamera>ReferenceImage</RegistrationCamera>
       </Expression>
       <Expression xsi:type="Combinator">
-        <Combinator xsi:type="rx:BufferTime">
-          <rx:TimeSpan>PT1S</rx:TimeSpan>
+        <Combinator xsi:type="dsp:ConvertScale">
+          <dsp:Depth xsi:nil="true" />
+          <dsp:Scale>0.5</dsp:Scale>
+          <dsp:Shift>0</dsp:Shift>
         </Combinator>
-      </Expression>
-      <Expression xsi:type="MemberSelector">
-        <Selector>Count</Selector>
-      </Expression>
-      <Expression xsi:type="ExternalizedMapping">
-        <Property Name="CameraName" DisplayName="StreamId4" />
       </Expression>
       <Expression xsi:type="IncludeWorkflow" Path="Extensions\GetCameras.bonsai">
         <CameraName>FlirW</CameraName>
@@ -539,38 +413,38 @@
         <VignetteImageFileName>4mmVigneting2.png</VignetteImageFileName>
         <Source>
           <Point2f>
-            <X>0</X>
-            <Y>0</Y>
+            <X>2257.7063</X>
+            <Y>1815.41467</Y>
           </Point2f>
           <Point2f>
-            <X>0</X>
-            <Y>2048</Y>
+            <X>2267.2688</X>
+            <Y>368.390259</Y>
           </Point2f>
           <Point2f>
-            <X>2448</X>
-            <Y>2048</Y>
+            <X>232.368744</X>
+            <Y>329.365845</Y>
           </Point2f>
           <Point2f>
-            <X>2448</X>
-            <Y>0</Y>
+            <X>218.981247</X>
+            <Y>1820.09753</Y>
           </Point2f>
         </Source>
         <Destination>
           <Point2f>
-            <X>2275</X>
-            <Y>1824.5</Y>
+            <X>106.2</X>
+            <Y>2134.6</Y>
           </Point2f>
           <Point2f>
-            <X>2275</X>
-            <Y>4476.5</Y>
+            <X>106.2</X>
+            <Y>3984.3</Y>
           </Point2f>
           <Point2f>
-            <X>5445</X>
-            <Y>4476.5</Y>
+            <X>2670.2</X>
+            <Y>3984.3</Y>
           </Point2f>
           <Point2f>
-            <X>5445</X>
-            <Y>1824.5</Y>
+            <X>2670.2</X>
+            <Y>2134.6</Y>
           </Point2f>
         </Destination>
         <Size>
@@ -597,54 +471,53 @@
         <RegistrationCamera>ReferenceImage</RegistrationCamera>
       </Expression>
       <Expression xsi:type="Combinator">
-        <Combinator xsi:type="rx:BufferTime">
-          <rx:TimeSpan>PT1S</rx:TimeSpan>
+        <Combinator xsi:type="dsp:ConvertScale">
+          <dsp:Depth xsi:nil="true" />
+          <dsp:Scale>0.5</dsp:Scale>
+          <dsp:Shift>0</dsp:Shift>
         </Combinator>
       </Expression>
-      <Expression xsi:type="MemberSelector">
-        <Selector>Count</Selector>
-      </Expression>
       <Expression xsi:type="IncludeWorkflow" Path="Extensions\GetCameras.bonsai">
-        <CameraName>FlirSE</CameraName>
+        <CameraName>FlirE</CameraName>
         <RegistrationCamera>ReferenceImage</RegistrationCamera>
       </Expression>
       <Expression xsi:type="IncludeWorkflow" Path="Extensions\CameraPipeline3.bonsai">
-        <CameraName>FlirSE</CameraName>
+        <CameraName>FlirE</CameraName>
         <VignetteImageFileName>4mmVigneting2.png</VignetteImageFileName>
         <Source>
           <Point2f>
-            <X>0</X>
-            <Y>0</Y>
+            <X>2277.7876</X>
+            <Y>1809.17078</Y>
           </Point2f>
           <Point2f>
-            <X>0</X>
-            <Y>2048</Y>
+            <X>2273.00635</X>
+            <Y>343.414642</Y>
           </Point2f>
           <Point2f>
-            <X>2448</X>
-            <Y>2048</Y>
+            <X>236.193756</X>
+            <Y>329.365845</Y>
           </Point2f>
           <Point2f>
-            <X>2448</X>
-            <Y>0</Y>
+            <X>230.456253</X>
+            <Y>1818.53662</Y>
           </Point2f>
         </Source>
         <Destination>
           <Point2f>
-            <X>-5</X>
-            <Y>3654.5</Y>
+            <X>2670.2</X>
+            <Y>2134.6</Y>
           </Point2f>
           <Point2f>
-            <X>-5</X>
-            <Y>6306.5</Y>
+            <X>2670.2</X>
+            <Y>3984.3</Y>
           </Point2f>
           <Point2f>
-            <X>3165</X>
-            <Y>6306.5</Y>
+            <X>5234.2</X>
+            <Y>3984.3</Y>
           </Point2f>
           <Point2f>
-            <X>3165</X>
-            <Y>3654.5</Y>
+            <X>5234.2</X>
+            <Y>2134.6</Y>
           </Point2f>
         </Destination>
         <Size>
@@ -662,21 +535,20 @@
         <CudaLibraryPath>..\..\.bonsai\Libraries\cuda12</CudaLibraryPath>
         <Interval>1</Interval>
         <Phase>4</Phase>
-        <CameraIndex>5</CameraIndex>
+        <CameraIndex>3</CameraIndex>
         <EdgeBand>100</EdgeBand>
         <FloorMargin>0</FloorMargin>
         <VoteDistance>0</VoteDistance>
         <RejectClass>4</RejectClass>
-        <OutputSubject>cam5</OutputSubject>
+        <OutputSubject>cam3</OutputSubject>
         <RegistrationCamera>ReferenceImage</RegistrationCamera>
       </Expression>
       <Expression xsi:type="Combinator">
-        <Combinator xsi:type="rx:BufferTime">
-          <rx:TimeSpan>PT1S</rx:TimeSpan>
+        <Combinator xsi:type="dsp:ConvertScale">
+          <dsp:Depth xsi:nil="true" />
+          <dsp:Scale>0.5</dsp:Scale>
+          <dsp:Shift>0</dsp:Shift>
         </Combinator>
-      </Expression>
-      <Expression xsi:type="MemberSelector">
-        <Selector>Count</Selector>
       </Expression>
       <Expression xsi:type="IncludeWorkflow" Path="Extensions\GetCameras.bonsai">
         <CameraName>FlirSW</CameraName>
@@ -687,38 +559,38 @@
         <VignetteImageFileName>4mmVigneting2.png</VignetteImageFileName>
         <Source>
           <Point2f>
-            <X>0</X>
-            <Y>0</Y>
+            <X>2253.88135</X>
+            <Y>2024.58533</Y>
           </Point2f>
           <Point2f>
-            <X>0</X>
-            <Y>2048</Y>
+            <X>2253.88135</X>
+            <Y>580.6829</Y>
           </Point2f>
           <Point2f>
-            <X>2448</X>
-            <Y>2048</Y>
+            <X>209.418747</X>
+            <Y>565.0732</Y>
           </Point2f>
           <Point2f>
-            <X>2448</X>
-            <Y>0</Y>
+            <X>201.768753</X>
+            <Y>2068.29272</Y>
           </Point2f>
         </Source>
         <Destination>
           <Point2f>
-            <X>2275</X>
-            <Y>3654.5</Y>
+            <X>106.2</X>
+            <Y>3984.3</Y>
           </Point2f>
           <Point2f>
-            <X>2275</X>
-            <Y>6306.5</Y>
+            <X>106.2</X>
+            <Y>5834.1</Y>
           </Point2f>
           <Point2f>
-            <X>5445</X>
-            <Y>6306.5</Y>
+            <X>2670.2</X>
+            <Y>5834.1</Y>
           </Point2f>
           <Point2f>
-            <X>5445</X>
-            <Y>3654.5</Y>
+            <X>2670.2</X>
+            <Y>3984.3</Y>
           </Point2f>
         </Destination>
         <Size>
@@ -745,309 +617,446 @@
         <RegistrationCamera>ReferenceImage</RegistrationCamera>
       </Expression>
       <Expression xsi:type="Combinator">
-        <Combinator xsi:type="rx:BufferTime">
-          <rx:TimeSpan>PT1S</rx:TimeSpan>
+        <Combinator xsi:type="dsp:ConvertScale">
+          <dsp:Depth xsi:nil="true" />
+          <dsp:Scale>0.5</dsp:Scale>
+          <dsp:Shift>0</dsp:Shift>
         </Combinator>
       </Expression>
-      <Expression xsi:type="MemberSelector">
-        <Selector>Count</Selector>
+      <Expression xsi:type="IncludeWorkflow" Path="Extensions\GetCameras.bonsai">
+        <CameraName>FlirSE</CameraName>
+        <RegistrationCamera>ReferenceImage</RegistrationCamera>
+      </Expression>
+      <Expression xsi:type="IncludeWorkflow" Path="Extensions\CameraPipeline3.bonsai">
+        <CameraName>FlirSE</CameraName>
+        <VignetteImageFileName>4mmVigneting2.png</VignetteImageFileName>
+        <Source>
+          <Point2f>
+            <X>2266.3125</X>
+            <Y>2021.46338</Y>
+          </Point2f>
+          <Point2f>
+            <X>2279.7</X>
+            <Y>583.8049</Y>
+          </Point2f>
+          <Point2f>
+            <X>221.85</X>
+            <Y>572.878052</Y>
+          </Point2f>
+          <Point2f>
+            <X>246.7125</X>
+            <Y>2087.02441</Y>
+          </Point2f>
+        </Source>
+        <Destination>
+          <Point2f>
+            <X>2670.2</X>
+            <Y>3984.3</Y>
+          </Point2f>
+          <Point2f>
+            <X>2670.2</X>
+            <Y>5834.1</Y>
+          </Point2f>
+          <Point2f>
+            <X>5234.2</X>
+            <Y>5834.1</Y>
+          </Point2f>
+          <Point2f>
+            <X>5234.2</X>
+            <Y>3984.3</Y>
+          </Point2f>
+        </Destination>
+        <Size>
+          <Width>0</Width>
+          <Height>0</Height>
+        </Size>
+        <ThresholdValue>110</ThresholdValue>
+        <MinArea>500</MinArea>
+        <MaxArea>20000</MaxArea>
+        <MinDensity>0.7</MinDensity>
+        <MaxElongation>5</MaxElongation>
+        <ModelPath>..\..\model\identity.onnx</ModelPath>
+        <ExecutionProvider>Cuda</ExecutionProvider>
+        <ThreadCount>2</ThreadCount>
+        <CudaLibraryPath>..\..\.bonsai\Libraries\cuda12</CudaLibraryPath>
+        <Interval>1</Interval>
+        <Phase>4</Phase>
+        <CameraIndex>5</CameraIndex>
+        <EdgeBand>100</EdgeBand>
+        <FloorMargin>0</FloorMargin>
+        <VoteDistance>0</VoteDistance>
+        <RejectClass>4</RejectClass>
+        <OutputSubject>cam5</OutputSubject>
+        <RegistrationCamera>ReferenceImage</RegistrationCamera>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="dsp:ConvertScale">
+          <dsp:Depth xsi:nil="true" />
+          <dsp:Scale>0.5</dsp:Scale>
+          <dsp:Shift>0</dsp:Shift>
+        </Combinator>
       </Expression>
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="rx:CombineLatest" />
       </Expression>
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="rx:SampleInterval">
-          <rx:Interval>PT0.05S</rx:Interval>
+          <rx:Interval>PT1S</rx:Interval>
         </Combinator>
       </Expression>
-      <Expression xsi:type="zg:RollingGraphBuilder">
-        <zg:SymbolType>None</zg:SymbolType>
-        <zg:LineWidth>1</zg:LineWidth>
-        <zg:CurveSettings />
-        <zg:Capacity xsi:nil="true" />
-        <zg:Min xsi:nil="true" />
-        <zg:Max xsi:nil="true" />
+      <Expression xsi:type="rx:SelectMany">
+        <Workflow>
+          <Nodes>
+            <Expression xsi:type="WorkflowInput">
+              <Name>Source1</Name>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:Take">
+                <rx:Count>1</rx:Count>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="Add" />
+            <Expression xsi:type="WorkflowOutput" />
+          </Nodes>
+          <Edges>
+            <Edge From="0" To="1" Label="Source1" />
+            <Edge From="1" To="2" Label="Source1" />
+            <Edge From="2" To="3" Label="Source1" />
+          </Edges>
+        </Workflow>
       </Expression>
-      <Expression xsi:type="SubscribeSubject">
-        <Name>cam1</Name>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="SubscribeSubject">
+          <Name>cam1</Name>
+        </Builder>
       </Expression>
-      <Expression xsi:type="MemberSelector">
-        <Selector>Item2.Value.Item1</Selector>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="MemberSelector">
+          <Selector>Item2.Value.Item1</Selector>
+        </Builder>
       </Expression>
-      <Expression xsi:type="SubscribeSubject">
-        <Name>cam2</Name>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="SubscribeSubject">
+          <Name>cam2</Name>
+        </Builder>
       </Expression>
-      <Expression xsi:type="MemberSelector">
-        <Selector>Item2.Value.Item1</Selector>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="MemberSelector">
+          <Selector>Item2.Value.Item1</Selector>
+        </Builder>
       </Expression>
-      <Expression xsi:type="SubscribeSubject">
-        <Name>cam3</Name>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="SubscribeSubject">
+          <Name>cam3</Name>
+        </Builder>
       </Expression>
-      <Expression xsi:type="MemberSelector">
-        <Selector>Item2.Value.Item1</Selector>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="MemberSelector">
+          <Selector>Item2.Value.Item1</Selector>
+        </Builder>
       </Expression>
-      <Expression xsi:type="SubscribeSubject">
-        <Name>cam4</Name>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="SubscribeSubject">
+          <Name>cam4</Name>
+        </Builder>
       </Expression>
-      <Expression xsi:type="MemberSelector">
-        <Selector>Item2.Value.Item1</Selector>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="MemberSelector">
+          <Selector>Item2.Value.Item1</Selector>
+        </Builder>
       </Expression>
-      <Expression xsi:type="Combinator">
-        <Combinator xsi:type="rx:Zip" />
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="Combinator">
+          <Combinator xsi:type="rx:Zip" />
+        </Builder>
       </Expression>
-      <Expression xsi:type="Combinator">
-        <Combinator xsi:type="rx:ObserveOn">
-          <rx:Scheduler>TaskPoolScheduler</rx:Scheduler>
-        </Combinator>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="Combinator">
+          <Combinator xsi:type="rx:ObserveOn">
+            <rx:Scheduler>TaskPoolScheduler</rx:Scheduler>
+          </Combinator>
+        </Builder>
       </Expression>
-      <Expression xsi:type="Combinator">
-        <Combinator xsi:type="p3:TrackAnimalIdentities">
-          <p3:AnimalCount>4</p3:AnimalCount>
-          <p3:ReferenceArea>0</p3:ReferenceArea>
-          <p3:ConfidenceThreshold>0.6</p3:ConfidenceThreshold>
-          <p3:MinimumQuality>0.05</p3:MinimumQuality>
-          <p3:MeasurementNoise>10</p3:MeasurementNoise>
-          <p3:AccelerationNoise>1000</p3:AccelerationNoise>
-          <p3:InitialSpeedNoise>200</p3:InitialSpeedNoise>
-          <p3:GateThreshold>9.21</p3:GateThreshold>
-          <p3:MaximumDistance>250</p3:MaximumDistance>
-          <p3:LostSpeed>200</p3:LostSpeed>
-          <p3:RevivalDelay>2</p3:RevivalDelay>
-          <p3:MergeFactor>3</p3:MergeFactor>
-          <p3:SmallFactor>0.5</p3:SmallFactor>
-          <p3:JoinOverlap>0.5</p3:JoinOverlap>
-          <p3:ClusterDistance>60</p3:ClusterDistance>
-          <p3:FrameRate>50</p3:FrameRate>
-          <p3:HeadingSpeed>50</p3:HeadingSpeed>
-          <p3:ClassNames>animal_0,animal_1,animal_2,animal_3,other</p3:ClassNames>
-          <p3:Identities>0,1,2,3</p3:Identities>
-          <p3:VoteHalfLife>1</p3:VoteHalfLife>
-          <p3:VoteMargin>4</p3:VoteMargin>
-          <p3:MinimumVoteMass>2</p3:MinimumVoteMass>
-          <p3:VoteIsolation>80</p3:VoteIsolation>
-          <p3:VoteAreaFactor>1.3</p3:VoteAreaFactor>
-          <p3:VoteMinimumSpeed>25</p3:VoteMinimumSpeed>
-          <p3:SlowVoteWeight>1</p3:SlowVoteWeight>
-          <p3:Combination>Mean</p3:Combination>
-          <p3:ForgetAfter>2</p3:ForgetAfter>
-        </Combinator>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="Combinator">
+          <Combinator xsi:type="p3:TrackAnimalIdentities">
+            <p3:AnimalCount>4</p3:AnimalCount>
+            <p3:ReferenceArea>0</p3:ReferenceArea>
+            <p3:ConfidenceThreshold>0.6</p3:ConfidenceThreshold>
+            <p3:MinimumQuality>0.05</p3:MinimumQuality>
+            <p3:MeasurementNoise>10</p3:MeasurementNoise>
+            <p3:AccelerationNoise>1000</p3:AccelerationNoise>
+            <p3:InitialSpeedNoise>200</p3:InitialSpeedNoise>
+            <p3:GateThreshold>9.21</p3:GateThreshold>
+            <p3:MaximumDistance>250</p3:MaximumDistance>
+            <p3:LostSpeed>200</p3:LostSpeed>
+            <p3:RevivalDelay>2</p3:RevivalDelay>
+            <p3:MergeFactor>3</p3:MergeFactor>
+            <p3:SmallFactor>0.5</p3:SmallFactor>
+            <p3:JoinOverlap>0.5</p3:JoinOverlap>
+            <p3:ClusterDistance>60</p3:ClusterDistance>
+            <p3:FrameRate>50</p3:FrameRate>
+            <p3:HeadingSpeed>50</p3:HeadingSpeed>
+            <p3:ClassNames>animal_0,animal_1,animal_2,animal_3,other</p3:ClassNames>
+            <p3:Identities>0,1,2,3</p3:Identities>
+            <p3:VoteHalfLife>1</p3:VoteHalfLife>
+            <p3:VoteMargin>4</p3:VoteMargin>
+            <p3:MinimumVoteMass>2</p3:MinimumVoteMass>
+            <p3:VoteIsolation>80</p3:VoteIsolation>
+            <p3:VoteAreaFactor>1.3</p3:VoteAreaFactor>
+            <p3:VoteMinimumSpeed>25</p3:VoteMinimumSpeed>
+            <p3:SlowVoteWeight>1</p3:SlowVoteWeight>
+            <p3:Combination>Mean</p3:Combination>
+            <p3:ForgetAfter>2</p3:ForgetAfter>
+          </Combinator>
+        </Builder>
       </Expression>
-      <Expression xsi:type="SubscribeSubject">
-        <Name>cam1</Name>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="SubscribeSubject">
+          <Name>cam1</Name>
+        </Builder>
       </Expression>
-      <Expression xsi:type="MemberSelector">
-        <Selector>Item1.Value</Selector>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="MemberSelector">
+          <Selector>Item1.Value</Selector>
+        </Builder>
       </Expression>
-      <Expression xsi:type="SubscribeSubject">
-        <Name>cam2</Name>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="SubscribeSubject">
+          <Name>cam2</Name>
+        </Builder>
       </Expression>
-      <Expression xsi:type="MemberSelector">
-        <Selector>Item1.Value</Selector>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="MemberSelector">
+          <Selector>Item1.Value</Selector>
+        </Builder>
       </Expression>
-      <Expression xsi:type="SubscribeSubject">
-        <Name>cam3</Name>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="SubscribeSubject">
+          <Name>cam3</Name>
+        </Builder>
       </Expression>
-      <Expression xsi:type="MemberSelector">
-        <Selector>Item1.Value</Selector>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="MemberSelector">
+          <Selector>Item1.Value</Selector>
+        </Builder>
       </Expression>
-      <Expression xsi:type="SubscribeSubject">
-        <Name>cam4</Name>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="SubscribeSubject">
+          <Name>cam4</Name>
+        </Builder>
       </Expression>
-      <Expression xsi:type="MemberSelector">
-        <Selector>Item1.Value</Selector>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="MemberSelector">
+          <Selector>Item1.Value</Selector>
+        </Builder>
       </Expression>
-      <Expression xsi:type="Combinator">
-        <Combinator xsi:type="rx:Zip" />
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="Combinator">
+          <Combinator xsi:type="rx:Zip" />
+        </Builder>
       </Expression>
-      <Expression xsi:type="Combinator">
-        <Combinator xsi:type="rx:WithLatestFrom" />
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="Combinator">
+          <Combinator xsi:type="rx:WithLatestFrom" />
+        </Builder>
       </Expression>
-      <Expression xsi:type="SubscribeSubject">
-        <Name>cam1</Name>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="SubscribeSubject">
+          <Name>cam1</Name>
+        </Builder>
       </Expression>
-      <Expression xsi:type="MemberSelector">
-        <Selector>Item2.Value.Item2</Selector>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="MemberSelector">
+          <Selector>Item2.Value.Item2</Selector>
+        </Builder>
       </Expression>
-      <Expression xsi:type="SubscribeSubject">
-        <Name>cam2</Name>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="SubscribeSubject">
+          <Name>cam2</Name>
+        </Builder>
       </Expression>
-      <Expression xsi:type="MemberSelector">
-        <Selector>Item2.Value.Item2</Selector>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="MemberSelector">
+          <Selector>Item2.Value.Item2</Selector>
+        </Builder>
       </Expression>
-      <Expression xsi:type="SubscribeSubject">
-        <Name>cam3</Name>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="SubscribeSubject">
+          <Name>cam3</Name>
+        </Builder>
       </Expression>
-      <Expression xsi:type="MemberSelector">
-        <Selector>Item2.Value.Item2</Selector>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="MemberSelector">
+          <Selector>Item2.Value.Item2</Selector>
+        </Builder>
       </Expression>
-      <Expression xsi:type="SubscribeSubject">
-        <Name>cam4</Name>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="SubscribeSubject">
+          <Name>cam4</Name>
+        </Builder>
       </Expression>
-      <Expression xsi:type="MemberSelector">
-        <Selector>Item2.Value.Item2</Selector>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="MemberSelector">
+          <Selector>Item2.Value.Item2</Selector>
+        </Builder>
       </Expression>
-      <Expression xsi:type="Combinator">
-        <Combinator xsi:type="rx:Zip" />
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="Combinator">
+          <Combinator xsi:type="rx:Zip" />
+        </Builder>
       </Expression>
-      <Expression xsi:type="Combinator">
-        <Combinator xsi:type="rx:WithLatestFrom" />
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="Combinator">
+          <Combinator xsi:type="rx:WithLatestFrom" />
+        </Builder>
       </Expression>
-      <Expression xsi:type="p3:IdentityTrackViewBuilder">
-        <p3:ImageSelector />
-        <p3:ContourSelector />
-        <p3:TrackSelector />
-        <p3:Scale>1</p3:Scale>
-        <p3:DisplayScale>0.5</p3:DisplayScale>
-        <p3:MatchDistance>250</p3:MatchDistance>
-      </Expression>
-      <Expression xsi:type="SubscribeSubject">
-        <Name>ReferenceImage</Name>
-      </Expression>
-      <Expression xsi:type="Combinator">
-        <Combinator xsi:type="rx:WithLatestFrom" />
-      </Expression>
-      <Expression xsi:type="Combinator">
-        <Combinator xsi:type="p3:DrawIdentityTracks">
-          <p3:Thickness>4</p3:Thickness>
-          <p3:Radius>40</p3:Radius>
-          <p3:FontScale>1.5</p3:FontScale>
-          <p3:TrailLength>50</p3:TrailLength>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="p3:IdentityTrackViewBuilder">
+          <p3:ImageSelector />
+          <p3:ContourSelector />
+          <p3:TrackSelector />
           <p3:Scale>1</p3:Scale>
-          <p3:DrawUnassigned>false</p3:DrawUnassigned>
-        </Combinator>
+          <p3:DisplayScale>0.5</p3:DisplayScale>
+          <p3:MatchDistance>250</p3:MatchDistance>
+        </Builder>
       </Expression>
-      <Expression xsi:type="Combinator">
-        <Combinator xsi:type="cv:VideoWriter">
-          <cv:FileName>identity_tracked.avi</cv:FileName>
-          <cv:Suffix>None</cv:Suffix>
-          <cv:Buffered>true</cv:Buffered>
-          <cv:Overwrite>true</cv:Overwrite>
-          <cv:FourCC>FMP4</cv:FourCC>
-          <cv:FrameRate>20</cv:FrameRate>
-          <cv:FrameSize>
-            <cv:Width>0</cv:Width>
-            <cv:Height>0</cv:Height>
-          </cv:FrameSize>
-          <cv:ResizeInterpolation>NearestNeighbor</cv:ResizeInterpolation>
-        </Combinator>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="SubscribeSubject">
+          <Name>ReferenceImage</Name>
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="Combinator">
+          <Combinator xsi:type="rx:WithLatestFrom" />
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="Combinator">
+          <Combinator xsi:type="p3:DrawIdentityTracks">
+            <p3:Thickness>4</p3:Thickness>
+            <p3:Radius>40</p3:Radius>
+            <p3:FontScale>1.5</p3:FontScale>
+            <p3:TrailLength>50</p3:TrailLength>
+            <p3:Scale>1</p3:Scale>
+            <p3:DrawUnassigned>false</p3:DrawUnassigned>
+          </Combinator>
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="Combinator">
+          <Combinator xsi:type="cv:VideoWriter">
+            <cv:FileName>identity_tracked.avi</cv:FileName>
+            <cv:Suffix>None</cv:Suffix>
+            <cv:Buffered>true</cv:Buffered>
+            <cv:Overwrite>true</cv:Overwrite>
+            <cv:FourCC>FMP4</cv:FourCC>
+            <cv:FrameRate>20</cv:FrameRate>
+            <cv:FrameSize>
+              <cv:Width>0</cv:Width>
+              <cv:Height>0</cv:Height>
+            </cv:FrameSize>
+            <cv:ResizeInterpolation>NearestNeighbor</cv:ResizeInterpolation>
+          </Combinator>
+        </Builder>
       </Expression>
     </Nodes>
     <Edges>
+      <Edge From="7" To="8" Label="Source1" />
+      <Edge From="8" To="9" Label="Source1" />
+      <Edge From="9" To="11" Label="Source1" />
+      <Edge From="10" To="11" Label="Source2" />
+      <Edge From="11" To="12" Label="Source1" />
+      <Edge From="12" To="13" Label="Source1" />
       <Edge From="13" To="14" Label="Source1" />
       <Edge From="14" To="15" Label="Source1" />
-      <Edge From="15" To="17" Label="Source1" />
-      <Edge From="16" To="17" Label="Source2" />
+      <Edge From="16" To="17" Label="Source1" />
       <Edge From="17" To="18" Label="Source1" />
       <Edge From="18" To="19" Label="Source1" />
       <Edge From="19" To="20" Label="Source1" />
-      <Edge From="20" To="21" Label="Source1" />
+      <Edge From="20" To="46" Label="Source1" />
+      <Edge From="21" To="22" Label="Source1" />
       <Edge From="22" To="23" Label="Source1" />
       <Edge From="23" To="24" Label="Source1" />
       <Edge From="24" To="25" Label="Source1" />
-      <Edge From="25" To="26" Label="Source1" />
-      <Edge From="26" To="52" Label="Source1" />
+      <Edge From="25" To="46" Label="Source2" />
+      <Edge From="26" To="27" Label="Source1" />
       <Edge From="27" To="28" Label="Source1" />
       <Edge From="28" To="29" Label="Source1" />
       <Edge From="29" To="30" Label="Source1" />
-      <Edge From="30" To="31" Label="Source1" />
-      <Edge From="31" To="52" Label="Source2" />
+      <Edge From="30" To="46" Label="Source3" />
+      <Edge From="31" To="32" Label="Source1" />
       <Edge From="32" To="33" Label="Source1" />
       <Edge From="33" To="34" Label="Source1" />
       <Edge From="34" To="35" Label="Source1" />
-      <Edge From="35" To="36" Label="Source1" />
-      <Edge From="36" To="52" Label="Source3" />
+      <Edge From="35" To="46" Label="Source4" />
+      <Edge From="36" To="37" Label="Source1" />
       <Edge From="37" To="38" Label="Source1" />
       <Edge From="38" To="39" Label="Source1" />
       <Edge From="39" To="40" Label="Source1" />
-      <Edge From="40" To="41" Label="Source1" />
-      <Edge From="41" To="52" Label="Source4" />
+      <Edge From="40" To="46" Label="Source5" />
+      <Edge From="41" To="42" Label="Source1" />
       <Edge From="42" To="43" Label="Source1" />
       <Edge From="43" To="44" Label="Source1" />
       <Edge From="44" To="45" Label="Source1" />
-      <Edge From="45" To="46" Label="Source1" />
-      <Edge From="46" To="52" Label="Source5" />
+      <Edge From="45" To="46" Label="Source6" />
+      <Edge From="46" To="47" Label="Source1" />
       <Edge From="47" To="48" Label="Source1" />
-      <Edge From="48" To="49" Label="Source1" />
       <Edge From="49" To="50" Label="Source1" />
       <Edge From="50" To="51" Label="Source1" />
-      <Edge From="51" To="52" Label="Source6" />
+      <Edge From="51" To="67" Label="Source1" />
       <Edge From="52" To="53" Label="Source1" />
       <Edge From="53" To="54" Label="Source1" />
-      <Edge From="55" To="57" Label="Source1" />
-      <Edge From="55" To="58" Label="Source2" />
-      <Edge From="56" To="57" Label="Source2" />
-      <Edge From="56" To="58" Label="Source3" />
-      <Edge From="56" To="62" Label="Source2" />
-      <Edge From="56" To="63" Label="Source3" />
-      <Edge From="56" To="67" Label="Source2" />
-      <Edge From="56" To="72" Label="Source2" />
-      <Edge From="57" To="58" Label="Source1" />
+      <Edge From="54" To="67" Label="Source2" />
+      <Edge From="55" To="56" Label="Source1" />
+      <Edge From="56" To="57" Label="Source1" />
+      <Edge From="57" To="67" Label="Source3" />
       <Edge From="58" To="59" Label="Source1" />
       <Edge From="59" To="60" Label="Source1" />
-      <Edge From="60" To="84" Label="Source1" />
+      <Edge From="60" To="67" Label="Source4" />
       <Edge From="61" To="62" Label="Source1" />
-      <Edge From="61" To="63" Label="Source2" />
       <Edge From="62" To="63" Label="Source1" />
-      <Edge From="63" To="64" Label="Source1" />
+      <Edge From="63" To="67" Label="Source5" />
       <Edge From="64" To="65" Label="Source1" />
-      <Edge From="65" To="84" Label="Source2" />
-      <Edge From="66" To="67" Label="Source1" />
-      <Edge From="66" To="68" Label="Source2" />
+      <Edge From="65" To="66" Label="Source1" />
+      <Edge From="66" To="67" Label="Source6" />
       <Edge From="67" To="68" Label="Source1" />
       <Edge From="68" To="69" Label="Source1" />
-      <Edge From="69" To="70" Label="Source1" />
-      <Edge From="70" To="84" Label="Source3" />
-      <Edge From="71" To="72" Label="Source1" />
-      <Edge From="71" To="73" Label="Source2" />
+      <Edge From="70" To="71" Label="Source1" />
+      <Edge From="71" To="78" Label="Source1" />
       <Edge From="72" To="73" Label="Source1" />
-      <Edge From="73" To="74" Label="Source1" />
+      <Edge From="73" To="78" Label="Source2" />
       <Edge From="74" To="75" Label="Source1" />
-      <Edge From="75" To="84" Label="Source4" />
+      <Edge From="75" To="78" Label="Source3" />
       <Edge From="76" To="77" Label="Source1" />
-      <Edge From="77" To="78" Label="Source1" />
+      <Edge From="77" To="78" Label="Source4" />
       <Edge From="78" To="79" Label="Source1" />
-      <Edge From="79" To="84" Label="Source5" />
-      <Edge From="80" To="81" Label="Source1" />
+      <Edge From="79" To="80" Label="Source1" />
+      <Edge From="80" To="90" Label="Source1" />
+      <Edge From="80" To="103" Label="Source2" />
       <Edge From="81" To="82" Label="Source1" />
-      <Edge From="82" To="83" Label="Source1" />
-      <Edge From="83" To="84" Label="Source6" />
-      <Edge From="84" To="85" Label="Source1" />
+      <Edge From="82" To="89" Label="Source1" />
+      <Edge From="83" To="84" Label="Source1" />
+      <Edge From="84" To="89" Label="Source2" />
       <Edge From="85" To="86" Label="Source1" />
+      <Edge From="86" To="89" Label="Source3" />
       <Edge From="87" To="88" Label="Source1" />
-      <Edge From="88" To="95" Label="Source1" />
-      <Edge From="89" To="90" Label="Source1" />
-      <Edge From="90" To="95" Label="Source2" />
+      <Edge From="88" To="89" Label="Source4" />
+      <Edge From="89" To="90" Label="Source2" />
+      <Edge From="90" To="100" Label="Source1" />
       <Edge From="91" To="92" Label="Source1" />
-      <Edge From="92" To="95" Label="Source3" />
+      <Edge From="92" To="99" Label="Source1" />
       <Edge From="93" To="94" Label="Source1" />
-      <Edge From="94" To="95" Label="Source4" />
+      <Edge From="94" To="99" Label="Source2" />
       <Edge From="95" To="96" Label="Source1" />
-      <Edge From="96" To="97" Label="Source1" />
-      <Edge From="97" To="107" Label="Source1" />
-      <Edge From="97" To="120" Label="Source2" />
-      <Edge From="98" To="99" Label="Source1" />
-      <Edge From="99" To="106" Label="Source1" />
+      <Edge From="96" To="99" Label="Source3" />
+      <Edge From="97" To="98" Label="Source1" />
+      <Edge From="98" To="99" Label="Source4" />
+      <Edge From="99" To="100" Label="Source2" />
       <Edge From="100" To="101" Label="Source1" />
-      <Edge From="101" To="106" Label="Source2" />
       <Edge From="102" To="103" Label="Source1" />
-      <Edge From="103" To="106" Label="Source3" />
+      <Edge From="103" To="104" Label="Source1" />
       <Edge From="104" To="105" Label="Source1" />
-      <Edge From="105" To="106" Label="Source4" />
-      <Edge From="106" To="107" Label="Source2" />
-      <Edge From="107" To="117" Label="Source1" />
-      <Edge From="108" To="109" Label="Source1" />
-      <Edge From="109" To="116" Label="Source1" />
-      <Edge From="110" To="111" Label="Source1" />
-      <Edge From="111" To="116" Label="Source2" />
-      <Edge From="112" To="113" Label="Source1" />
-      <Edge From="113" To="116" Label="Source3" />
-      <Edge From="114" To="115" Label="Source1" />
-      <Edge From="115" To="116" Label="Source4" />
-      <Edge From="116" To="117" Label="Source2" />
-      <Edge From="117" To="118" Label="Source1" />
-      <Edge From="119" To="120" Label="Source1" />
-      <Edge From="120" To="121" Label="Source1" />
-      <Edge From="121" To="122" Label="Source1" />
     </Edges>
   </Workflow>
 </WorkflowBuilder>
