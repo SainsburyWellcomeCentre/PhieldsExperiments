@@ -295,8 +295,6 @@ namespace RigConfiguration
     public partial class SpinnakerSettings
     {
     
-        private CameraName _cameraName;
-    
         private CameraTriggerName _triggerName;
     
         private double _exposureTime;
@@ -309,7 +307,6 @@ namespace RigConfiguration
     
         public SpinnakerSettings()
         {
-            _cameraName = RigConfiguration.CameraName.Center;
             _exposureTime = 15000D;
             _serialNumber = "00000";
             _gain = 1D;
@@ -318,25 +315,11 @@ namespace RigConfiguration
     
         protected SpinnakerSettings(SpinnakerSettings other)
         {
-            _cameraName = other._cameraName;
             _triggerName = other._triggerName;
             _exposureTime = other._exposureTime;
             _serialNumber = other._serialNumber;
             _gain = other._gain;
             _binning = other._binning;
-        }
-    
-        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="cameraName")]
-        public CameraName CameraName
-        {
-            get
-            {
-                return _cameraName;
-            }
-            set
-            {
-                _cameraName = value;
-            }
         }
     
         [YamlDotNet.Serialization.YamlMemberAttribute(Alias="triggerName")]
@@ -432,7 +415,6 @@ namespace RigConfiguration
     
         protected virtual bool PrintMembers(System.Text.StringBuilder stringBuilder)
         {
-            stringBuilder.Append("CameraName = " + _cameraName + ", ");
             stringBuilder.Append("TriggerName = " + _triggerName + ", ");
             stringBuilder.Append("ExposureTime = " + _exposureTime + ", ");
             stringBuilder.Append("SerialNumber = " + _serialNumber + ", ");
@@ -849,7 +831,7 @@ namespace RigConfiguration
     
         private CameraController _cameraController;
     
-        private System.Collections.Generic.List<SpinnakerSettings> _cameras;
+        private System.Collections.Generic.Dictionary<CameraName, SpinnakerSettings> _cameras;
     
         private System.Collections.Generic.List<MechanicalLoom> _looms;
     
@@ -857,7 +839,7 @@ namespace RigConfiguration
     
         public RigConfig()
         {
-            _cameras = new System.Collections.Generic.List<SpinnakerSettings>();
+            _cameras = new System.Collections.Generic.Dictionary<CameraName, SpinnakerSettings>();
             _looms = new System.Collections.Generic.List<MechanicalLoom>();
             _feeders = new System.Collections.Generic.List<UnderGroundFeeder>();
         }
@@ -899,9 +881,13 @@ namespace RigConfiguration
             }
         }
     
+        /// <summary>
+        /// The settings of each camera, by camera name
+        /// </summary>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         [YamlDotNet.Serialization.YamlMemberAttribute(Alias="cameras")]
-        public System.Collections.Generic.List<SpinnakerSettings> Cameras
+        [System.ComponentModel.DescriptionAttribute("The settings of each camera, by camera name")]
+        public System.Collections.Generic.Dictionary<CameraName, SpinnakerSettings> Cameras
         {
             get
             {

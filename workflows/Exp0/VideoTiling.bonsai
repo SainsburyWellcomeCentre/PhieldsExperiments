@@ -87,7 +87,7 @@
                                 <Name>SpinnakerSettings</Name>
                               </Expression>
                               <Expression xsi:type="MemberSelector">
-                                <Selector>TriggerName</Selector>
+                                <Selector>Value.TriggerName</Selector>
                               </Expression>
                               <Expression xsi:type="Combinator">
                                 <Combinator xsi:type="rx:WithLatestFrom" />
@@ -128,7 +128,7 @@
                     </Workflow>
                   </Expression>
                   <Expression xsi:type="MemberSelector">
-                    <Selector>Item1.CameraName,Item2.TriggerFrequency</Selector>
+                    <Selector>Item1.Key,Item2.TriggerFrequency</Selector>
                   </Expression>
                   <Expression xsi:type="aeon:CreateGroup">
                     <Workflow>
@@ -162,8 +162,8 @@
                           </PropertyMappings>
                         </Expression>
                         <Expression xsi:type="Index">
-                          <Operand xsi:type="IntProperty">
-                            <Value>4</Value>
+                          <Operand xsi:type="WorkflowProperty" TypeArguments="p1:CameraName">
+                            <Value>FlirNE</Value>
                           </Operand>
                         </Expression>
                         <Expression xsi:type="Combinator">
@@ -434,7 +434,7 @@
                                   <Name>SpinnakerSettings</Name>
                                 </Expression>
                                 <Expression xsi:type="MemberSelector">
-                                  <Selector>TriggerName</Selector>
+                                  <Selector>Value.TriggerName</Selector>
                                 </Expression>
                                 <Expression xsi:type="Combinator">
                                   <Combinator xsi:type="rx:WithLatestFrom" />
@@ -475,7 +475,7 @@
                       </Workflow>
                     </Expression>
                     <Expression xsi:type="MemberSelector">
-                      <Selector>Item1.CameraName,Item2.TriggerFrequency</Selector>
+                      <Selector>Item1.Key,Item2.TriggerFrequency</Selector>
                     </Expression>
                     <Expression xsi:type="aeon:CreateGroup">
                       <Workflow>
@@ -509,8 +509,8 @@
                             </PropertyMappings>
                           </Expression>
                           <Expression xsi:type="Index">
-                            <Operand xsi:type="IntProperty">
-                              <Value>4</Value>
+                            <Operand xsi:type="WorkflowProperty" TypeArguments="p1:CameraName">
+                              <Value>FlirNE</Value>
                             </Operand>
                           </Expression>
                           <Expression xsi:type="Combinator">

@@ -10,42 +10,40 @@ cameraController:
       triggerFrequency: 20
     - TriggerName: Trigger1
       triggerFrequency: 125
-# Keep the cameras in the order of the camera names in Schemas/RigConfiguration.json.
-# Workflows look up each camera's settings by that position.
 cameras:
-  - cameraName: FlirNE
-    triggerName: Trigger0
-    exposureTime: 1500
-    serialNumber: "25511619"
-    gain: 0
-    binning: 1
-  - cameraName: FlirNW
+  FlirNE:
     triggerName: Trigger0
     exposureTime: 1500
     serialNumber: "25511620"
     gain: 0
     binning: 1
-  - cameraName: FlirE
+  FlirNW:
     triggerName: Trigger0
-    exposureTime: 1500
-    serialNumber: "25511621"
+    exposureTime: 2000
+    serialNumber: "25511624"
     gain: 0
     binning: 1
-  - cameraName: FlirW
+  FlirE:
     triggerName: Trigger0
     exposureTime: 1500
     serialNumber: "25511622"
     gain: 0
     binning: 1
-  - cameraName: FlirSE
+  FlirW:
+    triggerName: Trigger0
+    exposureTime: 1500
+    serialNumber: "25511619"
+    gain: 0
+    binning: 1
+  FlirSE:
+    triggerName: Trigger0
+    exposureTime: 1500
+    serialNumber: "25511621"
+    gain: 0
+    binning: 1
+  FlirSW:
     triggerName: Trigger0
     exposureTime: 1500
     serialNumber: "25511623"
-    gain: 0
-    binning: 1
-  - cameraName: FlirSW
-    triggerName: Trigger0
-    exposureTime: 2000
-    serialNumber: "25511624"
     gain: 0
     binning: 1

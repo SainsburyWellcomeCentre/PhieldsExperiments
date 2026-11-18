@@ -67,11 +67,6 @@
         },
         "spinnakerSettings": {
             "properties": {
-                "cameraName":
-                {
-                    "$ref":"#/definitions/cameraName",
-                    "default": "Center"
-                },
                 "triggerName":
                 {
                     "$ref":"#/definitions/cameraTriggerName"
@@ -104,7 +99,6 @@
                 }
             },
             "required": [
-                "cameraName",
                 "triggerName",
                 "exposureTime",
                 "serialNumber",
@@ -163,8 +157,17 @@
         },
         "cameras":
         {
-            "type":"array",
-            "items": 
+            "type": "object",
+            "description": "The settings of each camera, by camera name",
+            "propertyNames":
+            {
+                "$ref": "#/definitions/cameraName"
+            },
+            "x-dictionaryKey":
+            {
+                "$ref": "#/definitions/cameraName"
+            },
+            "additionalProperties":
             {
                 "$ref": "#/definitions/spinnakerSettings"
             }
