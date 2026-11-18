@@ -3,6 +3,7 @@
                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                  xmlns:rx="clr-namespace:Bonsai.Reactive;assembly=Bonsai.Core"
                  xmlns:aeon="clr-namespace:Aeon.Acquisition;assembly=Aeon.Acquisition"
+                 xmlns:p1="clr-namespace:RigConfiguration;assembly=Extensions"
                  xmlns:scr="clr-namespace:Bonsai.Scripting.Expressions;assembly=Bonsai.Scripting.Expressions"
                  xmlns:aeon-video="clr-namespace:Aeon.Video;assembly=Aeon.Video"
                  xmlns:spk="clr-namespace:Bonsai.Spinnaker;assembly=Bonsai.Spinnaker"
@@ -50,7 +51,7 @@
                     <Name>SpinnakerSettings</Name>
                   </Expression>
                   <Expression xsi:type="MemberSelector">
-                    <Selector>TriggerName</Selector>
+                    <Selector>Value.TriggerName</Selector>
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:WithLatestFrom" />
@@ -91,7 +92,7 @@
         </Workflow>
       </Expression>
       <Expression xsi:type="MemberSelector">
-        <Selector>Item1.CameraName,Item2.TriggerFrequency</Selector>
+        <Selector>Item1.Key,Item2.TriggerFrequency</Selector>
       </Expression>
       <Expression xsi:type="aeon:CreateGroup">
         <Workflow>
@@ -125,8 +126,8 @@
               </PropertyMappings>
             </Expression>
             <Expression xsi:type="Index">
-              <Operand xsi:type="IntProperty">
-                <Value>4</Value>
+              <Operand xsi:type="WorkflowProperty" TypeArguments="p1:CameraName">
+                <Value>FlirNE</Value>
               </Operand>
             </Expression>
             <Expression xsi:type="Combinator">
@@ -279,7 +280,7 @@
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="aeon-video:SpinnakerCapture">
                       <spk:Index xsi:nil="true" />
-                      <spk:SerialNumber>23425450</spk:SerialNumber>
+                      <spk:SerialNumber>25511623</spk:SerialNumber>
                       <spk:ColorProcessing>Default</spk:ColorProcessing>
                       <aeon-video:ExposureTime>1500</aeon-video:ExposureTime>
                       <aeon-video:Gain>0</aeon-video:Gain>
