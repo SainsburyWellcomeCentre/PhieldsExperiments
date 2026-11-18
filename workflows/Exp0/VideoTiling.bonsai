@@ -1462,7 +1462,8 @@
                       </Edges>
                     </Workflow>
                   </Expression>
-                  <Expression xsi:type="GroupWorkflow">
+                  <Expression xsi:type="Disable">
+                    <Builder xsi:type="GroupWorkflow">
                     <Name>CameraPipeline</Name>
                     <Workflow>
                       <Nodes>
@@ -1740,6 +1741,7 @@
                         <Edge From="4" To="5" Label="Source1" />
                       </Edges>
                     </Workflow>
+                    </Builder>
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:BufferTime">
@@ -1756,14 +1758,48 @@
                     <Property Name="RegistrationCamera" />
                   </Expression>
                   <Expression xsi:type="IncludeWorkflow" Path="Extensions\GetCameras.bonsai">
-                    <CameraName>North</CameraName>
+                    <CameraName>FlirNE</CameraName>
                     <RegistrationCamera>cam0</RegistrationCamera>
                   </Expression>
                   <Expression xsi:type="IncludeWorkflow" Path="Extensions\CameraPipeline3.bonsai">
-                    <CameraName>North</CameraName>
+                    <CameraName>FlirNE</CameraName>
                     <VignetteImageFileName>4mmVigneting2.png</VignetteImageFileName>
-                    <Source xsi:nil="true" />
-                    <Destination xsi:nil="true" />
+                    <Source>
+                      <Point2f>
+                        <X>0</X>
+                        <Y>0</Y>
+                      </Point2f>
+                      <Point2f>
+                        <X>0</X>
+                        <Y>2048</Y>
+                      </Point2f>
+                      <Point2f>
+                        <X>2448</X>
+                        <Y>2048</Y>
+                      </Point2f>
+                      <Point2f>
+                        <X>2448</X>
+                        <Y>0</Y>
+                      </Point2f>
+                    </Source>
+                    <Destination>
+                      <Point2f>
+                        <X>-5</X>
+                        <Y>-5.5</Y>
+                      </Point2f>
+                      <Point2f>
+                        <X>-5</X>
+                        <Y>2646.5</Y>
+                      </Point2f>
+                      <Point2f>
+                        <X>3165</X>
+                        <Y>2646.5</Y>
+                      </Point2f>
+                      <Point2f>
+                        <X>3165</X>
+                        <Y>-5.5</Y>
+                      </Point2f>
+                    </Destination>
                     <Size>
                       <Width>0</Width>
                       <Height>0</Height>
@@ -1779,7 +1815,7 @@
                     <CudaLibraryPath>..\..\.bonsai\Libraries\cuda12</CudaLibraryPath>
                     <Interval>1</Interval>
                     <Phase>4</Phase>
-                    <CameraIndex>5</CameraIndex>
+                    <CameraIndex>1</CameraIndex>
                     <EdgeBand>100</EdgeBand>
                     <FloorMargin>0</FloorMargin>
                     <VoteDistance>0</VoteDistance>
@@ -1799,51 +1835,51 @@
                     <Property Name="CameraName" DisplayName="StreamId2" />
                   </Expression>
                   <Expression xsi:type="IncludeWorkflow" Path="Extensions\GetCameras.bonsai">
-                    <CameraName>South</CameraName>
+                    <CameraName>FlirNW</CameraName>
                     <RegistrationCamera>cam0</RegistrationCamera>
                   </Expression>
                   <Expression xsi:type="IncludeWorkflow" Path="Extensions\CameraPipeline3.bonsai">
-                    <CameraName>South</CameraName>
+                    <CameraName>FlirNW</CameraName>
                     <VignetteImageFileName>4mmVigneting2.png</VignetteImageFileName>
                     <Source>
                       <Point2f>
-                        <X>207.825</X>
-                        <Y>401.887024</Y>
+                        <X>0</X>
+                        <Y>0</Y>
                       </Point2f>
                       <Point2f>
-                        <X>218.025</X>
-                        <Y>1487.79382</Y>
+                        <X>0</X>
+                        <Y>2048</Y>
                       </Point2f>
                       <Point2f>
-                        <X>2331.975</X>
-                        <Y>1475.61548</Y>
+                        <X>2448</X>
+                        <Y>2048</Y>
                       </Point2f>
                       <Point2f>
-                        <X>2349.825</X>
-                        <Y>450.6006</Y>
+                        <X>2448</X>
+                        <Y>0</Y>
                       </Point2f>
                     </Source>
                     <Destination>
                       <Point2f>
-                        <X>471.908722</X>
-                        <Y>1385.2312</Y>
+                        <X>2275</X>
+                        <Y>-5.5</Y>
                       </Point2f>
                       <Point2f>
-                        <X>482.318451</X>
-                        <Y>2658.48267</Y>
+                        <X>2275</X>
+                        <Y>2646.5</Y>
                       </Point2f>
                       <Point2f>
-                        <X>3050</X>
-                        <Y>2656</Y>
+                        <X>5445</X>
+                        <Y>2646.5</Y>
                       </Point2f>
                       <Point2f>
-                        <X>3050</X>
-                        <Y>1390</Y>
+                        <X>5445</X>
+                        <Y>-5.5</Y>
                       </Point2f>
                     </Destination>
                     <Size>
-                      <Width>3345</Width>
-                      <Height>2870</Height>
+                      <Width>0</Width>
+                      <Height>0</Height>
                     </Size>
                     <ThresholdValue>110</ThresholdValue>
                     <MinArea>500</MinArea>
@@ -1876,51 +1912,51 @@
                     <Property Name="CameraName" DisplayName="StreamId3" />
                   </Expression>
                   <Expression xsi:type="IncludeWorkflow" Path="Extensions\GetCameras.bonsai">
-                    <CameraName>West</CameraName>
+                    <CameraName>FlirE</CameraName>
                     <RegistrationCamera>cam0</RegistrationCamera>
                   </Expression>
                   <Expression xsi:type="IncludeWorkflow" Path="Extensions\CameraPipeline3.bonsai">
-                    <CameraName>West</CameraName>
+                    <CameraName>FlirE</CameraName>
                     <VignetteImageFileName>4mmVigneting2.png</VignetteImageFileName>
                     <Source>
                       <Point2f>
-                        <X>118.575</X>
-                        <Y>1406.60461</Y>
+                        <X>0</X>
+                        <Y>0</Y>
                       </Point2f>
                       <Point2f>
-                        <X>2376.6</X>
-                        <Y>1413.37817</Y>
+                        <X>0</X>
+                        <Y>2048</Y>
                       </Point2f>
                       <Point2f>
-                        <X>2329.425</X>
-                        <Y>174.2521</Y>
+                        <X>2448</X>
+                        <Y>2048</Y>
                       </Point2f>
                       <Point2f>
-                        <X>159.375</X>
-                        <Y>219.428574</Y>
+                        <X>2448</X>
+                        <Y>0</Y>
                       </Point2f>
                     </Source>
                     <Destination>
                       <Point2f>
-                        <X>108.015625</X>
-                        <Y>105.514709</Y>
+                        <X>-5</X>
+                        <Y>1824.5</Y>
                       </Point2f>
                       <Point2f>
-                        <X>92.33594</X>
-                        <Y>2758.45581</Y>
+                        <X>-5</X>
+                        <Y>4476.5</Y>
                       </Point2f>
                       <Point2f>
-                        <X>1573.19531</X>
-                        <Y>2758.45581</Y>
+                        <X>3165</X>
+                        <Y>4476.5</Y>
                       </Point2f>
                       <Point2f>
-                        <X>1576.67969</X>
-                        <Y>111.544121</Y>
+                        <X>3165</X>
+                        <Y>1824.5</Y>
                       </Point2f>
                     </Destination>
                     <Size>
-                      <Width>3345</Width>
-                      <Height>2870</Height>
+                      <Width>0</Width>
+                      <Height>0</Height>
                     </Size>
                     <ThresholdValue>110</ThresholdValue>
                     <MinArea>500</MinArea>
@@ -1953,51 +1989,51 @@
                     <Property Name="CameraName" DisplayName="StreamId4" />
                   </Expression>
                   <Expression xsi:type="IncludeWorkflow" Path="Extensions\GetCameras.bonsai">
-                    <CameraName>East</CameraName>
+                    <CameraName>FlirW</CameraName>
                     <RegistrationCamera>cam0</RegistrationCamera>
                   </Expression>
                   <Expression xsi:type="IncludeWorkflow" Path="Extensions\CameraPipeline3.bonsai">
-                    <CameraName>East</CameraName>
+                    <CameraName>FlirW</CameraName>
                     <VignetteImageFileName>4mmVigneting2.png</VignetteImageFileName>
                     <Source>
                       <Point2f>
-                        <X>2314.75781</X>
-                        <Y>168.851059</Y>
+                        <X>0</X>
+                        <Y>0</Y>
                       </Point2f>
                       <Point2f>
-                        <X>41.8014946</X>
-                        <Y>108.936172</Y>
+                        <X>0</X>
+                        <Y>2048</Y>
                       </Point2f>
                       <Point2f>
-                        <X>90.525</X>
-                        <Y>1384.27747</Y>
+                        <X>2448</X>
+                        <Y>2048</Y>
                       </Point2f>
                       <Point2f>
-                        <X>2270.775</X>
-                        <Y>1368.03967</Y>
+                        <X>2448</X>
+                        <Y>0</Y>
                       </Point2f>
                     </Source>
                     <Destination>
                       <Point2f>
-                        <X>1749.25293</X>
-                        <Y>122.127663</Y>
+                        <X>2275</X>
+                        <Y>1824.5</Y>
                       </Point2f>
                       <Point2f>
-                        <X>1792.0918</X>
-                        <Y>2759.32178</Y>
+                        <X>2275</X>
+                        <Y>4476.5</Y>
                       </Point2f>
                       <Point2f>
-                        <X>3245</X>
-                        <Y>2770</Y>
+                        <X>5445</X>
+                        <Y>4476.5</Y>
                       </Point2f>
                       <Point2f>
-                        <X>3245</X>
-                        <Y>100</Y>
+                        <X>5445</X>
+                        <Y>1824.5</Y>
                       </Point2f>
                     </Destination>
                     <Size>
-                      <Width>3345</Width>
-                      <Height>2870</Height>
+                      <Width>0</Width>
+                      <Height>0</Height>
                     </Size>
                     <ThresholdValue>110</ThresholdValue>
                     <MinArea>500</MinArea>
@@ -2205,12 +2241,194 @@
                       <cv:ResizeInterpolation>NearestNeighbor</cv:ResizeInterpolation>
                     </Combinator>
                   </Expression>
+                  <Expression xsi:type="rx:PublishSubject" TypeArguments="sys:Tuple(harp:Timestamped(p5:IplImage),harp:Timestamped(sys:Tuple(p6:ViewObservationCollection,cv:Contours)))">
+                    <rx:Name>cam5</rx:Name>
+                  </Expression>
+                  <Expression xsi:type="rx:PublishSubject" TypeArguments="sys:Tuple(harp:Timestamped(p5:IplImage),harp:Timestamped(sys:Tuple(p6:ViewObservationCollection,cv:Contours)))">
+                    <rx:Name>cam6</rx:Name>
+                  </Expression>
+                  <Expression xsi:type="SubscribeSubject">
+                    <Name>FrameEvents</Name>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="rx:Take">
+                      <rx:Count>1</rx:Count>
+                    </Combinator>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="rx:Merge" />
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="cv:LoadImage">
+                      <cv:FileName>D:\phields\config\cradl_top_1mm.png</cv:FileName>
+                      <cv:Mode>Grayscale</cv:Mode>
+                    </Combinator>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="rx:WithLatestFrom" />
+                  </Expression>
+                  <Expression xsi:type="MemberSelector">
+                    <Selector>Item2,Item1.Seconds</Selector>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="harp:CreateTimestamped" />
+                  </Expression>
+                  <Expression xsi:type="MulticastSubject">
+                    <Name>cam0</Name>
+                  </Expression>
+                  <Expression xsi:type="IncludeWorkflow" Path="Extensions\GetCameras.bonsai">
+                    <CameraName>FlirSE</CameraName>
+                    <RegistrationCamera>cam0</RegistrationCamera>
+                  </Expression>
+                  <Expression xsi:type="IncludeWorkflow" Path="Extensions\CameraPipeline3.bonsai">
+                    <CameraName>FlirSE</CameraName>
+                    <VignetteImageFileName>4mmVigneting2.png</VignetteImageFileName>
+                    <Source>
+                      <Point2f>
+                        <X>0</X>
+                        <Y>0</Y>
+                      </Point2f>
+                      <Point2f>
+                        <X>0</X>
+                        <Y>2048</Y>
+                      </Point2f>
+                      <Point2f>
+                        <X>2448</X>
+                        <Y>2048</Y>
+                      </Point2f>
+                      <Point2f>
+                        <X>2448</X>
+                        <Y>0</Y>
+                      </Point2f>
+                    </Source>
+                    <Destination>
+                      <Point2f>
+                        <X>-5</X>
+                        <Y>3654.5</Y>
+                      </Point2f>
+                      <Point2f>
+                        <X>-5</X>
+                        <Y>6306.5</Y>
+                      </Point2f>
+                      <Point2f>
+                        <X>3165</X>
+                        <Y>6306.5</Y>
+                      </Point2f>
+                      <Point2f>
+                        <X>3165</X>
+                        <Y>3654.5</Y>
+                      </Point2f>
+                    </Destination>
+                    <Size>
+                      <Width>0</Width>
+                      <Height>0</Height>
+                    </Size>
+                    <ThresholdValue>110</ThresholdValue>
+                    <MinArea>500</MinArea>
+                    <MaxArea>20000</MaxArea>
+                    <MinDensity>0.7</MinDensity>
+                    <MaxElongation>5</MaxElongation>
+                    <ModelPath>..\..\model\identity.onnx</ModelPath>
+                    <ExecutionProvider>Cuda</ExecutionProvider>
+                    <ThreadCount>2</ThreadCount>
+                    <CudaLibraryPath>..\..\.bonsai\Libraries\cuda12</CudaLibraryPath>
+                    <Interval>1</Interval>
+                    <Phase>4</Phase>
+                    <CameraIndex>5</CameraIndex>
+                    <EdgeBand>100</EdgeBand>
+                    <FloorMargin>0</FloorMargin>
+                    <VoteDistance>0</VoteDistance>
+                    <RejectClass>4</RejectClass>
+                    <OutputSubject>cam5</OutputSubject>
+                    <RegistrationCamera>cam0</RegistrationCamera>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="rx:BufferTime">
+                      <rx:TimeSpan>PT1S</rx:TimeSpan>
+                    </Combinator>
+                  </Expression>
+                  <Expression xsi:type="MemberSelector">
+                    <Selector>Count</Selector>
+                  </Expression>
+                  <Expression xsi:type="IncludeWorkflow" Path="Extensions\GetCameras.bonsai">
+                    <CameraName>FlirSW</CameraName>
+                    <RegistrationCamera>cam0</RegistrationCamera>
+                  </Expression>
+                  <Expression xsi:type="IncludeWorkflow" Path="Extensions\CameraPipeline3.bonsai">
+                    <CameraName>FlirSW</CameraName>
+                    <VignetteImageFileName>4mmVigneting2.png</VignetteImageFileName>
+                    <Source>
+                      <Point2f>
+                        <X>0</X>
+                        <Y>0</Y>
+                      </Point2f>
+                      <Point2f>
+                        <X>0</X>
+                        <Y>2048</Y>
+                      </Point2f>
+                      <Point2f>
+                        <X>2448</X>
+                        <Y>2048</Y>
+                      </Point2f>
+                      <Point2f>
+                        <X>2448</X>
+                        <Y>0</Y>
+                      </Point2f>
+                    </Source>
+                    <Destination>
+                      <Point2f>
+                        <X>2275</X>
+                        <Y>3654.5</Y>
+                      </Point2f>
+                      <Point2f>
+                        <X>2275</X>
+                        <Y>6306.5</Y>
+                      </Point2f>
+                      <Point2f>
+                        <X>5445</X>
+                        <Y>6306.5</Y>
+                      </Point2f>
+                      <Point2f>
+                        <X>5445</X>
+                        <Y>3654.5</Y>
+                      </Point2f>
+                    </Destination>
+                    <Size>
+                      <Width>0</Width>
+                      <Height>0</Height>
+                    </Size>
+                    <ThresholdValue>110</ThresholdValue>
+                    <MinArea>500</MinArea>
+                    <MaxArea>20000</MaxArea>
+                    <MinDensity>0.7</MinDensity>
+                    <MaxElongation>5</MaxElongation>
+                    <ModelPath>..\..\model\identity.onnx</ModelPath>
+                    <ExecutionProvider>Cuda</ExecutionProvider>
+                    <ThreadCount>2</ThreadCount>
+                    <CudaLibraryPath>..\..\.bonsai\Libraries\cuda12</CudaLibraryPath>
+                    <Interval>1</Interval>
+                    <Phase>4</Phase>
+                    <CameraIndex>6</CameraIndex>
+                    <EdgeBand>100</EdgeBand>
+                    <FloorMargin>0</FloorMargin>
+                    <VoteDistance>0</VoteDistance>
+                    <RejectClass>4</RejectClass>
+                    <OutputSubject>cam6</OutputSubject>
+                    <RegistrationCamera>cam0</RegistrationCamera>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="rx:BufferTime">
+                      <rx:TimeSpan>PT1S</rx:TimeSpan>
+                    </Combinator>
+                  </Expression>
+                  <Expression xsi:type="MemberSelector">
+                    <Selector>Count</Selector>
+                  </Expression>
                 </Nodes>
                 <Edges>
                   <Edge From="5" To="6" Label="Source1" />
                   <Edge From="5" To="7" Label="Source2" />
                   <Edge From="6" To="7" Label="Source1" />
-                  <Edge From="7" To="8" Label="Source1" />
                   <Edge From="8" To="9" Label="Source1" />
                   <Edge From="9" To="31" Label="Source1" />
                   <Edge From="10" To="12" Label="Source1" />
@@ -2280,6 +2498,22 @@
                   <Edge From="66" To="67" Label="Source1" />
                   <Edge From="67" To="68" Label="Source1" />
                   <Edge From="68" To="69" Label="Source1" />
+                  <Edge From="72" To="73" Label="Source1" />
+                  <Edge From="73" To="74" Label="Source1" />
+                  <Edge From="74" To="76" Label="Source1" />
+                  <Edge From="75" To="76" Label="Source2" />
+                  <Edge From="76" To="77" Label="Source1" />
+                  <Edge From="77" To="78" Label="Source1" />
+                  <Edge From="78" To="79" Label="Source1" />
+                  <Edge From="79" To="8" Label="Source1" />
+                  <Edge From="80" To="81" Label="Source1" />
+                  <Edge From="81" To="82" Label="Source1" />
+                  <Edge From="82" To="83" Label="Source1" />
+                  <Edge From="83" To="31" Label="Source6" />
+                  <Edge From="84" To="85" Label="Source1" />
+                  <Edge From="85" To="86" Label="Source1" />
+                  <Edge From="86" To="87" Label="Source1" />
+                  <Edge From="87" To="31" Label="Source7" />
                 </Edges>
               </Workflow>
             </Expression>

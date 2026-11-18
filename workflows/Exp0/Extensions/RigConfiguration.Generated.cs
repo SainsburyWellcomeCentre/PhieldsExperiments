@@ -254,20 +254,38 @@ namespace RigConfiguration
     public enum CameraName
     {
     
+        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="FlirNE")]
+        FlirNE = 0,
+    
+        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="FlirNW")]
+        FlirNW = 1,
+    
+        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="FlirE")]
+        FlirE = 2,
+    
+        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="FlirW")]
+        FlirW = 3,
+    
+        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="FlirSE")]
+        FlirSE = 4,
+    
+        [YamlDotNet.Serialization.YamlMemberAttribute(Alias="FlirSW")]
+        FlirSW = 5,
+    
         [YamlDotNet.Serialization.YamlMemberAttribute(Alias="Center")]
-        Center = 0,
+        Center = 6,
     
         [YamlDotNet.Serialization.YamlMemberAttribute(Alias="West")]
-        West = 1,
+        West = 7,
     
         [YamlDotNet.Serialization.YamlMemberAttribute(Alias="East")]
-        East = 2,
+        East = 8,
     
         [YamlDotNet.Serialization.YamlMemberAttribute(Alias="North")]
-        North = 3,
+        North = 9,
     
         [YamlDotNet.Serialization.YamlMemberAttribute(Alias="South")]
-        South = 4,
+        South = 10,
     }
 
 

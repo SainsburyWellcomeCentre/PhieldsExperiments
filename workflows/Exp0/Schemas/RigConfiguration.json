@@ -61,7 +61,7 @@
         },
         "cameraName":
         {
-            "enum": ["Center","West","East", "North", "South"],
+            "enum": ["FlirNE", "FlirNW", "FlirE", "FlirW", "FlirSE", "FlirSW", "Center", "West", "East", "North", "South"],
             "default": "Center",
             "type": "string"
         },

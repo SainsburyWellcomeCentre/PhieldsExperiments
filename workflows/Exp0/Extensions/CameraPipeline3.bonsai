@@ -386,8 +386,8 @@
                 <p2:Floor>
                   <p2:X>100</p2:X>
                   <p2:Y>100</p2:Y>
-                  <p2:Width>3145</p2:Width>
-                  <p2:Height>2670</p2:Height>
+                  <p2:Width>5240</p2:Width>
+                  <p2:Height>6101</p2:Height>
                 </p2:Floor>
                 <p2:Margin>0</p2:Margin>
                 <p2:VoteDistance>0</p2:VoteDistance>
@@ -438,8 +438,8 @@
                   </p2:Point2f>
                 </p2:Destination>
                 <p2:Size>
-                  <p2:Width>3345</p2:Width>
-                  <p2:Height>2870</p2:Height>
+                  <p2:Width>5440</p2:Width>
+                  <p2:Height>6301</p2:Height>
                 </p2:Size>
               </Combinator>
             </Expression>
